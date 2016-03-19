@@ -1,0 +1,170 @@
+<!-- View of the home page -->
+
+<!-- Dropdown Structure -->
+<ul id="dropdown" class="dropdown-content collection">
+    <li class="collection-item ">
+        <span class="title red-text text-darken-1">You got a notification :O</span>
+    </li>
+    <li class="collection-item ">
+        <span class="title red-text text-darken-1">And one more!</span>
+    </li>
+    <li class="collection-item ">
+        <span class="title red-text text-darken-1">And another one!</span>
+    </li>
+</ul>
+
+<div class="navbar-fixed">
+  <nav class="white">
+
+    <div class="nav-wrapper">
+
+      <a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>
+
+      <ul class="right hide-on-med-and-down">
+        <li><a class="black-text" href="#!">Profile</a></li>
+        <!-- Dropdown Trigger -->
+        <li><a class="dropdown-button black-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+      </ul>
+
+      <form class="center" style="width:500px; margin: 0 auto;">
+        <div class="input-field">
+          <input placeholder="Ask something" ng-model="user_question" id="search" type="search"required>
+          <label><i class="material-icons red-text text-darken-2">question_answer</i></label>
+          <i ng-click="user_question = ''" class="material-icons">close</i>
+        </div>
+      </form>
+
+    </div>
+  </nav>
+</div>
+
+<div class="container">
+
+
+  <!-- search field start -->
+  <!--<div class="section">
+    
+     <nav class="white black-text">
+      <div class="nav-wrapper">
+
+        <form class="center" style="margin: 0 auto;">
+          <div class="input-field red">
+            <input placeholder="Ask something" ng-model="user_question" id="search" type="search"required>
+            <label><i class="material-icons red-text text-darken-2">question_answer</i></label>
+            <i ng-click="user_question = ''" class="material-icons">close</i>
+          </div>
+        </form>
+            
+      </div>
+    </nav>
+  <!-- end search field 
+  </div>-->
+
+
+  <div class="divider"></div>
+
+  <div class="section">
+
+    <!-- begin item -->
+    <div class="row">
+
+      <!-- categories which we hide on small device -->
+       <div class="col m3 hide-on-small-and-down">
+          <div class="collection">
+            <a href="#!" class="collection-item orange-text text-accent-2">Latest<span class="badge">1</span></a>
+            <a href="#!" class="collection-item orange-text text-accent-2">UTown<span class="new badge green darken-2">4</span></a>
+            <a href="#!" class="collection-item orange-text text-accent-2">Modules</a>
+            <a href="#!" class="collection-item orange-text text-accent-2">Parties<span class="badge">14</span></a>
+          </div>
+      </div>
+
+      
+      <!-- question -->
+      <div class="col s12 m9 right">
+        <div class="card white">
+
+
+          <div class="card-content">
+            <p class="grey-text">Latest</p>
+            <span class="card-title">When does Indian open on Sundays?</span>
+             
+             <ul style="border:0;"class="collection">
+              <li style="min-height:60px;"class="collection-item avatar">
+                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
+                <span class="title">El Chapo</span>
+                <p class="grey-text">4.8k Views </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+            </ul>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.</p>
+          </div>
+
+          <div class="card-action">
+            <a href="#">Comments</a>
+          </div>
+        </div>
+
+      <!-- end questions -->
+      </div>
+
+       <!-- question -->
+      <div class="col s12 m9 right">
+        <div class="card white">
+
+          <div class="card-content">
+            <p class="grey-text">Latest</p>
+            <span class="card-title">When does Indian open on Sundays?</span>
+             
+             <ul style="border:0;  "class="collection">
+              <li style="min-height:60px;"class="collection-item avatar">
+                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
+                <span class="title">El Chapo</span>
+                <p class="grey-text">4.8k Views </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+            </ul>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.</p>
+          </div>
+
+          <div class="card-action">
+            <a href="#">Comments</a>
+          </div>
+        </div>
+
+      </div>
+
+   
+
+
+    <!-- end Item -->
+    </div>
+  <!-- end section -->
+  </div>
+<!-- end container -->     
+</div>  
+
+
+<!-- rest of template -->
+<!--<div ng-repeat="post in posts | orderBy:'-upvotes'">
+
+  <div class="vote-container">
+    <div class="v-align left">
+      <span  ng-click="incrementUpvotes(post)">
+        <i class="icono-caretUpSquare"></i>
+      </span>
+    </div> 
+    <div class="v-align left">
+      <p class="post-title"><span>{{post.title}}</span></p>
+      <span>
+        <p class="post-title">
+          <a href="#/posts/{{$index}}">Comments</a>
+        </p>
+      </span>
+    </div>
+    <div class="v-align right">
+        <p class="upvotes">{{post.upvotes}}</p>
+    </div>
+  </div>
+</div>-->
