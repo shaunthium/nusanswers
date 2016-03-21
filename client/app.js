@@ -26,5 +26,3 @@ angular.module('quoraApp', ['ui.router'])
 
 	
 
-	
-
