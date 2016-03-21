@@ -2,15 +2,6 @@
 angular.module('quoraApp')
 .controller('MainCtrl', [ '$scope', 'posts', function($scope, posts){
 
-	$scope.hello = "hej";
-	console.log("hello from controller", $scope.hello);
-	
-	$scope.testfunc = function(sometext){
-
-		alert(sometext);
-
-	}
-
   $scope.posts = posts.posts;
 
   /*Adds a new post to our dummy data*/

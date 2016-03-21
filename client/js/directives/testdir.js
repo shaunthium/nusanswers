@@ -42,3 +42,22 @@
 					'</div>'
 	}
 });*/
+
+/*angular.module('quoraApp')
+
+
+
+.directive('voteContainer', function(){
+
+	return {
+		restrict: 'A',
+		link: function(scope, element, attrs){
+
+			var dom_element = element[0];
+			element.css('height', document.getElementById('post-text-container').clientHeight);
+			
+		}
+
+	}
+
+})*/
