@@ -1,12 +1,58 @@
-/* This script should handle call to API and get data from server,
-Have methods like postToAPI and fetchFromAPI and such, 
-We can just inject this module in our controllers and call whenever we want*/
+'use strict';
 
 angular.module('quoraApp')
+	.service('postService', ['$q', '$http', function($q, $http){
 
-.factory('posts', [function(){
-  var o = {
-    posts: []
-  };
-  return o;
-}])
+		var base_url = "path/to/our/php/script",
+			canceller;
+
+		// Just hardcoded atm
+		var posts = [{
+								  title: 'When does Indian open on Sundays?', 
+								  category: 'Latest',
+								  author: 'User1',
+								  views: 10,
+								  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
+									upvotes:0,
+									comments: [
+								 		{author:'Bob', body:'Some comment content', upvotes:0},
+								 		{author:'Eric', body:'Some comment content2222', upvotes:0}
+								 	]},
+								 {
+								  title: 'Why is nobody asking questions during lecture?', 
+								  category: 'UTown',
+								  author: 'User2',
+								  views: 25,
+								  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
+									upvotes:0,
+									comments: [
+								 		{author:'Bob', body:'Some comment content', upvotes:0},
+								 		{author:'Eric', body:'Some comment content2222', upvotes:0}
+								 	]
+								}];
+
+		function getPosts(){
+
+			//canceller = $q.defer();
+
+			return posts;
+
+			//var queryString = "base_url + 'PublicTollParkings/' + app_id + '?latitude=' + myPos.A + '&longitude=' + myPos.F + '&radius=' +
+			//								    	  radius + '&format=json';"
+
+			//return $http.get(queryString, {timeout: canceller.promise});
+
+		}
+
+		function cancelCall(){
+
+			canceller.resolve("User cancelled call");
+
+		}
+
+		return {
+			getPosts: getPosts,
+			cancelCall: cancelCall
+		}
+
+	}]);
