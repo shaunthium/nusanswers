@@ -3,41 +3,52 @@
 <!-- Dropdown Structure -->
 <ul id="dropdown" class="dropdown-content collection">
     <li class="collection-item ">
-        <span class="title red-text text-darken-1">You got a notification :O</span>
+        <span class="title black-text text-darken-1">You got a notification :O</span>
     </li>
     <li class="collection-item ">
-        <span class="title red-text text-darken-1">And one more!</span>
+        <span class="title black-text text-darken-1">And one more!</span>
     </li>
     <li class="collection-item ">
-        <span class="title red-text text-darken-1">And another one!</span>
+        <span class="title black-text text-darken-1">And another one!</span>
     </li>
 </ul>
 
+
+<!-- hardcoded logo in corner -->
+<h5 class="hide-on-med-and-down"style="position:fixed; font-size:1.3em; color:white; left:15px; top:10px;z-index:999;">logo_here</h5>
+
+
+<!-- this navbar is a mess, grid system does not seem
+     to work here, had to haxx0r hardcode it because couldn't make
+     elements float after each other -->
 <div class="navbar-fixed">
+  <nav class="red darken-2">
 
-  <nav class="white">
+    <div class="nav-wrapper container">
 
-    <div class="nav-wrapper">
-
-      <a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>
+      <!--<a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>-->
 
       <ul class="right hide-on-med-and-down">
-        <li><a class="black-text" href="#!">Profile</a></li>
+        <li><a class="white-text" href="#!">Profile</a></li>
         <!-- Dropdown Trigger -->
-        <li><a class="dropdown-button black-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+        <li><a class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
       </ul>
 
-      <form class="center" style="width:500px; margin: 0 auto;">
+      <form class="center v-align white" style="border-radius:5px; height:45px; width:450px;">
         <div class="input-field">
-          <input placeholder="Ask something" ng-model="user_question" id="search" type="search"required>
-          <label><i class="material-icons red-text text-darken-2">question_answer</i></label>
-          <i ng-click="user_question = ''" class="material-icons">close</i>
+          <input style="line-height:30px;"placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
+          <label>
+            <i style="line-height:45px;"class="material-icons red-text text-darken-2">question_answer</i>
+          </label>
+          <i style="line-height:45px;"ng-click="user_question = ''" class="material-icons">close</i>
         </div>
       </form>
 
     </div>
   </nav>
 </div>
+
+
 
 <div class="container">
 
@@ -59,7 +70,7 @@
       </div>
       
       <!-- begin feed -->
-      <div ng-repeat = "post in posts" class="col s12 m9 right">
+      <div ng-repeat="post in posts" class="col s12 m9 right">
         <div class="card white">
 
           <div class="card-content">
@@ -76,7 +87,7 @@
             </ul>
             
             <!-- Behave as a table cell for the height to adjust to same as the text column -->
-            <div style="display:table-cell; vertical-align:middle; text-align:center; width:80px;">
+            <div style="display:table-cell; vertical-align:middle; text-align:center;width:60px;">
               <i ng-click="incrementUpvotes(post, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
               <p style="padding:5px;">{{post.upvotes}}</p>
               <i ng-click="incrementUpvotes(post, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
