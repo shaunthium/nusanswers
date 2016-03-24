@@ -4,18 +4,23 @@ html,body{
 }
 
 
-/* Need media query for these two */
+div.suggestion-box-info{
+  background:#f0f0f0;
+  height:40px;
+  border-radius: 5px 5px 0px 0px;
+
+}
+
+
+/* Need media queries for these  */
 
 search-popup{
-
   position:absolute;
   background:white;
   width:450px;
-  height:100px;
   z-index:999;  
   border-radius:5px;
   top:80px;
-
 }
 
 search-popup:after {
@@ -28,7 +33,7 @@ search-popup:after {
   position: absolute;
   pointer-events: none;
   border-color: rgba(255, 255, 255, 0);
-  border-bottom-color: #ffffff;
+  border-bottom-color: #e0e0e0;
   border-width: 10px;
   margin-left: -10px;
 }
@@ -45,6 +50,7 @@ search-popup:after {
 
 }
 
+/************************/
 
 .input-field input[type=search]:focus {
 
