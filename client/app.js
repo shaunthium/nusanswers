@@ -13,10 +13,10 @@ angular.module('quoraApp', ['ui.router'])
 	    })
 
 	    .state('posts', {
-			  url: '/posts/{id}',
-			  templateUrl: '/views/posts.html',
-			  controller: 'PostsCtrl'
-			});
+		  url: '/posts/{id}',
+		  templateUrl: '/views/posts.html',
+		  controller: 'PostsCtrl'
+		});
 
 	  $urlRouterProvider.otherwise('home');
 
