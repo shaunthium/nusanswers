@@ -1,6 +1,6 @@
 <?php require_once 'connect.php';
 	
-	//Get all Title from "Questions" database
+	///Get all Title from "Questions" database
 	if($_GET["cmd"] == "title"){
 		$query = "SELECT title FROM Questions";
 		$result = $db->query($query);
