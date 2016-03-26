@@ -6,5 +6,5 @@
   if ($db->connect_errno) {
     exit("Failed to connect to MySQL, exiting.");
   }
-  echo "Successfully connected!";
+  //echo "Successfully connected!";
  ?>
