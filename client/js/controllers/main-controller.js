@@ -1,8 +1,8 @@
 /* Controls main view */
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'postService', function($scope, ps){
+.controller('MainCtrl', [ '$scope', 'postService', '$rootScope', function($scope, ps, $rootScope){
 
-  $scope.posts = ps.getPosts();
+  $rootScope.posts = ps.getPosts();
 
   /*Adds a new post to our dummy data*/
 	/*$scope.addPost = function(){

@@ -16,6 +16,12 @@ angular.module('quoraApp', ['ui.router'])
 		  url: '/posts/{id}',
 		  templateUrl: '/views/posts.html',
 		  controller: 'PostsCtrl'
+		})
+
+		.state('profile', {
+		  url: '/profile',
+		  templateUrl: '/views/profile.html',
+		  controller: 'ProfileCtrl'
 		});
 
 	  $urlRouterProvider.otherwise('home');
