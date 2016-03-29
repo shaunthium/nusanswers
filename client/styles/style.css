@@ -3,6 +3,17 @@ html,body{
   height:100%;
 }
 
+div.search-result-container{
+  cursor:pointer;
+  padding:15px;
+}
+
+div.search-result-container:hover{
+
+  background:blue;
+
+}
+
 
 div.suggestion-box-info{
   background:#f0f0f0;

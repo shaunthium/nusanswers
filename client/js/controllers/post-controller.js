@@ -1,9 +1,11 @@
 /*Controls the details of the posts */
 
 angular.module('quoraApp')
-.controller('PostsCtrl', [ '$scope', '$stateParams', 'posts', function($scope, $stateParams, posts){
+.controller('PostCtrl', [ '$scope', '$stateParams', '$rootScope', function($scope, $stateParams, $rootScope){
 	
-	$scope.post = posts.posts[$stateParams.id];
+	$scope.post = $stateParams.currPost;
+
+	/*$scope.post = posts.posts[$stateParams.id];
 
 	$scope.addComment = function(){
 	  if($scope.body === '')
@@ -14,6 +16,6 @@ angular.module('quoraApp')
 	    upvotes: 0
 	  });
 	  $scope.body = '';
-	};
+	};*/
 
 }])

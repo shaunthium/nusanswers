@@ -8,6 +8,7 @@ angular.module('quoraApp')
 
 		// Just hardcoded atm
 		var posts = [{
+								  id:0,
 								  title: 'When does Indian open on Sundays?', 
 								  category: 'Latest',
 								  author: 'User1',
@@ -19,6 +20,7 @@ angular.module('quoraApp')
 								 		{author:'Eric', body:'Some comment content2222', upvotes:0}
 								 	]},
 								 {
+								  id:1,
 								  title: 'Why is nobody asking questions during lecture?', 
 								  category: 'Lectures',
 								  author: 'User2',
@@ -31,6 +33,7 @@ angular.module('quoraApp')
 								 	]
 								},
 								{
+								  id:2,
 								  title: 'When does starbucks close on public holidays?', 
 								  category: 'UTown',
 								  author: 'Steven',

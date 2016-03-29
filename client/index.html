@@ -31,17 +31,17 @@
   <search-popup ng-hide="!user_question">
 
     <div class = "suggestion-box-info">
-
       <p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">
         Search for content lah
       </p>
-
     </div>
 
     <!-- filter all the posts on EVERYTHING that includes what user typed -->
-    <p style="text-indent:15px;"ng-repeat = "post in filteredPosts  = (posts | filter:user_question)">
-      <b>Post:</b> {{post.title}}
-    </p>
+    <div ui-sref="post({'currPost' : post})"ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
+      <p style="margin:0;padding:0px;" >
+        <b>Post:</b> {{post.title}}
+      </p>
+    </div>
 
     <p style="text-align:center;" ng-hide="filteredPosts.length">No results found!</p>
     
@@ -81,15 +81,11 @@
     </nav>
   </div>
 
-
-
-
-
   	<!-- Each view of the app is separate into views folder -->  
     <ui-view></ui-view>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+    <script src="js/angular-ui-router-0.2.18.min.js"></script>
     <!-- unfortunately materialize is depenedent on jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
