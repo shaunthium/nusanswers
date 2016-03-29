@@ -17,7 +17,7 @@ angular.module('quoraApp')
 									upvotes:0,
 									comments: [
 								 		{author:'Bob', body:'Some comment content', upvotes:0},
-								 		{author:'Eric', body:'Some comment content2222', upvotes:0}
+								 		{author:'Eric', body:'Some comment content2222 ome comment content2233322', upvotes:1}
 								 	]},
 								 {
 								  id:1,
@@ -29,7 +29,7 @@ angular.module('quoraApp')
 									upvotes:0,
 									comments: [
 								 		{author:'Bob', body:'Some comment content', upvotes:0},
-								 		{author:'Eric', body:'Some comment content2222', upvotes:0}
+								 		{author:'Eric', body:'Some comment content2222 ome comment content2222222333', upvotes:0}
 								 	]
 								},
 								{

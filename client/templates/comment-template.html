@@ -1,0 +1,19 @@
+<div style="padding-top:10px; padding-bottom:10px;" class="card-action">
+            
+  <div style="display:table-cell; text-align:left;width:40px;"></div>
+  
+  <div style="display:table-cell;">
+    
+    <div style="display:table-cell; width:40px;">
+      <span class="grey-text text-darken-1">{{upvotes}}</span>
+      <i style="cursor:pointer; padding-left:2px; padding-right:2px;" class="tiny material-icons orange-text text-darken-2">thumb_up</i>
+    </div>
+
+    <!-- binds what's inside the comment in view -->
+    <div style="display:table-cell;">
+      <span ng-transclude>
+      </span> -- {{user}}
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="container">
+
+  <div class="section">
+
+    <div class="row">
+      <div class="col s12">
+        <post>
+          <!-- comments -->
+          <comment ng-repeat = "comment in post.comments" upvotes="4" user="{{comment.author}}">
+               {{comment.body}}
+          </comment>
+
+          <div style="padding-top:10px; padding-bottom:10px;"class="card-action">
+            <div style="display:table-cell; text-align:left;width:40px;"></div>
+            <div style="display:table-cell">
+              <p style="font-size:0.9em;">Add Comment | Show 2 more comments</p>
+            </div>
+          </div>
+
+        </post>
+      <!-- end question -->
+      </div>
+
+      <div class="col s12">
+        <h5 style="font-size:1.3em;font-weight:250;"class="grey-text text-darken-2">3 Answers</h5>
+        <hr/>
+      </div>
+
+      <div class="col s12">
+
+        <div class="card white">
+
+          <div class="card-content">
+            <p class="grey-text">{{post.category}}</p>
+            <span class="card-title">{{post.title}}</span>
+             
+             <ul style="border:0;"class="collection">
+              <li style="min-height:60px;"class="collection-item avatar">
+                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
+                <span class="title">{{post.author}}</span>
+                <p class="grey-text">{{post.views}} Views </p>
+                <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>525</a>
+              </li>
+            </ul>
+            
+            <!-- Behave as a table cell for the height to adjust to same as the text column -->
+            <div style="display:table-cell; vertical-align:middle; text-align:center;width:60px;">
+              <i ng-click="incrementUpvotes(post, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
+              <p style="padding:5px;">{{post.upvotes}}</p>
+              <i ng-click="incrementUpvotes(post, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+            </div>
+
+            <p style="display:table-cell;">{{post.desc}}</p>
+            
+          </div>
+
+          <div class="card-action">
+            <a href="#">Comments</a>
+          </div>
+
+        <!-- end card-->
+        </div>
+
+      </div>
+
+    <!-- row end -->
+    </div>
+
+  <!-- section end -->
+  </div>
+</div>

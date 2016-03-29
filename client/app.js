@@ -15,7 +15,7 @@ angular.module('quoraApp', ['ui.router'])
 	    .state('post', {
 		  url: '/post',
 		  params:{'currPost': null},
-		  templateUrl: '/views/post.html',
+		  templateUrl: '/views/post-answers.html',
 		  controller: 'PostCtrl'
 		})
 
