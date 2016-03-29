@@ -4,7 +4,7 @@
   </p>
 </div>
 
-<div ui-sref="post({'currPost' : post})"ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
+<div ng-click="goToPost(post)" ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
   <p style="margin:0;padding:0px;" >
     <b>Post:</b> {{post.title}}
   </p>

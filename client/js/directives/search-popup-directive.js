@@ -4,6 +4,12 @@ angular.module('quoraApp')
 
 	return {
 		restrict: 'E',
+		controller: function($scope, $state){
+			$scope.goToPost = function(post){
+				$scope.user_question = "";
+				$state.go('post', {'currPost' : post})
+			}
+		},
 		link: function(scope, element, attrs){
 
 			element.css('left', document.getElementById("search-field").getBoundingClientRect().left);
@@ -15,13 +21,21 @@ angular.module('quoraApp')
 			})
 
 			angular.element($window).on('scroll', function(){
-
-				console.log($window.scrollY);
+				
 				element.css('margin-top', scrollY);
 				var overlayOffsetTop = document.getElementById("overlay-container").offsetTop;
 				document.getElementById("overlay-container").style.top = (scrollY) + "px";
 
 			})
+
+			$('html').click(function(){
+
+				if(scope.user_question){
+					scope.user_question = "";
+					scope.$apply(); // since this event was triggered outside angular
+				}
+
+			});
 
 		},
 		templateUrl:"templates/search-popup-template.html"
