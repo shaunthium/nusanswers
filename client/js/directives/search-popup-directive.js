@@ -13,6 +13,16 @@ angular.module('quoraApp')
 				scope.$digest();
 
 			})
+
+			angular.element($window).on('scroll', function(){
+
+				console.log($window.scrollY);
+				element.css('margin-top', scrollY);
+				var overlayOffsetTop = document.getElementById("overlay-container").offsetTop;
+				document.getElementById("overlay-container").style.top = (scrollY) + "px";
+
+			})
+
 		},
 		templateUrl:"templates/search-popup-template.html"
 	}

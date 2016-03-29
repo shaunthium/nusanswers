@@ -15,9 +15,9 @@
     
     <!-- Behave as a table cell for the height to adjust to same as the text column -->
     <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
-      <i ng-click="incrementUpvotes(post, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
+      <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
       <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
-      <i ng-click="incrementUpvotes(post, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+      <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
     </div>
 
     <p style="display:table-cell;">{{post.desc}}</p>

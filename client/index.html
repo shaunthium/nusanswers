@@ -19,7 +19,7 @@
   </ul>
 
   <!-- Stuff that appears when user starts typing question -->
-  <div ng-hide="!user_question" class="overlay-container"></div>
+  <div ng-hide="!user_question" id="overlay-container"></div>
 
   <search-popup ng-hide="!user_question">
   </search-popup>
@@ -30,13 +30,13 @@
   <!-- this navbar is a mess, grid system does not seem
        to work here, had to haxx0r hardcode it because couldn't make
        elements float after each other -->
-  <div class="navbar-fixed">
+  <div style="z-index:999;"class="navbar-fixed">
     <nav class="red darken-2">
 
       <div class="nav-wrapper container">
 
         <!--<a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>-->
-        
+
         <ul class="right hide-on-med-and-down">
           <li><a class="white-text" href="#/profile">Profile</a></li>
           <!-- Dropdown Trigger -->
