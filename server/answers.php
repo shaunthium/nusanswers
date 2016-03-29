@@ -2,17 +2,18 @@
 	require_once 'connect.php'; //contains login constants
 	if(isset($_POST["cmd"]))
 		$cmd = $_POST["cmd"];
-	if(isset($_POST["qid"]))
-		$queue_id = $_POST["qid"];
+	if(isset($_POST["question_id"]))
+		$question_id = $_POST["question_id"];
+	if(isset($_POST["answer_id"]))
+		$answer_id = $_POST["answer_id"];
+		
 	
 	global $db; // refer to the global variable 'db'
 	
-
-	
-	if($cmd == "getanswers" and $queue_id >=0)
+	if($cmd == "getanswers" and $question_id >=0)
 	{
 		/*******************Query Question table ***************************/
-		$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $queue_id . " group by Questions.id;";
+		$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
 		
 		$res = $db->query($query); 
 		 //| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
@@ -27,7 +28,7 @@
 		
 		
 		/*******************Query Comments table ***************************/
-		$query = "select Comments.id as comments_id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $queue_id;
+		$query = "select Comments.id as comments_id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
 		$res = $db->query($query); 
 		
 		 $commentsResult = array();
@@ -42,7 +43,7 @@
 		
 		
 
-		$query = "select Answers.id as answers_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $queue_id;
+		$query = "select Answers.id as answers_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
 		$res = $db->query($query); 
 		
 		$answersResult = array();
@@ -57,9 +58,11 @@
 		echo json_encode($finalOutput);
 
 	}
-
-	
-
-	
-
+	else if ($cmd == "deleteanswer")
+	{
+		//WARNING: Authorization check not implemented!!
+		$query = "CALL DeleteAnswer($answer_id)";
+		$res = $db->query($query); 
+		
+	}
 ?>
