@@ -1,0 +1,13 @@
+<div class = "suggestion-box-info">
+  <p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">
+      Search for content lah
+  </p>
+</div>
+
+<div ng-click="goToPost(post)" ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
+  <p style="margin:0;padding:0px;" >
+    <b>Post:</b> {{post.title}}
+  </p>
+</div>
+
+<p style="text-align:center;" ng-hide="filteredPosts.length">No results found!</p>
