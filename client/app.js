@@ -12,11 +12,18 @@ angular.module('quoraApp', ['ui.router'])
 	      controller: 'MainCtrl'
 	    })
 
-	    .state('posts', {
-			  url: '/posts/{id}',
-			  templateUrl: '/views/posts.html',
-			  controller: 'PostsCtrl'
-			});
+	    .state('post', {
+		  url: '/post',
+		  params:{'currPost': null},
+		  templateUrl: '/views/post-answers.html',
+		  controller: 'PostCtrl'
+		})
+
+		.state('profile', {
+		  url: '/profile',
+		  templateUrl: '/views/profile.html',
+		  controller: 'ProfileCtrl'
+		});
 
 	  $urlRouterProvider.otherwise('home');
 
