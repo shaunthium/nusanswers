@@ -23,4 +23,18 @@
       return false;
     }
   }
+
+  function authenticate_user($email, $password) {
+    global $db;
+    $query = "SELECT password FROM Users WHERE email='" . $email . "'";
+
+    $sql_result = $db->query($query);
+    $row = mysqli_fetch_row($sql_result);
+    if (!is_null($row)) {
+      $saved_password = $row[0];
+      return password_verify($password, $saved_password);
+    } else {
+      return false;
+    }
+  }
  ?>
