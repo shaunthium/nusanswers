@@ -25,13 +25,16 @@
 	}
 
 
-	///Get all Title from "Questions" database
-	if($cmd == "title"){
-		$query = "SELECT title FROM Questions";
+	///Get all Title & content from "Questions" database
+	if($cmd == "qns_title"){
+		$query = "SELECT title, content FROM Questions";
 		$result = $db->query($query);
 		$title_array = array();
 		while ($title = mysqli_fetch_assoc($result)){
-			$title_array[] = $title['title']; 
+			$title_array[] = array(
+				'title' => $title['title'],
+				'content'=>$title['content']
+			);
 		}
 		echo json_encode($title_array);		
 	}
