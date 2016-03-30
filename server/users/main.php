@@ -1,5 +1,6 @@
 <?php
   require_once('post_functions.php');
+  require_once('get_functions.php');
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST["cmd"] == "show") {
@@ -13,6 +14,11 @@
       } else {
         echo json_encode($result);
       }
+    }
+  } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if ($_GET["cmd"] == "index") {
+      $result = get_all_users();
+      echo json_encode($result);
     }
   }
  ?>
