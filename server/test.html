@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.js" charset="utf-8"></script>
+    <title>Test page</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var cmd = 'show';
+      var params = {
+        cmd: cmd,
+        user_id: '2'
+      }
+      var url = 'users/main.php';
+
+      var settings = {
+        url: url,
+        data: params,
+        dataType: 'json',
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
+        }
+      }
+      $.post(settings);
+    </script>
+  </body>
+</html>
