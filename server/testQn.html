@@ -162,6 +162,63 @@
 
 		<!--
 
+		Show Title and Post only (For Search bar)
+
+		-->
+
+		<style type="text/css">
+			table, th, td {
+    			border: 1px solid black;
+    			border-collapse: collapse;
+			}
+		</style>
+		<h3>Show Title & Content Only</h3>
+		<table id="qns_table"  style="width:100% ">
+			<thead>
+				<th>title</th>
+				<th>content</th>
+			</thead>
+			<tbody id="tbl_body_qns">
+			</tbody>
+		<table>
+		<button id="view_qns" type="button">Show Questions DB</button>
+		<br/>
+		<text id="msg_qns"></text>
+
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#view_qns").click(function(){
+					$.ajax({
+						url: "questions.php",
+						data: {
+							"cmd" : "qns_title" 
+						},
+						type: "POST",
+						dataType: "json",
+						error: function() {
+							$("#msg_qns").text("fail to excuete qns ajax");
+						},
+						success: function(data){
+							var table_content = "";
+							for(var i=0; i<data.length; i++){
+								table_content += (
+									"<tr>" +
+									"<td>" + data[i].title + "</td>" +
+									"<td>" + data[i].content + "</td>" +
+									"</tr>"
+								);
+							}
+							$("#tbl_body_qns").html(table_content);
+						}	
+					});
+				});
+			});
+		</script>
+		<hr>
+
+		<!--
+
 		Show Trending Post
 
 		-->
@@ -229,62 +286,7 @@
 		</script>
 		<hr>
 
-		<!--
-
-		Show Title and Post only (For Search bar)
-
-		-->
-
-		<style type="text/css">
-			table, th, td {
-    			border: 1px solid black;
-    			border-collapse: collapse;
-			}
-		</style>
-		<h3>Show trending post</h3>
-		<table id="qns_table"  style="width:100% ">
-			<thead>
-				<th>title</th>
-				<th>content</th>
-			</thead>
-			<tbody id="tbl_body_qns">
-			</tbody>
-		<table>
-		<button id="view_qns" type="button">Show Questions DB</button>
-		<br/>
-		<text id="msg_qns"></text>
-
-
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$("#view_qns").click(function(){
-					$.ajax({
-						url: "questions.php",
-						data: {
-							"cmd" : "qns_title" 
-						},
-						type: "POST",
-						dataType: "json",
-						error: function() {
-							$("#msg_qns").text("fail to excuete qns ajax");
-						},
-						success: function(data){
-							var table_content = "";
-							for(var i=0; i<data.length; i++){
-								table_content += (
-									"<tr>" +
-									"<td>" + data[i].title + "</td>" +
-									"<td>" + data[i].content + "</td>" +
-									"</tr>"
-								);
-							}
-							$("#tbl_body_qns").html(table_content);
-						}	
-					});
-				});
-			});
-		</script>
-		<hr>
+		
 
 	</body>
 </html>
