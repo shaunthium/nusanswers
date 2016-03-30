@@ -32,10 +32,7 @@
 		$result = $db->query($query);
 		$title_array = array();
 		while ($title = mysqli_fetch_assoc($result)){
-			$title_array[] = array(
-				'title' => $title['title'],
-				'content'=>$title['content']
-			);
+			$title_array[] = $title;
 		}
 		echo json_encode($title_array);		
 	}
