@@ -29,13 +29,8 @@
 
     $sql_result = $db->query($query);
     $result = array();
-    while (($row = mysqli_fetch_row($sql_result)) != null) {
-      $user = array();
-      $user["id"] = $row[0];
-      $user["first_name"] = $row[1];
-      $user["last_name"] = $row[2];
-      // Push user into array
-      $result[] = $user;
+    while (($user_details = mysqli_fetch_assoc($sql_result)) != null) {
+      $result[] = $user_details;
     }
     return $result;
   }
