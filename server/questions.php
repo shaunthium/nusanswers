@@ -14,7 +14,8 @@
 			exit("Empty title or content");
 		}
 
-		$query = "INSERT INTO Questions(user_id, title, content, score, view_count) VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
+		$query = "INSERT INTO Questions(user_id, title, content, score, view_count) 
+			VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
 		if($db->query($query)){
 			echo "Question Inserted";
 		}else{
