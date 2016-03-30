@@ -1,7 +1,11 @@
-<?php require_once 'connect.php';
+<?php 
+	require_once 'connect.php';
+	if(isset($_POST["cmd"])){
+		$cmd = $_POST["cmd"];
+	}
 	
 	///Get all Title from "Questions" database
-	if($_POST["cmd"] == "title"){
+	if($cmd == "title"){
 		$query = "SELECT title FROM Questions";
 		$result = $db->query($query);
 		$title_array = array();
@@ -12,7 +16,7 @@
 	}
 
 	//Get Trending Post Top 10
-	if($_POST["cmd"] == "trending"){
+	if($cmd == "trending"){
 		$query = "SELECT * FROM Questions ORDER BY score DESC LIMIT 10";
 		$result = $db->query($query);
 		$post_array = array();
