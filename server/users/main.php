@@ -3,16 +3,27 @@
   require_once('get_functions.php');
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if ($_POST["cmd"] == "show") {
-      // Show user
+    $cmd = $_POST["cmd"];
+    if ($cmd == "show") {
+      // Get user
       $user_id = $_POST["user_id"];
       $result = get_user($user_id);
 
       if (!$result) {
-        http_response_code(400);
+        http_response_code(404);
         echo "Error: No such user!";
       } else {
         echo json_encode($result);
+      }
+    } else if ($cmd == "auth") {
+      $email = $_POST["email"];
+      $password = $_POST["password"];
+
+      if (authenticate_user($email, $password)) {
+        echo true;
+      } else {
+        http_response_code(403);
+        echo "Error: Unauthorized.";
       }
     }
   } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
