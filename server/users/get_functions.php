@@ -1,6 +1,6 @@
 <?php
   require_once('../connect.php');
-  
+
   function get_all_users() {
     global $db;
     $query = "SELECT * FROM Users";
@@ -19,6 +19,18 @@
       $user["updated_at"] = $row[8];
       // Push user into array
       $result[] = $user;
+    }
+    return $result;
+  }
+
+  function get_users_for_search_results() {
+    global $db;
+    $query = "SELECT id, first_name, last_name FROM Users";
+
+    $sql_result = $db->query($query);
+    $result = array();
+    while (($user_details = mysqli_fetch_assoc($sql_result)) != null) {
+      $result[] = $user_details;
     }
     return $result;
   }

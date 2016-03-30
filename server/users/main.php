@@ -30,6 +30,9 @@
     if ($_GET["cmd"] == "index") {
       $result = get_all_users();
       echo json_encode($result);
+    } else if ($_GET["cmd"] == "search") {
+      $result = get_users_for_search_results();
+      echo json_encode($result);
     }
   }
  ?>
