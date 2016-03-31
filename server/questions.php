@@ -16,12 +16,15 @@
 
 		$query = "INSERT INTO Questions(user_id, title, content, score, view_count) 
 			VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
+
+		$db->query($query);
+		/*
 		if($db->query($query)){
 			echo "Question Inserted";
 		}else{
 			echo "Fail to insert question";
 		}
-
+		*/
 
 	}
 
@@ -55,12 +58,55 @@
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at']
 			);
-			
-			//$post_array[] = array_values($post);
 		}
 		echo json_encode($post_array);		
 	}
 
+	//Up Vote for Questions
+	if($cmd == "qns_upvote"){
+		$id= $_POST["id"];
+		$query = "UPDATE Questions SET score = score + 1 WHERE id=" . $id;
+		$db->query($query);
+		/*
+		if($db->query($query)){
+			echo "id='" . $id . "' Up Voted";
+		}else{
+			echo "id='" . $id . "' Fail to up vote";		
+		}
+		*/
+	}
+
+	//Down Vote for Questions
+	if($cmd == "qns_downvote"){
+		$id= $_POST["id"];
+		$query = "UPDATE Questions SET score = score - 1 WHERE id=" . $id;
+		$db->query($query);
+		/*
+		if($db->query($query)){
+			echo "id='" . $id . "' Down Voted";
+		}else{
+			echo "id='" . $id . "' Fail to down vote";		
+		}
+		*/
+	}
+
+	//View Count for Visitors Viewing the Questions every session
+	if($cmd == "qns_view_count"){
+		$id= $_POST["id"];
+		$query = "UPDATE Questions SET view_count = view_count + 1 WHERE id=" . $id;
+		$db->query($query);
+		/*
+		if($db->query($query)){
+			echo "id='" . $id . "' Viewed";
+		}else{
+			echo "id='" . $id . "' Fail to view";		
+		}
+		*/
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+	/* Code meant for internal testing only */
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	/* 
 	For testing purpose only
 	Update 'score' of user using 'id'
