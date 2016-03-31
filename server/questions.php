@@ -7,8 +7,8 @@
 	//Submit new questions
 	if($cmd == "new_qn"){
 		$user_id= $_POST["user_id"];
-		$title = $_POST["title"];
-		$content= $_POST["content"];
+		$title = $db->escape_string($_POST["title"]);
+		$content= $db->escape_string($_POST["content"]);
 
 		if(empty($title) || empty($content)){
 			exit("Empty title or content");
