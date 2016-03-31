@@ -8,6 +8,8 @@
 		$answer_id = $_POST["answer_id"];
 	if(isset($_POST["user_id"]))
 		$user_id = $_POST["user_id"];
+	if(isset($_POST["content"]))
+		$content = $_POST["content"];
 		
 	
 	global $db; 
@@ -72,6 +74,16 @@
 		//WARNING: Amount of upvotes not tracked!
 		$query = "CALL DownVoteAnswer($answer_id)";
 		$res = $db->query($query); 
+	}
+	else if($cmd == "createanswer")
+	{
+		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, $content)";
+		$db->query($query);
+	}
+	else if($cmd == "updateanswer")
+	{
+		$query = "update Answers set content = $content where id = $answer_id";
+		$db->query($query);
 	}
 	
 ?>
