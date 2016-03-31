@@ -4,3 +4,6 @@
 # Packages
 bower_components
 node_modules
+
+#html_files
+/server/testQn.html
