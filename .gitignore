@@ -5,4 +5,9 @@
 bower_components
 node_modules
 
+<<<<<<< HEAD
 seed_db.php
+=======
+#html_files
+/server/testQn.html
+>>>>>>> dev_weiren
