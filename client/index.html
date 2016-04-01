@@ -11,52 +11,52 @@
 
   <body ng-app="quoraApp">
 
-  <!-- Dropdown Structure -->
-  <ul id="dropdown" class="dropdown-content collection">
-      <li ng-repeat = "i in [1,2,3,4]" class="collection-item">
-          <span class="title black-text text-darken-1">You got a notification :O</span>
-      </li>
-  </ul>
+    <!-- Dropdown Structure -->
+    <ul id="dropdown" class="dropdown-content collection">
+        <li ng-repeat = "i in [1,2,3,4]" class="collection-item">
+            <span class="title black-text text-darken-1">You got a notification :O</span>
+        </li>
+    </ul>
 
-  <!-- Stuff that appears when user starts typing question -->
-  <div ng-hide="!user_question" id="overlay-container"></div>
+    <!-- Stuff that appears when user starts typing question -->
+    <div ng-show="showOverlay" id="overlay-container"></div>
 
-  <search-popup ng-hide="!user_question">
-  </search-popup>
+    <search-popup ng-hide="!user_question">
+    </search-popup>
 
-  <!-- hardcoded logo in corner -->
-  <h5 ui-sref="home" class="hide-on-med-and-down"style="cursor:pointer; position:fixed; font-size:1.3em; color:white; left:15px; top:10px; z-index:999;">logo_here</h5>
+    <!-- hardcoded logo in corner -->
+    <h5 ui-sref="home" class="hide-on-med-and-down"style="cursor:pointer; position:fixed; font-size:1.3em; color:white; left:15px; top:10px; z-index:999;">logo_here</h5>
 
-  <!-- this navbar is a mess, grid system does not seem
-       to work here, had to haxx0r hardcode it because couldn't make
-       elements float after each other -->
-  <div style="z-index:998;"class="navbar-fixed">
-    <nav class="red darken-2">
+    <!-- this navbar is a mess, grid system does not seem
+         to work here, had to haxx0r hardcode it because couldn't make
+         elements float after each other -->
+    <div style="z-index:998;"class="navbar-fixed">
+      <nav class="red darken-2">
 
-      <div class="nav-wrapper container">
+        <div class="nav-wrapper container">
 
-        <!--<a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>-->
+          <!--<a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>-->
 
-        <ul class="right hide-on-med-and-down">
-          <li><a class="white-text" href="#/profile">Profile</a></li>
-          <!-- Dropdown Trigger -->
-          <li><a class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
-        </ul>
+          <ul class="right hide-on-med-and-down">
+            <li><a class="white-text" href="#/profile">{{test}}</a></li>
+            <!-- Dropdown Trigger -->
+            <li><a class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
+          </ul>
 
-        <form class="main-search-field center v-align white" >
-          <div id="search-field" class="input-field">
-            <input style="line-height:30px;"placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
-            <label>
-              <i style="line-height:45px;"class="material-icons grey-text text-lighten-1">question_answer</i>
+          <form class="main-search-field center v-align white" >
+            <div id="search-field" class="input-field">
+              <input style="padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
+              <!-- <label>
+                <i style="line-height:45px;"class="material-icons grey-text text-lighten-1">question_answer</i>
+              </label> -->
 
-            </label>
-            <i style="line-height:45px;"ng-click="user_question = ''" class="material-icons">close</i>
-          </div>
-        </form>
+              <i ui-sref="qa({'currQuestion' : user_question})" style="line-height:45px;" ng-click="user_question = ''" class="material-icons">chat_bubble_outline</i>
+            </div>
+          </form>
 
-      </div>
-    </nav>
-  </div>
+        </div>
+      </nav>
+    </div>
 
   	<!-- Each view of the app is separate into views folder -->  
     <ui-view></ui-view>
@@ -70,14 +70,14 @@
     <script src="app.js"></script>
     <!-- controllers -->
     <script src="js/controllers/main-controller.js"></script>
-    <script src="js/controllers/post-controller.js"></script>
+    <script src="js/controllers/QA-controller.js"></script>
     <script src="js/controllers/profile-controller.js"></script>
     <!-- services -->
-    <script src="js/services/post-service.js"></script>
+    <script src="js/services/question-service.js"></script>
     <!-- directives -->
     <script src="js/jquery_stuff.js"></script>
     <script src="js/directives/comment-directive.js"></script>
-    <script src="js/directives/post-directive.js"></script>
+    <script src="js/directives/feed-item-directive.js"></script>
     <script src="js/directives/search-popup-directive.js"></script>
   </body>
 </html>

@@ -1,9 +1,10 @@
 /*Controls the details of the posts */
 
 angular.module('quoraApp')
-.controller('PostCtrl', [ '$scope', '$stateParams', '$rootScope', function($scope, $stateParams, $rootScope){
+.controller('QACtrl', [ '$scope', '$stateParams', '$rootScope', function($scope, $stateParams, $rootScope){
 	
-	$scope.post = $stateParams.currPost;
+	$scope.question = $stateParams.currQuestion;
+	console.log("q", $scope.question)
 	$scope.isAddCommentActive = false;
 	$scope.COMMENTS_MIN_SIZE = 15;
 	$scope.COMMENTS_MAX_SIZE = 30;

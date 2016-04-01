@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('quoraApp')
-	.service('postService', ['$q', '$http', function($q, $http){
+	.service('questionService', ['$q', '$http', function($q, $http){
 
 		var base_url = "path/to/our/php/script",
 			canceller;
@@ -46,7 +46,7 @@ angular.module('quoraApp')
 								 	]
 								}];
 
-		function getPosts(){
+		function getQuestions(){
 
 			//canceller = $q.defer();
 
@@ -66,7 +66,7 @@ angular.module('quoraApp')
 		}
 
 		return {
-			getPosts: getPosts,
+			getQuestions: getQuestions,
 			cancelCall: cancelCall
 		}
 
