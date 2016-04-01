@@ -16,14 +16,15 @@
             <a href="#!" class="collection-item black-text text-accent-2">Parties<span class="badge">14</span></a>
           </div>
       </div>
+
       
       <!-- begin feed -->
       <div class="col s12 m9 right">
-        <post ng-repeat="question in questions">
+        <feed-item ng-repeat="question in questions">
           <div class="card-action">
             Number of answers, votes and stuff
           </div>
-        </post>
+        </feed-item>
       </div>
     <!-- end item -->
     </div>

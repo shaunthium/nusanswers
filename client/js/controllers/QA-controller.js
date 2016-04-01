@@ -25,7 +25,7 @@ angular.module('quoraApp')
 			return;
 		}
 
-		$scope.post.comments.push({author:'Dummy', body:$scope.user_comment, upvotes:0})
+		$scope.questions.comments.push({author:'Dummy', body:$scope.user_comment, upvotes:0})
 		$scope.user_comment = "";
 		$scope.isAddCommentActive = !$scope.isAddCommentActive;
 
