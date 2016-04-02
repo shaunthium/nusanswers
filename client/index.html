@@ -50,7 +50,7 @@
                 <i style="line-height:45px;"class="material-icons grey-text text-lighten-1">question_answer</i>
               </label> -->
 
-              <i ui-sref="qa({'currQuestion' : user_question})" style="line-height:45px;" ng-click="user_question = ''" class="material-icons">chat_bubble_outline</i>
+              <i style="line-height:45px;" ng-click="submitQuestion()" class="material-icons">chat_bubble_outline</i>
             </div>
           </form>
 
@@ -58,7 +58,7 @@
       </nav>
     </div>
 
-  	<!-- Each view of the app is separate into views folder -->  
+  	<!-- Each view of the app is separate into views folder -->
     <ui-view></ui-view>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
@@ -77,9 +77,10 @@
     <!-- directives -->
     <script src="js/jquery_stuff.js"></script>
     <script src="js/directives/comment-directive.js"></script>
+    <script src="js/directives/answer-directive.js"></script>
+    <script src="js/directives/post-directive.js"></script>
+    <script src="js/directives/add-comment-directive.js"></script>
     <script src="js/directives/feed-item-directive.js"></script>
     <script src="js/directives/search-popup-directive.js"></script>
-    <script src="js/directives/question-directive.js"></script>
-    <script src="js/directives/new-question-directive.js"></script>
   </body>
 </html>
