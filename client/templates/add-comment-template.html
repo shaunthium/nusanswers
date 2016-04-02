@@ -1,0 +1,31 @@
+<div style="padding-top:10px; padding-bottom:10px;"class="card-action">
+  <div style="display:table-cell; text-align:left;width:40px;"></div>
+  <div style="display:table-cell">
+
+    <p ng-hide="isAddCommentActive" style="font-size:0.9em;">
+      <span style="cursor:pointer;" ng-click="toggleAddCommentVisible()" class="blue-text">Add Comment</span> | <span class="blue-text">Show 2 more comments (I don't work yet)</span> <!--FIXME: fix show more comments button -->
+    </p>
+
+    <div ng-if="isAddCommentActive">
+
+      <div style="float:left; margin-top:5px;">
+        <textarea id="textarea" class="comment-input-area" ng-model="$parent.user_comment" placeholder="Make a comment!"> <!--XXX: BEWARE THIS NG-MODEL HACK --->
+        </textarea>
+      </div>
+
+      <a ng-click="submitComment()" class="waves-effect waves-light btn blue comment-button">Add comment</a>
+
+      <!-- feedback -->
+      <p ng-if="!user_comment || user_comment.length < COMMENTS_MIN_SIZE" class="grey-text darken-1 comment-feedback">Enter {{COMMENTS_MIN_SIZE - user_comment.length}} more characters</p>
+
+      <p ng-if="user_comment.length >= COMMENTS_MIN_SIZE && user_comment.length <= COMMENTS_MAX_SIZE" class="grey-text darken-1 comment-feedback">
+      {{COMMENTS_MAX_SIZE - user_comment.length}} characters left</p>
+
+      <p ng-if="user_comment.length > COMMENTS_MAX_SIZE" class="red-text darken-1 comment-feedback">
+      {{user_comment.length - COMMENTS_MAX_SIZE}} too many</p>
+
+      <!-- feedback end -->
+    </div>
+  </div>
+  <!-- add comment section end -->
+</div>
