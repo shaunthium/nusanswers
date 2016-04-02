@@ -6,7 +6,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-		templateUrl : "templates/post-template.html"
+		templateUrl : "templates/new-question-template.html"
 	}
 
 })

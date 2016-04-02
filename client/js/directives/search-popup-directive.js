@@ -4,9 +4,10 @@ angular.module('quoraApp')
 
 	return {
 		restrict: 'E',
-		controller: function($scope, $state){
+		controller: function($scope, $state, $rootScope){
 			$scope.goToPost = function(post){
 				$scope.user_question = "";
+				$scope.showOverlay = false;
 				$state.go('post', {'currPost' : post})
 			}
 		},
@@ -27,15 +28,6 @@ angular.module('quoraApp')
 				document.getElementById("overlay-container").style.top = (scrollY) + "px";
 
 			})
-
-			$('html').click(function(){
-
-				if(scope.user_question){
-					scope.user_question = "";
-					scope.$apply(); // since this event was triggered outside angular
-				}
-
-			});
 
 		},
 		templateUrl:"templates/search-popup-template.html"

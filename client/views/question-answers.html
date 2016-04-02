@@ -4,9 +4,35 @@
 
     <div class="row">
       <div class="col s12">
-        <post>
-          <!-- comments -->
-          <comment ng-repeat = "comment in post.comments" upvotes="4" user="{{comment.author}}">
+
+        <div class="card white">
+
+          <div class="card-content">
+            <p class="grey-text">{{question.category}}</p>
+            <span style="cursor:pointer;" ui-sref="question({'currQuestion' : question})" class="card-title">{{question.title}}</span>
+             
+             <ul style="border:0;"class="collection">
+              <li style="min-height:60px;"class="collection-item avatar">
+                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
+                <span class="title">{{question.author}}</span>
+                <p class="grey-text">{{question.views}} Views </p>
+                <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>525</a>
+              </li>
+            </ul>
+            
+            <!-- Behave as a table cell for the height to adjust to same as the text column -->
+            <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
+              <i ng-click="incrementUpvotes(question, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
+              <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{question.upvotes}}</p>
+              <i ng-click="incrementUpvotes(question, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+            </div>
+
+            <p style="display:table-cell;">{{question.desc}}</p>
+            
+          </div>
+
+          <!-- we pass in what we want in the footer -->
+           <comment ng-repeat = "comment in question.comments" upvotes="4" user="{{comment.author}}">
                {{comment.body}}
           </comment>
 
@@ -37,14 +63,12 @@
                 {{user_comment.length - COMMENTS_MAX_SIZE}} too many</p>
 
                 <!-- feedback end -->
-
               </div>
-
             </div>
-          <!-- add comment section end -->
+            <!-- add comment section end -->
           </div>
-
-        </post>
+        <!-- end card-->
+        </div>
       <!-- end question -->
       </div>
 
@@ -58,26 +82,26 @@
         <div class="card white">
 
           <div class="card-content">
-            <p class="grey-text">{{post.category}}</p>
-            <span class="card-title">{{post.title}}</span>
+            <p class="grey-text">{{question.category}}</p>
+            <span class="card-title">{{question.title}}</span>
              
              <ul style="border:0;"class="collection">
               <li style="min-height:60px;"class="collection-item avatar">
                 <img src="http://lorempixel.com/400/200/" alt="" class="circle">
-                <span class="title">{{post.author}}</span>
-                <p class="grey-text">{{post.views}} Views </p>
+                <span class="title">{{question.author}}</span>
+                <p class="grey-text">{{question.views}} Views </p>
                 <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>525</a>
               </li>
             </ul>
             
             <!-- Behave as a table cell for the height to adjust to same as the text column -->
             <div style="display:table-cell; vertical-align:middle; text-align:center;width:60px;">
-              <i ng-click="incrementUpvotes(post, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
-              <p style="padding:5px;">{{post.upvotes}}</p>
-              <i ng-click="incrementUpvotes(post, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+              <i ng-click="incrementUpvotes(question, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
+              <p style="padding:5px;">{{question.upvotes}}</p>
+              <i ng-click="incrementUpvotes(question, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
             </div>
 
-            <p style="display:table-cell;">{{post.desc}}</p>
+            <p style="display:table-cell;">{{question.desc}}</p>
             
           </div>
 

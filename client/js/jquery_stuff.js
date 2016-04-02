@@ -15,8 +15,36 @@ angular.module('quoraApp')
 		      alignment: 'right' // Displays dropdown with edge aligned to the left of button
 		    }
 		  );
+
 		}
 	}
 })
 
 
+
+.directive('body', function(){
+	return {
+		restrict:'E',
+		link:function(scope, element, attributes){
+
+			$('html').click(function(){
+				
+				if( $('#search').is(':focus')) {
+
+					console.log("heh")
+					scope.showOverlay = true;
+				
+				} else {
+
+					console.log("not focus")
+					scope.user_question = "";	
+					scope.showOverlay = false;
+
+				}	
+				scope.$apply(); 
+				
+			});
+
+		}
+	}
+})
