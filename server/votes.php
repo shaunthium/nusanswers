@@ -19,6 +19,24 @@
 		$db->query($query);
 	}
 
+	//Return the name list of users who voted for a question
+	function get_users_who_voted($query){
+		global $db;
+		
+		$result = $db->query($query);
+		$user_name_array = array();
+
+		while ($user_id = mysqli_fetch_array($result)){
+			$query_user_name = "SELECT first_name, last_name FROM Users WHERE id=".$user_id['user_id'];
+			$result_user_name = $db->query($query_user_name);
+
+			while ($user_name = mysqli_fetch_array($result_user_name)){
+				$user_name_array[] = array($user_name['first_name'], $user_name['last_name']);
+			}
+		}
+		
+		echo json_encode($user_name_array);		
+	}
 
 	if(isset($_POST["cmd"])){
 		$cmd = $_POST["cmd"];
@@ -100,7 +118,7 @@
 			$total_up_votes += $row['up_vote'];
 		}
 
-		echo $total_up_votes;
+		echo json_encode($total_up_votes);
 		
 	}
 
@@ -115,6 +133,23 @@
 			$total_up_votes += $row['down_vote'];
 		}
 
-		echo $total_up_votes;
+		echo json_encode($total_up_votes);
+	}
+
+	//Return the the list of users who gives a up_votes to a question
+	if($cmd == "get_users_up_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+
+		$query_user_id = "SELECT user_id FROM Questions_Voted_By_Users WHERE question_id=".$qns_id . " AND up_vote=1";
+		get_users_who_voted($query_user_id);
+	}
+
+	//Return the the list of users who gives a down_votes to a question
+	if($cmd == "get_users_down_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+
+		$query_user_id = "SELECT user_id FROM Questions_Voted_By_Users WHERE question_id=".$qns_id . " AND down_vote=1";
+
+		get_users_who_voted($query_user_id);
 	}
 ?>
