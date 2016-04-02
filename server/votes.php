@@ -22,8 +22,6 @@
 
 	if(isset($_POST["cmd"])){
 		$cmd = $_POST["cmd"];
-		$qns_id = $db->escape_string($_POST["qns_id"]);
-		$user_id =  $db->escape_string($_POST["user_id"]);
 	}
 
 	/*
@@ -31,6 +29,8 @@
 	*	Update and increase the total 'score' by +1 for the question inside 'Questions' table 
 	*/
 	if($cmd == "set_up_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+		$user_id =  $db->escape_string($_POST["user_id"]);
 		$table_name = "Questions_Voted_By_Users";
 		$up_vote = 1;
 		$down_vote = 0;
@@ -46,6 +46,8 @@
 	*	Update and decrease the total 'score' by -1 for the question inside 'Questions' table 
 	*/
 	if($cmd == "set_down_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+		$user_id =  $db->escape_string($_POST["user_id"]);
 		$table_name = "Questions_Voted_By_Users";
 		$up_vote = 0;
 		$down_vote = 1;
@@ -55,7 +57,13 @@
 		update_score($qns_id, $operator);
 	}
 
+	/*
+	*	Reset a up vote given by a user in the 'Questions_Voted_By_Users' table
+	* 	Update and decrease the total 'score' by -1 for the question inside 'Questions' table 
+	*/
 	if($cmd == "reset_up_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+		$user_id =  $db->escape_string($_POST["user_id"]);
 		$table_name = "Questions_Voted_By_Users";
 		$up_vote = 0;
 		$down_vote = 0;
@@ -65,7 +73,13 @@
 		update_score($qns_id, $operator);
 	}
 
+	/*
+	*	Reset a down vote given by a user in the 'Questions_Voted_By_Users' table
+	* 	Update and increase the total 'score' by +1 for the question inside 'Questions' table 
+	*/
 	if($cmd == "reset_down_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
+		$user_id =  $db->escape_string($_POST["user_id"]);
 		$table_name = "Questions_Voted_By_Users";
 		$up_vote = 0;
 		$down_vote = 0;
@@ -77,7 +91,7 @@
 
 	//Return the total number of up_votes given to a question
 	if($cmd == "get_qns_up_vote"){
-		
+		$qns_id = $db->escape_string($_POST["qns_id"]);
 		$query = "SELECT up_vote FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
 		$result = $db->query($query);
 		$total_up_votes = 0;
@@ -92,6 +106,7 @@
 
 	//Return the total number down_votes given to a question
 	if($cmd == "get_qns_down_vote"){
+		$qns_id = $db->escape_string($_POST["qns_id"]);
 		$query = "SELECT down_vote FROM Questions_Voted_By_Users WHERE question_id=".$qns_id;
 		$result = $db->query($query);
 		$total_up_votes = 0;
