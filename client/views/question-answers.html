@@ -3,116 +3,15 @@
   <div class="section">
 
     <div class="row">
-      <div class="col s12">
 
-        <div class="card white">
-
-          <div class="card-content">
-            <p class="grey-text">{{question.category}}</p>
-            <span style="cursor:pointer;" ui-sref="question({'currQuestion' : question})" class="card-title">{{question.title}}</span>
-             
-             <ul style="border:0;"class="collection">
-              <li style="min-height:60px;"class="collection-item avatar">
-                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
-                <span class="title">{{question.author}}</span>
-                <p class="grey-text">{{question.views}} Views </p>
-                <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>525</a>
-              </li>
-            </ul>
-            
-            <!-- Behave as a table cell for the height to adjust to same as the text column -->
-            <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
-              <i ng-click="incrementUpvotes(question, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
-              <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{question.upvotes}}</p>
-              <i ng-click="incrementUpvotes(question, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
-            </div>
-
-            <p style="display:table-cell;">{{question.desc}}</p>
-            
-          </div>
-
-          <!-- we pass in what we want in the footer -->
-           <comment ng-repeat = "comment in question.comments" upvotes="4" user="{{comment.author}}">
-               {{comment.body}}
-          </comment>
-
-          <div style="padding-top:10px; padding-bottom:10px;"class="card-action">
-            <div style="display:table-cell; text-align:left;width:40px;"></div>
-            <div style="display:table-cell">
-
-              <p ng-hide="isAddCommentActive" style="font-size:0.9em;">
-                <span style="cursor:pointer;" ng-click="toggleAddCommentVisible()" class="blue-text">Add Comment</span> | <span class="blue-text">Show 2 more comments (I don't work yet)</span>
-              </p>
-
-              <div ng-if="isAddCommentActive">
-  
-                <div style="float:left; margin-top:5px;">
-                  <textarea id="textarea" class="comment-input-area" ng-model="$parent.$parent.user_comment" placeholder="Make a comment!">
-                  </textarea>
-                </div>
-
-                <a ng-click="submitComment()" class="waves-effect waves-light btn blue comment-button">Add comment</a>
-
-                <!-- feedback -->
-                <p ng-if="!user_comment || user_comment.length < COMMENTS_MIN_SIZE" class="grey-text darken-1 comment-feedback">Enter {{COMMENTS_MIN_SIZE - user_comment.length}} more characters</p>
-
-                <p ng-if="user_comment.length >= COMMENTS_MIN_SIZE && user_comment.length <= COMMENTS_MAX_SIZE" class="grey-text darken-1 comment-feedback">
-                {{COMMENTS_MAX_SIZE - user_comment.length}} characters left</p>
-
-                <p ng-if="user_comment.length > COMMENTS_MAX_SIZE" class="red-text darken-1 comment-feedback">
-                {{user_comment.length - COMMENTS_MAX_SIZE}} too many</p>
-
-                <!-- feedback end -->
-              </div>
-            </div>
-            <!-- add comment section end -->
-          </div>
-        <!-- end card-->
-        </div>
-      <!-- end question -->
-      </div>
+      <post type="question"></post>
 
       <div class="col s12">
-        <h5 style="font-size:1.3em;font-weight:250;"class="grey-text text-darken-2">3 Answers</h5>
+        <h5 style="font-size:1.3em;font-weight:250;"class="grey-text text-darken-2">{{numAnswers}} Answer<span ng-if="numAnswers !== 1">s</span></h5>
         <hr/>
       </div>
 
-      <div class="col s12">
-
-        <div class="card white">
-
-          <div class="card-content">
-            <p class="grey-text">{{question.category}}</p>
-            <span class="card-title">{{question.title}}</span>
-             
-             <ul style="border:0;"class="collection">
-              <li style="min-height:60px;"class="collection-item avatar">
-                <img src="http://lorempixel.com/400/200/" alt="" class="circle">
-                <span class="title">{{question.author}}</span>
-                <p class="grey-text">{{question.views}} Views </p>
-                <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>525</a>
-              </li>
-            </ul>
-            
-            <!-- Behave as a table cell for the height to adjust to same as the text column -->
-            <div style="display:table-cell; vertical-align:middle; text-align:center;width:60px;">
-              <i ng-click="incrementUpvotes(question, 1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_up</i>
-              <p style="padding:5px;">{{question.upvotes}}</p>
-              <i ng-click="incrementUpvotes(question, -1);" style="cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
-            </div>
-
-            <p style="display:table-cell;">{{question.desc}}</p>
-            
-          </div>
-
-          <div class="card-action">
-            <a href="#">Comments</a>
-          </div>
-
-        <!-- end card-->
-        </div>
-
-      </div>
+      <post ng-repeat="post in post.answers" type="answer"></post>
 
     <!-- row end -->
     </div>
