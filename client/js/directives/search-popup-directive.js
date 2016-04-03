@@ -30,20 +30,20 @@ angular.module('quoraApp')
                 /*FIXME: REMOVE HARDCODED DATA*/
                 answer =  {
                                 id: 600,
-                                author:     {name:'Alex', karma:100},
+                                author:     {name:'Alex', karma:100, userid:99},
                                 desc:       "I am an answer.",
                                 upvotes:    0,
-                                comments:   [{author:'Eric', body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}]
+                                comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}]
                             };
                 question =  {
                                 id: 600,
                                 title: $scope.user_question,
                                 category:   "New post!",
-                                author:     {name:'Alex', karma:100},
+                                author:     {name:'Alex', karma:100, userid:99},
                                 views:      9001,
                                 desc:       "This is a new question description placeholder.",
                                 upvotes:    0,
-                                comments:   [{author:'Eric', body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}],
+                                comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}],
                                 answers: [answer]
                             };
                 $scope.user_question = ""; //Clear the search field
