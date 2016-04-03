@@ -27,6 +27,12 @@ angular.module('quoraApp')
         	  post.upvotes += inc;
         	};
 
+            //TODO: implement goToProfile function
+            $scope.goToProfile = function(post){
+                //FIXME: this is just a simple placeholder to demonstrate functionality
+                $state.go('profile', {'author' : post.author});
+            }
+
             $scope.goToPost = function(post){
 				$scope.user_question = "";
 				$scope.showOverlay = false;

@@ -6,7 +6,7 @@
         <ul style="border:0;"class="collection">
             <li style="min-height:60px;"class="collection-item avatar">
                 <img src="http://lorempixel.com/400/200/" alt="" class="circle">
-                <span class="title">{{post.author.name}}</span>
+                <span ng-click="goToProfile(post.author.userid)" class="title">{{post.author.name}}</span>
                 <p ng-if="includeViews" class="grey-text">{{post.views}} Views </p>
                 <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
             </li>
@@ -21,10 +21,6 @@
 
         <p style="display:table-cell;">{{post.desc}}</p>
 
-    </div>
-
-    <div class="card-action">
-        <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
     </div>
 
     <!-- we pass in what we want in the footer -->
