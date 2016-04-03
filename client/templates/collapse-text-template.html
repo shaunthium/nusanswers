@@ -1,0 +1,5 @@
+<span ng-if="readMore === false">{{lessText}}</span>
+<span ng-if="overflow === true">
+    <span ng-if="readMore === false" style="cursor:pointer" ng-click="toggleReadMore()">...(read more)</span>
+    <span ng-if="readMore === true">{{moreText}}</span>
+</span>

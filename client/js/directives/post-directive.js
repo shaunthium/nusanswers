@@ -40,6 +40,7 @@ angular.module('quoraApp')
 			}
         },
         link : function(scope, element, attrs){
+            scope.type = attrs.type;
             scope.includeTags = false;
             scope.includeTitle = false;
             scope.linkToQuestionPage = false;
