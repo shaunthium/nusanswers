@@ -1,48 +1,11 @@
 <?php 
 	require_once ('connect.php');
 
-	if(isset($_POST["cmd"])){
-		$cmd = $_POST["cmd"];
-	}
+	$request_data = file_get_contents("php://input");
+  	$data = json_decode($request_data);
+  	$cmd = $data->cmd;
 
-	//Tag a questions
-	if($cmd == "tag_qns"){
-		$qns_id = $db->escape_string($_POST["qns_id"]);
-		$tag_string =  $db->escape_string($_POST["tag_string"]);
-		
-		$tag_array = explode(",", $tag_string);
-		add_tag($tag_array);
-		
-		tag_qns($qns_id, $tag_array);
-	}
-
-	if($cmd == "delete_tag"){
-		global $db;
-
-		$qns_id = $db->escape_string($_POST["qns_id"]);
-		$tag_string =  $db->escape_string($_POST["tag_string"]);
-		
-		
-		if(!empty($tag_string)){
-			$tag_array = explode(",", $tag_string);
-			$tag_id_array = array();
-			$i=0;
-			foreach($tag_array as $tag){
-				$query = "SELECT id FROM Tags WHERE content='" . $tag . "'";
-				$result = $db->query($query);
-				$row = mysqli_fetch_array($result);
-				$tag_id_array[$i++] = $row['id'];
-			}
-			
-			foreach($tag_id_array as $tag_id){
-				$query = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id . " AND tag_id=" . $tag_id;
-				$db->query($query);
-			}
-			
-		}		
-	}
-	
-	//Insert new tag to 'Tags' table, if tag exist inside the 'Tags' table, it will not be inserted 
+  	//Insert new tag to 'Tags' table, if tag exist inside the 'Tags' table, it will not be inserted 
 	function add_tag($tag_array){	
 		global $db;
 		foreach($tag_array as $tag){
@@ -65,5 +28,44 @@
 			$db->query($query_tag_qns);
 		}
 	}
+
+	//Tag a questions
+	if($cmd == "tag_qns"){
+		$qns_id = $db->escape_string($data->qns_id);
+		$tag_string =  $db->escape_string($data->tag_string);
+		
+		$tag_array = explode(",", $tag_string);
+		add_tag($tag_array);
+		
+		tag_qns($qns_id, $tag_array);
+	}
+
+	if($cmd == "delete_tag"){
+		global $db;
+
+		$qns_id = $db->escape_string($data->qns_id);
+		$tag_string =  $db->escape_string($data->tag_string);
+		
+		
+		if(!empty($tag_string)){
+			$tag_array = explode(",", $tag_string);
+			$tag_id_array = array();
+			$i=0;
+			foreach($tag_array as $tag){
+				$query = "SELECT id FROM Tags WHERE content='" . $tag . "'";
+				$result = $db->query($query);
+				$row = mysqli_fetch_array($result);
+				$tag_id_array[$i++] = $row['id'];
+			}
+			
+			foreach($tag_id_array as $tag_id){
+				$query = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id . " AND tag_id=" . $tag_id;
+				$db->query($query);
+			}
+			
+		}		
+	}
+	
+	
 
 ?>

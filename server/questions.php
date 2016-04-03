@@ -2,16 +2,16 @@
 	require_once('connect.php');
 	require_once('tags.php');
 
-	if(isset($_POST["cmd"])){
-		$cmd = $_POST["cmd"];
-	}
+	$request_data = file_get_contents("php://input");
+  	$data = json_decode($request_data);
+  	$cmd = $data->cmd;
 	
 	//Submit new questions
 	if($cmd == "new_qn"){
-		$user_id= $db->escape_string($_POST["user_id"]);
-		$title = $db->escape_string($_POST["title"]);
-		$content= $db->escape_string($_POST["content"]);
-		$tag_string =  $db->escape_string($_POST["tag_string"]);
+		$user_id= $db->escape_string($data->user_id);
+		$title = $db->escape_string($data->title);
+		$content= $db->escape_string($data->content);
+		$tag_string =  $db->escape_string($data->tag_string);
 
 		//Exit if there is no title for questions
 		if(empty($title)){
@@ -81,21 +81,21 @@
 
 	//Up Vote for Questions
 	if($cmd == "qns_upvote"){
-		$id= $db->escape_string($_POST["id"]);
+		$id= $db->escape_string($data->id);
 		$query = "UPDATE Questions SET score = score + 1 WHERE id=" . $id;
 		$db->query($query);
 	}
 
 	//Down Vote for Questions
 	if($cmd == "qns_downvote"){
-		$id= $db->escape_string($_POST["id"]);
+		$id= $db->escape_string($data->id);
 		$query = "UPDATE Questions SET score = score - 1 WHERE id=" . $id;
 		$db->query($query);
 	}
 
 	//View Count for Visitors Viewing the Questions every session
 	if($cmd == "qns_view_count"){
-		$id= $db->escape_string($_POST["id"]);
+		$id= $db->escape_string($data->id);
 		$query = "UPDATE Questions SET view_count = view_count + 1 WHERE id=" . $id;
 		$db->query($query);
 	}
@@ -108,8 +108,8 @@
 	Update 'score' of user using 'id'
 	*/
 	if($cmd == "update_score"){
-		$id= $_POST["id"];
-		$score = $_POST["score"];
+		$id= $$data->id;
+		$score = $data->score;
 		$query = "UPDATE Questions SET score=". $score . " WHERE id=" . $id;
 		if($db->query($query)){
 			echo "Score Updated";
@@ -123,8 +123,8 @@
 	Update 'view_count' of user using 'id'
 	*/
 	if($cmd == "update_view"){
-		$id= $_POST["id"];
-		$view_count = $_POST["view_count"];
+		$id= $data->id;
+		$view_count = $data->view_count;
 		$query = "UPDATE Questions SET view_count=". $view_count . " WHERE id=" . $id;
 		if($db->query($query)){
 			echo "View_Count Updated";
@@ -138,7 +138,7 @@
 	Delete row from table
 	*/
 	if($cmd == "delete"){
-		$id= $_POST["id"];
+		$id= $data->id;
 		$query = "DELETE FROM Questions WHERE id=" . $id;
 		if($db->query($query)){
 			echo "Row with id='" . $id . "' had been deleted";
