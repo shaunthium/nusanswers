@@ -1,5 +1,7 @@
 <?php
-	require_once 'connect.php';
+	require_once('connect.php');
+  require_once('tags.php');
+
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
@@ -9,8 +11,9 @@
     $user_id = $data->user_id;
     $title = $db->escape_string($data->title);
     $content= $db->escape_string($data->content);
+    $tag_string =  $db->escape_string($data->tag_string);
 
-		if (empty($title) || empty($content)) {
+		if (empty($title)) {
 			exit("Empty title or content");
 		}
 
@@ -18,13 +21,30 @@
 			VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
 
 		$db->query($query);
-		/*
+	  /*
 		if($db->query($query)){
 			echo "Question Inserted";
 		}else{
-			echo "Fail to insert question";
+			$query = "INSERT INTO Questions(user_id, title, score, view_count)
+				VALUES(".$user_id.",'".$title."', 0, 0)";
 		}
-		*/
+    */
+/*
+		$db->query($query);
+
+		$query_id = "SELECT LAST_INSERT_ID()";
+		$result = $db->query($query_id);
+		$row = mysqli_fetch_array($result);
+		$qns_id =  $row['LAST_INSERT_ID()'];
+
+		//If the questions contains tag when it is created
+		if(!empty($tag_string)){
+			$tag_array = explode(",", $tag_string);
+			//Call add_tag($tag_array) function inside tags.php to add new tag not in the database
+			add_tag($tag_array);
+			//Call tag_qns($qns_id, $tag_array) function inside tags.php to tag qns and the list of related tags togther
+			tag_qns($qns_id, $tag_array);
+		}*/
 
 	}
 
@@ -40,9 +60,9 @@
 		echo json_encode($title_array);
 	}
 
-	//Get Trending post. The post is sorted in descending order of the Score of each post
-	if ($cmd == "trending") {
-		$query = "SELECT * FROM Questions ORDER BY score DESC";
+	//Get Trending post. The post is sorted in descending order of the total views of each post
+	if($cmd == "trending"){
+		$query = "SELECT * FROM Questions ORDER BY view_count DESC";
 		$result = $db->query($query);
 		$post_array = array();
 		while ($post = mysqli_fetch_array($result)){
@@ -67,13 +87,6 @@
     $id = $data->id;
 		$query = "UPDATE Questions SET score = score + 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Up Voted";
-		}else{
-			echo "id='" . $id . "' Fail to up vote";
-		}
-		*/
 	}
 
 	//Down Vote for Questions
@@ -81,13 +94,6 @@
     $id = $data->id;
 		$query = "UPDATE Questions SET score = score - 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Down Voted";
-		}else{
-			echo "id='" . $id . "' Fail to down vote";
-		}
-		*/
 	}
 
 	//View Count for Visitors Viewing the Questions every session
@@ -95,13 +101,6 @@
     $id = $data->id;
 		$query = "UPDATE Questions SET view_count = view_count + 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Viewed";
-		}else{
-			echo "id='" . $id . "' Fail to view";
-		}
-		*/
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
