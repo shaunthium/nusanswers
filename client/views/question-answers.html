@@ -1,21 +1,31 @@
 <div class="container">
+    <div class="section">
+        <div class="row">
+            <post type="question">
+                <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
+                    {{comment.body}}
+                </comment>
 
-  <div class="section">
+                <add-comment-box></add-comment-box>
+            </post>
 
-    <div class="row">
+            <div class="col s12">
+                <h5 style="font-size:1.3em;font-weight:250;"class="grey-text text-darken-2">{{numAnswers}} Answer<span ng-if="numAnswers !== 1">s</span></h5>
+                <hr/>
+            </div>
 
-      <post type="question"></post>
+            <div class="col s12" ng-repeat="post in post.answers">
+                <post type="answer">
+                    <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
+                        {{comment.body}}
+                    </comment>
 
-      <div class="col s12">
-        <h5 style="font-size:1.3em;font-weight:250;"class="grey-text text-darken-2">{{numAnswers}} Answer<span ng-if="numAnswers !== 1">s</span></h5>
-        <hr/>
-      </div>
-
-      <post ng-repeat="post in post.answers" type="answer"></post>
-
-    <!-- row end -->
+                    <add-comment-box></add-comment-box>
+                </post>
+            </div>
+            <!-- row end -->
+        </div>
+        <!-- section end -->
     </div>
-
-  <!-- section end -->
-  </div>
+    <!-- container end -->
 </div>
