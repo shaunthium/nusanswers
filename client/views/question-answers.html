@@ -2,6 +2,10 @@
     <div class="section">
         <div class="row">
             <post type="question">
+                <div class="card-action">
+                    <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
+                </div>
+                
                 <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
                     {{comment.body}}
                 </comment>
@@ -16,6 +20,10 @@
 
             <div class="col s12" ng-repeat="post in post.answers">
                 <post type="answer">
+                    <div class="card-action">
+                        <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
+                    </div>
+
                     <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
                         {{comment.body}}
                     </comment>
