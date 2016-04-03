@@ -1,31 +1,48 @@
 <?php 
-	require_once 'connect.php';
+	require_once('connect.php');
+	require_once('tags.php');
+
 	if(isset($_POST["cmd"])){
 		$cmd = $_POST["cmd"];
 	}
 	
 	//Submit new questions
 	if($cmd == "new_qn"){
-		$user_id= $_POST["user_id"];
+		$user_id= $db->escape_string($_POST["user_id"]);
 		$title = $db->escape_string($_POST["title"]);
 		$content= $db->escape_string($_POST["content"]);
+		$tag_string =  $db->escape_string($_POST["tag_string"]);
 
-		if(empty($title) || empty($content)){
-			exit("Empty title or content");
+		//Exit if there is no title for questions
+		if(empty($title)){
+			exit();
 		}
 
-		$query = "INSERT INTO Questions(user_id, title, content, score, view_count) 
-			VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
+		//Content can be empty if user decide not to add addition info to the questions
+		if(!empty($content)){
+			$query = "INSERT INTO Questions(user_id, title, content, score, view_count) 
+				VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
+		}else{
+			$query = "INSERT INTO Questions(user_id, title, score, view_count) 
+				VALUES(".$user_id.",'".$title."', 0, 0)";
+		}
 
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "Question Inserted";
-		}else{
-			echo "Fail to insert question";
-		}
-		*/
 
+		$query_id = "SELECT LAST_INSERT_ID()";
+		$result = $db->query($query_id);
+		$row = mysqli_fetch_array($result);
+		$qns_id =  $row['LAST_INSERT_ID()'];
+		
+		//If the questions contains tag when it is created
+		if(!empty($tag_string)){
+			$tag_array = explode(",", $tag_string);
+			//Call add_tag($tag_array) function inside tags.php to add new tag not in the database
+			add_tag($tag_array);
+			//Call tag_qns($qns_id, $tag_array) function inside tags.php to tag qns and the list of related tags togther
+			tag_qns($qns_id, $tag_array);
+		}
+		
 	}
 
 
@@ -40,9 +57,9 @@
 		echo json_encode($title_array);		
 	}
 
-	//Get Trending post. The post is sorted in descending order of the Score of each post
+	//Get Trending post. The post is sorted in descending order of the total views of each post
 	if($cmd == "trending"){
-		$query = "SELECT * FROM Questions ORDER BY score DESC";
+		$query = "SELECT * FROM Questions ORDER BY view_count DESC";
 		$result = $db->query($query);
 		$post_array = array();
 		while ($post = mysqli_fetch_array($result)){
@@ -64,44 +81,23 @@
 
 	//Up Vote for Questions
 	if($cmd == "qns_upvote"){
-		$id= $_POST["id"];
+		$id= $db->escape_string($_POST["id"]);
 		$query = "UPDATE Questions SET score = score + 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Up Voted";
-		}else{
-			echo "id='" . $id . "' Fail to up vote";		
-		}
-		*/
 	}
 
 	//Down Vote for Questions
 	if($cmd == "qns_downvote"){
-		$id= $_POST["id"];
+		$id= $db->escape_string($_POST["id"]);
 		$query = "UPDATE Questions SET score = score - 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Down Voted";
-		}else{
-			echo "id='" . $id . "' Fail to down vote";		
-		}
-		*/
 	}
 
 	//View Count for Visitors Viewing the Questions every session
 	if($cmd == "qns_view_count"){
-		$id= $_POST["id"];
+		$id= $db->escape_string($_POST["id"]);
 		$query = "UPDATE Questions SET view_count = view_count + 1 WHERE id=" . $id;
 		$db->query($query);
-		/*
-		if($db->query($query)){
-			echo "id='" . $id . "' Viewed";
-		}else{
-			echo "id='" . $id . "' Fail to view";		
-		}
-		*/
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
