@@ -10,6 +10,10 @@
 		$user_id = $_POST["user_id"];
 	if(isset($_POST["content"]))
 		$content = $_POST["content"];
+	if(isset($_POST["score"]))
+		$score = $_POST["score"];
+	if(isset($_POST["chosen"]))
+		$chosen = $_POST["chosen"];
 		
 	
 	global $db; 
@@ -75,14 +79,21 @@
 		$query = "CALL DownVoteAnswer($answer_id)";
 		$res = $db->query($query); 
 	}
-	else if($cmd == "createanswer")
+	else if($cmd == "addanswer")
 	{
-		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, $content)";
+		$query = "insert into Answers (user_id, question_id, content, score, chosen) Values ($user_id, $question_id, '$content', 0, 0)";
 		$db->query($query);
 	}
 	else if($cmd == "updateanswer")
 	{
-		$query = "update Answers set content = $content where id = $answer_id";
+		$query = "update Answers set chosen = '$content' where id = $answer_id";
+		$db->query($query);
+	}
+	else if ($cmd == "chooseanswer")
+	{
+		$query = "update Answers set chosen = 0";
+		$db->query($query);
+		$query = "update Answers set chosen = $chosen where id = $answer_id";
 		$db->query($query);
 	}
 	
