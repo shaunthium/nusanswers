@@ -3,9 +3,10 @@
 angular.module('quoraApp')
 	.service('questionService', ['$q', '$http', function($q, $http){
 
-		// var base_url = "path/to/our/php/script",
-    var users_url = "/server/users/main.php",
-			canceller;
+    var questions_url = "/server/questions.php";
+    var questions;
+    var canceller;
+
 
 		// Just hardcoded atm
 		// var posts = [{
@@ -47,32 +48,19 @@ angular.module('quoraApp')
 		// 						 	]
 		// 						}];
 
-		function getQuestions(){
-      var test;
-
+		function getQuestions() {
       $http({
         method: 'POST',
-        url: users_url,
+        url: questions_url,
         data: {
-          cmd: 'show',
-          user_id: '1'
+          cmd: "trending",
         },
         dataType: 'json'
-      }).then(function success(data) {
-        console.log(data);
-        test = data;
+      }).then(function success(returnedData) {
+        questions = returnedData.data;
       });
-			//canceller = $q.defer();
 
-
-			// return posts;
-      return test;
-
-			//var queryString = "base_url + 'PublicTollParkings/' + app_id + '?latitude=' + myPos.A + '&longitude=' + myPos.F + '&radius=' +
-			//								    	  radius + '&format=json';"
-
-			//return $http.get(queryString, {timeout: canceller.promise});
-
+      return questions;
 		}
 
 		function cancelCall(){
