@@ -16,7 +16,11 @@ angular.module('quoraApp')
                     upvotes:    0,
                     comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}]
                 };
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> fed9084785869a8a9a312cae2c8f9ee8a47ade02
     var newPost =  {
                     id: 600,
                     title: "New Post",
