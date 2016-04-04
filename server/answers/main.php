@@ -9,7 +9,7 @@
   //$cmd = $_POST["cmd"];
  
   if ($_SERVER["REQUEST_METHOD"] == "POST"){
-	if($cmd == "upvote"){
+	if($cmd == "upVote"){
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
 		
@@ -18,7 +18,7 @@
 		upVote($answer_id);
 		
 	} 
-	else if ($cmd == "downvote"){
+	else if ($cmd == "downVote"){
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
 		
@@ -26,7 +26,7 @@
 		//$answer_id = $_POST["answer_id"];
 		downVote($answer_id);
 	}
-	else if ($cmd == "addanswer"){
+	else if ($cmd == "addAnswer"){
 		$user_id = $data->answer_id;
 		$question_id = $data->answer_id;
 		$content = $data->content;
@@ -36,26 +36,26 @@
 		//$content = $_POST["content"];
 		addAnswer($user_id, $question_id, $content);
 	}
-	else if ($cmd == "deleteanswer"){
+	else if ($cmd == "deleteAnswer"){
 		$answer_id = $data->answer_id;
 		//$answer_id = $_POST["answer_id"];
 		deleteAnswer($answer_id);
 	}
-	else if($cmd == "updateanswer"){
+	else if($cmd == "updateAnswer"){
 		$answer_id = $data->answer_id;
 		$content = $data->content;
 		//$answer_id = $_POST["answer_id"];
 		//$content = $_POST["content"];
 		updateAnswer($answer_id, $content);
 	}
-	else if ($cmd == "chooseanswer"){
+	else if ($cmd == "chooseAnswer"){
 		//$answer_id = $data->answer_id;
 		//$chosen = $data->chosen;
 		$answer_id = $_POST["answer_id"];
 		$chosen = $_POST["chosen"];
 		chooseAnswer($answer_id, $content);
 	}
-	else if ($cmd == "getanswers"){
+	else if ($cmd == "getAnswers"){
 		$question_id = $data->question_id;
 		//$question_id = $_POST["question_id"];
 		$result = getAnswers($question_id);
