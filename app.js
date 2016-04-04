@@ -9,12 +9,12 @@ angular.module('quoraApp', ['ui.router'])
 	    .state('home', {
 	      url: '/home',
 	      templateUrl: '/views/home.html',
-	      controller: 'MainCtrl'
+	      controller: 'HomeCtrl'
 	    })
 
 	    .state('qa', {
 		  url: '/qa',
-		  params:{'currQuestion': null},
+		  params:{'currPost': null},
 		  templateUrl: '/views/question-answers.html',
 		  controller: 'QACtrl'
 		})
@@ -28,8 +28,3 @@ angular.module('quoraApp', ['ui.router'])
 	  $urlRouterProvider.otherwise('home');
 
 	}])
-
-	
-
-	
-

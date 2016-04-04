@@ -1,7 +1,11 @@
 <div class="card white">
     <div class="card-content">
         <p ng-if="includeTags" class="grey-text">{{post.category}}</p>
-        <span ng-if="includeTitle" {{linkToQuestionPage ? ng-click="goToPost(post)" : null}} style="cursor:pointer;" class="card-title">{{post.title}}</span>
+        <span ng-switch="linkToQuestionPage">
+                <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">{{post.title}}</span>
+                <span ng-switch-when="false" ng-if="includeTitle" class="card-title">{{post.title}}</span>
+        </span>
+
 
         <ul style="border:0;"class="collection">
             <li style="min-height:60px;"class="collection-item avatar">
@@ -19,7 +23,12 @@
             <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
         </div>
 
-        <p style="display:table-cell;">{{post.desc}}</p>
+        <p style="display:table-cell;">
+            <span ng-switch="type">
+                <span ng-switch-when="feed-item"><collapse-text max-length="100">{{post.desc}}</collapse-text></span>
+                <span ng-switch-default>{{post.desc}}</span>
+            </span>
+        </p>
 
     </div>
 

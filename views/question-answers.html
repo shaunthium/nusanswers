@@ -2,15 +2,16 @@
     <div class="section">
         <div class="row">
             <post type="question">
-                <div class="card-action">
-                    <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
+                <div ng-click="toggleFooter()" class="card-action" style="cursor:pointer">
+                    <a>Comments</a>
                 </div>
-                
-                <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
-                    {{comment.body}}
-                </comment>
+                <span ng-show="showFooter === true">
+                    <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
+                        {{comment.body}}
+                    </comment>
 
-                <add-comment-box></add-comment-box>
+                    <add-comment-box></add-comment-box>
+                </span>
             </post>
 
             <div class="col s12">
@@ -20,15 +21,16 @@
 
             <div class="col s12" ng-repeat="post in post.answers">
                 <post type="answer">
-                    <div class="card-action">
-                        <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
+                    <div ng-click="toggleFooter()" class="card-action" style="cursor:pointer">
+                        <a>Comments</a>
                     </div>
+                    <span ng-show="showFooter">
+                        <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
+                            {{comment.body}}
+                        </comment>
 
-                    <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
-                        {{comment.body}}
-                    </comment>
-
-                    <add-comment-box></add-comment-box>
+                        <add-comment-box></add-comment-box>
+                    </span>
                 </post>
             </div>
             <!-- row end -->
