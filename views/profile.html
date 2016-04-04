@@ -1,68 +1,35 @@
 <div class="container">
-
 	<div class="section">
-
 		<div class="row">
-
+			<!-- profile card begin -->
 			<div class="col s12">
 				<div class="card">
-
 					<div style="min-height:210px;"class="card-content">
-
 						<div style="float:left; padding:15px; padding-right:25px;"class="image-upload">
 					    <label for="file-input">
 					         <img style="width:130px; cursor:pointer; height:130px;"src="{{profileImg}}" alt="" class="circle">
 					    </label>
 							<input type="file" id="file-input"/>
 						</div>
-
-
 						<span class="card-title">Michael Novén</span>
 						<br/>
+						<!-- karma -->
 						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma 999</span>
+						<!-- profile body -->
             <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p>
             <hr/>
+            <!-- involved tags -->
             <b>Involved in</b>
-
             <div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
 					    Iamaprettylonghtag1
 					  </div>
-
-            
 					</div>
-					
-					<!--<ul class="collection">
-				    <li style="padding-top:20px; min-height:170px; padding-left:165px;"class="collection-item avatar">
-				      
-				      <div class="image-upload">
-						    <label for="file-input">
-						         <img style="width:130px; cursor:pointer; height:130px;"src="{{profileImg}}" alt="" class="circle">
-						    </label>
-							</div>
-
-				     	<span class="card-title">Michael Novén</span>
-
-			      	<p style="padding-top:10px; font-size:0.9em;">
-			      		Venison ribeye ground round pancetta shoulder, jowl corned beef pastrami cupim. Drumstick pastrami beef ribs jowl chicken picanha capicola tongue meatloaf biltong. Spare ribs ribeye pig doner flank filet mignon shankle pastrami chuck ham porchetta tail. Pig rump tenderloin tri-tip meatball, prosciutto bacon turducken strip steak hamburger. Pork loin prosciutto spare ribs, ball tip ground round boudin brisket bacon shoulder sirloin short loin. Filet mignon t-bone turkey, meatball pastrami frankfurter shankle.
-			     	 	</p>
-
-			     	 	<hr/>
-			     	 	<b>Popular: </b>
-
-			     	 	<div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
-						    Iamaprettylonghtag1
-						  </div>
-				      
-				      <a href="#!" style="font-size:1.1em; top:10px;"class="secondary-content orange-text text-darken-2"><i class="small material-icons orange-text text-darken-2">grade</i>Karma: 500</a>
-
-				    </li>
-				  </ul>-->
-
 				</div>
+			<!-- profile card end -->
 			</div>
 		
+			<!-- question card begin -->
 			<div class="col s12 m6">
-
 				<h6>Questions</h6>
 				<hr/>
 				<div class="card">
@@ -83,25 +50,22 @@
 		        </a>
 		      </div>
 				</div>
-
+			<!-- question card end -->
 			</div>
 
+			<!-- answer card begin -->
 			<div class="col s12 m6">
 				<h6>Answers</h6>
 				<hr/>
 				<div class="card">
 					<div class="collection">
 		        <a ng-repeat="i in [1,2,3]"href="#!" class="collection-item black-text">
-
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
-
 			        		<p style="margin-bottom:5px;">Why are three groups doing the same project in CS3226?</p>
-
 			        		<div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
 								    Tag{{tag}}
 								  </div>
-			        		
 			        	</div>
 			        	<div style="display:table-cell; width:65px;">
 			        		<span class="right orange-text text-darken-2">500</span>
@@ -111,7 +75,7 @@
 		        </a>
 		      </div>
 				</div>
-			<!-- end col -->
+			<!-- end answer card -->
 			</div>
 		<!-- end row -->
 		</div>
