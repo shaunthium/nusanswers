@@ -23,6 +23,10 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller: function($scope, $state, $rootScope){
+            $scope.toggleFooter = function(){
+                $scope.showFooter = !$scope.showFooter;
+            }
+
             $scope.incrementUpvotes = function(post, inc) {
         	  post.upvotes += inc;
         	};
@@ -41,6 +45,8 @@ angular.module('quoraApp')
         },
         link : function(scope, element, attrs){
             scope.type = attrs.type;
+            scope.showFooter = attrs.showFooter == "true" ? true : false;
+            console.log(attrs.showFooter);
             scope.includeTags = false;
             scope.includeTitle = false;
             scope.linkToQuestionPage = false;

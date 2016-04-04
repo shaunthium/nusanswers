@@ -29,6 +29,8 @@ angular.module('quoraApp')
         },
         link: function(scope, element, attrs, ctrl, transclude){
             scope.maxLength = attrs.maxLength;
+            scope.readMore = false;
+            scope.overflow = false;
             transclude(scope.$parent, function(transcluded){
                 scope.transcluded = transcluded;
             });
