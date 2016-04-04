@@ -1,12 +1,13 @@
 <?php
-  require_once('post_functions.php');
-  require_once('get_functions.php');
+  require_once('functions.php');
 
+  $request_data = file_get_contents("php://input");
+  $data = json_decode($request_data);
+  $cmd = $data->cmd;
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $cmd = $_POST["cmd"];
     if ($cmd == "show") {
       // Get user
-      $user_id = $_POST["user_id"];
+      $user_id = $data->user_id;
       $result = get_user($user_id);
 
       if (!$result) {
@@ -16,8 +17,8 @@
         echo json_encode($result);
       }
     } else if ($cmd == "auth") {
-      $email = $_POST["email"];
-      $password = $_POST["password"];
+      $email = $data->email;
+      $password = $data->password;
 
       if (authenticate_user($email, $password)) {
         echo true;
@@ -25,12 +26,10 @@
         http_response_code(403);
         echo "Error: Unauthorized.";
       }
-    }
-  } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if ($_GET["cmd"] == "index") {
+    } else if ($cmd == "index") {
       $result = get_all_users();
       echo json_encode($result);
-    } else if ($_GET["cmd"] == "search") {
+    } else if ($cmd == "search") {
       $result = get_users_for_search_results();
       echo json_encode($result);
     }
