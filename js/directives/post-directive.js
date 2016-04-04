@@ -23,6 +23,11 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller: function($scope, $state, $rootScope){
+            $scope.includeTags = false;
+            $scope.includeTitle = false;
+            $scope.linkToQuestionPage = false;
+            $scope.includeViews = false;
+
             $scope.toggleFooter = function(){
                 $scope.showFooter = !$scope.showFooter;
             }
@@ -36,21 +41,10 @@ angular.module('quoraApp')
                 //FIXME: this is just a simple placeholder to demonstrate functionality
                 $state.go('profile', {'author' : post.author});
             }
-
-            $scope.goToPost = function(post){
-				$scope.user_question = "";
-				$scope.showOverlay = false;
-				$state.go('qa', {'currQuestion' : post});
-			}
         },
         link : function(scope, element, attrs){
             scope.type = attrs.type;
             scope.showFooter = attrs.showFooter == "true" ? true : false;
-            console.log(attrs.showFooter);
-            scope.includeTags = false;
-            scope.includeTitle = false;
-            scope.linkToQuestionPage = false;
-            scope.includeViews = false;
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;

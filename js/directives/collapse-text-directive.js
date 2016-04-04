@@ -18,7 +18,6 @@ angular.module('quoraApp')
                             },
                             function(newValue){
                                 if($scope.transcluded){
-                                    console.log($scope.transcluded);
                                     $scope.lessText = $scope.transcluded.text().substring(0, $scope.maxLength);
                                     $scope.moreText = $scope.transcluded.text();
                                     $scope.readMore = false || $scope.readMore; //If it was arleady true, do not collapse it again.
