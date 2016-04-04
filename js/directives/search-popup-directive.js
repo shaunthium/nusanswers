@@ -44,7 +44,7 @@ angular.module('quoraApp')
                                 desc:       "This is a new question description placeholder.",
                                 upvotes:    0,
                                 comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}],
-                                answers: [answer]
+                                answers: [JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer))]
                             };
                 $scope.user_question = ""; //Clear the search field
                 $scope.showOverlay = false; //Hide shading box
