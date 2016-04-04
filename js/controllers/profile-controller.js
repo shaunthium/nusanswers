@@ -1,9 +1,8 @@
-/*Controls the details of the posts */
+/*Controls the details of the profile */
 
 angular.module('quoraApp')
-.controller('ProfileCtrl', [ '$scope', function($scope){
-		
+.controller('ProfileCtrl', [ '$scope', '$stateParams', function($scope, $stateParams){
+
 	console.log("in profile controller")
 
-
-}])
+}]);

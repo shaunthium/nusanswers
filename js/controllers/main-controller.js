@@ -1,11 +1,19 @@
-/* Controls main view */
+/*This is the uppermost controller.*/
 angular.module('quoraApp')
 .controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', function($scope, qs, $rootScope, $state){
-    $scope.showOverlay = true;
-    $rootScope.questions = qs.getQuestions();
+    $scope.currentUser = {name : "root", karma : 9999, userid : 0};
+
+    $scope.posts = qs.getQuestions();
+    $scope.notifications = qs.getNotifications();
+
     console.log("getting fresh posts from service..");
 
-    $scope.incrementUpvotes = function(post, inc) {
-	  post.upvotes += inc;
-	};
+    $scope.goToPost = function(post){
+        $state.go('qa', {'currPost' : post});
+    }
+
+    $scope.newPost = function(title){
+        return qs.submitNewPost(title, $scope.currentUser);
+    }
+
 }]);
