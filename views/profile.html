@@ -1,32 +1,85 @@
 <div class="container">
-
 	<div class="section">
-
 		<div class="row">
-
+			<!-- profile card begin -->
 			<div class="col s12">
 				<div class="card">
-					<p>Picture</p>
-					<p>Info</p>
-					<p>Reputation</p>
+					<div style="min-height:210px;"class="card-content">
+						<div style="float:left; padding:15px; padding-right:25px;"class="image-upload">
+					    <label for="file-input">
+					         <img style="width:130px; cursor:pointer; height:130px;"src="{{profileImg}}" alt="" class="circle">
+					    </label>
+							<input type="file" id="file-input"/>
+						</div>
+						<span class="card-title">Michael Novén</span>
+						<br/>
+						<!-- karma -->
+						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma 999</span>
+						<!-- profile body -->
+            <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p>
+            <hr/>
+            <!-- involved tags -->
+            <b>Involved in</b>
+            <div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
+					    Iamaprettylonghtag1
+					  </div>
+					</div>
 				</div>
+			<!-- profile card end -->
 			</div>
 		
+			<!-- question card begin -->
 			<div class="col s12 m6">
+				<h6>Questions</h6>
+				<hr/>
 				<div class="card">
-					<p>Questions</p>
+					<div class="collection">
+		        <a ng-repeat="i in [1]"href="#!" class="collection-item black-text">
+		        	<div style="display:table; width:100%;">
+			        	<div style="display:table-cell;">
+			        		<p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p>
+			        		<div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
+								    Iamaprettylonghtag1
+								  </div>
+			        	</div>
+			        	<div style="display:table-cell; width:65px; ">
+			        		<span class="right orange-text text-darken-2">500</span>
+			        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+			        	</div>
+		        	</div>
+		        </a>
+		      </div>
 				</div>
-
+			<!-- question card end -->
 			</div>
 
+			<!-- answer card begin -->
 			<div class="col s12 m6">
-
+				<h6>Answers</h6>
+				<hr/>
 				<div class="card">
-					<p>Answers</p>
+					<div class="collection">
+		        <a ng-repeat="i in [1,2,3]"href="#!" class="collection-item black-text">
+		        	<div style="display:table; width:100%;">
+			        	<div style="display:table-cell;">
+			        		<p style="margin-bottom:5px;">Why are three groups doing the same project in CS3226?</p>
+			        		<div style="font-size:0.8em; height:20px; line-height:20px;padding-bottom:0px; border-radius:3px;" ng-repeat="tag in [1,2,3]"class="chip blue lighten-4">
+								    Tag{{tag}}
+								  </div>
+			        	</div>
+			        	<div style="display:table-cell; width:65px;">
+			        		<span class="right orange-text text-darken-2">500</span>
+			        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+			        	</div>
+		        	</div>
+		        </a>
+		      </div>
 				</div>
+			<!-- end answer card -->
 			</div>
+		<!-- end row -->
 		</div>
-
+	<!-- end section -->
 	</div>
 
 </div>

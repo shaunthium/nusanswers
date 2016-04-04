@@ -15,6 +15,13 @@ html,body{
 
 }*/
 
+/*
+.profile-card{
+
+  padding-left:130px !important;
+
+}*/
+
 @media (max-width:500px){
 
   form.main-search-field, search-popup{
@@ -41,6 +48,13 @@ html,body{
   }
 
 }
+
+.image-upload > input
+{
+    display: none;
+}
+
+.chip{margin:2px;}
 
 form.main-search-field{
 
