@@ -1,40 +1,29 @@
-<div class="col s12">
-    <div class="card white">
+<div class="card white">
+    <div class="card-content">
+        <p ng-if="includeTags" class="grey-text">{{post.category}}</p>
+        <span ng-if="includeTitle" {{linkToQuestionPage ? ng-click="goToPost(post)" : null}} style="cursor:pointer;" class="card-title">{{post.title}}</span>
 
-      <div class="card-content">
-        <p ng-if="type === 'question'" class="grey-text">{{post.category}}</p>
-        <span ng-if="type === 'question'" style="cursor:pointer;" ui-sref="qa({'currQuestion' : question})" class="card-title">{{post.title}}</span>
-
-         <ul style="border:0;"class="collection">
-          <li style="min-height:60px;"class="collection-item avatar">
-            <img src="http://lorempixel.com/400/200/" alt="" class="circle">
-            <span class="title">{{post.author.name}}</span>
-            <p ng-if="type === 'question'" class="grey-text">{{post.views}} Views </p>
-            <a href="#!" class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
-          </li>
+        <ul style="border:0;"class="collection">
+            <li style="min-height:60px;"class="collection-item avatar">
+                <img ng-click="goToProfile(post.author.userid)" src="http://lorempixel.com/400/200/" alt="" class="circle" style="cursor:pointer">
+                <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+                <p ng-if="includeViews" class="grey-text">{{post.views}} Views </p>
+                <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
+            </li>
         </ul>
 
         <!-- Behave as a table cell for the height to adjust to same as the text column -->
         <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
-          <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
-          <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
-          <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+            <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
+            <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
+            <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
         </div>
 
         <p style="display:table-cell;">{{post.desc}}</p>
 
-      </div>
-
-      <div class="card-action">
-        <a href="#">Comments</a> <!-- TODO: comments link expands comments for this answer -->
-      </div>
-
-      <!-- we pass in what we want in the footer -->
-       <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
-           {{comment.body}}
-      </comment>
-
-      <add-comment-box></add-comment-box>
-    <!-- end card-->
     </div>
+
+    <!-- we pass in what we want in the footer -->
+    <div ng-transclude></div>
+    <!-- end card-->
 </div>

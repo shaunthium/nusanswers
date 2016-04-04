@@ -22,13 +22,43 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($scope){
+        controller: function($scope, $state, $rootScope){
             $scope.incrementUpvotes = function(post, inc) {
         	  post.upvotes += inc;
         	};
+
+            //TODO: implement goToProfile function
+            $scope.goToProfile = function(post){
+                //FIXME: this is just a simple placeholder to demonstrate functionality
+                $state.go('profile', {'author' : post.author});
+            }
+
+            $scope.goToPost = function(post){
+				$scope.user_question = "";
+				$scope.showOverlay = false;
+				$state.go('qa', {'currQuestion' : post});
+			}
         },
         link : function(scope, element, attrs){
-            scope.type = attrs.type;
+            scope.includeTags = false;
+            scope.includeTitle = false;
+            scope.linkToQuestionPage = false;
+            scope.includeViews = false;
+            switch(attrs.type){
+                case "feed-item":
+                    scope.includeTags = true;
+                    scope.includeTitle = true;
+                    scope.linkToQuestionPage = true;
+                    scope.includeViews = true;
+                    break;
+                case "question":
+                    scope.includeTags = true;
+                    scope.includeTitle = true;
+                    scope.includeViews = true;
+                    break;
+                case "answer":
+                    break;
+            }
         },
 		templateUrl : "templates/post-template.html"
 	}
