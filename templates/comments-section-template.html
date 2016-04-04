@@ -1,0 +1,12 @@
+<div ng-click="toggleShowComments()" class="card-action" style="cursor:pointer">
+    <a>Comments</a>
+</div>
+<span ng-show="showComments">
+    <div ng-if="noComments" style="padding-top:10px;" class="card-action">No comments to show.</div>
+    <comment ng-repeat="comment in lessComments"></comment>
+    <comment ng-show="moreCommentsShown" ng-repeat="comment in moreComments"></comment>
+    <div ng-if="!moreCommentsShown && hasMoreComments" style="padding-top:10px; padding-bottom:10px;" class="card-action">
+        <span ng-click="showMoreComments()" class="blue-text" style="cursor:pointer">Show {{moreComments.length}} more comment<span ng-show="moreComments.length > 1">s</span>.</span>
+    </div>
+    <add-comment-box></add-comment-box>
+</span>

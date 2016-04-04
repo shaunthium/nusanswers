@@ -25,8 +25,8 @@ angular.module('quoraApp')
                     desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
                     upvotes:0,
                     comments: [
-                        {author: {name:'Bob', karma:100, userid: 4}, body:'Some comment content', upvotes:0, liked : false, reported : false},
-                        {author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}
+                        // {author: {name:'Bob', karma:100, userid: 4}, body:'Some comment content', upvotes:0, liked : false, reported : false},
+                        // {author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false}
                     ],
                     answers: [JSON.parse(JSON.stringify(answer))]
                 },
