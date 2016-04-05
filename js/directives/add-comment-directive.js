@@ -4,7 +4,6 @@ angular.module('quoraApp')
 .directive('addCommentBox', function($window){
 	return {
 		restrict: 'E',
-		transclude: true,
         controller: function($scope){
             $scope.isAddCommentActive = false;
             $scope.COMMENTS_MIN_SIZE = 15;
@@ -35,20 +34,28 @@ angular.module('quoraApp')
 
             $scope.toggleAddCommentVisible = function(){
                 $scope.isAddCommentActive = !$scope.isAddCommentActive;
+
+                //If adding a comment was cancelled.
+                if(!$scope.isAddCommentActive){
+                    $scope.rejectComment();
+                }
             }
 
-            $scope.submitComment = function(){
+            $scope.acceptComment = function(){
                 if(!$scope.commentLongEnough || $scope.commentTooLong){
                     alert("Comment not valid"); // TODO: Make this feedback cooler
                     return;
                 }
 
-                /*FIXME: $scope.currentUser is undefined. This is probably due to a scoping issue introduced by passing "post" as parent.*/
-                $scope.parent.comments.push({author: $scope.currentUser, body:$scope.user_comment, upvotes:0});
+                $scope.addComment($scope.user_comment);
+                $scope.moreCommentsShown = true;
                 $scope.user_comment = "";
                 $scope.isAddCommentActive = !$scope.isAddCommentActive;
+            }
 
-                $scope.moreCommentsShown = true;
+            $scope.rejectComment = function(){
+                $scope.cancelEdit();
+                $scope.isAddCommentActive = false;
             }
         },
 		templateUrl : "templates/add-comment-template.html"
