@@ -29,6 +29,25 @@
 		}
 	}
 
+	/*
+		Get and return trending tags 
+	*/
+	if($cmd == "get_trending_tag"){
+		$query = "SELECT tag_id, COUNT(tag_id) as trend_tag from Questions_Tags GROUP BY tag_id ORDER BY trend_tag DESC";
+		$result = $db->query($query);
+		$tag_array = array();
+		while ($tag = mysqli_fetch_assoc($result)){
+			
+			$tag_id = $tag['tag_id'];
+			$query_tag =  "SELECT content FROM Tags WHERE id=".$tag_id;
+			$result_tag = $db->query($query_tag);
+			$tag_name = mysqli_fetch_assoc($result_tag);
+		
+			$tag_array[] = $tag_name["content"];
+		}
+		echo json_encode($tag_array);		
+	}
+
 	//Tag a questions
 	if($cmd == "tag_qns"){
 		$qns_id = $db->escape_string($data->qns_id);
