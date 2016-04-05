@@ -64,8 +64,13 @@
 		$post_array = array();
 		while ($post = mysqli_fetch_array($result)){
 					
-			//$post_array[] = array(
+			$user_id = $post['user_id'];
+			$query_author =  "SELECT first_name, last_name FROM Users WHERE id=".$user_id;
+			$result_author = $db->query($query_author);
+			$author = mysqli_fetch_assoc($result_author);
+		
 			$post_array[] = array(
+
 				'id'=>$post['id'],
 				'user_id'=>$post['user_id'],
 				'title'=>$post['title'],
@@ -73,7 +78,8 @@
 				'score'=>$post['score'],
 				'view_count'=>$post['view_count'],
 				'created_at'=>$post['created_at'],
-				'updated_at'=>$post['updated_at']
+				'updated_at'=>$post['updated_at'],
+				'author' => $author['first_name'] . " " . $author['last_name']
 			);
 		}
 		echo json_encode($post_array);		
