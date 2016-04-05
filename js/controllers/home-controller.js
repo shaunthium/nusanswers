@@ -27,14 +27,6 @@ angular.module('quoraApp')
 })
 .controller('HomeCtrl', [ '$scope', '$stateParams', 'byTagsFilter', function($scope, $stateParams, filterByTags){
     $scope.activeTags = [];
-    //Watch for changes in posts coming from the main controller
-    // $scope.$watchCollection(function(){
-    //   console.log($scope.posts);
-    //     return $scope.posts;
-    // },
-    // function(newPosts){
-    //     $scope.filteredPosts = filterByTags(newPosts, $scope.activeTags);
-    // });
 
     //Watch for changes in activeTags, coming from the trending-box
     $scope.$watchCollection(function(){

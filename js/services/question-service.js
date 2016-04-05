@@ -178,7 +178,14 @@ angular.module('quoraApp')
 
     //TODO: implement back-end integration
     function submitGetTrendingTags(){
-        return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
+        // return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
+        return $http({
+          url: "/server/tags.php",
+          method: "POST",
+          data: {
+            cmd: "get_trending_tag"
+          }
+        });
     }
 
     return {
