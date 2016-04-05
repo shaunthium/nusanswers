@@ -3,28 +3,34 @@
 <div class="container">
 
   <div class="divider"></div>
-  <div class="section">
 
+  <div class="section">
     <!-- begin item -->
     <div class="row">
-      <!-- categories which we hide on small device -->
-       <div class="col m3 hide-on-small-and-down">
-          <div class="collection">
-            <a href="#!" class="collection-item black-text text-accent-2">Latest<span class="badge">1</span></a>
-            <a href="#!" class="collection-item black-text text-accent-2">UTown<span class="new badge green darken-2">4</span></a>
-            <a href="#!" class="collection-item black-text text-accent-2">Modules</a>
-            <a href="#!" class="collection-item black-text text-accent-2">Parties<span class="badge">14</span></a>
-          </div>
-      </div>
-
-
       <!-- begin feed -->
-      <div class="col s12 m9 right" ng-repeat="post in posts">
-        <post type="feed-item">
+      <div class="col s12 m9">
+        <post ng-repeat=" post in posts" type="feed-item">
           <div class="card-action">
             Number of answers, votes and stuff <!--TODO: implement feed-item footer -->
           </div>
         </post>
+      <!-- end feed -->
+      </div>
+
+      <!-- trending tags which we hide on small device -->
+       <div class="col m3 hide-on-small-and-down right">
+          <div style="position:fixed; "class="top-tags collection">
+            <div href="#!" class="collection-item black-text text-accent-2">
+              <h5 style="font-size:1.1em;">Trending</h5>
+            </div>
+            <a href="#!" ng-repeat="i in [1,2,3,4,5]"class="collection-item black-text text-accent-2">
+              <div class="tag chip blue lighten-5">
+                abcdefghijklm
+              </div>
+               <span class="grey-text">{{i*2}}</span>
+            </a>
+          </div>
+      <!-- end trending tags -->
       </div>
     <!-- end item -->
     </div>
