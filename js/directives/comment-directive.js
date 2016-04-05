@@ -8,20 +8,27 @@ angular.module('quoraApp')
         controller : function($scope){
             //TODO: implement current user verifications
             $scope.belongsToUser = $scope.comment.author.userid === $scope.currentUser.userid;
-            console.log($scope.comment.author.userid);
 
             $scope.toggleLike = function(){
                 $scope.comment.liked = !$scope.comment.liked;
                 if($scope.comment.liked == true){
                     $scope.comment.upvotes++;
+                    $scope.upvoteComment($scope.comment.id);
                 }
                 else{
                     $scope.comment.upvotes--;
+                    $scope.cancelUpvoteComment($scope.comment.id);
                 }
             }
 
             $scope.toggleReport = function(){
                 $scope.comment.reported = !$scope.comment.reported;
+                if($scope.comment.reported){
+                    $scope.reportComment($scope.comment.id);
+                }
+                else{
+                    $scope.cancelReportComment($scope.comment.id);
+                }
             }
         },
 		link: function(scope, element, attrs){
