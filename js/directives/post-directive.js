@@ -23,6 +23,7 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller: function($scope, $state, $rootScope, $timeout){
+            $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
             $scope.linkToQuestionPage = false;
@@ -32,13 +33,13 @@ angular.module('quoraApp')
              // Edit here plx!
             var submitAnswerToServer = function(dangerousHTML){
                 console.log("sending ...", dangerousHTML);
-            }   
+            }
 
             // Here goes user on submit click
             $scope.submit = function(){
 
                 submitAnswerToServer($('.wysiwyg-editor').trumbowyg('html'));
-                
+
                 //clean up
                 $('.wysiwyg-editor').trumbowyg('empty')
                 $scope.showTextEditor = !$scope.showTextEditor;
@@ -61,7 +62,7 @@ angular.module('quoraApp')
                         btns:['bold', 'italic']
                     });
                 })
-                
+
                 $scope.showTextEditor = !$scope.showTextEditor;
             }
 
@@ -69,6 +70,15 @@ angular.module('quoraApp')
             $scope.goToProfile = function(post){
                 //FIXME: this is just a simple placeholder to demonstrate functionality
                 $state.go('profile', {'author' : post.author});
+            }
+
+            $scope.removeTag = function(tag){
+                $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
+                //TODO: communicate with back-end
+            }
+
+            $scope.addTag = function(tag){
+                //TODO: implement addTag functionality
             }
         },
         link : function(scope, element, attrs){
