@@ -6,15 +6,15 @@
         </div>
         <br/>
         <span ng-switch="linkToQuestionPage">
-                <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">{{post.title}}</span>
-                <span ng-switch-when="false" ng-if="includeTitle" class="card-title">{{post.title}}</span>
+            <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">{{post.title}}</span>
+            <span ng-switch-when="false" ng-if="includeTitle" class="card-title">{{post.title}}</span>
         </span>
 
         <ul style="border:0;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
-                <img ng-click="goToProfile(post.author.userid)" src="http://lorempixel.com/400/200/" alt="" class="circle" style="cursor:pointer">
+                <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
-                <p ng-if="includeViews" class="grey-text">{{post.views}} Views </p>
+                <p ng-if="includeViews" class="grey-text">Newbie</p>
                 <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
             </li>
         </ul>
@@ -28,7 +28,7 @@
 
         <p style="display:table-cell;">
             <span ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="100">{{post.desc}}</collapse-text></span>
+                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.desc}}</collapse-text></span>
                 <span ng-switch-default>{{post.desc}}</span>
             </span>
         </p>

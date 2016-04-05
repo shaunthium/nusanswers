@@ -9,7 +9,7 @@ angular.module('quoraApp', ['ui.router'])
 	    .state('home', {
 	      url: '/home',
 	      templateUrl: '/views/home.html',
-	      controller: 'HomeCtrl'
+	      controller: 'HomeCtrl as homectrl',
 	    })
 
 	    .state('qa', {
