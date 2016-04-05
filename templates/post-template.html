@@ -11,23 +11,23 @@
         <ul style="border:0;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
-                <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+                <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author}}</span>
                 <p ng-if="includeViews" class="grey-text">Newbie</p>
-                <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
+                <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author_score}}</a>
             </li>
         </ul>
 
         <!-- Behave as a table cell for the height to adjust to same as the text column -->
         <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
             <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
-            <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
+            <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.score}}</p>
             <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
         </div>
 
         <p style="display:table-cell;">
             <span ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.desc}}</collapse-text></span>
-                <span ng-switch-default>{{post.desc}}</span>
+                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.content}}</collapse-text></span>
+                <span ng-switch-default>{{post.content}}</span>
             </span>
         </p>
 

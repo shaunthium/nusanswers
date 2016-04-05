@@ -83,13 +83,13 @@ angular.module('quoraApp')
         return qs.submitCancelDownvoteComment(postID, commentID, $scope.currentUser);
     }
 
-    $scope.getTrendingTags = function(){
-        return qs.submitGetTrendingTags();
-    }
-
     //TODO: get currentUser from database by logging in.
     $scope.currentUser = {name : "root", karma : 9999, userid : 0};
-    $scope.posts = qs.getQuestions();
+    qs.getQuestions().then(function (returnedData) {
+      $scope.posts = returnedData.data;
+    });;
     $scope.notifications = qs.getNotifications();
-    $scope.trendingTags = $scope.getTrendingTags();
+    qs.submitGetTrendingTags().then(function(data) {
+      $scope.trendingTags = data.data;
+    });
 }]);

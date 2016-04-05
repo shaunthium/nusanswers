@@ -22,7 +22,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($scope, $state, $rootScope, $timeout){
+        controller: function($http, $scope, $state, $rootScope, $timeout){
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -32,6 +32,21 @@ angular.module('quoraApp')
 
              // Edit here plx!
             var submitAnswerToServer = function(dangerousHTML){
+              var answersURL = "/server/answers.php";
+              $http({
+                method: 'POST',
+                url: answersURL,
+                data: {
+                  cmd: "createanswer",
+                  user_id: user_id,
+                  question_id: question_id,
+                  content: dangerousHTML
+                },
+                dataType: 'json'
+              }).success(function(data) {
+                console.log('data:');
+                console.log(data);
+              });
                 console.log("sending ...", dangerousHTML);
             }
 
@@ -50,8 +65,25 @@ angular.module('quoraApp')
             }
 
             $scope.incrementUpvotes = function(post, inc) {
-        	  post.upvotes += inc;
-        	};
+              var cmd;
+               if (inc == 1) {
+                 post.score++;
+                 cmd = "qns_upvote";
+               } else {
+                 post.score--;
+                 cmd = "qns_downvote";
+               }
+               $http({
+                 method: "POST",
+                 url: "/server/questions.php",
+                 data: {
+                   cmd: cmd,
+                   id: post.id
+                 }
+               }).success(function() {
+                 console.log('success');
+               });
+            };
 
             $scope.toggleTextEditor = function(){
 
