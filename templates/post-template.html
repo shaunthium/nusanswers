@@ -26,8 +26,8 @@
 
         <p style="display:table-cell;">
             <span ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.content}}</collapse-text></span>
-                <span ng-switch-default>{{post.content}}</span>
+                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.desc}}</collapse-text></span>
+                <span ng-switch-default>{{post.desc}}</span>
             </span>
         </p>
 
