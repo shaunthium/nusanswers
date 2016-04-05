@@ -27,15 +27,12 @@ angular.module('quoraApp')
         $scope.goToPost($scope.newPost(user_question));
     }
 
+    $scope.toggleOverlay = function(){
+      $('#search').focus();
+    }
 
     $timeout(function(){
-
        $(".button-collapse").sideNav();
-       $scope.$apply();
-
     }, 500)
-
-
-
 
 }]);
