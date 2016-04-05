@@ -11,18 +11,19 @@
 <search-popup ng-hide="!user_question"></search-popup>
 
 <!-- hardcoded logo in corner -->
-<h5 ui-sref="home" class="hide-on-med-and-down"style="cursor:pointer; position:fixed; font-size:1.3em; color:white; left:15px; top:10px; z-index:999;">logo_here</h5>
-
+<div ui-sref="home" class="nus-logo">
+  <div class="logo-container">
+    <img src="icon.svg" class="logo">
+  </div>
+  <span class="white-text" style="line-height:30px; font-weight:200; font-size:1.2em; margin-left:5px;">NUSAnswers</span>
+</div>
 <!-- this navbar is a mess, grid system does not seem
      to work here, had to haxx0r hardcode it because couldn't make
      elements float after each other -->
 <div style="z-index:998;"class="navbar-fixed">
   <nav class="red darken-2">
-
     <div class="nav-wrapper container">
-
-      <!--<a href="#!" style="font-weight:250; font-size:1.4em;margin-left:20px;"class="brand-logo left red-text text-darken-1 hide-on-med-and-down">NUSAnswers</a>-->
-
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <li><a class="white-text" href="#/profile">Profile</a></li>
         <!-- Dropdown Trigger -->
@@ -39,6 +40,13 @@
           <i style="line-height:45px;" ng-click="submitQuestion(user_question)" class="material-icons">chat_bubble_outline</i>
         </div>
       </form>
+
+      <ul class="side-nav" id="mobile-demo">
+        <li><a href="sass.html">Sass</a></li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">Javascript</a></li>
+        <li><a href="mobile.html">Mobile</a></li>
+      </ul>
 
     </div>
   </nav>

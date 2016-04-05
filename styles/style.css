@@ -3,31 +3,41 @@ html,body{
   height:100%;
 }
 
-
-/*
-@media (min-width:1400px){
-
-  form.main-search-field, search-popup{
-
-    color:blue !important;
-
-  }
-
-}*/
-
-/*
-.profile-card{
-
-  padding-left:130px !important;
-
-}*/
-
-
 html{
+  zoom:0.9; /* Please change me */
+}
 
-  zoom:0.9;
+.logo{
+  width:25px;
+}
+
+div.logo-container{
+
+  padding:2px;
+  background:white;
+  cursor:pointer; 
+  font-size:1.3em; 
+  color:white; 
+  float:left;
+  border-radius:2px;
 
 }
+
+div.nus-logo{
+
+  position:fixed; 
+  left:30px; 
+  top:16px; 
+  z-index:999;
+  cursor:pointer !important;
+
+}
+
+nav{
+  height:60px !important;
+  line-height:61px !important;
+}
+
 
 @media (max-width:500px){
 
@@ -80,6 +90,7 @@ html{
 
 }
 
+
 .card-title{font-size:1.4em !important; line-height:45px !important; }
 
 div.tag{
@@ -102,10 +113,12 @@ div.tag{
 form.main-search-field{
 
   border-radius:5px;
-  height:45px; 
+  height:40px; 
   width:450px;
 
 }
+
+
 
 i.comment-icon{
 
