@@ -65,7 +65,7 @@
 		while ($post = mysqli_fetch_array($result)){
 					
 			$user_id = $post['user_id'];
-			$query_author =  "SELECT first_name, last_name FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
 		
@@ -79,7 +79,8 @@
 				'view_count'=>$post['view_count'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name']
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' =>  $author['score']
 			);
 		}
 		echo json_encode($post_array);		
