@@ -9,7 +9,7 @@
         <div class="row">
             <!-- begin feed -->
             <div class="col s12 m9">
-                <div ng-repeat="post in filteredPosts">
+                <div ng-repeat="post in filteredPosts track by $index">
                     <post type="feed-item">
                         <!-- fixed footer -->
                         <div class="card-action">
@@ -26,7 +26,7 @@
                                 <ul style="border:0;"class="collection">
                                     <li style="margin-left:5px; min-height:0px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
                                         <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
-                                        <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+                                        <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author}}</span>
                                         <p ng-if="includeViews" class="grey-text">Newbie</p>
                                         <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
                                     </li>

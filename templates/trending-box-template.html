@@ -1,7 +1,7 @@
 <div href="#!" class="collection-item black-text text-accent-2">
     <h5 style="font-size:1.1em;">Trending</h5>
 </div>
-<a href="#!" ng-repeat="tag in trendingTags" ng-click="toggleTagFilter(tag)" class="collection-item black-text text-accent-2">
+<a href="#!" ng-repeat="tag in trendingTags track by $index" ng-click="toggleTagFilter(tag)" class="collection-item black-text text-accent-2">
     <tag is-filter>
         <span class="grey-text">Additional info</span> <!--TODO: decide what additional info we wish to include, if any -->
     </tag>

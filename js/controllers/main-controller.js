@@ -86,8 +86,9 @@ angular.module('quoraApp')
     //TODO: get currentUser from database by logging in.
     $scope.currentUser = {name : "root", karma : 9999, userid : 0};
     qs.getQuestions().then(function (returnedData) {
+      console.log(returnedData);
       $scope.posts = returnedData.data;
-    });;
+    });
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
       $scope.trendingTags = data.data;
