@@ -6,17 +6,22 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller : function($scope){
-            $scope.toggleLikeComment = function(comment){
-                comment.liked = !comment.liked;
+            $scope.toggleLike = function(){
+                $scope.comment.liked = !$scope.comment.liked;
+                if($scope.comment.liked == true){
+                    $scope.comment.upvotes++;
+                }
+                else{
+                    $scope.comment.upvotes--;
+                }
             }
 
-            $scope.toggleReportComment = function(comment){
-                comment.reported = !comment.reported;
+            $scope.toggleReport = function(){
+                $scope.comment.reported = !$scope.comment.reported;
             }
         },
 		link: function(scope, element, attrs){
-			scope.upvotes = attrs.upvotes;
-			scope.user = attrs.user;
+            
 		},
 		templateUrl : "templates/comment-template.html"
 	}

@@ -2,16 +2,7 @@
     <div class="section">
         <div class="row">
             <post type="question">
-                <div ng-click="toggleFooter()" class="card-action" style="cursor:pointer">
-                    <a>Comments</a>
-                </div>
-                <span ng-show="showFooter === true">
-                    <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
-                        {{comment.body}}
-                    </comment>
-
-                    <add-comment-box></add-comment-box>
-                </span>
+                <comments-section parent="post"></comments-section>
             </post>
 
             <div class="col s12">
@@ -21,16 +12,7 @@
 
             <div class="col s12" ng-repeat="post in post.answers">
                 <post type="answer">
-                    <div ng-click="toggleFooter()" class="card-action" style="cursor:pointer">
-                        <a>Comments</a>
-                    </div>
-                    <span ng-show="showFooter">
-                        <comment ng-repeat = "comment in post.comments" upvotes="{{comment.upvotes}}" authorName="{{comment.author.name}}">
-                            {{comment.body}}
-                        </comment>
-
-                        <add-comment-box></add-comment-box>
-                    </span>
+                    <comments-section parent="post"></comments-section>
                 </post>
             </div>
             <!-- row end -->
