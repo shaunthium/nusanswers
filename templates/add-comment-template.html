@@ -5,6 +5,9 @@
     <p style="font-size:0.9em;">
       <span ng-hide="isAddCommentActive" style="cursor:pointer;" ng-click="toggleAddCommentVisible()" class="blue-text">Add Comment</span>
     </p>
+    <p style="font-size:0.9em;">
+      <span ng-show="isAddCommentActive" style="cursor:pointer;" ng-click="toggleAddCommentVisible()" class="blue-text">Cancel</span>
+    </p>
 
     <div ng-if="isAddCommentActive">
 
@@ -13,7 +16,7 @@
         </textarea>
       </div>
 
-      <a ng-click="submitComment()" class="waves-effect waves-light btn blue comment-button">Add comment</a>
+      <a ng-click="acceptComment()" class="waves-effect waves-light btn blue comment-button">Add comment</a>
 
       <!-- feedback -->
       <p ng-if="!commentLongEnough" class="grey-text darken-1 comment-feedback">Enter {{charactersMissing}} more character<span ng-show="charactersMissing > 1">s</span>.</p>

@@ -4,8 +4,12 @@ angular.module('quoraApp')
 .directive('comment', function($window){
 	return {
 		restrict: 'E',
-		transclude: true,
+        scope: true,
         controller : function($scope){
+            //TODO: implement current user verifications
+            $scope.belongsToUser = $scope.comment.author.userid === $scope.currentUser.userid;
+            console.log($scope.comment.author.userid);
+
             $scope.toggleLike = function(){
                 $scope.comment.liked = !$scope.comment.liked;
                 if($scope.comment.liked == true){
@@ -21,7 +25,7 @@ angular.module('quoraApp')
             }
         },
 		link: function(scope, element, attrs){
-            
+
 		},
 		templateUrl : "templates/comment-template.html"
 	}

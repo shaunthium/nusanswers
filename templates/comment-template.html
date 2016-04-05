@@ -17,6 +17,14 @@
         <div ng-click="toggleReport(comment)" class="comment-icon-wrapper">
           <i ng-class="{'comment-icon-active' : comment.reported}" class="tiny material-icons comment-icon red-text text-darken-2">report_problem</i>
         </div>
+        <span ng-if="belongsToUser"> <!--Cannot manipulate other users' comments -->
+            <div ng-click="deleteComment(comment, true)" class="comment-icon-wrapper">
+              <i class="tiny material-icons comment-icon orange-text text-darken-2">delete</i>
+            </div>
+            <div ng-click="editComment(comment)" class="comment-icon-wrapper">
+              <i class="tiny material-icons comment-icon orange-text text-darken-2">edit</i>
+            </div>
+        </span>
       </div>
     </div>
 
