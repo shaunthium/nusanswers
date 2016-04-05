@@ -5,8 +5,8 @@
   
   $data = json_decode($request_data);
   
-  //$cmd = $data->cmd;
-  $cmd = $_POST["cmd"];
+  $cmd = $data->cmd;
+  //$cmd = $_POST["cmd"];
  
   if ($_SERVER["REQUEST_METHOD"] == "POST"){
 	if($cmd == "upVote"){
