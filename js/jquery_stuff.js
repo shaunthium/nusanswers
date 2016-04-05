@@ -19,7 +19,7 @@ angular.module('quoraApp')
 	}
 })
 
-.directive('body', function($timeout){
+.directive('body', function(){
 	return {
 		restrict:'E',
 		link:function(scope, element, attributes){
@@ -32,10 +32,6 @@ angular.module('quoraApp')
 				}	
 				scope.$apply(); 
 			});
-			// ugly
-			/*$timeout(function(){
-				$('#wysiwyg-editor').trumbowyg();
-			}, 50);*/
 		}
 	}
 })
