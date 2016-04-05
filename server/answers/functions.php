@@ -36,7 +36,7 @@
 		
 		$finalOutput = array("q"=>$questionResult, "c"=>$commentsResult, "a"=>$answersResult);
 		
-		return $finalOutput;
+		echo $finalOutput; //dunno if echo or return
 	}
 	
 	/*
