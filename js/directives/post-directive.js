@@ -23,6 +23,7 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller: function($scope, $state, $rootScope){
+            $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
             $scope.linkToQuestionPage = false;
@@ -40,6 +41,15 @@ angular.module('quoraApp')
             $scope.goToProfile = function(post){
                 //FIXME: this is just a simple placeholder to demonstrate functionality
                 $state.go('profile', {'author' : post.author});
+            }
+
+            $scope.removeTag = function(tag){
+                $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
+                //TODO: communicate with back-end
+            }
+
+            $scope.addTag = function(tag){
+                //TODO: implement addTag functionality
             }
         },
         link : function(scope, element, attrs){

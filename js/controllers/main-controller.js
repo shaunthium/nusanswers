@@ -1,12 +1,6 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
 .controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', function($scope, qs, $rootScope, $state){
-    //TODO: get currentUser from database by logging in.
-    $scope.currentUser = {name : "root", karma : 9999, userid : 0};
-    $scope.posts = qs.getQuestions();
-    $scope.notifications = qs.getNotifications();
-
-    console.log("getting fresh posts from service..");
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -88,4 +82,14 @@ angular.module('quoraApp')
     $scope.cancelDownvoteComment = function(postID, commentID){
         return qs.submitCancelDownvoteComment(postID, commentID, $scope.currentUser);
     }
+
+    $scope.getTrendingTags = function(){
+        return qs.submitGetTrendingTags();
+    }
+
+    //TODO: get currentUser from database by logging in.
+    $scope.currentUser = {name : "root", karma : 9999, userid : 0};
+    $scope.posts = qs.getQuestions();
+    $scope.notifications = qs.getNotifications();
+    $scope.trendingTags = $scope.getTrendingTags();
 }]);

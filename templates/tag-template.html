@@ -1,0 +1,10 @@
+<div class='tag chip blue {{activeFilter ? "" : "lighten-5"}}' ng-click="onClick()">
+    {{tag}}
+    <!--WARNING: all materialize CSS icons "close" onclick -->
+    <span ng-show="editMode" ng-click="removeTag(tag)">
+        <i class="material-icons">close</i> <!--FIXME: the icon displays wrongly -->
+    </span>
+    <!-- In case we want a checkbox -->
+    <!-- <i ng-show="activeFilter" class="material-icons" style="pointer-events:none">check</i> -->
+</div>
+<ng-transclude></ng-transclude>

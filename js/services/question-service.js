@@ -21,7 +21,7 @@ angular.module('quoraApp')
     var newPost =  {
                     id: 600,
                     title: "New Post",
-                    category:   "New post!",
+                    tags:   ["New post!", "Tags", "MoreTags", "EvenMoreTags"],
                     author:     {name:'Alex', karma:100, userid:99},
                     views:      9001,
                     desc:       "This is a new question description placeholder.",
@@ -34,7 +34,7 @@ angular.module('quoraApp')
 	var posts = [{
  				  id:0,
  				  title: 'When does Indian open on Sundays?',
- 				  category: 'Latest',
+ 				  tags: ['Latest', "Tags", "MoreTags", "EvenMoreTags"],
  				  author:{name:'User1', karma:100, userid:2},
  				  views: 10,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
@@ -46,7 +46,7 @@ angular.module('quoraApp')
  				 {
  				  id:1,
  				  title: 'Why is nobody asking questions during lecture?',
- 				  category: 'Lectures',
+ 				  tags: ['Lectures', "Latest", "Tags"],
  				  author: {name:'User2', karma:150, userid:5},
  				  views: 25,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.In sed leo a lectus suscipit porta. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
@@ -59,7 +59,7 @@ angular.module('quoraApp')
  				{
  				  id:2,
  				  title: 'When does starbucks close on public holidays?',
- 				  category: 'UTown',
+ 				  tags: ['UTown', "Tags"],
  				  author: {name:'Steven', karma:7, userid:7},
  				  views: 25,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus.  Aliquam vel scelerisque quam. Pellentesque ut mattis tellus.',
@@ -181,6 +181,11 @@ angular.module('quoraApp')
         return false;
     }
 
+    //TODO: implement back-end integration
+    function submitGetTrendingTags(){
+        return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -198,6 +203,7 @@ angular.module('quoraApp')
         submitUpvoteComment         :   submitUpvoteComment,
         submitCancelUpvoteComment   :   submitCancelUpvoteComment,
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
+        submitGetTrendingTags       : submitGetTrendingTags,
         getNotifications            :   getNotifications
     }
 
