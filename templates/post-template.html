@@ -1,14 +1,17 @@
 <div class="card white">
     <div class="card-content">
-        <p ng-if="includeTags" class="grey-text">{{post.category}}</p>
+       
+        <div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
+            tagtagtag{{tag}}
+        </div>
+        <br/>
         <span ng-switch="linkToQuestionPage">
                 <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">{{post.title}}</span>
                 <span ng-switch-when="false" ng-if="includeTitle" class="card-title">{{post.title}}</span>
         </span>
 
-
         <ul style="border:0;"class="collection">
-            <li style="min-height:60px;"class="collection-item avatar">
+            <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <img ng-click="goToProfile(post.author.userid)" src="http://lorempixel.com/400/200/" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p ng-if="includeViews" class="grey-text">{{post.views}} Views </p>

@@ -49,6 +49,18 @@ html,body{
 
 }
 
+.card-title{font-size:1.4em !important; line-height:45px !important; }
+
+div.tag{
+
+  font-size:0.8em; 
+  height:20px; 
+  line-height:20px;
+  border-radius:3px;
+  margin-left:0px;
+
+}
+
 .image-upload > input
 {
     display: none;
