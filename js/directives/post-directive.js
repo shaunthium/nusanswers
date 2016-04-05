@@ -22,11 +22,27 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($scope, $state, $rootScope){
+        controller: function($scope, $state, $rootScope, $timeout){
             $scope.includeTags = false;
             $scope.includeTitle = false;
             $scope.linkToQuestionPage = false;
             $scope.includeViews = false;
+            $scope.showTextEditor = false;
+
+             // Edit here plx!
+            var submitAnswerToServer = function(dangerousHTML){
+                console.log("sending ...", dangerousHTML);
+            }   
+
+            // Here goes user on submit click
+            $scope.submit = function(){
+
+                submitAnswerToServer($('.wysiwyg-editor').trumbowyg('html'));
+                
+                //clean up
+                $('.wysiwyg-editor').trumbowyg('empty')
+                $scope.showTextEditor = !$scope.showTextEditor;
+            }
 
             $scope.toggleFooter = function(){
                 $scope.showFooter = !$scope.showFooter;
@@ -36,6 +52,19 @@ angular.module('quoraApp')
         	  post.upvotes += inc;
         	};
 
+            $scope.toggleTextEditor = function(){
+
+                // ugly
+                $timeout(function(){
+                    $('.wysiwyg-editor').trumbowyg({
+                        fullscreenable: false,
+                        btns:['bold', 'italic']
+                    });
+                })
+                
+                $scope.showTextEditor = !$scope.showTextEditor;
+            }
+
             //TODO: implement goToProfile function
             $scope.goToProfile = function(post){
                 //FIXME: this is just a simple placeholder to demonstrate functionality
@@ -43,8 +72,10 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
+
             scope.type = attrs.type;
-            scope.showFooter = attrs.showFooter == "true" ? true : false;
+
+            //scope.showFooter = attrs.showFooter == "true" ? true : false;
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;

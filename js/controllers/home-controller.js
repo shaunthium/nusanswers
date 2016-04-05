@@ -9,4 +9,15 @@
 angular.module('quoraApp')
 .controller('HomeCtrl', [ '$scope', '$stateParams', function($scope, $stateParams){
 
+	console.log("in home controller")
+
+	$scope.showTextEditor = false;
+	$scope.toggleTextEditor = function(){
+		$('#wysiwyg-editor').trumbowyg({
+			fullscreenable: false,
+			btns:['bold', 'italic', 'insertImage', 'link']
+		});
+		$scope.showTextEditor = !$scope.showTextEditor;
+	}
+
 }]);
