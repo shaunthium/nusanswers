@@ -31,29 +31,37 @@ angular.module('quoraApp')
             $scope.showTextEditor = false;
 
              // Edit here plx!
-            var submitAnswerToServer = function(dangerousHTML){
+            var submitAnswerToServer = function(post, dangerousHTML){
+              var userID;
+              FB.getLoginStatus(function(resp) {
+                if (resp.status == 'connected') {
+                  FB.api('/me', function(response) {
+                    userID = response.id;
+                  });
+                }
+              });
               var answersURL = "/server/answers.php";
+              var questionID = post.id;
               $http({
                 method: 'POST',
                 url: answersURL,
                 data: {
                   cmd: "createanswer",
-                  user_id: user_id,
-                  question_id: question_id,
+                  user_id: userID,
+                  question_id: questionID,
                   content: dangerousHTML
                 },
                 dataType: 'json'
-              }).success(function(data) {
-                console.log('data:');
-                console.log(data);
+              }).success(function() {
+                console.log('hahaha');
               });
                 console.log("sending ...", dangerousHTML);
             }
 
             // Here goes user on submit click
-            $scope.submit = function(){
+            $scope.submit = function(post){
 
-                submitAnswerToServer($('.wysiwyg-editor').trumbowyg('html'));
+                submitAnswerToServer(post, $('.wysiwyg-editor').trumbowyg('html'));
 
                 //clean up
                 $('.wysiwyg-editor').trumbowyg('empty')
