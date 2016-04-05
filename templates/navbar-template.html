@@ -6,7 +6,7 @@
 </ul>
 
 <!-- Stuff that appears when user starts typing question -->
-<div ng-show="showOverlay" id="overlay-container"></div>
+<div ng-show="showOverlay" ng-class="{'show' : showOverlay}" id="overlay-container"></div>
 
 <search-popup ng-hide="!user_question"></search-popup>
 
@@ -15,7 +15,7 @@
   <div class="logo-container">
     <img src="icon.svg" class="logo">
   </div>
-  <span class="white-text" style="line-height:30px; font-weight:200; font-size:1.2em; margin-left:5px;">NUSAnswers</span>
+  <span class="white-text logo-text">NUSAnswers</span>
 </div>
 <!-- this navbar is a mess, grid system does not seem
      to work here, had to haxx0r hardcode it because couldn't make
@@ -23,29 +23,29 @@
 <div style="z-index:998;"class="navbar-fixed">
   <nav class="red darken-2">
     <div class="nav-wrapper container">
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+
+      <a href="#" data-activates="mobile-demo" class="button-collapse right"><i class="material-icons">menu</i></a>
+
       <ul class="right hide-on-med-and-down">
         <li><a class="white-text" href="#/profile">Profile</a></li>
-        <!-- Dropdown Trigger -->
         <li><a class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a></li>
       </ul>
-
       <form class="main-search-field center v-align white" >
         <div id="search-field" class="input-field">
           <input style="padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
-          <!-- <label>
-            <i style="line-height:45px;"class="material-icons grey-text text-lighten-1">question_answer</i>
-          </label> -->
-
           <i style="line-height:45px;" ng-click="submitQuestion(user_question)" class="material-icons">chat_bubble_outline</i>
         </div>
       </form>
 
+      <a style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align">Ask question</a>
+
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
+        <li><a href="#/home">Home</a></li>
+        <li><a href="#/profile">Profile</a></li>
+        <!-- this one needs more work
+        <li>
+          <a class="dropdown-button" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a>
+        </li>-->
       </ul>
 
     </div>
