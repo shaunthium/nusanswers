@@ -12,7 +12,7 @@
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
-                <p ng-if="includeViews" class="grey-text">Newbie</p>
+                <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavor}}</p>
                 <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
             </li>
         </ul>

@@ -11,6 +11,12 @@ angular.module('quoraApp')
         $state.go('qa', {'currPost' : post});
     }
 
+    //TODO: implement goToProfile function
+    $scope.goToProfile = function(post){
+        //FIXME: this is just a simple placeholder to demonstrate functionality
+        $state.go('profile', {'author' : post.author});
+    }
+
     $scope.newPost = function(title){
         return qs.submitNewPost(title, $scope.currentUser);
     }
@@ -88,7 +94,7 @@ angular.module('quoraApp')
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.currentUser = {name : "root", karma : 9999, userid : 0};
+    $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator"};
     $scope.posts = qs.getQuestions();
     $scope.notifications = qs.getNotifications();
     $scope.trendingTags = $scope.getTrendingTags();

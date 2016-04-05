@@ -12,21 +12,21 @@ angular.module('quoraApp')
     var id = 0;
     var answer =  {
                     id: 600,
-                    author:     {name:'Alex', karma:100, userid:99},
+                    author:     {name:'Alex', karma:100, userid:99, flavor: "Newbie"},
                     desc:       "I am an answer.",
                     upvotes:    0,
-                    comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}]
+                    comments:   [{author: {name:'Eric', karma:120, userid: 5, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}]
                 };
 
     var newPost =  {
                     id: 600,
                     title: "New Post",
                     tags:   ["New post!", "Tags", "MoreTags", "EvenMoreTags"],
-                    author:     {name:'Alex', karma:100, userid:99},
+                    author:     {name:'Alex', karma:100, userid:99, flavor: "Newbie"},
                     views:      9001,
                     desc:       "This is a new question description placeholder.",
                     upvotes:    0,
-                    comments:   [{author: {name:'Eric', karma:120, userid: 5}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}],
+                    comments:   [{author: {name:'Eric', karma:120, userid: 5, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}],
                     answers: [JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer))]
                 };
 
@@ -35,39 +35,43 @@ angular.module('quoraApp')
  				  id:0,
  				  title: 'When does Indian open on Sundays?',
  				  tags: ['Latest', "Tags", "MoreTags", "EvenMoreTags"],
- 				  author:{name:'User1', karma:100, userid:2},
+ 				  author:{name:'User1', karma:100, userid:2, flavor: "Newbie"},
  				  views: 10,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus. Donec maximus elementum nibh eget gravida. In sed leo a lectus suscipit porta. Fusce ornare sem vel sem viverra tempor. Aenean et tempus sapien. Donec sit amet mollis nibh. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
  					upvotes:0,
  					comments: [
- 				 		{author:{name:'Bob', karma:100, userid:3}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
- 				 		{author:{name:'Eric', karma:200, userid:4}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}
- 				 	]},
+ 				 		{author:{name:'Bob', karma:100, userid:3, flavor: "Newbie"}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
+ 				 		{author:{name:'Eric', karma:200, userid:4, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}
+ 				 	],
+                    answers : [JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer))]
+                },
  				 {
  				  id:1,
  				  title: 'Why is nobody asking questions during lecture?',
  				  tags: ['Lectures', "Latest", "Tags"],
- 				  author: {name:'User2', karma:150, userid:5},
+ 				  author: {name:'User2', karma:150, userid:5, flavor: "Newbie"},
  				  views: 25,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.In sed leo a lectus suscipit porta. Suspendisse interdum, ipsum a maximus mattis, ipsum nibh viverra ipsum, eget facilisis enim mauris vitae urna. Mauris vulputate libero sed dapibus tristique. Nullam at ante a nisi porttitor rhoncus.',
  					upvotes:0,
  					comments: [
- 				 		{author:{name:'Bob', karma:100, userid:3}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
- 				 		{author:{name:'Eric', karma:200, userid:4}, body:'Some comment content2222 ome comment content2222222333', upvotes:0, liked : false, reported : false, id:id++}
- 				 	]
+ 				 		{author:{name:'Bob', karma:100, userid:3, flavor: "Newbie"}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
+ 				 		{author:{name:'Eric', karma:200, userid:4, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2222222333', upvotes:0, liked : false, reported : false, id:id++}
+ 				 	],
+                    answers: [JSON.parse(JSON.stringify(answer))]
  				},
  				{
  				  id:2,
  				  title: 'When does starbucks close on public holidays?',
  				  tags: ['UTown', "Tags"],
- 				  author: {name:'Steven', karma:7, userid:7},
+ 				  author: {name:'Steven', karma:7, userid:7, flavor: "Newbie"},
  				  views: 25,
  				  desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel scelerisque quam. Pellentesque ut mattis tellus.  Aliquam vel scelerisque quam. Pellentesque ut mattis tellus.',
  					upvotes:0,
  					comments: [
- 				 		{author:{name:'Bob', karma:100, userid:3}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
- 				 		{author:{name:'Eric', karma:200, userid:4}, body:'Some comment content2222', upvotes:0, liked : false, reported : false, id:id++}
- 				 	]
+ 				 		{author:{name:'Bob', karma:100, userid:3, flavor: "Newbie"}, body:'Some comment content', upvotes:0, liked : false, reported : false, id:id++},
+ 				 		{author:{name:'Eric', karma:200, userid:4, flavor: "Newbie"}, body:'Some comment content2222', upvotes:0, liked : false, reported : false, id:id++}
+ 				 	],
+                    answers : []
  				}];
 
 
@@ -75,20 +79,20 @@ angular.module('quoraApp')
     /*END HARDCODED SERVER REPLY OBJECTS*/
 
     function getQuestions() {
-          $http({
-            method: 'POST',
-            url: questions_url,
-            data: {
-              cmd: "trending",
-            },
-            dataType: 'json'
-          }).then(function success(returnedData) {
-            questions = returnedData.data;
-            console.log(questions);
-          });
-
-          return questions;
-        // return posts;
+        //   $http({
+        //     method: 'POST',
+        //     url: questions_url,
+        //     data: {
+        //       cmd: "trending",
+        //     },
+        //     dataType: 'json'
+        //   }).then(function success(returnedData) {
+        //     questions = returnedData.data;
+        //     console.log(questions);
+        //   });
+          //
+        //   return questions;
+        return posts;
     }
 
     //TODO: implement back-end communication
