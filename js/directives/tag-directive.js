@@ -10,7 +10,7 @@ angular.module('quoraApp')
         link : function(scope, elems, attrs){
             scope.isFilter = 'isFilter' in attrs;
             if(scope.isFilter){
-                $scope.activeFilter = false;
+                scope.activeFilter = false;
                 scope.$on("filterChange", function(event, selectedTag){
                     if(selectedTag === scope.tag){
                         scope.activeFilter = !scope.activeFilter;

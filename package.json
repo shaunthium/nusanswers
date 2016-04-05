@@ -7,5 +7,8 @@
     "grunt-express": "~1.0.0-beta2",
     "grunt-contrib-watch": "~0.5.1",
     "grunt-open": "~0.2.1"
+  },
+  "dependencies": {
+    "trumbowyg": "^2.0.0-beta.7"
   }
 }

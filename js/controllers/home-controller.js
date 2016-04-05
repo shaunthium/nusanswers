@@ -1,9 +1,9 @@
 /* Controls home view */
 /*
-    TODO:
-    + Can display fancy notifications.
-    + Live-update of the latest tags or trends.
-    + More information is displayed in the home view.
+TODO:
++ Can display fancy notifications.
++ Live-update of the latest tags or trends.
++ More information is displayed in the home view.
 
 */
 angular.module('quoraApp')
@@ -20,10 +20,10 @@ angular.module('quoraApp')
                     relevant = relevant || postTag.toUpperCase() === arrayTag.toUpperCase();
                 });
             }
-            );
-            return relevant;
-        });
-    };
+        );
+        return relevant;
+    });
+};
 })
 .controller('HomeCtrl', [ '$scope', '$stateParams', 'byTagsFilter', function($scope, $stateParams, filterByTags){
     $scope.activeTags = [];
@@ -42,4 +42,16 @@ angular.module('quoraApp')
     function(newTags){
         $scope.filteredPosts = filterByTags($scope.posts, newTags);
     });
+
+    console.log("in home controller")
+
+    $scope.showTextEditor = false;
+    $scope.toggleTextEditor = function(){
+        $('#wysiwyg-editor').trumbowyg({
+            fullscreenable: false,
+            btns:['bold', 'italic', 'insertImage', 'link']
+        });
+        $scope.showTextEditor = !$scope.showTextEditor;
+    }
+
 }]);
