@@ -1,21 +1,23 @@
 angular.module('quoraApp')
-.controller('ProfileCtrl', [ '$scope', function($scope){
-	
-	$scope.profileImg = "http://dummyimage.com/300/09.png/fff"
- 
-	/** listens for change event on the input file type 
-	    TODO: might want to change this to a directive or something*/
-	$("input:file").change(function (){
-     	var fileName = $(this).val();
-       
-      var f = document.getElementById('file-input').files[0],
-      r = new FileReader();
-	  	r.onloadend = function(e){
-		    var data = e.target.result;
-				$scope.profileImg = data;
-				$scope.$apply(); // update view
-		  }
-
-		  r.readAsDataURL(f);
-  });
+.controller('ProfileCtrl', [ '$scope', '$http', function($scope, $http){
+  // FB.getLoginStatus(function(resp) {
+  //   if (resp.status == 'connected') {
+  //     FB.api('/me', function(response) {
+  //       // User's Facebook name
+  //       $scope.userName = response.name;
+  //       // Get user's profile picture
+  //       $http({
+  //         url: 'http://graph.facebook.com/v2.5/' + response.id + '/picture?redirect=false',
+  //         method: 'GET',
+  //         data: {
+  //           width: '1000'
+  //         }
+  //       }).success(function(data) {
+  //         $scope.profileImg = data.data.url;
+  //       });
+  //
+  //       $scope.$apply();
+  //     });
+  //   }
+  // });
 }])

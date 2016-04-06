@@ -63,9 +63,21 @@
 		$result = $db->query($query);
 		$post_array = array();
 		while ($post = mysqli_fetch_array($result)){
-					
-			//$post_array[] = array(
+			
+			/* Here we get the number of answers to each question */
+			$id = $post['id'];
+			$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $id;
+			$result_answers_count = $db->query($query_answers_count);
+			$answers_count = mysqli_fetch_assoc($result_answers_count);
+			
+			/* Here we get the User Info to each question */
+			$user_id = $post['user_id'];
+			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+			$result_author = $db->query($query_author);
+			$author = mysqli_fetch_assoc($result_author);
+		
 			$post_array[] = array(
+
 				'id'=>$post['id'],
 				'user_id'=>$post['user_id'],
 				'title'=>$post['title'],
@@ -73,7 +85,10 @@
 				'score'=>$post['score'],
 				'view_count'=>$post['view_count'],
 				'created_at'=>$post['created_at'],
-				'updated_at'=>$post['updated_at']
+				'updated_at'=>$post['updated_at'],
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' =>  $author['score'],
+				'answers_count' => $answers_count
 			);
 		}
 		echo json_encode($post_array);		

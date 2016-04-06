@@ -9,12 +9,12 @@
         <div class="row">
             <!-- begin feed -->
             <div class="col s12 m9">
-                <div ng-repeat="post in filteredPosts">
+                <div ng-repeat="post in filteredPosts track by $index">
                     <post type="feed-item">
                         <!-- fixed footer -->
                         <div class="card-action">
-                            <span style="padding-right:15px;"class="grey-text">{{post.answers.length}} Answer<span ng-show="post.answers.length != 1">s</span></span>
-                            <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()" class="waves-effect waves-light btn blue ">
+                            <span style="padding-right:15px;"class="grey-text">{{}} Answer<span ng-show="post.answers.length != 1">s</span></span>
+                            <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
                                 <i class="material-icons">edit</i>
                                 <span style="position:relative; bottom:5px;">Answer</span>
                             </a>
@@ -24,10 +24,9 @@
                 </div>
                 <!-- end feed -->
             </div>
-
             <!-- trending tags which we hide on small device -->
             <div class="col m3 hide-on-small-and-down right">
-                <div style="position:fixed; "class="top-tags collection">
+                <div class="top-tags collection">
                     <trending-box trending-tags="trendingTags"></trending-box>
                 </div>
                 <!-- end trending tags -->

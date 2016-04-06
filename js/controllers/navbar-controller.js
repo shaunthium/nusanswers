@@ -7,7 +7,7 @@
         + home button
 */
 angular.module('quoraApp')
-.controller('NavCtrl', ['$scope', function($scope){
+.controller('NavCtrl', ['$scope', '$timeout', function($scope, $timeout){
     $scope.user_question = "";
     $scope.showOverlay = false;
 
@@ -26,4 +26,13 @@ angular.module('quoraApp')
         $scope.showOverlay = false; //Hide shading box
         $scope.goToPost($scope.newPost(user_question));
     }
+
+    $scope.toggleOverlay = function(){
+      $('#search').focus();
+    }
+
+    $timeout(function(){
+       $(".button-collapse").sideNav();
+    }, 500)
+
 }]);
