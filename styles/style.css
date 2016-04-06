@@ -1,3 +1,24 @@
+.animate-search-popup.ng-move,
+.animate-search-popup.ng-enter,
+.animate-search-popup.ng-leave {
+  -webkit-transition:all linear 0.2s;
+  transition:all linear 0.2s;
+}
+
+.animate-search-popup.ng-leave.ng-leave-active,
+.animate-search-popup.ng-move,
+.animate-search-popup.ng-enter {
+  opacity:0;
+  top:100px;
+}
+
+.animate-search-popup.ng-leave,
+.animate-search-popup.ng-move.ng-move-active,
+.animate-search-popup.ng-enter.ng-enter-active {
+  opacity:1;
+  top:80px;
+}
+
 .animate-fade-in.ng-move,
 .animate-fade-in.ng-enter,
 .animate-fade-in.ng-leave {
