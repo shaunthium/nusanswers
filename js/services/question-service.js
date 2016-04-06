@@ -79,7 +79,7 @@ angular.module('quoraApp')
         method: 'POST',
         url: questions_url,
         data: {
-          cmd: "trending",
+          cmd: "trending_qns",
         },
         dataType: 'json'
       });

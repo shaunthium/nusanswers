@@ -1,6 +1,13 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', function($scope, qs, $rootScope, $state){
+.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
+
+    $scope.loading = true;
+
+    // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
+    $timeout(function(){
+        $scope.loading = false;
+    }, 1500)
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
