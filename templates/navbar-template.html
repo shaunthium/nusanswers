@@ -6,7 +6,7 @@
 </ul>
 
 <!-- Stuff that appears when user starts typing question -->
-<div ng-show="showOverlay" ng-class="{'show' : showOverlay}" id="overlay-container"></div>
+<div ng-if="showOverlay" id="overlay-container"></div>
 
 <search-popup ng-hide="!user_question"></search-popup>
 
@@ -49,8 +49,8 @@
         </div>
       </form>
 
-      <a ng-show="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align">Ask question</a>
-      <a ng-show="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue lighten-4 black-text v-align">Submit</a>
+      <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
+      <a ng-if="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue lighten-4 black-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
         <li><a href="#/home">Home</a></li>
