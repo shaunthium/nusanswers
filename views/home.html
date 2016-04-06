@@ -13,7 +13,7 @@
                     <post type="feed-item">
                         <!-- fixed footer -->
                         <div class="card-action">
-                            <span style="padding-right:15px;"class="grey-text">3 Answers</span>
+                            <span style="padding-right:15px;"class="grey-text">{{}} Answers</span>
                             <a ng-class="{'disabled' : showTextEditor}" ng-click="toggleTextEditor()"class="waves-effect waves-light btn blue ">
                                 <i class="material-icons">edit</i>
                                 <span style="position:relative; bottom:5px;">Answer</span>
@@ -26,7 +26,7 @@
                                 <ul style="border:0;"class="collection">
                                     <li style="margin-left:5px; min-height:0px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
                                         <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
-                                        <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+                                        <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author}}</span>
                                         <p ng-if="includeViews" class="grey-text">Newbie</p>
                                         <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
                                     </li>
@@ -38,7 +38,7 @@
                             </div>
                             <!-- Submit or cancel -->
                             <div class="card-action">
-                                <a ng-click="submit()" ng-click="toggleTextEditor()" class="waves-effect waves-light btn blue ">
+                                <a ng-click="submit(post)" ng-click="toggleTextEditor()" class="waves-effect waves-light btn blue ">
                                     <span style="position:relative; padding-right:5px;bottom:5px;">Submit</span>
                                     <i class="material-icons">send</i>
                                 </a>

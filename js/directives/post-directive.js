@@ -22,7 +22,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($scope, $state, $rootScope, $timeout){
+        controller: function($http, $scope, $state, $rootScope, $timeout){
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -31,14 +31,38 @@ angular.module('quoraApp')
             $scope.showTextEditor = false;
 
              // Edit here plx!
-            var submitAnswerToServer = function(dangerousHTML){
+            var submitAnswerToServer = function(post, dangerousHTML){
+              var userID;
+              // FB.getLoginStatus(function(resp) {
+              //   if (resp.status == 'connected') {
+              //     FB.api('/me', function(response) {
+              //       userID = response.id;
+              //     });
+              //   }
+              // });
+              var userID = 1;
+              var answersURL = "/server/answers.php";
+              var questionID = post.id;
+              $http({
+                method: 'POST',
+                url: answersURL,
+                data: {
+                  cmd: "createanswer",
+                  user_id: userID,
+                  question_id: questionID,
+                  content: dangerousHTML
+                },
+                dataType: 'json'
+              }).success(function() {
+                console.log('hahaha');
+              });
                 console.log("sending ...", dangerousHTML);
             }
 
             // Here goes user on submit click
-            $scope.submit = function(){
+            $scope.submit = function(post){
 
-                submitAnswerToServer($('.wysiwyg-editor').trumbowyg('html'));
+                submitAnswerToServer(post, $('.wysiwyg-editor').trumbowyg('html'));
 
                 //clean up
                 $('.wysiwyg-editor').trumbowyg('empty')
@@ -50,8 +74,25 @@ angular.module('quoraApp')
             }
 
             $scope.incrementUpvotes = function(post, inc) {
-        	  post.upvotes += inc;
-        	};
+              var cmd;
+               if (inc == 1) {
+                 post.score++;
+                 cmd = "qns_upvote";
+               } else {
+                 post.score--;
+                 cmd = "qns_downvote";
+               }
+               $http({
+                 method: "POST",
+                 url: "/server/questions.php",
+                 data: {
+                   cmd: cmd,
+                   id: post.id
+                 }
+               }).success(function() {
+                 console.log('success');
+               });
+            };
 
             $scope.toggleTextEditor = function(){
 

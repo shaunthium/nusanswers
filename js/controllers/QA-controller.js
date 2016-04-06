@@ -1,13 +1,25 @@
 /*Controls display of the "question-answers" page*/
 angular.module('quoraApp')
-.controller('QACtrl', [ '$scope', '$stateParams', function($scope, $stateParams){
+.controller('QACtrl', [ '$scope', '$stateParams', '$http', function($scope, $stateParams, $http){
 
-	$scope.post = $stateParams.currPost;
-
-    if($scope.post.answers){
-        $scope.numAnswers = $scope.post.answers.length;
+  $scope.post = $stateParams.currPost;
+  console.log('here');
+  console.log($scope.post);
+  $http({
+    url: "/server/answers.php",
+    method: "POST",
+    data: {
+      cmd: "getanswers",
+      question_id: $scope.post.id
     }
-    else{
-        $scope.numAnswers = 0;
-    }
+  }).success(function(data) {
+    console.log(data);
+  });
+  //
+  //   if($scope.post.answers){
+  //       $scope.numAnswers = $scope.post.answers.length;
+  //   }
+  //   else{
+  //       $scope.numAnswers = 0;
+  //   }
 }]);
