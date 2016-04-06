@@ -34,8 +34,9 @@
 	*
 	*
 	*/
-	if($cmd == "getanswers" and $question_id >=0)
+	if($cmd == "getanswers")
 	{
+    $question_id = $data->question_id;
 		global $db;
 		/*******************Query Question table ***************************/
 		$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
