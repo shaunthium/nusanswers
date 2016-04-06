@@ -23,10 +23,14 @@ div.logo-container{
 
 }
 
+.logo-text{
+  line-height:30px; font-weight:200; font-size:1.2em; margin-left:7px;
+}
+
 div.nus-logo{
 
   position:fixed; 
-  left:30px; 
+  left:40px; 
   top:16px; 
   z-index:999;
   cursor:pointer !important;
@@ -38,18 +42,65 @@ nav{
   line-height:61px !important;
 }
 
+form.main-search-field{
+
+  border-radius:2px;
+  height:40px; 
+  width:450px;
+  /*width:90%;*/
+  float:left;
+
+}
+
+#submit-question-mobile{
+  display:none;
+}
+
+@media (max-width:1050px){
+
+  #submit-question-button{
+    display:none !important;
+  }
+
+  #ask-question-button{
+    display:none !important;
+  }
+
+  #submit-question-mobile{
+
+    display:inline !important;
+
+  }
+
+  /*form.main-search-field{
+    margin-left:50px;
+  }*/
+  
+}
+
+@media (max-width:1100px){
+
+  .nus-logo{
+    display:none !important;
+  }
+
+  /*form.main-search-field{
+    margin-left:50px;
+  }*/
+  
+}
+
 
 @media (max-width:500px){
 
   form.main-search-field, search-popup{
-
-    width:350px !important;
-
+    width:270px !important;
   }
-
+  
 }
 
 @media (max-width: 750px){
+
 
   a.comment-button{
     clear:both;
@@ -110,13 +161,6 @@ div.tag{
 
 .chip{margin:2px;}
 
-form.main-search-field{
-
-  border-radius:5px;
-  height:40px; 
-  width:450px;
-
-}
 
 
 
@@ -219,22 +263,25 @@ search-popup:after {
 
 
 #overlay-container{
-
   position:absolute;
   background:rgba(0,0,0,0.7);
   width:100%;
   height:100%;
   z-index:997;
+  transition: all 0.2s linear;
+  opacity:0.1;
+  
+}
+
+.show {
+  opacity:1 !important;
 }
 
 /************************/
 
 .input-field input[type=search]:focus {
-
   border-radius:5px;
-
 }
-
 
 .dropdown-content{
   background-color: #FFFFFF;

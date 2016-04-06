@@ -15,13 +15,10 @@ angular.module('quoraApp')
 			})
 
 			angular.element($window).on('scroll', function(){
-
 				element.css('margin-top', scrollY);
 				var overlayOffsetTop = document.getElementById("overlay-container").offsetTop;
 				document.getElementById("overlay-container").style.top = (scrollY) + "px";
-
 			})
-
 		},
 		templateUrl:"templates/search-popup-template.html"
 	}
