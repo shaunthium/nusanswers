@@ -26,7 +26,7 @@
 
 
 
-	global $db;
+	
 
 
 	/*
@@ -36,6 +36,7 @@
 	*/
 	if($cmd == "getanswers" and $question_id >=0)
 	{
+		global $db;
 		/*******************Query Question table ***************************/
 		$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
 		$res = $db->query($query);
@@ -69,6 +70,7 @@
 	}
 	else if ($cmd == "deleteanswer")
 	{
+		global $db;
 		//WARNING: Authorization check not implemented!!
 		$query = "CALL DeleteAnswer($answer_id)";
 		$res = $db->query($query);
@@ -76,6 +78,7 @@
 	}
 	else if($cmd == "upvote")
 	{
+		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
 		$query = "CALL UpVoteAnswer($answer_id)";
@@ -84,6 +87,7 @@
 	}
 	else if($cmd == "downvote")
 	{
+		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
 		$query = "CALL DownVoteAnswer($answer_id)";
@@ -91,11 +95,13 @@
 	}
 	else if($cmd == "createanswer")
 	{
+		global $db;
 		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, $content)";
 		$db->query($query);
 	}
 	else if($cmd == "updateanswer")
 	{
+		global $db;
 		$query = "update Answers set content = $content where id = $answer_id";
 		$db->query($query);
 	}
