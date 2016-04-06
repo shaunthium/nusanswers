@@ -24,15 +24,16 @@
     <!-- loading screen -->
     <div style="text-align:center;"ng-if="loading" class="loading-container animate-fade-in"> 
         <div style="display:inline-block; padding:10px;" class="v-align">
-            <p style="font-weight:200;font-size:1.9em;"class="white-text">Hold on, we are fetching your questions...</p>
+            <p style="font-weight:200;font-size:1.9em;"class="white-text">Hold on while we are fetching all questions...</p>
             <img style="width:100px; clear:both;"src="rolling.svg">
         </div>   
     </div>
 
     <navbar></navbar>
     <!-- Each view of the app is separate into views folder -->
-    <ui-view></ui-view>
-
+    <!-- <ui-view class="animate-fade-in"></ui-view> -->    
+    <div ui-view></div>        
+    
     <!-- unfortunately materialize is depenedent on jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
