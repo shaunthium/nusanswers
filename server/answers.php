@@ -41,27 +41,49 @@
 		$res = $db->query($query);
 		$havetag = mysqli_fetch_assoc($res);
 		
+		/* Here we get the User ID of the question */
+		$query = "SELECT user_id FROM Questions where id = $question_id";
+		$result = $db->query($query);
+		$user_id = mysqli_fetch_assoc($result);
+		$user_id = $user_id["user_id"];
+		
+		/* Here we get the User Info to each question */
+		$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+		$result_author = $db->query($query_author);
+		$author = mysqli_fetch_assoc($result_author);
+		
+		/* Here we get the number of answers to each question */
+		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
+		$result_answers_count = $db->query($query_answers_count);
+		$answers_count = mysqli_fetch_assoc($result_answers_count);
+			
 		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
 		{
-			error_log("no tags");
+			/*******************Query Question table ***************************/
+			$query = "select Questions.*, '' as tags from Questions where Questions.id = ". $question_id;
+			$res = $db->query($query);
+			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
+			$post = mysqli_fetch_assoc($res);
+			
+			$questionResult = array(
+
+				'id'=>$post['id'],
+				'user_id'=>$post['user_id'],
+				'title'=>$post['title'],
+				'content'=>$post['content'],
+				'score'=>$post['score'],
+				'view_count'=>$post['view_count'],
+				'created_at'=>$post['created_at'],
+				'updated_at'=>$post['updated_at'],
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' =>  $author['score'],
+				'answers_count' => $answers_count["answers_count"],
+				'tags' => $post['tags']
+			);
+			
 		}
 		else //Has Tags
 		{
-			/* Here we get the User ID of the question */
-			$query = "SELECT user_id FROM Questions where id = $question_id";
-			$result = $db->query($query);
-			$user_id = mysqli_fetch_assoc($result);
-			$user_id = $user_id["user_id"];
-			
-			/* Here we get the User Info to each question */
-			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
-			$result_author = $db->query($query_author);
-			$author = mysqli_fetch_assoc($result_author);
-			
-			/* Here we get the number of answers to each question */
-			$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
-			$result_answers_count = $db->query($query_answers_count);
-			$answers_count = mysqli_fetch_assoc($result_answers_count);
 			
 			/*******************Query Question table ***************************/
 			$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
@@ -123,7 +145,7 @@
 		$answersResult = array();
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
 		while($r = mysqli_fetch_assoc($res)){
-			//error_log("\nha\n");
+			
 			/* Here we get the User Info to each answer */
 			$user_id = $r["user_id"];
 			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
