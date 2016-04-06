@@ -1,3 +1,118 @@
+/* Have to set height explicity on ui-view 
+to prevent collapsing during animation*/
+/*.well[ui-view]{
+ height: 65px; 
+}*/
+/*.ui-view-container {
+  position: relative;
+}*/
+
+[ui-view].ng-enter, [ui-view].ng-leave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  -webkit-transition:all .4s ease-in-out;
+  -moz-transition:all .4s ease-in-out;
+  -o-transition:all .4s ease-in-out;
+  transition:all .4s ease-in-out;
+}
+
+[ui-view].ng-enter {
+  opacity: 0;
+  -webkit-transform:scale3d(0.5, 0.5, 0.5);
+  -moz-transform:scale3d(0.5, 0.5, 0.5);
+  transform:scale3d(0.5, 0.5, 0.5);
+}
+
+[ui-view].ng-enter-active {
+  opacity: 1;
+  -webkit-transform:scale3d(1, 1, 1);
+  -moz-transform:scale3d(1, 1, 1);
+  transform:scale3d(1, 1, 1);
+}
+
+[ui-view].ng-leave {
+  opacity: 1;
+  /*padding-left: 0px;*/  
+  -webkit-transform:translate3d(0, 0, 0);
+  -moz-transform:translate3d(0, 0, 0);
+  transform:translate3d(0, 0, 0);
+}
+
+[ui-view].ng-leave-active {
+  opacity: 0;
+  /*padding-left: 100px;*/
+  -webkit-transform:translate3d(100px, 0, 0);
+  -moz-transform:translate3d(100px, 0, 0);
+  transform:translate3d(100px, 0, 0);
+}
+
+
+.animate-search-popup.ng-move,
+.animate-search-popup.ng-enter,
+.animate-search-popup.ng-leave {
+  -webkit-transition:all linear 0.2s;
+  transition:all linear 0.2s;
+}
+
+.animate-search-popup.ng-leave.ng-leave-active,
+.animate-search-popup.ng-move,
+.animate-search-popup.ng-enter {
+  opacity:0;
+  top:100px;
+}
+
+.animate-search-popup.ng-leave,
+.animate-search-popup.ng-move.ng-move-active,
+.animate-search-popup.ng-enter.ng-enter-active {
+  opacity:1;
+  top:80px;
+}
+
+.animate-fade-in.ng-move,
+.animate-fade-in.ng-enter,
+.animate-fade-in.ng-leave {
+  -webkit-transition:all linear 0.2s;
+  transition:all linear 0.2s;
+}
+
+.animate-fade-in.ng-leave.ng-leave-active,
+.animate-fade-in.ng-move,
+.animate-fade-in.ng-enter {
+  opacity:0;
+}
+
+.animate-fade-in.ng-leave,
+.animate-fade-in.ng-move.ng-move-active,
+.animate-fade-in.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.loading-container{
+  width:100%;
+  height:100%;
+  background:#D32F2F;
+  position:fixed;
+  z-index:999;
+}
+ 
+#overlay-container{
+  position:absolute;
+  background:rgba(0,0,0,0.7);
+  width:100%;
+  height:100%;
+  z-index:997;
+  transition: all 0.2s;
+}
+
+#overlay-container.ng-enter, #overlay-container.ng-leave-active{
+  opacity:0;
+  
+}
+#overlay-container.ng-enter-active{
+  opacity:1;
+}
+
 html,body{ 
   background:#EEEEEE;
   height:100%;
@@ -20,7 +135,6 @@ div.logo-container{
   color:white; 
   float:left;
   border-radius:2px;
-
 }
 
 .logo-text{
@@ -28,13 +142,11 @@ div.logo-container{
 }
 
 div.nus-logo{
-
   position:fixed; 
-  left:40px; 
+  left:20px; 
   top:16px; 
-  z-index:999;
+  z-index:1000;
   cursor:pointer !important;
-
 }
 
 nav{
@@ -242,7 +354,7 @@ search-popup{
   background:white;
   width:450px;
   z-index:999;  
-  border-radius:5px;
+  border-radius:2px;
   top:80px;
 }
 
@@ -261,20 +373,14 @@ search-popup:after {
   margin-left: -10px;
 }
 
-
-#overlay-container{
-  position:absolute;
-  background:rgba(0,0,0,0.7);
-  width:100%;
-  height:100%;
-  z-index:997;
-  transition: all 0.2s linear;
-  opacity:0.1;
-  
+search-popup.fake-white:after{
+  border-bottom-color: white !important;
 }
 
-.show {
-  opacity:1 !important;
+
+.no-animate {
+   -webkit-transition: none !important;
+   transition: none !important;
 }
 
 /************************/

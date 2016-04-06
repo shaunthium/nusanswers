@@ -1,7 +1,7 @@
 /*Main config of the app, handles the different views and should also keep track
 of the history. Each view is attached to its controller*/
 
-angular.module('quoraApp', ['ui.router'])
+angular.module('quoraApp', ['ui.router', 'ngAnimate'])
 
 	.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
