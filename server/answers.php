@@ -37,7 +37,7 @@
 	*/
 	if($cmd == "getanswers" and $question_id >=0)
 	{
-		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = 1";
+		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
 		$res = $db->query($query);
 		$havetag = mysqli_fetch_assoc($res);
 		
@@ -123,6 +123,7 @@
 		$answersResult = array();
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
 		while($r = mysqli_fetch_assoc($res)){
+			//error_log("\nha\n");
 			/* Here we get the User Info to each answer */
 			$user_id = $r["user_id"];
 			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
@@ -170,6 +171,7 @@
 		
 		
 		$finalOutput = array("question"=>$questionResult, "question_comments"=>$commentsResult, "answers"=>$answersResult);
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
