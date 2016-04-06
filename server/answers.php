@@ -4,18 +4,18 @@
   $data = json_decode($request_data);
   $cmd = $data->cmd;
 	// if(isset($_POST["question_id"]))
-  if (isset($data->question_id)) {
-    $question_id = $data->question_id;
-  }
-  if (isset($data->answer_id)) {
-    $answer_id = $data->answer_id;
-  }
-  if (isset($data->user_id)) {
-    $user_id = $data->user_id;
-  }
-  if (isset($data->content)) {
-    $content = $data->content;
-  }
+  // if (isset($data->question_id)) {
+  //   $question_id = $data->question_id;
+  // }
+  // if (isset($data->answer_id)) {
+  //   $answer_id = $data->answer_id;
+  // }
+  // if (isset($data->user_id)) {
+  //   $user_id = $data->user_id;
+  // }
+  // if (isset($data->content)) {
+  //   $content = $data->content;
+  // }
 	// 	$question_id = $_POST["question_id"];
 	// if(isset($_POST["answer_id"]))
 	// 	$answer_id = $_POST["answer_id"];
@@ -26,7 +26,7 @@
 
 
 
-	
+
 
 
 	/*
@@ -96,7 +96,10 @@
 	else if($cmd == "createanswer")
 	{
 		global $db;
-		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, $content)";
+    $user_id = $data->user_id;
+    $question_id = $data->question_id;
+    $content = $data->content;
+		$query = "insert into Answers (user_id, question_id, content, score, chosen) Values ($user_id, $question_id, '" . $content . "', 0, 0)";
 		$db->query($query);
 	}
 	else if($cmd == "updateanswer")

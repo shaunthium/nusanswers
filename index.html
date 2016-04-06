@@ -12,7 +12,7 @@
 </head>
 
 <body ng-app="quoraApp" ng-controller="MainCtrl">
-    <!-- <script>
+    <script>
       var test;
       // This is called with the results from from FB.getLoginStatus().
       function statusChangeCallback(response) {
@@ -49,7 +49,26 @@
       function checkLoginState() {
         FB.getLoginStatus(function(response) {
           statusChangeCallback(response);
+          addUser(response);
         });
+      }
+
+      function addUser(resp) {
+        var settings = {
+          url: '/server/users/create-user.php',
+          method: 'POST',
+          data: {
+            token: resp.authResponse.accessToken
+          },
+          success: function(resp) {
+            console.log('hi');
+            console.log(resp);
+          },
+          error: function() {
+            console.log('bye');
+          }
+        }
+        $.ajax(settings);
       }
       window.fbAsyncInit = function() {
         FB.init({
@@ -90,12 +109,21 @@
             //   'Thanks for logging in, ' + response.name + '!';
           });
         }
-    </script> -->
+
+        function logout() {
+          FB.logout(function (resp){
+            console.log(resp);
+          });
+        }
+    </script>
     <navbar></navbar>
     <!-- Each view of the app is separate into views folder -->
     <ui-view></ui-view>
     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
     </fb:login-button>
+
+    <button type="button" style="width:20px; height:20px; background-color:blue"
+    name="logout-btn" onclick="logout()"></button>
 
     <!-- unfortunately materialize is depenedent on jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

@@ -33,29 +33,31 @@ angular.module('quoraApp')
              // Edit here plx!
             var submitAnswerToServer = function(post, dangerousHTML){
               var userID;
-              // FB.getLoginStatus(function(resp) {
-              //   if (resp.status == 'connected') {
-              //     FB.api('/me', function(response) {
-              //       userID = response.id;
-              //     });
-              //   }
-              // });
-              var userID = 1;
-              var answersURL = "/server/answers.php";
-              var questionID = post.id;
-              $http({
-                method: 'POST',
-                url: answersURL,
-                data: {
-                  cmd: "createanswer",
-                  user_id: userID,
-                  question_id: questionID,
-                  content: dangerousHTML
-                },
-                dataType: 'json'
-              }).success(function() {
-                console.log('hahaha');
+              FB.getLoginStatus(function(resp) {
+                if (resp.status == 'connected') {
+                  FB.api('/me', function(response) {
+                    userID = response.id;
+                    console.log('userID is:');
+                    console.log(userID);
+                    var answersURL = "/server/answers.php";
+                    var questionID = post.id;
+                    $http({
+                      method: 'POST',
+                      url: answersURL,
+                      data: {
+                        cmd: "createanswer",
+                        user_id: userID,
+                        question_id: questionID,
+                        content: dangerousHTML
+                      },
+                      dataType: 'json'
+                    }).success(function() {
+                      console.log('hahaha');
+                    });
+                  });
+                }
               });
+              // var userID = 1;
                 console.log("sending ...", dangerousHTML);
             }
 
