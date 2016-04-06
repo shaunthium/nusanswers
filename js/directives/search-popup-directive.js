@@ -6,6 +6,8 @@ angular.module('quoraApp')
 		restrict: 'E',
 		link: function(scope, element, attrs){
 
+			scope.mode = attrs.mode;
+
 			element.css('left', document.getElementById("search-field").getBoundingClientRect().left);
 			angular.element($window).bind('resize', function(){
 
