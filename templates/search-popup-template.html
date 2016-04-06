@@ -1,13 +1,31 @@
-<div class = "suggestion-box-info">
-  <p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">
-      Search for content lah
-  </p>
+<div ng-if="user_question">
+	<div class = "suggestion-box-info">
+	  <p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">
+	      Search for content lah
+	  </p>
+	</div>
+
+	<div ng-click="goToPost(post)" ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
+	  <p style="margin:0;padding:0px;" >
+	    <b>Post:</b> {{post.title}}
+	  </p>
+	</div>
+
+	<p style="text-align:center;" ng-hide="filteredPosts.length">No results found!</p>
 </div>
 
-<div ng-click="goToPost(post)" ng-repeat = "post in filteredPosts  = (posts | filter:user_question)" class="search-result-container">
-  <p style="margin:0;padding:0px;" >
-    <b>Post:</b> {{post.title}}
-  </p>
+<div ng-if="!user_question">
+
+	<div style="height:100px;">
+
+		<div style="text-align:center;" class="v-align">
+			<span class="v-align">
+				<b>What's your question?</b><br/>
+				Ask a question about anything that is related to NUS and get an answer instantly.
+			</span>
+		</div>
+		
+	</div>
+
 </div>
 
-<p style="text-align:center;" ng-hide="filteredPosts.length">No results found!</p>

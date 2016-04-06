@@ -278,7 +278,7 @@ search-popup{
   background:white;
   width:450px;
   z-index:999;  
-  border-radius:5px;
+  border-radius:2px;
   top:80px;
 }
 
@@ -295,6 +295,10 @@ search-popup:after {
   border-bottom-color: #e0e0e0;
   border-width: 10px;
   margin-left: -10px;
+}
+
+search-popup.fake-white:after{
+  border-bottom-color: white !important;
 }
 
 
