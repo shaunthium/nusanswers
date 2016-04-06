@@ -33,13 +33,14 @@ angular.module('quoraApp')
              // Edit here plx!
             var submitAnswerToServer = function(post, dangerousHTML){
               var userID;
-              FB.getLoginStatus(function(resp) {
-                if (resp.status == 'connected') {
-                  FB.api('/me', function(response) {
-                    userID = response.id;
-                  });
-                }
-              });
+              // FB.getLoginStatus(function(resp) {
+              //   if (resp.status == 'connected') {
+              //     FB.api('/me', function(response) {
+              //       userID = response.id;
+              //     });
+              //   }
+              // });
+              var userID = 1;
               var answersURL = "/server/answers.php";
               var questionID = post.id;
               $http({
