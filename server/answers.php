@@ -1,6 +1,6 @@
 <?php
-   require_once 'connect.php'; //contains login constants
-  $request_data = file_get_contents("php://input");
+   require_once ('connect.php'); //contains login constants
+   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
 	// if(isset($_POST["question_id"]))
@@ -15,6 +15,9 @@
   }
   if (isset($data->content)) {
     $content = $data->content;
+  }
+  if (isset($data->comment_id)) {
+    $comment_id = $data->comment_id;
   }
 	// 	$question_id = $_POST["question_id"];
 	// if(isset($_POST["answer_id"]))
@@ -235,4 +238,24 @@
 		$db->query($query);
 	}
 
+	else if ($cmd == "createcomment")
+	{
+		global $db;
+		$query = "insert into Answers_Comments (user_id, answer_id, content) Values ($user_id, $answer_id, '$content')";
+		$db->query($query);
+	}
+	else if ($cmd == "updatecomment")
+	{
+		global $db;
+		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
+		$db->query($query);
+	}
+	else if ($cmd == "deletecomment")
+	{
+		global $db;
+		//WARNING: Authorization check not implemented!!
+		$query = "delete from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+	}
 ?>
+
