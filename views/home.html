@@ -9,16 +9,52 @@
         <div class="row">
             <!-- begin feed -->
             <div class="col s12 m9">
+
+                <!-- <div ng-repeat="post in filteredPosts track by $index">
+                    <post type="feed-item"> -->
+                        <!-- fixed footer -->
+                        <!-- <div class="card-action">
+                            <span style="padding-right:15px;"class="grey-text">{{post.answers_count.answers_count}} Answers</span>
+                            <a ng-class="{'disabled' : showTextEditor}" ng-click="toggleTextEditor()"class="waves-effect waves-light btn blue "> -->
+
                 <div ng-repeat="post in filteredPosts" class="animate-fade-in">
                     <post type="feed-item">
                         <!-- fixed footer -->
                         <div class="card-action">
-                            <span style="padding-right:15px;"class="grey-text">{{}} Answer<span ng-show="post.answers.length != 1">s</span></span>
+                            <span style="padding-right:15px;"class="grey-text">{{post.total_answers}} Answer<span ng-show="post.total_answers != 1">s</span></span>
                             <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
                                 <i class="material-icons">edit</i>
                                 <span style="position:relative; bottom:5px;">Answer</span>
                             </a>
                         </div>
+                        <!-- add answer -->
+                        <!-- <div ng-if="showTextEditor"> -->
+                            <!-- shows user profile on add answer -->
+                            <!-- <div style="padding:0px;"class="card-action">
+                                <ul style="border:0;"class="collection">
+                                    <li style="margin-left:5px; min-height:0px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
+                                        <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
+                                        <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author}}</span>
+                                        <p ng-if="includeViews" class="grey-text">Newbie</p>
+                                        <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author_score}}</a>
+                                    </li>
+                                </ul> -->
+                                <!-- the editor -->
+                            <!-- </div>
+                            <div style="padding:0px;" class="card-action">
+                                <div placeholder="What's your answer?" class="wysiwyg-editor"></div>
+                            </div> -->
+                            <!-- Submit or cancel -->
+                            <!-- <div class="card-action">
+                                <a ng-click="submit(post)" ng-click="toggleTextEditor()" class="waves-effect waves-light btn blue ">
+                                    <span style="position:relative; padding-right:5px;bottom:5px;">Submit</span>
+                                    <i class="material-icons">send</i>
+                                </a>
+                                <span style="margin-left:5px; cursor:pointer;" ng-click="toggleTextEditor()" class="grey-text">Cancel</span>
+                            </div> -->
+                            <!-- end add answer -->
+                        <!-- </div> -->
+
                         <wysiwyg-editor editor-id="{{post.id}}" ng-show="showFooter"></wysiwyg-editor>
                     </post>
                 </div>
