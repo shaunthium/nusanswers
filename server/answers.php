@@ -204,7 +204,7 @@
 	{
 		global $db;
 		//WARNING: Authorization check not implemented!!
-		$query = "CALL DeleteAnswer($answer_id)";
+		$query = "delete from Answers where id = $answer_id";
 		$res = $db->query($query);
 
 	}
