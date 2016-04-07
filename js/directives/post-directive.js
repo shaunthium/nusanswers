@@ -27,8 +27,8 @@ angular.module('quoraApp')
             $scope.includeTags = false;
             $scope.includeTitle = false;
             $scope.linkToQuestionPage = false;
-            $scope.includeViews = false;
-            $scope.showTextEditor = false;
+            $scope.includeAuthorFlavor = false;
+            $scope.showFooter = false;
 
              // Edit here plx!
             var submitAnswerToServer = function(post, dangerousHTML){
@@ -94,25 +94,6 @@ angular.module('quoraApp')
                });
             };
 
-            $scope.toggleTextEditor = function(){
-
-                // ugly
-                $timeout(function(){
-                    $('.wysiwyg-editor').trumbowyg({
-                        fullscreenable: false,
-                        btns:['bold', 'italic']
-                    });
-                })
-
-                $scope.showTextEditor = !$scope.showTextEditor;
-            }
-
-            //TODO: implement goToProfile function
-            $scope.goToProfile = function(post){
-                //FIXME: this is just a simple placeholder to demonstrate functionality
-                $state.go('profile', {'author' : post.author});
-            }
-
             $scope.removeTag = function(tag){
                 $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
                 //TODO: communicate with back-end
@@ -123,23 +104,23 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
-
             scope.type = attrs.type;
+            scope.showFooter = "showFooter" in attrs;
 
-            //scope.showFooter = attrs.showFooter == "true" ? true : false;
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
-                    scope.includeViews = true;
+                    scope.includeAuthorFlavor = true;
                     break;
                 case "question":
                     scope.includeTags = true;
                     scope.includeTitle = true;
-                    scope.includeViews = true;
+                    scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
+                    scope.includeAuthorFlavor = true;
                     break;
             }
         },

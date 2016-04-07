@@ -1,6 +1,17 @@
 <div class="container">
     <div class="section">
         <div class="row">
+            <post type="question">
+                <comments-section parent="post"></comments-section>
+                <!-- fixed footer -->
+                <div class="card-action">
+                    <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()" class="waves-effect waves-light btn blue ">
+                        <i class="material-icons">edit</i>
+                        <span style="position:relative; bottom:5px;">Answer</span>
+                    </a>
+                </div>
+                <wysiwyg-editor editor-id="{{post.id}}" ng-show="showFooter"></wysiwyg-editor>
+            </post>
 
             <div class="col s12">
                 <post type="question">
