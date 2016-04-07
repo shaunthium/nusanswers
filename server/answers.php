@@ -1,11 +1,21 @@
 <?php
-   require_once ('connect.php'); //contains login constants
-  <?php
-   require_once ('connect.php'); //contains login constants
+  require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
 	// if(isset($_POST["question_id"]))
+  // if (isset($data->question_id)) {
+  //   $question_id = $data->question_id;
+  // }
+  // if (isset($data->answer_id)) {
+  //   $answer_id = $data->answer_id;
+  // }
+  // if (isset($data->user_id)) {
+  //   $user_id = $data->user_id;
+  // }
+  // if (isset($data->content)) {
+  //   $content = $data->content;
+  // }
   if (isset($data->question_id)) {
     $question_id = $data->question_id;
   }
@@ -31,7 +41,7 @@
 
 
 
-	
+
 
 
 	/*
@@ -41,28 +51,29 @@
 	* @return: VISIT :http://www.jsoneditoronline.org/?id=313a2b0f90376c791e4b965fa4b0cdf5
 	* To see how the json_encode looks like
 	*/
-	if($cmd == "getanswers" and $question_id >=0)
+	if($cmd == "getanswers")
 	{
+    global $db;
 		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
 		$res = $db->query($query);
 		$havetag = mysqli_fetch_assoc($res);
-		
+
 		/* Here we get the User ID of the question */
 		$query = "SELECT user_id FROM Questions where id = $question_id";
 		$result = $db->query($query);
 		$user_id = mysqli_fetch_assoc($result);
 		$user_id = $user_id["user_id"];
-		
+
 		/* Here we get the User Info to each question */
 		$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
-		
+
 		/* Here we get the number of answers to each question */
 		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
 		$result_answers_count = $db->query($query_answers_count);
 		$answers_count = mysqli_fetch_assoc($result_answers_count);
-			
+
 		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
 		{
 			/*******************Query Question table ***************************/
@@ -70,7 +81,7 @@
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
-			
+
 			$questionResult = array(
 
 				'id'=>$post['id'],
@@ -86,17 +97,17 @@
 				'answers_count' => $answers_count["answers_count"],
 				'tags' => $post['tags']
 			);
-			
+
 		}
 		else //Has Tags
 		{
-			
+
 			/*******************Query Question table ***************************/
 			$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
-			
+
 			$questionResult = array(
 
 				'id'=>$post['id'],
@@ -113,11 +124,11 @@
 				'tags' => $post['tags']
 			);
 			//error_log(json_encode($questionResult));
-			
-			
+
+
 		}
-		
-		
+
+
 
 
 		/*******************Query Questions Comments table ***************************/
@@ -131,7 +142,7 @@
 			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
-			
+
 			$commentsResult[] = array(
 				'id' => $r["id"],
 				'user_id' => $r["user_id"],
@@ -145,24 +156,24 @@
 		//error_log(json_encode($commentsResult));
 
 		/*******************Query Answers table ***************************/
-		
+
 		$query = "select Answers.id , Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
 		$res = $db->query($query);
 		$answersResult = array();
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
 		while($r = mysqli_fetch_assoc($res)){
-			
+
 			/* Here we get the User Info to each answer */
 			$user_id = $r["user_id"];
 			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
-			
+
 			$answers_id= $r["id"];
 			/* Here we get the comments for each answer */
 			$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 			$res2 = $db->query($query);
-			
+
 			 $answersCommentsResult = array();
 			//| comments_id |  users_id|content| created_at| updated_at |
 			while($a = mysqli_fetch_assoc($res2)){
@@ -171,7 +182,7 @@
 				$query_author2 =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id2;
 				$result_author2 = $db->query($query_author2);
 				$author2 = mysqli_fetch_assoc($result_author2);
-				
+
 				$answersCommentsResult[] = array(
 					'id' => $a["id"],
 					'user_id' => $a["user_id"],
@@ -196,14 +207,14 @@
 				'comments' => $answersCommentsResult
 			);
 		}
-		
-		
+
+
 		$finalOutput = array("question"=>$questionResult, "question_comments"=>$commentsResult, "answers"=>$answersResult);
 		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
-	
+
 	/*
 	* Deletes an answer
 	*
@@ -217,7 +228,7 @@
 		$res = $db->query($query);
 
 	}
-	
+
 	/*
 	* Increases the score of the User and the Answer by 1
 	*
@@ -228,23 +239,23 @@
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		
+
 		/* Here we get the User ID of the user who posted the Answer */
 		$query = "SELECT user_id FROM Answers where id = $answer_id";
 		$result = $db->query($query);
 		$user_id = mysqli_fetch_assoc($result);
 		$user_id = $user_id["user_id"];
-		
+
 		/* Here we upvote the Answer score by 1 */
-		$query = "UPDATE Answers SET score = score + 1 where id = $answer_id;"
+		$query = "UPDATE Answers SET score = score + 1 where id = $answer_id";
 		$db->query($query);
-		
+
 		/* Here we upvote the User score */
-		$query = "UPDATE Users SET score = score + 1 where id = $user_id;"
+		$query = "UPDATE Users SET score = score + 1 where id = $user_id";
 		$db->query($query);
 
 	}
-	
+
 	/*
 	* Decreases the score of the User and the Answer by 1
 	*
@@ -255,22 +266,22 @@
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		
+
 		/* Here we get the User ID of the user who posted the Answer */
 		$query = "SELECT user_id FROM Answers where id = $answer_id";
 		$result = $db->query($query);
 		$user_id = mysqli_fetch_assoc($result);
 		$user_id = $user_id["user_id"];
-		
+
 		/* Here we upvote the Answer score by 1 */
-		$query = "UPDATE Answers SET score = score - 1 where id = $answer_id;"
+		$query = "UPDATE Answers SET score = score - 1 where id = $answer_id";
 		$db->query($query);
-		
+
 		/* Here we upvote the User score */
-		$query = "UPDATE Users SET score = score - 1 where id = $user_id;"
+		$query = "UPDATE Users SET score = score - 1 where id = $user_id";
 		$db->query($query);
 	}
-	
+
 	/*
 	* Inserts a new Answer to a question
 	*
@@ -282,7 +293,7 @@
 		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, '$content')";
 		$db->query($query);
 	}
-	
+
 	/*
 	* Updates an Answer's content
 	*
@@ -294,7 +305,7 @@
 		$query = "update Answers set content = '$content' where id = $answer_id";
 		$db->query($query);
 	}
-	
+
 	/*
 	* Creates a comment for an Answer
 	*

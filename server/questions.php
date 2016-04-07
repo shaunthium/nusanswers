@@ -107,11 +107,17 @@
 		$result = $db->query($query);
 		$latest_array = array();
 		while ($latest = mysqli_fetch_assoc($result)){
-			
+			//Get the first name and last name of the author from 'users' table
 			$user_id = $latest['user_id'];
-			$query_author =  "SELECT first_name, last_name FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
+
+			//Get total number of answers to each questions from 'answers' table
+			$question_id = $latest['id'];
+			$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id=".$question_id;
+			$result_total_answers = $db->query($query_total_answers);
+			$total_answers = mysqli_fetch_assoc($result_total_answers);
 		
 			$latest_array[] = array(
 
@@ -123,7 +129,9 @@
 				'view_count'=>$latest['view_count'],
 				'created_at'=>$latest['created_at'],
 				'updated_at'=>$latest['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name']
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' => $author['score'],
+				'total_answers' => $total_answers['total_answers']
 			);
 		}
 		echo json_encode($latest_array);		
@@ -138,11 +146,18 @@
 		$result = $db->query($query);
 		$trending_array = array();
 		while ($trending = mysqli_fetch_assoc($result)){
-			
+			//Get the first name and last name of the author from 'users' table
 			$user_id = $trending['user_id'];
-			$query_author =  "SELECT first_name, last_name FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
+
+			//Get total number of answers to each questions from 'answers' table
+			$question_id = $trending['id'];
+			$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id="
+									.$question_id;
+			$result_total_answers = $db->query($query_total_answers);
+			$total_answers = mysqli_fetch_assoc($result_total_answers);
 		
 			$trending_array[] = array(
 
@@ -154,7 +169,9 @@
 				'view_count'=>$trending['view_count'],
 				'created_at'=>$trending['created_at'],
 				'updated_at'=>$trending['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name']
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' => $author['score'],
+				'total_answers' => $total_answers['total_answers']
 			);
 		}
 		echo json_encode($trending_array);		
