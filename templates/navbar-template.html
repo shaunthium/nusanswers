@@ -6,17 +6,10 @@
 </ul>
 
 <!-- Stuff that appears when user starts typing question -->
-<div ng-show="showOverlay" ng-class="{'show' : showOverlay}" id="overlay-container"></div>
+<div ng-if="showOverlay" id="overlay-container"></div>
 
-<search-popup ng-hide="!user_question"></search-popup>
+<search-popup ng-class="{'fake-white' : !user_question}"class="animate-search-popup" ng-if="showOverlay"></search-popup>
 
-<!-- hardcoded logo in corner -->
-<div ui-sref="home" class="nus-logo">
-  <div class="logo-container">
-    <img src="icon.svg" class="logo">
-  </div>
-  <span class="white-text logo-text">NUSAnswers</span>
-</div>
 <!-- this navbar is a mess, grid system does not seem
      to work here, had to haxx0r hardcode it because couldn't make
      elements float after each other -->
@@ -49,8 +42,8 @@
         </div>
       </form>
 
-      <a ng-show="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align">Ask question</a>
-      <a ng-show="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue lighten-4 black-text v-align">Submit</a>
+      <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
+      <a ng-if="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
         <li><a href="#/home">Home</a></li>

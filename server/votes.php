@@ -5,9 +5,35 @@
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $data->cmd;
+  	
+	/*
+		Option to select set or reset up vote or down vote
+		@ question.php using it
+	*/
+	function vote_qns($cmd, $table_name, $qns_id, $user_id){
+		switch ($cmd) {
+			case 'set_up_vote_qns':
+				set_up_vote($table_name, $qns_id, $user_id);
+				break;
+			case 'set_down_vote_qns':
+				set_down_vote($table_name, $qns_id, $user_id);
+				break;
+			case 'reset_up_vote_qns':
+				reset_up_vote($table_name, $qns_id, $user_id);
+				break;
+			case 'reset_down_vote_qns':
+				reset_down_vote($table_name, $qns_id, $user_id);
+				break;
+			default:
+				break;
+		}
+	}
 
-	//Set the vote in the respective table
-	function set_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote){
+	/*
+		Set the vote in the respective table ('Questions_Voted_By_Users' table)
+		@param table_name, qns_id, user_id, up_vote, down_vote
+	*/
+	function set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote){
 		global $db;
 
 		$query = "INSERT INTO ". $table_name . " VALUES(" . $qns_id . ", " . $user_id . ", " . $up_vote . ", " . 
@@ -15,15 +41,69 @@
 		$db->query($query);
 	}
 
-	//Update the score in the 'Questions' table
-	function update_score($qns_id, $operator){
+	/*
+		Update the score(karma points) in the 'Questions' table
+	*/
+	function update_qns_score($qns_id, $operator){
 		global $db;
 
 		$query = "UPDATE Questions SET score = score " . $operator . " 1 WHERE id=" . $qns_id;
 		$db->query($query);
 	}
 
-	//Return the name list of users who voted for a question
+	/*
+		Set the up vote 
+		@use by switch statment at the start
+	*/
+	function set_up_vote($table_name, $qns_id, $user_id){
+		$up_vote = 1;
+		$down_vote = 0;
+		$operator = "+";
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		update_qns_score($qns_id, $operator);
+	}
+
+	/*
+		Set the down vote 
+		@use by switch statment at the start
+	*/
+	function set_down_vote($table_name, $qns_id, $user_id){
+		$up_vote = 0;
+		$down_vote = 1;
+		$operator = "-";
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		update_qns_score($qns_id, $operator);
+	}
+
+	/*
+		Reset the up vote 
+		@use by switch statment at the start
+	*/
+	function reset_up_vote($table_name, $qns_id, $user_id){
+		$up_vote = 0;
+		$down_vote = 0;
+		$operator = "-";
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		update_qns_score($qns_id, $operator);
+	}
+
+	/*
+		Reset the down vote 
+		@use by switch statment at the start
+	*/
+	function reset_down_vote($table_name, $qns_id, $user_id){
+		$up_vote = 0;
+		$down_vote = 0;
+		$operator = "+";
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		update_qns_score($qns_id, $operator);
+	}
+
+	/*
+		Return the name list of users who voted for a question
+		@param: query
+		@return: A list of users who gave an up vote or down vote for a question 
+	*/
 	function get_users_who_voted($query){
 		global $db;
 		
@@ -43,72 +123,15 @@
 	}
 
 
-	/*
-	*	Record info of users who give an up vote to a question into 'Questions_Voted_By_Users' table
-	*	Update and increase the total 'score' by +1 for the question inside 'Questions' table 
-	*/
-	if($cmd == "set_up_vote"){
-		$qns_id = $db->escape_string($data->qns_id);
-		$user_id =  $db->escape_string($data->user_id);
-		$table_name = "Questions_Voted_By_Users";
-		$up_vote = 1;
-		$down_vote = 0;
-		$operator = "+";
-
-		set_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_score($qns_id, $operator);
-
+	if(isset($data->cmd)){
+		$cmd = $data->cmd;
 	}
 
 	/*
-	*	Record info of users who give an up vote to a question into 'Questions_Voted_By_Users' table
-	*	Update and decrease the total 'score' by -1 for the question inside 'Questions' table 
+		Return the total number of up_votes given to a question
+		@param:	qns_id
+		@return: integer value of total up votes given to a question 
 	*/
-	if($cmd == "set_down_vote"){
-		$qns_id = $db->escape_string($data->qns_id);
-		$user_id =  $db->escape_string($data->user_id);
-		$table_name = "Questions_Voted_By_Users";
-		$up_vote = 0;
-		$down_vote = 1;
-		$operator = "-";
-
-		set_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_score($qns_id, $operator);
-	}
-
-	/*
-	*	Reset a up vote given by a user in the 'Questions_Voted_By_Users' table
-	* 	Update and decrease the total 'score' by -1 for the question inside 'Questions' table 
-	*/
-	if($cmd == "reset_up_vote"){
-		$qns_id = $db->escape_string($data->qns_id);
-		$user_id =  $db->escape_string($data->user_id);
-		$table_name = "Questions_Voted_By_Users";
-		$up_vote = 0;
-		$down_vote = 0;
-		$operator = "-";
-
-		set_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_score($qns_id, $operator);
-	}
-
-	/*
-	*	Reset a down vote given by a user in the 'Questions_Voted_By_Users' table
-	* 	Update and increase the total 'score' by +1 for the question inside 'Questions' table 
-	*/
-	if($cmd == "reset_down_vote"){
-		$qns_id = $db->escape_string($data->qns_id);
-		$user_id =  $db->escape_string($data->user_id);
-		$table_name = "Questions_Voted_By_Users";
-		$up_vote = 0;
-		$down_vote = 0;
-		$operator = "+";
-
-		set_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_score($qns_id, $operator);
-	}
-
-	//Return the total number of up_votes given to a question
 	if($cmd == "get_qns_up_vote"){
 		$qns_id = $db->escape_string($data->qns_id);
 		$query = "SELECT up_vote FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
@@ -123,7 +146,11 @@
 		
 	}
 
-	//Return the total number down_votes given to a question
+	/*
+		Return the total number of down_votes given to a question
+		@param:	qns_id
+		@return: integer value of total down votes given to a question 
+	*/
 	if($cmd == "get_qns_down_vote"){
 		$qns_id = $db->escape_string($data->qns_id);
 		$query = "SELECT down_vote FROM Questions_Voted_By_Users WHERE question_id=".$qns_id;
@@ -137,7 +164,11 @@
 		echo json_encode($total_up_votes);
 	}
 
-	//Return the the list of users who gives a up_votes to a question
+	/*
+		Return the name list of users who gave an up vote for a question
+		@param: qns_id
+		@return: A list of users who gave an up vote for a question 
+	*/
 	if($cmd == "get_users_up_vote"){
 		$qns_id = $db->escape_string($data->qns_id);
 
@@ -145,7 +176,11 @@
 		get_users_who_voted($query_user_id);
 	}
 
-	//Return the the list of users who gives a down_votes to a question
+	/*
+		Return the name list of users who gave a down vote for a question
+		@param: qns_id
+		@return: A list of users who gave a down vote for a question 
+	*/
 	if($cmd == "get_users_down_vote"){
 		$qns_id = $db->escape_string($data->qns_id);
 

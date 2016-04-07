@@ -27,11 +27,12 @@ angular.module('quoraApp')
             $scope.includeTags = false;
             $scope.includeTitle = false;
             $scope.linkToQuestionPage = false;
-            $scope.includeViews = false;
-            $scope.showTextEditor = false;
+            $scope.includeAuthorFlavor = false;
+            $scope.showFooter = false;
 
              // Edit here plx!
             var submitAnswerToServer = function(post, dangerousHTML){
+              console.log('hi');
               var userID;
               FB.getLoginStatus(function(resp) {
                 if (resp.status == 'connected') {
@@ -58,7 +59,7 @@ angular.module('quoraApp')
                 }
               });
               // var userID = 1;
-                console.log("sending ...", dangerousHTML);
+              console.log("sending ...", dangerousHTML);
             }
 
             // Here goes user on submit click
@@ -79,41 +80,23 @@ angular.module('quoraApp')
               var cmd;
                if (inc == 1) {
                  post.score++;
-                 cmd = "qns_upvote";
+                 cmd = "set_up_vote_qns";
                } else {
                  post.score--;
-                 cmd = "qns_downvote";
+                 cmd = "set_down_vote_qns";
                }
                $http({
                  method: "POST",
                  url: "/server/questions.php",
                  data: {
                    cmd: cmd,
-                   id: post.id
+                   qns_id: post.id,
+                   user_id: loggedInUserID
                  }
                }).success(function() {
                  console.log('success');
                });
             };
-
-            $scope.toggleTextEditor = function(){
-
-                // ugly
-                $timeout(function(){
-                    $('.wysiwyg-editor').trumbowyg({
-                        fullscreenable: false,
-                        btns:['bold', 'italic']
-                    });
-                })
-
-                $scope.showTextEditor = !$scope.showTextEditor;
-            }
-
-            //TODO: implement goToProfile function
-            $scope.goToProfile = function(post){
-                //FIXME: this is just a simple placeholder to demonstrate functionality
-                $state.go('profile', {'author' : post.author});
-            }
 
             $scope.removeTag = function(tag){
                 $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
@@ -125,23 +108,23 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
-
             scope.type = attrs.type;
+            scope.showFooter = "showFooter" in attrs;
 
-            //scope.showFooter = attrs.showFooter == "true" ? true : false;
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
-                    scope.includeViews = true;
+                    scope.includeAuthorFlavor = true;
                     break;
                 case "question":
                     scope.includeTags = true;
                     scope.includeTitle = true;
-                    scope.includeViews = true;
+                    scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
+                    scope.includeAuthorFlavor = true;
                     break;
             }
         },
