@@ -1,5 +1,7 @@
 <?php
-   require_once 'connect.php'; //contains login constants
+   require_once ('connect.php'); //contains login constants
+  <?php
+   require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
@@ -16,6 +18,9 @@
   if (isset($data->content)) {
     $content = $data->content;
   }
+  if (isset($data->comment_id)) {
+    $comment_id = $data->comment_id;
+  }
 	// 	$question_id = $_POST["question_id"];
 	// if(isset($_POST["answer_id"]))
 	// 	$answer_id = $_POST["answer_id"];
@@ -30,9 +35,10 @@
 
 
 	/*
-	* Gets details of Questions, Comments and Answers
+	* Gets details of Questions, Comments and Answers, and answers comments
 	*
-	* VISIT :http://www.jsoneditoronline.org/?id=313a2b0f90376c791e4b965fa4b0cdf5
+	* @param: question_id
+	* @return: VISIT :http://www.jsoneditoronline.org/?id=313a2b0f90376c791e4b965fa4b0cdf5
 	* To see how the json_encode looks like
 	*/
 	if($cmd == "getanswers" and $question_id >=0)
@@ -197,42 +203,130 @@
 		echo json_encode($finalOutput);
 
 	}
+	
+	/*
+	* Deletes an answer
+	*
+	* @param: answer_id
+	*/
 	else if ($cmd == "deleteanswer")
 	{
 		global $db;
 		//WARNING: Authorization check not implemented!!
-		$query = "CALL DeleteAnswer($answer_id)";
+		$query = "delete from Answers where id = $answer_id";
 		$res = $db->query($query);
 
 	}
+	
+	/*
+	* Increases the score of the User and the Answer by 1
+	*
+	* @param: answer_id
+	*/
 	else if($cmd == "upvote")
 	{
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		$query = "CALL UpVoteAnswer($answer_id)";
+		
+		/* Here we get the User ID of the user who posted the Answer */
+		$query = "SELECT user_id FROM Answers where id = $answer_id";
+		$result = $db->query($query);
+		$user_id = mysqli_fetch_assoc($result);
+		$user_id = $user_id["user_id"];
+		
+		/* Here we upvote the Answer score by 1 */
+		$query = "UPDATE Answers SET score = score + 1 where id = $answer_id;"
+		$db->query($query);
+		
+		/* Here we upvote the User score */
+		$query = "UPDATE Users SET score = score + 1 where id = $user_id;"
 		$db->query($query);
 
 	}
+	
+	/*
+	* Decreases the score of the User and the Answer by 1
+	*
+	* @param: answer_id
+	*/
 	else if($cmd == "downvote")
 	{
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		$query = "CALL DownVoteAnswer($answer_id)";
-		$res = $db->query($query);
+		
+		/* Here we get the User ID of the user who posted the Answer */
+		$query = "SELECT user_id FROM Answers where id = $answer_id";
+		$result = $db->query($query);
+		$user_id = mysqli_fetch_assoc($result);
+		$user_id = $user_id["user_id"];
+		
+		/* Here we upvote the Answer score by 1 */
+		$query = "UPDATE Answers SET score = score - 1 where id = $answer_id;"
+		$db->query($query);
+		
+		/* Here we upvote the User score */
+		$query = "UPDATE Users SET score = score - 1 where id = $user_id;"
+		$db->query($query);
 	}
+	
+	/*
+	* Inserts a new Answer to a question
+	*
+	* @param: user_id, question_id, content
+	*/
 	else if($cmd == "createanswer")
 	{
 		global $db;
 		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, '$content')";
 		$db->query($query);
 	}
+	
+	/*
+	* Updates an Answer's content
+	*
+	* @param: answer_id, content
+	*/
 	else if($cmd == "updateanswer")
 	{
 		global $db;
 		$query = "update Answers set content = '$content' where id = $answer_id";
 		$db->query($query);
 	}
-
+	
+	/*
+	* Creates a comment for an Answer
+	*
+	* @param: user_id, answer_id, content
+	*/
+	else if ($cmd == "createcomment")
+	{
+		global $db;
+		$query = "insert into Answers_Comments (user_id, answer_id, content) Values ($user_id, $answer_id, '$content')";
+		$db->query($query);
+	}
+	/*
+	* Updates an Answer's COMMENT
+	*
+	* @param: comment_id, content
+	*/
+	else if ($cmd == "updatecomment")
+	{
+		global $db;
+		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
+		$db->query($query);
+	}
+	/*
+	* Delete's a Comment
+	*
+	* @param: comment_id
+	*/
+	else if ($cmd == "deletecomment")
+	{
+		global $db;
+		//WARNING: Authorization check not implemented!!
+		$query = "delete from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+	}
 ?>
