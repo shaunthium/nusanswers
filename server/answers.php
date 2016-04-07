@@ -213,7 +213,19 @@
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		$query = "CALL UpVoteAnswer($answer_id)";
+		
+		/* Here we get the User ID of the user who posted the Answer */
+		$query = "SELECT user_id FROM Answers where id = $answer_id";
+		$result = $db->query($query);
+		$user_id = mysqli_fetch_assoc($result);
+		$user_id = $user_id["user_id"];
+		
+		/* Here we upvote the Answer score by 1 */
+		$query = "UPDATE Answers SET score = score + 1 where id = $answer_id;"
+		$db->query($query);
+		
+		/* Here we upvote the User score */
+		$query = "UPDATE Users SET score = score + 1 where id = $user_id;"
 		$db->query($query);
 
 	}
@@ -222,8 +234,20 @@
 		global $db;
 		//WARNING: Authorization check not implemented!!
 		//WARNING: Amount of upvotes not tracked!
-		$query = "CALL DownVoteAnswer($answer_id)";
-		$res = $db->query($query);
+		
+		/* Here we get the User ID of the user who posted the Answer */
+		$query = "SELECT user_id FROM Answers where id = $answer_id";
+		$result = $db->query($query);
+		$user_id = mysqli_fetch_assoc($result);
+		$user_id = $user_id["user_id"];
+		
+		/* Here we upvote the Answer score by 1 */
+		$query = "UPDATE Answers SET score = score - 1 where id = $answer_id;"
+		$db->query($query);
+		
+		/* Here we upvote the User score */
+		$query = "UPDATE Users SET score = score - 1 where id = $user_id;"
+		$db->query($query);
 	}
 	else if($cmd == "createanswer")
 	{
