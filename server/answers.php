@@ -340,6 +340,35 @@
 		$res = $db->query($query);
 	}
 	
+	/*
+	*	Gets the answers posted by a user sorted by latest.
+	*	The question Title pertaining to the answer is also included.
+	*	@param: user_id
+	*
+	*/
+	else if ($cmd == "profileanswers")
+	{
+		global $db;
+		$query = "select Questions.title, Answers.* from Answers inner join Questions on  Questions.id = Answers.question_id where Answers.user_id = $user_id order by Answers.updated_at desc";
+		$result = $db->query($query);
+		$answers_array = array();
+		while ($answer = mysqli_fetch_assoc($result)){
+			
+			$answers_array[] = array(
+				'title'=>$answer['title'],
+				'id'=>$answer['id'],
+				'user_id'=>$answer['user_id'],
+				'question_id'=>$answer['question_id'],
+				'content'=>$answer['content'],
+				'score'=>$answer['score'],
+				'created_at'=>$answer['created_at'],
+				'updated_at'=>$answer['updated_at'],
+				'chosen'=>$answer['chosen']
+			);
+		}
+		echo json_encode($answers_array);	
+	}
+	
 	//still doing
 	else if ($cmd == "latestanswers")
 	{
