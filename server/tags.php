@@ -13,7 +13,7 @@
 		global $db;
 		foreach($tag_array as $tag){
 			$sanitised_tag =  $db->escape_string($tag);
-			$query = "INSERT INTO Tags(content) VALUES('". $sanitised_tag ."')";		
+			$query = "INSERT INTO Tags(content) VALUES('". trim($sanitised_tag, " ") ."')";		
 			$db->query($query);
 		}
 	}
@@ -57,7 +57,7 @@
 		Get and return all tags associated with a question
 		@param: qns_id
 	*/
-	if($cmd == "get_qns_tag"){
+	if($cmd == "get_all_tags_of_qns"){
 		$qns_id = $db->escape_string($data->qns_id);
 
 		$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $qns_id;
@@ -72,6 +72,50 @@
 		}
 
 		echo json_encode($tag_name_array);	
+	}
+
+	/*
+		Get and return all questions associated with a tag
+		@param: tag_string
+	*/
+	if($cmd == "get_all_qns_of_tags"){
+		$tag_string = $db->escape_string($data->tag_string);
+		$tag_array = explode(",", $tag_string);
+
+		$tag_id_array = array();
+		foreach($tag_array as $tag){
+			$query = "SELECT id FROM Tags WHERE content='".$tag."'";
+			$result = $db->query($query);
+			$tag_id_result =  mysqli_fetch_assoc($result);
+			$tag_id_array[] =  $tag_id_result['id'];
+		}
+
+		$query_qns_id = "SELECT DISTINCT question_id FROM Questions_Tags WHERE tag_id=".$tag_id_array[0];
+
+		$size = count($tag_id_array);
+		for($i=1; $i<$size; $i++){
+			$query_qns_id = $query_qns_id . " OR tag_id=" . $tag_id_array[$i];
+		}
+		$qns_array = array();
+		$qns_id_result = $db->query($query_qns_id);
+
+		foreach($qns_id_result as $qns_id){
+			$query = "SELECT * FROM Questions WHERE id=".$qns_id["question_id"];
+			$result = $db->query($query);
+			$qns_result =  mysqli_fetch_assoc($result);
+			$qns_array[] = array(
+				'id'=>$qns_result['id'],
+				'user_id'=>$qns_result['user_id'],
+				'title'=>$qns_result['title'],
+				'content'=>$qns_result['content'],
+				'score'=>$qns_result['score'],
+				'view_count'=>$qns_result['view_count'],
+				'created_at'=>$qns_result['created_at'],
+				'updated_at'=>$qns_result['updated_at']
+			);
+		}	
+		
+		echo json_encode($qns_array);
 	}
 
 	/*
