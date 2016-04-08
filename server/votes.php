@@ -188,4 +188,44 @@
 
 		get_users_who_voted($query_user_id);
 	}
+
+	/*
+		Return the list of questions which the users have up voted
+		@parm: user_id
+		@return: List of qns_id and the status of the up_vote=true
+	*/
+	if($cmd == "get_all_qns_up_vote_by_user"){
+		$user_id = $db->escape_string($data->user_id);
+		$query_qns_id = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=" . $user_id . " AND up_vote=1";
+		$result_qns_id = $db->query($query_qns_id);
+
+		$qns_up_vote_array = array();
+		while($row = mysqli_fetch_array($result_qns_id)){
+			$qns_up_vote_array[] = array(
+				'qns_id'=>$row["question_id"],
+				'up_vote'=>true
+			); 
+		}
+		echo json_encode($qns_up_vote_array);
+	}
+
+	/*
+		Return the list of questions which the users have down voted
+		@parm: user_id
+		@return: List of qns_id and the status of the down_vote=true
+	*/
+	if($cmd == "get_all_qns_down_vote_by_user"){
+		$user_id = $db->escape_string($data->user_id);
+		$query_qns_id = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=" . $user_id . " AND down_vote=1";
+		$result_qns_id = $db->query($query_qns_id);
+
+		$qns_udown_vote_array = array();
+		while($row = mysqli_fetch_array($result_qns_id)){
+			$qns_down_vote_array[] = array(
+				'qns_id'=>$row["question_id"],
+				'down_vote'=>true
+			); 
+		}
+		echo json_encode($qns_down_vote_array);
+	}
 ?>
