@@ -369,12 +369,17 @@
 		echo json_encode($answers_array);	
 	}
 	
-	//still doing
+	/*
+	*	Gets the TOP 20 latest answers
+	*	The question Title pertaining to the answer is also included.
+	*	@param: user_id
+	*
+	*/
 	else if ($cmd == "latestanswers")
 	{
 		global $db;
 		
-		$query = "SELECT * FROM Answers ORDER BY updated_at DESC";
+		$query = "SELECT Questions.title, Answers.* FROM Answers inner join Questions on Questions.id = Answers.question_id ORDER BY updated_at DESC LIMIT 20";
 		$result = $db->query($query);
 		$latest_array = array();
 		while ($latest = mysqli_fetch_assoc($result)){
@@ -385,7 +390,7 @@
 			$author = mysqli_fetch_assoc($result_author);
 		
 			$latest_array[] = array(
-
+				'title'=>$latest['title'],
 				'id'=>$latest['id'],
 				'user_id'=>$latest['user_id'],
 				'question_id'=>$latest['question_id'],
