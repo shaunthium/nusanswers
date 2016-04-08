@@ -7,7 +7,7 @@ angular.module('quoraApp')
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
     $timeout(function(){
         $scope.loading = false;
-    }, 1500)
+    }, 100)
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -104,6 +104,7 @@ angular.module('quoraApp')
     });
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
+      console.log(data);
       $scope.trendingTags = data.data;
     });
 }]);
