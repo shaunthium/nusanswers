@@ -59,8 +59,9 @@
 		$up_vote = 1;
 		$down_vote = 0;
 		$operator = "+";
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_qns_score($qns_id, $operator);
+		
+		check_if_user_voted($qns_id, $user_id, $operator);
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
 	}
 
 	/*
@@ -71,8 +72,9 @@
 		$up_vote = 0;
 		$down_vote = 1;
 		$operator = "-";
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_qns_score($qns_id, $operator);
+	
+		check_if_user_voted($qns_id, $user_id, $operator);
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
 	}
 
 	/*
@@ -83,8 +85,9 @@
 		$up_vote = 0;
 		$down_vote = 0;
 		$operator = "-";
+		
+		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_qns_score($qns_id, $operator);
 	}
 
 	/*
@@ -95,8 +98,9 @@
 		$up_vote = 0;
 		$down_vote = 0;
 		$operator = "+";
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		update_qns_score($qns_id, $operator);
+		
+		check_if_user_voted($qns_id, $user_id, $operator);
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
 	}
 
 	/*
@@ -120,6 +124,41 @@
 		}
 		
 		echo json_encode($user_name_array);		
+	}
+
+	/*
+		Check if the user had already voted for a questions
+		The function "update_qns_score" is executed if the user had not voted
+		@param: $qns_id, $user_id, $operator
+	*/
+	function check_if_user_voted($qns_id, $user_id, $operator){
+		global $db;
+
+
+		$query = "SELECT * FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id . 
+					" AND user_id=". $user_id;
+		$result = $db->query($query);
+		
+		
+		if(mysqli_num_rows($result)){
+			$votes = mysqli_fetch_array($result);
+			$up_vote = $votes["up_vote"];
+			$down_vote = $votes["down_vote"];
+
+			if($up_vote == 0 && $down_vote == 0){
+				update_qns_score($qns_id, $operator);
+			}
+			if($up_vote == 1 && $operator == "-"){
+				update_qns_score($qns_id, $operator);
+			}
+			if($down_vote == 1 && $operator == "+"){
+				update_qns_score($qns_id, $operator);
+			}
+			
+		}else{
+			update_qns_score($qns_id, $operator);
+		}
+		
 	}
 
 
@@ -187,5 +226,45 @@
 		$query_user_id = "SELECT user_id FROM Questions_Voted_By_Users WHERE question_id=".$qns_id . " AND down_vote=1";
 
 		get_users_who_voted($query_user_id);
+	}
+
+	/*
+		Return the list of questions which the users have up voted
+		@parm: user_id
+		@return: List of qns_id and the status of the up_vote=true
+	*/
+	if($cmd == "get_all_qns_up_vote_by_user"){
+		$user_id = $db->escape_string($data->user_id);
+		$query_qns_id = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=" . $user_id . " AND up_vote=1";
+		$result_qns_id = $db->query($query_qns_id);
+
+		$qns_up_vote_array = array();
+		while($row = mysqli_fetch_array($result_qns_id)){
+			$qns_up_vote_array[] = array(
+				'qns_id'=>$row["question_id"],
+				'up_vote'=>true
+			); 
+		}
+		echo json_encode($qns_up_vote_array);
+	}
+
+	/*
+		Return the list of questions which the users have down voted
+		@parm: user_id
+		@return: List of qns_id and the status of the down_vote=true
+	*/
+	if($cmd == "get_all_qns_down_vote_by_user"){
+		$user_id = $db->escape_string($data->user_id);
+		$query_qns_id = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=" . $user_id . " AND down_vote=1";
+		$result_qns_id = $db->query($query_qns_id);
+
+		$qns_udown_vote_array = array();
+		while($row = mysqli_fetch_array($result_qns_id)){
+			$qns_down_vote_array[] = array(
+				'qns_id'=>$row["question_id"],
+				'down_vote'=>true
+			); 
+		}
+		echo json_encode($qns_down_vote_array);
 	}
 ?>
