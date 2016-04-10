@@ -1,6 +1,6 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$http', '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($http, $scope, qs, $rootScope, $state, $timeout){
+.controller('MainCtrl', ['$location', '$http', '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($location, $http, $scope, qs, $rootScope, $state, $timeout){
 
     $scope.loading = true;
 
@@ -15,7 +15,8 @@ angular.module('quoraApp')
         state parameter.
     */
     $scope.goToPost = function(post){
-        $state.go('qa', {'currPost' : post});
+        // $state.go('qa', {'currPost' : post});
+        $location.path('qa').search({id: post.id});
     }
 
     //TODO: implement goToProfile function
