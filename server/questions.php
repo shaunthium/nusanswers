@@ -11,6 +11,7 @@
 		Insert new questions into 'Questions' table
 		@param: 	user_id, title, content, tag_string
 		@optional:	content, tag_string	
+		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
 		$user_id= $db->escape_string($data->user_id);
@@ -48,6 +49,44 @@
 			//Call tag_qns($qns_id, $tag_array) function inside tags.php to tag qns and the list of related tags together
 			tag_qns($qns_id, $tag_array);
 		}
+
+		//Return the data of the new question including author score and name
+		$query_qns_data = "SELECT * FROM Questions WHERE id=" . $qns_id;
+		$result_qns_data = $db->query($query_qns_data);
+		$qns_data_array = array();
+		
+		while ($qns_data = mysqli_fetch_assoc($result_qns_data)){
+			//Get the first name and last name of the author from 'users' table
+			$user_id = $qns_data['user_id'];
+			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+			$result_author = $db->query($query_author);
+			$author = mysqli_fetch_assoc($result_author);
+
+			//Get total number of answers to each questions from 'answers' table
+			$question_id = $qns_data['id'];
+			$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id="
+									.$question_id;
+			$result_total_answers = $db->query($query_total_answers);
+			$total_answers = mysqli_fetch_assoc($result_total_answers);
+		
+			$qns_data_array[] = array(
+
+				'id'=>$qns_data['id'],
+				'user_id'=>$qns_data['user_id'],
+				'title'=>$qns_data['title'],
+				'content'=>$qns_data['content'],
+				'score'=>$qns_data['score'],
+				'view_count'=>$qns_data['view_count'],
+				'created_at'=>$qns_data['created_at'],
+				'updated_at'=>$qns_data['updated_at'],
+				'author' => $author['first_name'] . " " . $author['last_name'],
+				'author_score' => $author['score'],
+				'total_answers' => $total_answers['total_answers']
+			);
+		}
+		
+		echo json_encode($qns_data_array);		
+		
 		
 	}
 
