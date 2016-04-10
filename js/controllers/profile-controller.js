@@ -20,8 +20,47 @@ angular.module('quoraApp')
   //         $scope.profileImg = data.data.url;
   //       });
   //
-  //       $scope.$apply();
+  //       $http({
+  //         url: '/server/users/main.php',
+  //         method: 'POST',
+  //         data: {
+  //           cmd: 'show',
+  //           user_id: loggedInUserID
+  //         }
+  //       }).then(function(data) {
+  //         console.log('user data is:');
+  //         console.log(data);
+  //         $scope.userScore = data.data.score;
+  //       });
   //     });
+  //
+  //     $http({
+  //       url: '/server/answers.php',
+  //       method: 'POST',
+  //       data: {
+  //         cmd: 'profileanswers',
+  //         user_id: loggedInUserID
+  //       }
+  //     }).then(function(data){
+  //       console.log('data is:');
+  //       console.log(data);
+  //       $scope.profileAnswers = data.data;
+  //     });
+  //
+  //     $http({
+  //       url: '/server/questions.php',
+  //       method: 'POST',
+  //       data: {
+  //         cmd: 'get_all_qns_of_user',
+  //         user_id: loggedInUserID
+  //       }
+  //     }).then(function(data) {
+  //       console.log(data);
+  //       $scope.profileQns = data.data;
+  //     });
+  //
+  //     // $scope.$apply();
   //   }
   // });
-}])
+
+}]);

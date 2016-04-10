@@ -32,14 +32,14 @@ angular.module('quoraApp')
 
              // Edit here plx!
             var submitAnswerToServer = function(post, dangerousHTML){
-              console.log('hi');
+              // console.log('hi');
               var userID;
               FB.getLoginStatus(function(resp) {
                 if (resp.status == 'connected') {
                   FB.api('/me', function(response) {
                     userID = response.id;
-                    console.log('userID is:');
-                    console.log(userID);
+                    // console.log('userID is:');
+                    // console.log(userID);
                     var answersURL = "/server/answers.php";
                     var questionID = post.id;
                     $http({
@@ -54,12 +54,13 @@ angular.module('quoraApp')
                       dataType: 'json'
                     }).success(function() {
                       console.log('hahaha');
+                      $window.location.reload();
                     });
                   });
                 }
               });
               // var userID = 1;
-              console.log("sending ...", dangerousHTML);
+              // console.log("sending ...", dangerousHTML);
             }
 
             // Here goes user on submit click

@@ -1,13 +1,13 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
+.controller('MainCtrl', ['$location', '$http', '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($location, $http, $scope, qs, $rootScope, $state, $timeout){
 
     $scope.loading = true;
 
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
     $timeout(function(){
         $scope.loading = false;
-    }, 1500)
+    }, 100);
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -15,7 +15,8 @@ angular.module('quoraApp')
         state parameter.
     */
     $scope.goToPost = function(post){
-        $state.go('qa', {'currPost' : post});
+        // $state.go('qa', {'currPost' : post});
+        $location.path('qa').search({id: post.id});
     }
 
     //TODO: implement goToProfile function
@@ -97,13 +98,23 @@ angular.module('quoraApp')
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator"};
+    $timeout(function(){
+      // console.log(loggedInUserID);
+        qs.getCurrentUser().then(function(data) {
+          // console.log('user is:');
+          // console.log(data);
+          $scope.currentUser = data;
+        });
+
+    }, 5000);
     qs.getQuestions().then(function (returnedData) {
-      console.log(returnedData);
+      // console.log(returnedData);
+      // $scope.posts = JSON.parse(JSON.stringify(returnedData.data));
       $scope.posts = returnedData.data;
     });
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
+      // console.log(data);
       $scope.trendingTags = data.data;
     });
 }]);

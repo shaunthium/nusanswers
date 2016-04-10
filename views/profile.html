@@ -17,7 +17,7 @@
 						<span class="card-title">{{userName}}</span>
 						<br/>
 						<!-- karma -->
-						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma 999</span>
+						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma {{userScore}}</span>
 			            <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p>
 			            <hr/>
 			            <!-- involved tags -->
@@ -36,16 +36,17 @@
 				<hr/>
 				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="i in [1]"href="#!" class="collection-item black-text">
+		        <a ng-repeat="question in profileQns" href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
-			        		<p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p>
+			        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
+                  <p>{{question.title}}</p>
 			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
 								    Iamaprettylonghtag1
 								  </div>
 			        	</div>
 			        	<div style="display:table-cell; width:65px; ">
-			        		<span class="right orange-text text-darken-2">500</span>
+			        		<span class="right orange-text text-darken-2">{{question.score}}</span>
 			        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
 			        	</div>
 		        	</div>
@@ -61,16 +62,16 @@
 				<hr/>
 				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="i in [1,2,3]"href="#!" class="collection-item black-text">
+		        <a ng-repeat="answer in profileAnswers"href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
-			        		<p style="margin-bottom:5px;">Why are three groups doing the same project in CS3226?</p>
+			        		<p style="margin-bottom:5px;">{{answer.title}}</p>
 			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
 								    Tag{{tag}}
 								  </div>
 			        	</div>
 			        	<div style="display:table-cell; width:65px;">
-			        		<span class="right orange-text text-darken-2">500</span>
+			        		<span class="right orange-text text-darken-2">{{answer.score}}</span>
 			        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
 			        	</div>
 		        	</div>

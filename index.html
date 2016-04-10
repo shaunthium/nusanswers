@@ -18,8 +18,8 @@
       // For temporary use only while fb integration is not complete
         var loggedInUserID = 1;
         var loggedInUserToken = 1;
-
-
+        // 
+        //
         // var loggedInUserID;
         // var loggedInUserToken;
         // // This is called with the results from from FB.getLoginStatus().
@@ -36,6 +36,8 @@
         //     // console.log("shaun's response:");
         //     // console.log(response);
         //     loggedInUserID = response.authResponse.userID;
+        //     // console.log('heeellll');
+        //     // console.log(loggedInUserID);
         //     loggedInUserToken = response.authResponse.accessToken;
         //     // console.log('test is:');
         //     // console.log(test);
@@ -67,11 +69,12 @@
         //     url: '/server/users/create-user.php',
         //     method: 'POST',
         //     data: {
-        //       token: loggedInUserToken
+        //       token: loggedInUserToken,
+        //       id: loggedInUserID
         //     },
         //     success: function(resp) {
-        //       console.log('hi');
-        //       console.log(resp);
+        //       // console.log('hi');
+        //       // console.log(resp);
         //     },
         //     error: function() {
         //       console.log('bye');
@@ -148,11 +151,11 @@
     <!-- <navbar></navbar> -->
     <!-- Each view of the app is separate into views folder -->
     <!-- <ui-view></ui-view> -->
-    <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-    </fb:login-button> -->
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
 
-    <!-- <button type="button" style="width:20px; height:20px; background-color:blue"
-    name="logout-btn" onclick="logout()"></button> -->
+    <button type="button" style="width:20px; height:20px; background-color:blue"
+    name="logout-btn" onclick="logout()"></button>
 
     <!-- unfortunately materialize is depenedent on jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
