@@ -47,6 +47,18 @@ angular.module('quoraApp')
         $scope.profileAnswers = data.data;
       });
 
+      $http({
+        url: '/server/questions.php',
+        method: 'POST',
+        data: {
+          cmd: 'get_all_qns_of_user',
+          user_id: loggedInUserID
+        }
+      }).then(function(data) {
+        console.log(data);
+        $scope.profileQns = data.data;
+      });
+
       // $scope.$apply();
     }
   });
