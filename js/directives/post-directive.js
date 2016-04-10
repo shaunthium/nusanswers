@@ -54,6 +54,7 @@ angular.module('quoraApp')
                       dataType: 'json'
                     }).success(function() {
                       console.log('hahaha');
+                      $window.location.reload();
                     });
                   });
                 }

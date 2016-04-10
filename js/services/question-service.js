@@ -18,17 +18,17 @@ angular.module('quoraApp')
                     comments:   [{author: {name:'Eric', karma:120, userid: 5, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}]
                 };
 
-    var newPost =  {
-                    id: 600,
-                    title: "New Post",
-                    tags:   ["New post!", "Tags", "MoreTags", "EvenMoreTags"],
-                    author:     {name:'Alex', karma:100, userid:99, flavor: "Newbie"},
-                    views:      9001,
-                    desc:       "This is a new question description placeholder.",
-                    upvotes:    0,
-                    comments:   [{author: {name:'Eric', karma:120, userid: 5, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}],
-                    answers: [JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer))]
-                };
+    // var newPost =  {
+    //                 id: 600,
+    //                 title: "New Post",
+    //                 tags:   ["New post!", "Tags", "MoreTags", "EvenMoreTags"],
+    //                 author:     {name:'Alex', karma:100, userid:99, flavor: "Newbie"},
+    //                 views:      9001,
+    //                 desc:       "This is a new question description placeholder.",
+    //                 upvotes:    0,
+    //                 comments:   [{author: {name:'Eric', karma:120, userid: 5, flavor: "Newbie"}, body:'Some comment content2222 ome comment content2233322', upvotes:1, liked : false, reported : false, id:id++}],
+    //                 answers: [JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer)), JSON.parse(JSON.stringify(answer))]
+    //             };
 
 
     var notifications = ["Notification 1","Notification 2","Notification 3","Notification 4"];
