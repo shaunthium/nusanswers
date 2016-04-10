@@ -1,13 +1,13 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
+.controller('MainCtrl', [ '$http', '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($http, $scope, qs, $rootScope, $state, $timeout){
 
     $scope.loading = true;
 
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
     $timeout(function(){
         $scope.loading = false;
-    }, 100)
+    }, 100);
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -97,7 +97,15 @@ angular.module('quoraApp')
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator"};
+    $timeout(function(){
+      console.log(loggedInUserID);
+        qs.getCurrentUser().then(function(data) {
+          console.log('user is:');
+          console.log(data);
+          $scope.currentUser = data;
+        });
+
+    }, 3000);
     qs.getQuestions().then(function (returnedData) {
       console.log(returnedData);
       $scope.posts = returnedData.data;

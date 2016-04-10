@@ -36,6 +36,8 @@
             // console.log("shaun's response:");
             // console.log(response);
             loggedInUserID = response.authResponse.userID;
+            console.log('heeellll');
+            console.log(loggedInUserID);
             loggedInUserToken = response.authResponse.accessToken;
             // console.log('test is:');
             // console.log(test);
@@ -67,7 +69,8 @@
             url: '/server/users/create-user.php',
             method: 'POST',
             data: {
-              token: loggedInUserToken
+              token: loggedInUserToken,
+              id: loggedInUserID
             },
             success: function(resp) {
               console.log('hi');

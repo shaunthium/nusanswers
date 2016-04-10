@@ -188,6 +188,18 @@ angular.module('quoraApp')
         });
     }
 
+    function getCurrentUser() {
+      return $http({
+        url: "/server/users/main.php",
+        method: 'POST',
+        data: {
+          cmd: 'show',
+          user_id: loggedInUserID
+        },
+        dataType: 'json'
+      });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -206,7 +218,8 @@ angular.module('quoraApp')
         submitCancelUpvoteComment   :   submitCancelUpvoteComment,
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
         submitGetTrendingTags       : submitGetTrendingTags,
-        getNotifications            :   getNotifications
+        getNotifications            :   getNotifications,
+        getCurrentUser              : getCurrentUser
     }
 
 }]);
