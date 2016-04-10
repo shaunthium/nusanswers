@@ -108,6 +108,7 @@ angular.module('quoraApp')
     }, 5000);
     qs.getQuestions().then(function (returnedData) {
       // console.log(returnedData);
+      // $scope.posts = JSON.parse(JSON.stringify(returnedData.data));
       $scope.posts = returnedData.data;
     });
     $scope.notifications = qs.getNotifications();
