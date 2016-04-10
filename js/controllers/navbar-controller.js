@@ -22,7 +22,7 @@ angular.module('quoraApp')
     //TODO: maximum question length
     $scope.submitQuestion = function(user_question){
         if(!user_question) return; //Prevent a null post
-        $scope.user_question = "";
+        // $scope.user_question = "";
         $scope.showOverlay = false; //Hide shading box
         $scope.goToPost($scope.newPost(user_question));
     }

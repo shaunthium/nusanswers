@@ -98,21 +98,21 @@ angular.module('quoraApp')
 
     //TODO: get currentUser from database by logging in.
     $timeout(function(){
-      console.log(loggedInUserID);
+      // console.log(loggedInUserID);
         qs.getCurrentUser().then(function(data) {
-          console.log('user is:');
-          console.log(data);
+          // console.log('user is:');
+          // console.log(data);
           $scope.currentUser = data;
         });
 
-    }, 3000);
+    }, 5000);
     qs.getQuestions().then(function (returnedData) {
-      console.log(returnedData);
+      // console.log(returnedData);
       $scope.posts = returnedData.data;
     });
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
-      console.log(data);
+      // console.log(data);
       $scope.trendingTags = data.data;
     });
 }]);
