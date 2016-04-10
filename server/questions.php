@@ -103,7 +103,7 @@
 		@return:	Information of all latest question in descending order in JSON format	
 	*/
 	if($cmd == "latest_qns"){
-		$query = "SELECT * FROM Questions ORDER BY id DESC";
+		$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
 		$result = $db->query($query);
 		$latest_array = array();
 		while ($latest = mysqli_fetch_assoc($result)){
@@ -237,6 +237,34 @@
 		$qns_id= $db->escape_string($data->qns_id);
 		$query = "UPDATE Questions SET view_count = view_count + 1 WHERE id=" . $qns_id;
 		$db->query($query);
+	}
+
+	/*
+		Get all questions of a user
+		@param: user_id
+		@return: list of questions posted by user 
+	*/
+	if($cmd == "get_all_qns_of_user"){
+		$user_id = $db->escape_string($data->user_id);
+		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
+		$result = $db->query($query);
+		$qns_array = array();
+		while ($qns = mysqli_fetch_assoc($result)){
+			//Get the first name and last name of the author from 'users' table
+		
+			$qns_array[] = array(
+				'id'=>$qns['id'],
+				'user_id'=>$qns['user_id'],
+				'title'=>$qns['title'],
+				'content'=>$qns['content'],
+				'score'=>$qns['score'],
+				'view_count'=>$qns['view_count'],
+				'created_at'=>$qns['created_at'],
+				'updated_at'=>$qns['updated_at'],
+			);
+		}
+		echo json_encode($qns_array);	
+
 	}
 
 	
