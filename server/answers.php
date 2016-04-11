@@ -54,7 +54,7 @@
 		$user_id = $user_id["user_id"];
 		
 		/* Here we get the User Info to each question */
-		$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
@@ -62,7 +62,41 @@
 		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
 		$result_answers_count = $db->query($query_answers_count);
 		$answers_count = mysqli_fetch_assoc($result_answers_count);
-			
+		
+		
+		/*******************Query Questions Comments table ***************************/
+		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
+		$res = $db->query($query);
+		$commentsResult = array();
+		//| comments_id |  users_id|content| created_at| updated_at |
+		
+		if(!is_bool($res))
+		{
+			while($r = mysqli_fetch_assoc($res)){
+				$user_id = $r["user_id"];
+				
+				/* Here we get the User Info to each comment */
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
+				
+				$commentsResult[] = array(
+					'id' => $r["id"],
+					'questionid' => $question_id,
+					'reported' => "false",
+					'liked' => "false",
+					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
+								'karma' =>$author['score'],
+								'userid'=>$r["user_id"],
+								'flavour'=> $author['flavour']),
+					
+					'body' => $r["content"],
+					'created_at'=>$r['created_at'],
+					'updated_at'=>$r['updated_at']
+				);
+			}
+		}
+		//error_log(json_encode($commentsResult));
 		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
 		{
 			/*******************Query Question table ***************************/
@@ -74,17 +108,19 @@
 			$questionResult = array(
 
 				'id'=>$post['id'],
-				'user_id'=>$post['user_id'],
 				'title'=>$post['title'],
-				'content'=>$post['content'],
-				'score'=>$post['score'],
-				'view_count'=>$post['view_count'],
+				'tags' => $post['tags'],
+				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
+								'karma' =>$author['score'],
+								'userid'=>$post['user_id'],
+								'flavour'=> $author['flavour']),
+				'views'=>$post['view_count'],
+				'desc'=>$post['content'],
+				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name'],
-				'author_score' =>  $author['score'],
-				'answers_count' => $answers_count["answers_count"],
-				'tags' => $post['tags']
+				'comments' => $commentsResult
+				//'answers_count' => $answers_count["answers_count"],
 			);
 			
 		}
@@ -100,17 +136,19 @@
 			$questionResult = array(
 
 				'id'=>$post['id'],
-				'user_id'=>$post['user_id'],
 				'title'=>$post['title'],
-				'content'=>$post['content'],
-				'score'=>$post['score'],
-				'view_count'=>$post['view_count'],
+				'tags' => $post['tags'],
+				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
+								'karma' =>$author['score'],
+								'userid'=>$post['user_id'],
+								'flavour'=> $author['flavour']),
+				'views'=>$post['view_count'],
+				'desc'=>$post['content'],
+				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name'],
-				'author_score' =>  $author['score'],
-				'answers_count' => $answers_count["answers_count"],
-				'tags' => $post['tags']
+				'comments' => $commentsResult
+				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));
 			
@@ -120,37 +158,11 @@
 		
 
 
-		/*******************Query Questions Comments table ***************************/
-		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
-		$res = $db->query($query);
-		 $commentsResult = array();
-		//| comments_id |  users_id|content| created_at| updated_at |
 		
-		if(!is_bool($res))
-		{
-			while($r = mysqli_fetch_assoc($res)){
-				$user_id = $r["user_id"];
-				/* Here we get the User Info to each comment */
-				$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
-				$result_author = $db->query($query_author);
-				$author = mysqli_fetch_assoc($result_author);
-				
-				$commentsResult[] = array(
-					'id' => $r["id"],
-					'user_id' => $r["user_id"],
-					'content' => $r["content"],
-					'created_at'=>$r['created_at'],
-					'updated_at'=>$r['updated_at'],
-					'author' => $author['first_name'] . " " . $author['last_name'],
-					'author_score' =>  $author['score'],
-				);
-			}
-		}
-		//error_log(json_encode($commentsResult));
 
 		/*******************Query Answers table ***************************/
 		
-		$query = "select Answers.id , Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
+		$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
 		$res = $db->query($query);
 		$answersResult = array();
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
@@ -160,11 +172,12 @@
 				
 				/* Here we get the User Info to each answer */
 				$user_id = $r["user_id"];
-				$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 				$result_author = $db->query($query_author);
 				$author = mysqli_fetch_assoc($result_author);
 				
 				$answers_id= $r["id"];
+				
 				/* Here we get the comments for each answer */
 				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
@@ -176,18 +189,23 @@
 					while($a = mysqli_fetch_assoc($res2)){
 						$user_id2 = $a["user_id"];
 						/* Here we get the User Info to each comment */
-						$query_author2 =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id2;
+						$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 						$result_author2 = $db->query($query_author2);
 						$author2 = mysqli_fetch_assoc($result_author2);
 						
 						$answersCommentsResult[] = array(
 							'id' => $a["id"],
-							'user_id' => $a["user_id"],
-							'content' => $a["content"],
+							'answerid' => $answers_id,
+							'reported' => "false",
+							'liked' => "false",
+							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
+										'karma' =>$author2['score'],
+										'userid'=>$a["user_id"],
+										'flavour'=> $author2['flavour']),
+							
+							'body' => $a["content"],
 							'created_at'=>$a['created_at'],
-							'updated_at'=>$a['updated_at'],
-							'author' => $author2['first_name'] . " " . $author2['last_name'],
-							'author_score' =>  $author2['score'],
+							'updated_at'=>$a['updated_at']
 						);
 					}
 				}
@@ -195,21 +213,21 @@
 				$answersResult[] = array(
 
 					'id'=>$r['id'],
-					'user_id'=>$r['user_id'],
-					'content'=>$r['content'],
-					'score'=>$r['score'],
+					'questionid' => $question_id,
+					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+									'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
+					'desc'=>$r['content'],
+					'upvotes'=>$r['score'],
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at'],
 					'chosen' => $r['chosen'],
-					'author' => $author['first_name'] . " " . $author['last_name'],
-					'author_score' =>  $author['score'],
 					'comments' => $answersCommentsResult
 				);
 			}
 		}
 		
-		$finalOutput = array("question"=>$questionResult, "question_comments"=>$commentsResult, "answers"=>$answersResult);
-		//error_log(json_encode($finalOutput));
+		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
+		error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
@@ -455,11 +473,17 @@
 	*	Gets the answers posted by a user sorted by latest.
 	*	The question Title pertaining to the answer is also included.
 	*	@param: user_id
+	*	@result VISIT: http://www.jsoneditoronline.org/?id=14eeaf9a6225a352da51c25fe5afc96a
 	*
 	*/
 	else if ($cmd == "profileanswers")
 	{
 		global $db;
+		/* Here we get the User Info to each question */
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$result_author = $db->query($query_author);
+		$author = mysqli_fetch_assoc($result_author);
+		
 		$query = "select Questions.title, Answers.* from Answers inner join Questions on  Questions.id = Answers.question_id where Answers.user_id = $user_id order by Answers.updated_at desc";
 		$result = $db->query($query);
 		$answers_array = array();
@@ -468,23 +492,26 @@
 			$answers_array[] = array(
 				'title'=>$answer['title'],
 				'id'=>$answer['id'],
-				'user_id'=>$answer['user_id'],
-				'question_id'=>$answer['question_id'],
-				'content'=>$answer['content'],
-				'score'=>$answer['score'],
+				'questionid'=>$answer['question_id'],
+				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+				'desc'=>$answer['content'],
+				'upvotes'=>$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
 				'chosen'=>$answer['chosen']
 			);
+			
+			
 		}
+		error_log(json_encode($answers_array));
 		echo json_encode($answers_array);	
 	}
 	
 	/*
 	*	Gets the TOP 20 latest answers
 	*	The question Title pertaining to the answer is also included.
-	*	@param: user_id
-	*
+	*   @Return VISIT: http://www.jsoneditoronline.org/?id=bfb669aaec05c2f0aa3019e971b86505
 	*/
 	else if ($cmd == "latestanswers")
 	{
@@ -496,23 +523,24 @@
 		while ($latest = mysqli_fetch_assoc($result)){
 			
 			$user_id = $latest['user_id'];
-			$query_author =  "SELECT first_name, last_name FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
 		
 			$latest_array[] = array(
 				'title'=>$latest['title'],
 				'id'=>$latest['id'],
-				'user_id'=>$latest['user_id'],
-				'question_id'=>$latest['question_id'],
-				'content'=>$latest['content'],
-				'score'=>$latest['score'],
+				'questionid'=>$latest['question_id'],
+				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+				'desc'=>$latest['content'],
+				'upvotes'=>$latest['score'],
 				'created_at'=>$latest['created_at'],
 				'updated_at'=>$latest['updated_at'],
-				'chosen'=>$latest['chosen'],
-				'author' => $author['first_name'] . " " . $author['last_name']
+				'chosen'=>$latest['chosen']
 			);
 		}
+		error_log(json_encode($latest_array));
 		echo json_encode($latest_array);		
 	}
 	
