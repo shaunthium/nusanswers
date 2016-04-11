@@ -48,7 +48,7 @@ to prevent collapsing during animation*/
 }
 
 
-.animate-search-popup.ng-move,
+
 .animate-search-popup.ng-enter,
 .animate-search-popup.ng-leave {
   -webkit-transition:all linear 0.2s;
@@ -56,14 +56,14 @@ to prevent collapsing during animation*/
 }
 
 .animate-search-popup.ng-leave.ng-leave-active,
-.animate-search-popup.ng-move,
+
 .animate-search-popup.ng-enter {
   opacity:0;
   top:100px;
 }
 
 .animate-search-popup.ng-leave,
-.animate-search-popup.ng-move.ng-move-active,
+
 .animate-search-popup.ng-enter.ng-enter-active {
   opacity:1;
   top:80px;
@@ -102,7 +102,7 @@ to prevent collapsing during animation*/
   width:100%;
   height:100%;
   z-index:997;
-  transition: all 0.2s;
+  transition: opacity 0.2s;
 }
 
 #overlay-container.ng-enter, #overlay-container.ng-leave-active{
@@ -119,7 +119,7 @@ html,body{
 }
 
 html{
-  zoom:0.9; /* Please change me */
+  zoom:0.9;
 }
 
 .logo{
@@ -356,6 +356,7 @@ search-popup{
   z-index:999;  
   border-radius:2px;
   top:80px;
+  transition: all 0.1s;
 }
 
 search-popup:after {
