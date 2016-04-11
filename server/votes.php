@@ -44,10 +44,10 @@
 	/*
 		Update the score(karma points) in the 'Questions' table
 	*/
-	function update_qns_score($qns_id, $operator){
+	function update_qns_score($qns_id, $operator, $increment_val){
 		global $db;
 
-		$query = "UPDATE Questions SET score = score " . $operator . " 1 WHERE id=" . $qns_id;
+		$query = "UPDATE Questions SET score = score " . $operator . " " . $increment_val  ." WHERE id=" . $qns_id;
 		$db->query($query);
 	}
 
@@ -146,17 +146,17 @@
 			$down_vote = $votes["down_vote"];
 
 			if($up_vote == 0 && $down_vote == 0){
-				update_qns_score($qns_id, $operator);
+				update_qns_score($qns_id, $operator, 1);
 			}
 			if($up_vote == 1 && $operator == "-"){
-				update_qns_score($qns_id, $operator);
+				update_qns_score($qns_id, $operator, 2);
 			}
 			if($down_vote == 1 && $operator == "+"){
-				update_qns_score($qns_id, $operator);
+				update_qns_score($qns_id, $operator, 2);
 			}
 			
 		}else{
-			update_qns_score($qns_id, $operator);
+			update_qns_score($qns_id, $operator, 1);
 		}
 		
 	}
