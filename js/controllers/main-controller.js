@@ -96,8 +96,19 @@ angular.module('quoraApp')
         return qs.submitCancelDownvoteComment(postID, commentID, $scope.currentUser);
     }
 
+    $scope.showLogin = function(){
+        $('#login-modal').openModal();
+        //
+    }
+
+    // Do your magic here shaun
+    $scope.makeFacebookLogin = function(){
+        $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+        $('#login-modal').closeModal();
+    }
+
     //TODO: get currentUser from database by logging in.
-    $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator"};
+    
     qs.getQuestions().then(function (returnedData) {
       console.log(returnedData);
       $scope.posts = returnedData.data;
