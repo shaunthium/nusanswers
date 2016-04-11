@@ -1,8 +1,9 @@
 angular.module('quoraApp')
-.controller('ProfileCtrl', [ '$scope', '$http', function($scope, $http){
+.controller('ProfileCtrl', [ '$scope', '$http', '$state', function($scope, $http, $state){
   // For temporary use only while fb integration is not complete
-  $scope.userName = 'CS3226';
-  $scope.profileImg = "http://dummyimage.com/300/09.png/fff";
+  
+  //$scope.userName = 'CS3226';
+  //$scope.profileImg = "http://dummyimage.com/300/09.png/fff";
 
   // FB.getLoginStatus(function(resp) {
   //   if (resp.status == 'connected') {
@@ -24,4 +25,10 @@ angular.module('quoraApp')
   //     });
   //   }
   // });
+
+  $scope.logout = function(){
+    $scope.$parent.currentUser = undefined;
+    $state.go('home');
+  }
+
 }])

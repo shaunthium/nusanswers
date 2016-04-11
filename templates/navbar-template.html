@@ -10,6 +10,20 @@
 
 <search-popup ng-class="{'fake-white' : !user_question}"class="animate-search-popup" ng-if="showOverlay"></search-popup>
 
+
+ <!-- Login modal -->
+  <div style="max-width:500px;" id="login-modal" class="modal">
+    <div class="modal-content">
+      <p style="font-size:1.1em;" class="center">For now we only support facebook login</p>
+      <div ng-click="makeFacebookLogin()" style="margin:0 auto;width:200px;"class="btn-fb-login">
+        <span class="icon icon-fb"></span>
+        <span class="title">Login with Facebook</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
 <!-- this navbar is a mess, grid system does not seem
      to work here, had to haxx0r hardcode it because couldn't make
      elements float after each other -->
@@ -19,14 +33,22 @@
 
       <a href="#" data-activates="mobile-demo" class="button-collapse right"><i class="material-icons">menu</i></a>
 
-
       <ul class="right hide-on-med-and-down">
-        <li>
-          <a style="font-size:0.9em;"class="white-text" href="#/profile">
-            <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-            Profile
-          </a>
+
+        <li class="no-animate"ng-if="currentUser">
+            <a style="font-size:0.9em;"class="white-text" href="#/profile">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span >{{currentUser.name}}</span>
+            </a>
         </li>
+
+        <li class="no-animate" ng-if="!currentUser">
+            <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span ng-if="!currentUser">Login</span>
+            </a>
+        </li>
+
         <li><a style="font-size:0.9em;" class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">
           <i style="line-height:60px;font-size:1.6em;margin-right:5px;" class="material-icons left">view_list</i>
           Notifications

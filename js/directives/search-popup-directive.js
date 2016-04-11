@@ -10,10 +10,8 @@ angular.module('quoraApp')
 
 			element.css('left', document.getElementById("search-field").getBoundingClientRect().left);
 			angular.element($window).bind('resize', function(){
-
 				element.css('left', document.getElementById("search-field").getBoundingClientRect().left);
 				scope.$digest();
-
 			})
 
 			angular.element($window).on('scroll', function(){
