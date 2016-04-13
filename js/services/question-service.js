@@ -3,7 +3,8 @@
 angular.module('quoraApp')
 .service('questionService', ['$q', '$http', function($q, $http){
 
-    var questions_url = "/server/questions.php";
+    var base_url = "http://139.59.247.83/";
+    var questions_url = "server/questions.php";
     var questions;
     var canceller;
 
@@ -77,7 +78,7 @@ angular.module('quoraApp')
     function getQuestions() {
       return $http({
         method: 'POST',
-        url: questions_url,
+        url: base_url + questions_url,
         data: {
           cmd: "trending_qns",
         },
@@ -92,9 +93,7 @@ angular.module('quoraApp')
     }
 
     function cancelCall(){
-
         canceller.resolve("User cancelled call");
-
     }
 
     //TODO: implement back-end integration
@@ -113,6 +112,31 @@ angular.module('quoraApp')
         //This function should add the comment to the post server-side and return a comment object, which will be attached to the post client-side.
         //TODO: discuss the best way to add/delete comments and answers from posts
         return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
+    }
+
+    function getAnswersToCurrentPost(postID){
+      return $http({
+        url: base_url + "server/answers.php",
+        method: "POST",
+        data: {
+          cmd: "getanswers",
+          question_id: postID
+        }
+      });
+    }
+
+    function submitAnswerToPost(postID, userID, content){
+      console.log("Submitting answer to post ... ");
+      return $http({
+        url: base_url + "server/answers.php",
+        method: 'POST',
+        data: {
+          cmd: "createanswer",
+          user_id: userID,
+          question_id: postID,
+          content: content
+        }
+      });
     }
 
     //TODO: implement back-end integration
@@ -141,8 +165,22 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitUpvotePost(postID, commentID, user){
-        return false;
+    function submitUpvotePost(postID, userID){
+
+      $http({
+         method: "POST",
+         url: base_url + "/server/questions.php",
+         data: {
+           cmd: 'set_up_vote_qns',
+           qns_id: postID,
+           user_id: userID
+         }
+       }).then(function(data) {
+          console.log('Success in upvoting post'); // ?
+       }, function(err){
+          console.log("Error in upvoting post" , err);
+       });
+
     }
 
     //TODO: implement back-end integration
@@ -151,8 +189,18 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitDownvotePost(postID, commentID, user){
-        return false;
+    function submitDownvotePost(postID, userID){
+
+      return $http({
+         method: "POST",
+         url: base_url + "/server/questions.php",
+         data: {
+           cmd: 'set_down_vote_qns',
+           qns_id: postID,
+           user_id: userID
+         }
+       });
+        
     }
 
     //TODO: implement back-end integration
@@ -180,12 +228,13 @@ angular.module('quoraApp')
     function submitGetTrendingTags(){
         // return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
         return $http({
-          url: "/server/tags.php",
+          url: base_url + "/server/tags.php",
           method: "POST",
           data: {
             cmd: "get_trending_tag"
           }
         });
+
     }
 
     return {
@@ -206,7 +255,9 @@ angular.module('quoraApp')
         submitCancelUpvoteComment   :   submitCancelUpvoteComment,
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
         submitGetTrendingTags       : submitGetTrendingTags,
-        getNotifications            :   getNotifications
+        submitAnswerToPost       : submitAnswerToPost,
+        getNotifications            :   getNotifications,
+        getAnswersToCurrentPost : getAnswersToCurrentPost
     }
 
 }]);
