@@ -68,9 +68,44 @@
 									.$question_id;
 			$result_total_answers = $db->query($query_total_answers);
 			$total_answers = mysqli_fetch_assoc($result_total_answers);
+
+
+
+			//Get all tags of a question from 'questions_tags' & 'tags' table
+			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
+			$result_tag_id = $db->query($query_tag_id);
+
+			$tag_name_array = array();
+			while ($row = mysqli_fetch_assoc($result_tag_id)){
+				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+				$result_tag_name = $db->query($query_tag_name);
+				$tag = mysqli_fetch_assoc($result_tag_name);
+				$tag_name_array[]  = $tag["content"];
+			}
+
+			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
+									'karma' => $author['score'],
+									'userid' => $qns_data['user_id'],
+									'flavour' => 'New User'
+									);
+
+			//Get all comment of a question including the author from 'comment' table
+			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
+			$result_comment = $db->query($query_comment);
+
+			$comment_array = array();
+		
 		
 			$qns_data_array[] = array(
-
+				'id'=>$qns_data['id'],
+				'title'=>$qns_data['title'],
+				'tags'=>$tag_name_array,
+				'author'=> $author_array,
+				'views'=>$qns_data['view_count'],
+				'desc'=>$qns_data['content'],
+				'upvotes'=>$qns_data['score'],
+				'comments'=> $comment_array
+				/*
 				'id'=>$qns_data['id'],
 				'user_id'=>$qns_data['user_id'],
 				'title'=>$qns_data['title'],
@@ -82,11 +117,11 @@
 				'author' => $author['first_name'] . " " . $author['last_name'],
 				'author_score' => $author['score'],
 				'total_answers' => $total_answers['total_answers']
+				*/
 			);
 		}
 		
 		echo json_encode($qns_data_array);		
-		
 		
 	}
 
@@ -158,8 +193,63 @@
 			$result_total_answers = $db->query($query_total_answers);
 			$total_answers = mysqli_fetch_assoc($result_total_answers);
 		
-			$latest_array[] = array(
+			//Get all tags of a question from 'questions_tags' & 'tags' table
+			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
+			$result_tag_id = $db->query($query_tag_id);
 
+			$tag_name_array = array();
+			while ($row = mysqli_fetch_assoc($result_tag_id)){
+				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+				$result_tag_name = $db->query($query_tag_name);
+				$tag = mysqli_fetch_assoc($result_tag_name);
+				$tag_name_array[]  = $tag["content"];
+			}
+
+			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
+									'karma' => $author['score'],
+									'userid' => $trending['user_id']);
+
+			//Get all comment of a question including the author from 'comment' table
+			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
+			$result_comment = $db->query($query_comment);
+
+			$comment_array = array();
+			while ($comment = mysqli_fetch_assoc($result_comment)){
+				$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
+				$result_comment_author = $db->query($query_comment_author);
+				$comment_author = mysqli_fetch_assoc($result_comment_author);
+
+				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
+									'karma' => $comment_author['score'],
+									'userid' => $comment_author['id'],
+									'flavour' => 'New User'
+									);
+
+				$comment_array[]  = array(
+						'author' => $comment_author_array,
+						'body' => $comment['content'],
+						'upvotes' => 0,
+						'liked' => false,
+						'reported' => false,
+						'id' => $comment['id']
+					);
+			}
+			$latest_array[] = array(
+				
+				'id'=>$latest['id'],
+				'title'=>$latest['title'],
+				'tags'=>$tag_name_array,
+				'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
+									'karma' => $author['score'],
+									'userid' => $latest['user_id'],
+									'flavour' => 'New User'
+					),
+				'views'=>$latest['view_count'],
+				'desc'=>$latest['content'],
+				'upvotes'=>$latest['score'],
+				'comments'=> $comment_array
+				
+				/*
 				'id'=>$latest['id'],
 				'user_id'=>$latest['user_id'],
 				'title'=>$latest['title'],
@@ -171,6 +261,7 @@
 				'author' => $author['first_name'] . " " . $author['last_name'],
 				'author_score' => $author['score'],
 				'total_answers' => $total_answers['total_answers']
+				*/
 			);
 		}
 		echo json_encode($latest_array);		
@@ -198,8 +289,62 @@
 			$result_total_answers = $db->query($query_total_answers);
 			$total_answers = mysqli_fetch_assoc($result_total_answers);
 		
-			$trending_array[] = array(
+			//Get all tags of a question from 'questions_tags' & 'tags' table
+			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
+			$result_tag_id = $db->query($query_tag_id);
 
+			$tag_name_array = array();
+			while ($row = mysqli_fetch_assoc($result_tag_id)){
+				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+				$result_tag_name = $db->query($query_tag_name);
+				$tag = mysqli_fetch_assoc($result_tag_name);
+				$tag_name_array[]  = $tag["content"];
+			}
+
+			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
+									'karma' => $author['score'],
+									'userid' => $trending['user_id'],
+									'flavour' => 'New User'
+									);
+
+			//Get all comment of a question including the author from 'comment' table
+			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
+			$result_comment = $db->query($query_comment);
+
+			$comment_array = array();
+			while ($comment = mysqli_fetch_assoc($result_comment)){
+				$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
+				$result_comment_author = $db->query($query_comment_author);
+				$comment_author = mysqli_fetch_assoc($result_comment_author);
+
+				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
+									'karma' => $comment_author['score'],
+									'userid' => $comment_author['id'],
+									'flavour' => 'New User'
+									);
+
+				$comment_array[]  = array(
+						'author' => $comment_author_array,
+						'body' => $comment['content'],
+						'upvotes' => 0,
+						'liked' => false,
+						'reported' => false,
+						'id' => $comment['id']
+					);
+			}
+
+
+			$trending_array[] = array(
+				'id'=>$trending['id'],
+				'title'=>$trending['title'],
+				'tags'=>$tag_name_array,
+				'author'=> $author_array,
+				'views'=>$trending['view_count'],
+				'desc'=>$trending['content'],
+				'upvotes'=>$trending['score'],
+				'comments'=> $comment_array
+								
+				/*
 				'id'=>$trending['id'],
 				'user_id'=>$trending['user_id'],
 				'title'=>$trending['title'],
@@ -211,6 +356,7 @@
 				'author' => $author['first_name'] . " " . $author['last_name'],
 				'author_score' => $author['score'],
 				'total_answers' => $total_answers['total_answers']
+				*/
 			);
 		}
 		echo json_encode($trending_array);		
