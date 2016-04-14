@@ -24,7 +24,7 @@
 									'flavour' => 'New User'
 									);
 
-				$comment_array[]  = array(
+				$comments_array[]  = array(
 						'author' => $comment_author_array,
 						'body' => $comment['content'],
 						'upvotes' => 0,

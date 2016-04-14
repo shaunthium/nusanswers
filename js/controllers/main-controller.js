@@ -13,8 +13,8 @@ angular.module('quoraApp')
         qs.getCurrentUser($scope.apiMe.id).then(function(data) {
           $scope.currentUser = data.data;
           console.log($scope.currentUser);
+          $scope.loading = false;
         })
-        $scope.loading = false;
       });
     });
 
@@ -123,7 +123,6 @@ angular.module('quoraApp')
     //TODO: get currentUser from database by logging in.
 
     qs.getQuestions().then(function (returnedData) {
-      $scope.loading = false;
       console.log(returnedData);
       $scope.posts = returnedData.data;
     });
