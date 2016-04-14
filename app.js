@@ -28,7 +28,7 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
 
 	  $urlRouterProvider.otherwise('home');
 
-   /* ezfbProvider.setInitParams({
+    ezfbProvider.setInitParams({
       // This is my FB app id for plunker demo app
       appId: '1616624788586225',
 
@@ -59,5 +59,5 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
       }($document[0]));
 
       $window.fbAsyncInit = ezfbAsyncInit;
-    }];*/
+    }];
 	}])

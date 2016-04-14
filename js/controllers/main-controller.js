@@ -5,7 +5,7 @@ angular.module('quoraApp')
     $scope.loading = true;
     $scope.currentUser = { userID : "10209460093644289" };
 
-    /*ezfb.getLoginStatus(function (res) {
+    ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
 
       ezfb.api('/me',function (res) {
@@ -13,11 +13,12 @@ angular.module('quoraApp')
         console.log($scope.apiMe);
         qs.getCurrentUser($scope.apiMe.id).then(function(data) {
           $scope.currentUser = data.data;
+          $scope.loading = false;
           console.log($scope.currentUser);
-          
+
         })
       });
-    });*/
+    });
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -122,7 +123,7 @@ angular.module('quoraApp')
     //TODO: get currentUser from database by logging in.
 
     qs.getQuestions().then(function (returnedData) {
-        $scope.loading = false;
+        // $scope.loading = false;
       console.log(returnedData);
       $scope.posts = returnedData.data;
     });
