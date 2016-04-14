@@ -342,7 +342,8 @@
 				'views'=>$trending['view_count'],
 				'desc'=>$trending['content'],
 				'upvotes'=>$trending['score'],
-				'comments'=> $comment_array
+				'comments'=> $comment_array,
+				'total_answers' => $total_answers['total_answers']
 								
 				/*
 				'id'=>$trending['id'],

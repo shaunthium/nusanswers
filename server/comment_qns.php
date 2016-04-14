@@ -13,15 +13,25 @@
 		
 		$comments_array = array();
 
-		while($comment = mysqli_fetch_assoc($result)){
-			$comments_array[] = array(
-				'id'=>$comment['id'],
-				'user_id'=>$comment['user_id'],
-				'question_id'=>$comment['question_id'],
-				'content'=>$comment['content'],
-				'created_at'=>$comment['created_at'],
-				'updated_at'=>$comment['updated_at']
-			);
+		while ($comment = mysqli_fetch_assoc($result)){
+				$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
+				$result_comment_author = $db->query($query_comment_author);
+				$comment_author = mysqli_fetch_assoc($result_comment_author);
+
+				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
+									'karma' => $comment_author['score'],
+									'userid' => $comment_author['id'],
+									'flavour' => 'New User'
+									);
+
+				$comment_array[]  = array(
+						'author' => $comment_author_array,
+						'body' => $comment['content'],
+						'upvotes' => 0,
+						'liked' => false,
+						'reported' => false,
+						'id' => $comment['id']
+					);
 		}
 
 		echo json_encode($comments_array);

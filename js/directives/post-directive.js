@@ -83,10 +83,10 @@ angular.module('quoraApp')
               // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
                 post.score++;
-                questionService.submitUpvotePost(post.id, 10209460093644289);
+                questionService.submitUpvotePost(post.id, $scope.currentUser.id);
               } else {
                 post.score--;
-                questionService.submitDownvotePost(post.id, 10209460093644289);
+                questionService.submitDownvotePost(post.id, $scope.currentUser.id);
               }
 
             };
@@ -104,7 +104,7 @@ angular.module('quoraApp')
 
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
-            
+
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;

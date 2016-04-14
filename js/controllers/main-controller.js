@@ -1,9 +1,21 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
+.controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', function(ezfb, $scope, qs, $rootScope, $state, $timeout){
 
     $scope.loading = true;
-    $scope.currentUser = { userID : "10209460093644289" };
+    // $scope.currentUser = { userID : "10209460093644289" };
+    ezfb.getLoginStatus(function (res) {
+      $scope.loginStatus = res;
+
+      ezfb.api('/me',function (res) {
+        $scope.apiMe = res;
+        qs.getCurrentUser($scope.apiMe.id).then(function(data) {
+          $scope.currentUser = data.data;
+          console.log($scope.currentUser);
+        })
+        $scope.loading = false;
+      });
+    });
 
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
     /*$timeout(function(){
@@ -99,17 +111,16 @@ angular.module('quoraApp')
 
     $scope.showLogin = function(){
         $('#login-modal').openModal();
-        //
     }
 
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
-        $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+        // $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
         $('#login-modal').closeModal();
     }
 
     //TODO: get currentUser from database by logging in.
-    
+
     qs.getQuestions().then(function (returnedData) {
       $scope.loading = false;
       console.log(returnedData);
