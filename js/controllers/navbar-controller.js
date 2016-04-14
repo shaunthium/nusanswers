@@ -7,7 +7,7 @@
         + home button
 */
 angular.module('quoraApp')
-.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$state', function($scope, $timeout, qs, $state){
+.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$location', function($scope, $timeout, qs, $location){
     $scope.user_question = "";
     $scope.showOverlay = false;
 
@@ -37,8 +37,8 @@ angular.module('quoraApp')
         qs.submitNewPost($scope.currentUser.id, title_string)
         .then(function(res){
             console.log("Successfully submitted question", res);
-            console.log("res data in navbar ctrl", res);
-            $state.go('qa', {'currPost' : res.data[0]});
+            //$state.go('qa', {'currPost' : res.data[0]});
+            $location.path('/qa/' + res.data[0].id);
         }, function(err){
           console.log("Couldn't post new question", err);
         })
