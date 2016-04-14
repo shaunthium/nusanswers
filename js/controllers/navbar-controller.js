@@ -7,7 +7,7 @@
         + home button
 */
 angular.module('quoraApp')
-.controller('NavCtrl', ['$scope', '$timeout', function($scope, $timeout){
+.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$state', function($scope, $timeout, qs, $state){
     $scope.user_question = "";
     $scope.showOverlay = false;
 
@@ -20,11 +20,21 @@ angular.module('quoraApp')
 
     */
     //TODO: maximum question length
-    $scope.submitQuestion = function(user_question){
-        if(!user_question) return; //Prevent a null post
-        $scope.user_question = "";
+    $scope.submitQuestion = function(title_string){
+        if(!title_string) return; //Prevent a null post
+        $scope.title_string = "";
         $scope.showOverlay = false; //Hide shading box
-        $scope.goToPost($scope.newPost(user_question));
+        //$scope.goToPost($scope.newPost(user_question));
+        console.log("trying to send " , title_string);
+        //user_id, title, content
+        qs.submitNewPost($scope.currentUser.userID, title_string)
+        .then(function(res){
+            console.log("Successfully submitted question", res); 
+            console.log("res data in navbar ctrl", res); 
+            $state.go('qa', {'currPost' : res.data[0]});
+        }, function(err){
+          console.log("Couldn't post new question", err);
+        })
     }
 
     $scope.toggleOverlay = function(){

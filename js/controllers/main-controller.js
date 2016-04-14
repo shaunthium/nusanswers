@@ -2,12 +2,13 @@
 angular.module('quoraApp')
 .controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
 
-    $scope.loading = true;
+    $scope.loading = false;
+    $scope.currentUser = { userID : "10209460093644289" };
 
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
-    $timeout(function(){
+    /*$timeout(function(){
         $scope.loading = false;
-    }, 1500)
+    }, 1500)*/
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated

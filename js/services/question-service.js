@@ -99,19 +99,45 @@ angular.module('quoraApp')
     //TODO: implement back-end integration
     /*FIXME: should we sanitize input before sending it to the server?*/
     //TODO: check for duplicate questions before storing a new question
-    function submitNewPost(title, user){
-        var serverReply = JSON.parse(JSON.stringify(newPost));
+
+    // send params:
+    // cmd : new_qns
+    // data : user_id, title, content, tag_string (comma separated tags)
+    function submitNewPost(userID, title){
+        /*var serverReply = JSON.parse(JSON.stringify(newPost));
         serverReply.title = title;
         serverReply.author = user;
-        return serverReply;
+        return serverReply;*/
+        return $http({
+          url: base_url + "server/questions.php",
+          method: "POST",
+          data: {
+            cmd: "new_qns",
+            user_id: userID,
+            title : title,
+            content : "",
+            tag_string : ""
+          }
+        });
+
     }
 
     //TODO: implement back-end integration
     /*FIXME: should we sanitize input before sending it to the server?*/
-    function submitNewComment(postID, commentBody, user){
+    function submitNewComment(postID, commentBody, userID){
         //This function should add the comment to the post server-side and return a comment object, which will be attached to the post client-side.
         //TODO: discuss the best way to add/delete comments and answers from posts
-        return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
+       // return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
+        return $http({
+          url: base_url + "server/comment_qns.php",
+          method: "POST",
+          data: {
+            cmd: "new_comment_qns",
+            user_id: userID,
+            qns_id: postID,
+            comment : commentBody
+          }
+        });
     }
 
     function getAnswersToCurrentPost(postID){
@@ -206,6 +232,20 @@ angular.module('quoraApp')
         
     }
 
+    function getCommentsFromQuestion(postID){
+
+      console.log("sending post id ", postID);
+
+      return $http({
+         method: "POST",
+         url: base_url + "/server/comment_qns.php",
+         data: {
+           cmd: 'get_all_comments_qns',
+           qns_id: postID
+         }
+       });
+    }
+
     //TODO: implement back-end integration
     function submitCancelDownvotePost(postID, commentID, user){
         return false;
@@ -259,6 +299,7 @@ angular.module('quoraApp')
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
         submitGetTrendingTags       : submitGetTrendingTags,
         submitAnswerToPost       : submitAnswerToPost,
+        getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost
     }
