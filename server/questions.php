@@ -245,9 +245,10 @@
 									'flavour' => 'New User'
 					),
 				'views'=>$latest['view_count'],
-				'desc'=>$latest['content'],
+				'content'=>$latest['content'],
 				'upvotes'=>$latest['score'],
-				'comments'=> $comment_array
+				'comments'=> $comment_array,
+				'total_answers' => $total_answers['total_answers']
 				
 				/*
 				'id'=>$latest['id'],
@@ -340,7 +341,7 @@
 				'tags'=>$tag_name_array,
 				'author'=> $author_array,
 				'views'=>$trending['view_count'],
-				'desc'=>$trending['content'],
+				'content'=>$trending['content'],
 				'upvotes'=>$trending['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers']
