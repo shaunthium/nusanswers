@@ -292,6 +292,17 @@ angular.module('quoraApp')
       });
     }
 
+    function getPost(id) {
+      return $http({
+        url: base_url + 'server/questions.php',
+        method: 'POST',
+        data: {
+          cmd: 'get_qns_info',
+          qns_id: id
+        }
+      });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -314,7 +325,8 @@ angular.module('quoraApp')
         getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost,
-        getCurrentUser        : getCurrentUser
+        getCurrentUser        : getCurrentUser,
+        getPost               : getPost
     }
 
 }]);

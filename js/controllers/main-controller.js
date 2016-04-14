@@ -3,21 +3,25 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
 
     $scope.loading = true;
-    $scope.currentUser = { userID : "10209460093644289" };
+    // $scope.currentUser = { userID : "10209460093644289" };
 
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
-
-      ezfb.api('/me',function (res) {
-        $scope.apiMe = res;
-        console.log($scope.apiMe);
-        qs.getCurrentUser($scope.apiMe.id).then(function(data) {
-          $scope.currentUser = data.data;
-          $scope.loading = false;
-          console.log($scope.currentUser);
-
-        })
-      });
+      console.log($scope.loginStatus);
+      if (res.status == 'connected') {
+        ezfb.api('/me',function (res) {
+          $scope.apiMe = res;
+          // console.log($scope.apiMe);
+          qs.getCurrentUser($scope.apiMe.id).then(function(data) {
+            $scope.currentUser = data.data;
+            $scope.loading = false;
+            console.log($scope.currentUser);
+          });
+        });
+      } else {
+        $scope.loading = false;
+        $scope.currentUser = null;
+      }
     });
 
     /*TODO: back-end integration
@@ -26,9 +30,8 @@ angular.module('quoraApp')
         state parameter.
     */
     $scope.goToPost = function(post){
-        $state.go('qa', {'currPost' : post});
-        console.log("going to post", post);
-       // $location.path('qa').search({id: post.id});
+        // $state.go('qa', {'currPost' : post});
+        $location.path('/qa').search({id: post.id});
     }
 
     //TODO: implement goToProfile function
@@ -110,13 +113,27 @@ angular.module('quoraApp')
     }
 
     $scope.showLogin = function(){
-        $('#login-modal').openModal();
+      $('#login-modal').openModal();
     }
 
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
         // $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
-        $scope.currentUser = { userID : "10209460093644289" };
+        // $scope.currentUser = { userID : "10209460093644289" };
+        ezfb.login(function(res) {
+          console.log(res);
+          if (res.status == 'connected') {
+            ezfb.api('/me',function (res) {
+              $scope.apiMe = res;
+              console.log($scope.apiMe);
+              qs.getCurrentUser($scope.apiMe.id).then(function(data) {
+                $scope.currentUser = data.data;
+                // $scope.loading = false;
+                console.log($scope.currentUser);
+              });
+            });
+          }
+        }, {scope: 'public_profile,email'});
         $('#login-modal').closeModal();
     }
 
