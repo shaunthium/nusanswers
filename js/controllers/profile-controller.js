@@ -29,7 +29,7 @@ angular.module('quoraApp')
   $scope.logout = function(){
     // $scope.$parent.currentUser = undefined;
     ezfb.logout(function(res) {
-      console.log(res);
+      // console.log(res);
     });
     $state.go('home');
   }

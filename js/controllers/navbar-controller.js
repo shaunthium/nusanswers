@@ -24,7 +24,7 @@ angular.module('quoraApp')
         if(!title_string) return; //Prevent a null post
 
         else if (!$scope.currentUser){
-            console.log("asadasda");
+            // console.log("asadasda");
             $scope.showLogin();
             return;
         }
@@ -32,15 +32,15 @@ angular.module('quoraApp')
         $scope.title_string = "";
         $scope.showOverlay = false; //Hide shading box
         //$scope.goToPost($scope.newPost(user_question));
-        console.log("trying to send " , title_string);
+        // console.log("trying to send " , title_string);
         //user_id, title, content
         qs.submitNewPost($scope.currentUser.id, title_string)
         .then(function(res){
-            console.log("Successfully submitted question", res);
+            // console.log("Successfully submitted question", res);
             //$state.go('qa', {'currPost' : res.data[0]});
             $location.path('/qa/' + res.data[0].id);
         }, function(err){
-          console.log("Couldn't post new question", err);
+          // console.log("Couldn't post new question", err);
         })
     }
 

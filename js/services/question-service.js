@@ -155,7 +155,7 @@ angular.module('quoraApp')
     function submitAnswerToPost(postID, userID, content){
       //console.log("Submitting answer to post ... ");
 
-      console.log("Sending from userID " , userID);
+      // console.log("Sending from userID " , userID);
 
       return $http({
         url: base_url + "server/answers.php",
@@ -206,9 +206,9 @@ angular.module('quoraApp')
            user_id: userID
          }
        }).then(function(data) {
-          console.log('Success in upvoting post'); // ?
+          // console.log('Success in upvoting post'); // ?
        }, function(err){
-          console.log("Error in upvoting post" , err);
+          // console.log("Error in upvoting post" , err);
        });
 
     }
@@ -235,7 +235,7 @@ angular.module('quoraApp')
 
     function getCommentsFromQuestion(postID){
 
-      console.log("sending post id ", postID);
+      // console.log("sending post id ", postID);
 
       return $http({
          method: "POST",
@@ -254,7 +254,7 @@ angular.module('quoraApp')
 
     //TODO: implement back-end integration
     function submitUpvoteComment(postID, commentID, user){
-        console.log("Upvote!");
+        // console.log("Upvote!");
         return false;
     }
 

@@ -13,7 +13,7 @@ angular.module('quoraApp')
             $scope.$watchCollection(
               function(){
                   return $scope.post;
-              }, 
+              },
               function(post){
                 if(post){
                   $scope.$watchCollection(
@@ -37,24 +37,24 @@ angular.module('quoraApp')
                 };
               }
             );
-      
+
             $scope.toggleShowComments = function(){
 
-                console.log("Toggle comments");
+                // console.log("Toggle comments");
 
                 $scope.showComments = !$scope.showComments;
                 $scope.cancelEdit();
 
-                console.log("post " , $scope.post.id);
+                // console.log("post " , $scope.post.id);
 
                 questionService.getCommentsFromQuestion($scope.post.id)
                 .then(function(res){
-                    
-                    console.log("got data " , res);
+
+                    // console.log("got data " , res);
                     $scope.post.comments = res.data;
-            
+
                 }, function(err){
-                    console.log("Error in getting comments", err);
+                    // console.log("Error in getting comments", err);
                 })
 
             }
@@ -77,9 +77,9 @@ angular.module('quoraApp')
 
                     // add comment to scope
                     $scope.post.comments.push(res);
-                    console.log("Success post comment", res);
+                    // console.log("Success post comment", res);
                 }, function(err){
-                    console.log("Error in posting comment", err);
+                    // console.log("Error in posting comment", err);
                 });
 
                 //$scope.post.comments.push($scope.$parent.newComment($scope.post.id, comment));

@@ -77,7 +77,7 @@ angular.module('quoraApp')
 
             $scope.incrementUpvotes = function(post, inc) {
 
-              console.log("incrementing upvotes on " , post.id );
+              // console.log("incrementing upvotes on " , post.id );
 
               // User should not be able to downvote/upvote multiple times
               // change loggedinUserId to $scope.facebookuserid or something..
@@ -118,7 +118,7 @@ angular.module('quoraApp')
                     scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
-                    console.log("answer " , scope.post);
+                    // console.log("answer " , scope.post);
                     scope.includeAuthorFlavor = true;
                     break;
             }
