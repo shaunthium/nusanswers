@@ -63,7 +63,6 @@
 		$result_answers_count = $db->query($query_answers_count);
 		$answers_count = mysqli_fetch_assoc($result_answers_count);
 		
-		
 		/*******************Query Questions Comments table ***************************/
 		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
 		$res = $db->query($query);
@@ -72,7 +71,7 @@
 		
 		if(!is_bool($res))
 		{
-			while($r = mysqli_fetch_assoc($res)){
+			while($r = mysqli_fetch_assoc($res)){ //for each comment
 				$user_id = $r["user_id"];
 				
 				/* Here we get the User Info to each comment */
@@ -85,6 +84,7 @@
 					'questionid' => $question_id,
 					'reported' => "false",
 					'liked' => "false",
+					'likes' => "0",
 					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
 								'karma' =>$author['score'],
 								'userid'=>$r["user_id"],
@@ -168,7 +168,7 @@
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
 		if(!is_bool($res))
 		{
-			while($r = mysqli_fetch_assoc($res)){
+			while($r = mysqli_fetch_assoc($res)){ //foreach answ
 				
 				/* Here we get the User Info to each answer */
 				$user_id = $r["user_id"];
@@ -198,6 +198,7 @@
 							'answerid' => $answers_id,
 							'reported' => "false",
 							'liked' => "false",
+							'likes' => "0",
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
 										'userid'=>$a["user_id"],
@@ -227,7 +228,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
@@ -245,6 +246,109 @@
 		$res = $db->query($query);
 
 	}
+	
+	
+	/*
+	* Toggle Likes a comment
+	*
+	* @param: user_id -> ID OF THE PERSON VOTING
+	* @param: comment_id
+	*/
+	else if($cmd == "like")
+	{
+		
+		global $db;
+		
+		/* Get current vote info to the Answer */
+		$query = "SELECT 1 FROM  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+		$result = $db->query($query);
+		
+
+		if(mysqli_num_rows($result) == 0) //Never liked before, proceed to like!
+		{
+			/* Insert like entry */
+			$query = "Insert Into Answer_Comments_Liked_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
+			$db->query($query);
+			
+			/* Here we get the User ID of the user who posted the Comment */
+			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+			$result = $db->query($query);
+			$comment_user_id = mysqli_fetch_assoc($result);
+			$comment_user_id = $comment_user_id["user_id"];
+			
+			/* Here we upvote the Comments likes by 1 */
+			$query = "UPDATE Answers_Comments SET likes = likes + 1 where id = $comment_id";
+			$db->query($query);
+			
+			/* Here we upvote the User score by 1*/
+			$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
+			$db->query($query);
+			
+		}
+		else //have voted before! Proceed to unlike
+		{
+			
+			/* Remove like entry */
+			$query = "Delete From Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+			$db->query($query);
+			
+			/* Here we downvote the Comments likes by 1 */
+			$query = "UPDATE Answers_Comments SET likes = likes - 1 where id = $comment_id";
+			$db->query($query);
+			
+			/* Here we get the User ID of the user who posted the Comment */
+			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+			$result = $db->query($query);
+			$comment_user_id = mysqli_fetch_assoc($result);
+			$comment_user_id = $comment_user_id["user_id"];
+			
+			/* Here we upvote the User score by 1*/
+			$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
+			$db->query($query);
+		}
+
+	}
+	
+	/*
+	* Toggle reports a comment
+	*
+	* @param: user_id -> ID OF THE PERSON VOTING
+	* @param: comment_id
+	*/
+	else if ($cmd == "report")
+	{
+		global $db;
+		
+		/* Get current vote info to the Answer */
+		$query = "SELECT 1 FROM  Answer_Comments_Reported_By_Users where comment_id = $comment_id and user_id = $user_id";
+		$result = $db->query($query);
+		
+
+		if(mysqli_num_rows($result) == 0) //Never reported before, proceed to report!
+		{
+			/* Insert report entry */
+			$query = "Insert Into Answer_Comments_Reported_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
+			$db->query($query);
+			
+			/* Here we upvote the Comments likes by 1 */
+			$query = "UPDATE Answers_Comments SET reports = reports + 1 where id = $comment_id";
+			$db->query($query);
+			
+			
+		}
+		else //have reported before! Proceed to unreport
+		{
+			
+			/* Remove reported entry */
+			$query = "Delete From Answer_Comments_Reported_By_Users where comment_id = $comment_id and user_id = $user_id";
+			$db->query($query);
+			
+			/* Here we downvote the Comments reports by 1 */
+			$query = "UPDATE Answers_Comments SET reports = reports - 1 where id = $comment_id";
+			$db->query($query);
+		}
+	}
+	
 	
 	/*
 	* Increases the score of the User and the Answer by 1
