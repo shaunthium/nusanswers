@@ -22,10 +22,14 @@ angular.module('quoraApp')
 
               console.log("trying to submit " , dangerousHTML);
 
-              questionService.submitAnswerToPost(post.id, 10209460093644289, dangerousHTML)
+              questionService.submitAnswerToPost(post.id, "10209460093644289", dangerousHTML)
                 .then(function(res){
-                  console.log("Successfully answered question", res);
+                  console.log("Successfully answered question", res.data);
                   $scope.post.total_answers++;
+                  if(!$scope.post.answers)
+                    $scope.post.answers = [];
+                  
+                  $scope.post.answers.push(res.data[0]);
 
                 }, function(err){
                   console.log("Error in answering question", err);

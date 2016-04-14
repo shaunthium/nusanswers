@@ -126,7 +126,10 @@ angular.module('quoraApp')
     }
 
     function submitAnswerToPost(postID, userID, content){
-      console.log("Submitting answer to post ... ");
+      //console.log("Submitting answer to post ... ");
+
+      console.log("Sending from userID " , userID);
+
       return $http({
         url: base_url + "server/answers.php",
         method: 'POST',
