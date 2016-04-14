@@ -7,20 +7,20 @@
 					<div style="min-height:210px;"class="card-content">
 						<div style="float:left; padding:15px; padding-right:25px;"class="image-upload">
 					    <label for="file-input">
-					         <img style="width:130px; cursor:pointer; height:130px;"src="{{currentUser.profileImg}}" alt="" class="circle">
+					         <img style="width:130px; cursor:pointer; height:130px;" ng-src="{{profileImg}}" alt="" class="circle">
 					    </label>
 							<input type="file" id="file-input"/>
 						</div>
-						<span class="card-title">{{currentUser.userID}}</span>
+						<span class="card-title">{{currentUser.first_name}}</span>
 						<br/>
 						<!-- karma -->
-						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma 999</span>
-			            <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p>
+						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma {{currentUser.score}}</span>
+			            <!-- <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p> -->
 			            <hr/>
 			            <!-- involved tags -->
-			            <b>Involved in</b>
-			            <div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
-						    Iamaprettylonghtag1
+			            <!-- <b>Involved in</b> -->
+			            <!-- <div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
+						    Iamaprettylonghtag1 -->
 			  			</div>
 			  			<br/>
 			  			<!-- make som check if user is currentuser to show this ... -->
@@ -31,10 +31,11 @@
 			</div>
 
 			<!-- question card begin -->
-			<div class="col s12 m6">
+
+			<!-- <div class="col s12 m6">
 				<h6>Questions</h6>
-				<hr/>
-				<div class="card">
+				<hr/> -->
+				<!-- <div class="card">
 					<div class="collection">
 		        <a ng-repeat="i in [1]"href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
@@ -51,15 +52,15 @@
 		        	</div>
 		        </a>
 		      </div>
-				</div>
+				</div> -->
 			<!-- question card end -->
-			</div>
+			<!-- </div> -->
 
 			<!-- answer card begin -->
-			<div class="col s12 m6">
+			 <!-- <div class="col s12 m6">
 				<h6>Answers</h6>
-				<hr/>
-				<div class="card">
+				<hr/> -->
+				<!-- <div class="card">
 					<div class="collection">
 		        <a ng-repeat="i in [1,2,3]"href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
@@ -76,11 +77,12 @@
 		        	</div>
 		        </a>
 		      </div>
-				</div>
+				</div> -->
 			<!-- end answer card -->
-			</div>
+			<!-- </div> -->
+
 		<!-- end row -->
-		</div>
+		<!-- </div> -->
 	<!-- end section -->
 	</div>
 

@@ -41,7 +41,8 @@ angular.module('quoraApp')
     //TODO: implement goToProfile function
     $scope.goToProfile = function(post){
         //FIXME: this is just a simple placeholder to demonstrate functionality
-        $state.go('profile', {'author' : post.author});
+        // $state.go('profile', {'author' : post.author});
+        $location.path('/profile/' + post);
     }
 
     $scope.newPost = function(title){

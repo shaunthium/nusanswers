@@ -21,7 +21,7 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
 		  })
 
   		.state('profile', {
-  		  url: '/profile',
+  		  url: '/profile/:profileId',
   		  templateUrl: '/views/profile.html',
   		  controller: 'ProfileCtrl'
   		});
