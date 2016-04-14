@@ -15,6 +15,8 @@ angular.module('quoraApp')
         }
         return posts.filter(function(post){
             var relevant = false;
+            if(!post.tags || typeof post.tags === 'undefined' || post.tags.length === 0)
+                return;
             post.tags.forEach(function(postTag){
                 tags.forEach(function(arrayTag){
                     relevant = relevant || postTag.toUpperCase() === arrayTag.toUpperCase();
