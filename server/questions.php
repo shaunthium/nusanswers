@@ -306,7 +306,7 @@
 				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
 				$result_tag_name = $db->query($query_tag_name);
 				$tag = mysqli_fetch_assoc($result_tag_name);
-				$tag_name_array[]  = $tag["content"];
+				$tag_name_array[]  =  $row['tag_id'];
 				$testString += $tag["content"];
 			}
 
