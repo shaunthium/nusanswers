@@ -1,5 +1,7 @@
 angular.module('quoraApp')
 .controller('ProfileCtrl', ['$stateParams','ezfb', '$scope', '$http', '$state', function($stateParams, ezfb, $scope, $http, $state){
+  var base_url = "http://139.59.247.83/";
+  // var base_url = '';
   var id = $stateParams.profileId;
   $scope.$watchCollection(function(){
     return $scope.user;
@@ -7,13 +9,14 @@ angular.module('quoraApp')
     $scope.user = user;
   });
   var user = $http({
-    url: 'server/users/main.php',
+    url: base_url + 'server/users/main.php',
     method: 'POST',
     data: {
       cmd: 'show',
       user_id: id
     }
   }).then(function(data) {
+    console.log('data', data);
     $scope.user = data.data;
   })
 
