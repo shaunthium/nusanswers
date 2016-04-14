@@ -292,13 +292,14 @@ angular.module('quoraApp')
       });
     }
 
-    function getCurrentUser(id) {
+    function getCurrentUser(id, token) {
       return $http({
         url: base_url + 'server/users/main.php',
         method: 'POST',
         data: {
-          cmd: 'show',
-          user_id: id
+          cmd: 'create',
+          user_id: id,
+          token: token
         }
       });
     }
@@ -337,7 +338,7 @@ angular.module('quoraApp')
         getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost,
-        getCurrentUser        : getCurrentUser,
+        getCurrentUser        : getCurrentUser
     }
 
 }]);

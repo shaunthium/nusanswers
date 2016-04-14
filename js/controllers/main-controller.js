@@ -7,20 +7,22 @@ angular.module('quoraApp')
 
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
-      console.log($scope.loginStatus);
+      // console.log($scope.loginStatus);
       if (res.status == 'connected') {
         ezfb.api('/me',function (res) {
           $scope.apiMe = res;
           // console.log($scope.apiMe);
-          qs.getCurrentUser($scope.apiMe.id).then(function(data) {
+          qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+          // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+            // console.log(data);
             $scope.currentUser = data.data;
             $scope.loading = false;
-            console.log($scope.currentUser);
+            // console.log($scope.currentUser);
           });
         });
       } else {
-        $scope.loading = false;
         $scope.currentUser = null;
+        $scope.loading = false;
       }
     });
 
@@ -123,15 +125,18 @@ angular.module('quoraApp')
         // $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
         // $scope.currentUser = { userID : "10209460093644289" };
         ezfb.login(function(res) {
-          console.log(res);
+          // console.log(res);
+          $scope.loginStatus = res;
           if (res.status == 'connected') {
             ezfb.api('/me',function (res) {
               $scope.apiMe = res;
-              console.log($scope.apiMe);
-              qs.getCurrentUser($scope.apiMe.id).then(function(data) {
+              // console.log($scope.apiMe);
+              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+              qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
                 $scope.currentUser = data.data;
+                // console.log($scope.currentUser);
                 // $scope.loading = false;
-                console.log($scope.currentUser);
+                // console.log($scope.currentUser);
               });
             });
           }
@@ -143,7 +148,7 @@ angular.module('quoraApp')
 
     qs.getQuestions().then(function (returnedData) {
         // $scope.loading = false;
-      console.log(returnedData);
+      // console.log(returnedData);
       $scope.posts = returnedData.data;
     });
     $scope.notifications = qs.getNotifications();
