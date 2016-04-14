@@ -9,31 +9,35 @@ angular.module('quoraApp')
             $scope.moreCommentsShown = false;
             $scope.noComments = true;
 
-
-
-            if(!$scope.post.comments || typeof $scope.post.comments === 'undefined' || $scope.post.comments.length === 0){
-                $scope.post.comments = [];
-            } 
-
+            // A bit ugly
             $scope.$watchCollection(
-                function(){
-                    //XXX: beware! does tight coupling occur between the comments section and a post?
-                    return $scope.post.comments;
-                },
-                function(newComments){
-                    if(newComments){
-                        $scope.lessComments = newComments.slice(0,2);
-                        $scope.moreComments = newComments.slice(2);
-                        $scope.hasMoreComments = $scope.moreComments.length > 0;
-                        $scope.noComments = false;
-                    }
+              function(){
+                  return $scope.post;
+              }, 
+              function(post){
+                if(post){
+                  $scope.$watchCollection(
+                    function(){
+                      //XXX: beware! does tight coupling occur between the comments section and a post?
+                      return $scope.post.comments;
+                    },
+                    function(newComments){
+                      if(newComments){
+                          $scope.lessComments = newComments.slice(0,2);
+                          $scope.moreComments = newComments.slice(2);
+                          $scope.hasMoreComments = $scope.moreComments.length > 0;
+                          $scope.noComments = false;
+                      }
 
-                    if(!newComments || newComments.length === 0){
-                        $scope.noComments = true;
+                      if(!newComments || newComments.length === 0){
+                          $scope.noComments = true;
+                      }
                     }
-                }
+                  );
+                };
+              }
             );
-
+      
             $scope.toggleShowComments = function(){
 
                 console.log("Toggle comments");

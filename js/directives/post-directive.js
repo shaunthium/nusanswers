@@ -82,10 +82,10 @@ angular.module('quoraApp')
               // User should not be able to downvote/upvote multiple times
               // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
-                post.score++;
+                post.upvotes++;
                 questionService.submitUpvotePost(post.id, $scope.currentUser.id);
               } else {
-                post.score--;
+                post.upvotes--;
                 questionService.submitDownvotePost(post.id, $scope.currentUser.id);
               }
 

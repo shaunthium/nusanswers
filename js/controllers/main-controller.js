@@ -25,7 +25,9 @@ angular.module('quoraApp')
         state parameter.
     */
     $scope.goToPost = function(post){
-        $state.go('qa', {'currPost' : post});
+
+        //$state.go('qa', {'currPost' : post});
+        $location.path('/qa/' + post.id);
         console.log("going to post", post);
        // $location.path('qa').search({id: post.id});
     }

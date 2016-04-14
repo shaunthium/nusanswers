@@ -281,6 +281,17 @@ angular.module('quoraApp')
 
     }
 
+    function getPost(postID){
+      return $http({
+        url: base_url + "server/questions.php",
+        method: 'POST',
+        data: {
+          cmd: 'get_qns_info',
+          qns_id: postID
+        }
+      });
+    }
+
     function getCurrentUser(id) {
       return $http({
         url: base_url + 'server/users/main.php',
@@ -311,6 +322,7 @@ angular.module('quoraApp')
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
         submitGetTrendingTags       : submitGetTrendingTags,
         submitAnswerToPost       : submitAnswerToPost,
+        getPost       : getPost,
         getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost,
