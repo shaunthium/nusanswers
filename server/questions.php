@@ -277,6 +277,8 @@
 		@return:	Information of all trending question in descending order in JSON format	
 	*/
 	if($cmd == "trending_qns"){
+		global $db;
+
 		$query = "SELECT * FROM Questions ORDER BY view_count DESC";
 		$result = $db->query($query);
 		$trending_array = array();
@@ -299,15 +301,12 @@
 			$result_tag_id = $db->query($query_tag_id);
 
 			$tag_name_array = array();
-			//Testing 
-			$testString = "";
-			//Testing
+		
 			while ($row = mysqli_fetch_assoc($result_tag_id)){
 				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
 				$result_tag_name = $db->query($query_tag_name);
 				$tag = mysqli_fetch_assoc($result_tag_name);
-				$tag_name_array[]  =  $row['tag_id'];
-				$testString += $tag["content"];
+				$tag_name_array[]  = $tag["content"];
 			}
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
@@ -353,7 +352,6 @@
 				'upvotes'=>$trending['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers'],
-				'test' => $testString
 								
 				/*
 				'id'=>$trending['id'],
