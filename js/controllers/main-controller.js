@@ -9,6 +9,7 @@ angular.module('quoraApp')
 
       ezfb.api('/me',function (res) {
         $scope.apiMe = res;
+        console.log($scope.apiMe);
         qs.getCurrentUser($scope.apiMe.id).then(function(data) {
           $scope.currentUser = data.data;
           console.log($scope.currentUser);

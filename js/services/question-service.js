@@ -3,7 +3,8 @@
 angular.module('quoraApp')
 .service('questionService', ['$q', '$http', function($q, $http){
 
-    var base_url = "http://139.59.247.83/";
+    // var base_url = "http://139.59.247.83/";
+    var base_url = '';
     var questions_url = "server/questions.php";
     var questions;
     var canceller;
