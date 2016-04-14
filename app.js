@@ -14,7 +14,7 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
 	    })
 
 	    .state('qa', {
-  		  url: '/qa/{5}',
+  		  url: '/qa',
   		  params:{'currPost': null},
   		  templateUrl: '/views/question-answers.html',
   		  controller: 'QACtrl'
