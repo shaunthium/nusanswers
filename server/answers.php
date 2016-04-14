@@ -410,16 +410,28 @@
 	}
 	
 	/*
-	* Increases the score of the User and the Answer by 1
+	* Creates a new answer only if he has not done so before.
 	*
-	* @param: answer_id,
+	* @param: question_id,
 	* @param: user_id -> ID OF THE PERSON VOTING
+	* @param: content
 	*/
 	else if($cmd == "createanswer")
 	{
 		global $db;
-		$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, '$content')";
-		$db->query($query);
+		
+		//Check if user has answered before
+		$query = "Select 1 from Answers where question_id = $question_id and user_id = $user_id";
+		$result = $db->query($query);
+		
+		if(mysqli_num_rows($result) == 0)
+		{
+			$query = "insert into Answers (user_id, question_id, content) Values ($user_id, $question_id, '$content')";
+			
+			$db->query($query);
+		}
+		else
+			echo "Error: Multiple Answers";
 	}
 	
 	/*
@@ -504,7 +516,7 @@
 			
 			
 		}
-		error_log(json_encode($answers_array));
+		//error_log(json_encode($answers_array));
 		echo json_encode($answers_array);	
 	}
 	
@@ -540,7 +552,7 @@
 				'chosen'=>$latest['chosen']
 			);
 		}
-		error_log(json_encode($latest_array));
+		//error_log(json_encode($latest_array));
 		echo json_encode($latest_array);		
 	}
 	
