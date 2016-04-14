@@ -101,9 +101,10 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
+
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
-
+            
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;

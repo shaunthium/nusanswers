@@ -2,7 +2,7 @@
 angular.module('quoraApp')
 .controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
 
-    $scope.loading = false;
+    $scope.loading = true;
     $scope.currentUser = { userID : "10209460093644289" };
 
     // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
@@ -111,6 +111,7 @@ angular.module('quoraApp')
     //TODO: get currentUser from database by logging in.
     
     qs.getQuestions().then(function (returnedData) {
+      $scope.loading = false;
       console.log(returnedData);
       $scope.posts = returnedData.data;
     });
