@@ -35,6 +35,9 @@ angular.module('quoraApp')
             );
 
             $scope.toggleShowComments = function(){
+
+                console.log("Toggle comments");
+
                 $scope.showComments = !$scope.showComments;
                 $scope.cancelEdit();
 
@@ -42,9 +45,10 @@ angular.module('quoraApp')
 
                 questionService.getCommentsFromQuestion($scope.post.id)
                 .then(function(res){
-                    console.log("Got Comments", res);
+                    
+                    console.log("got data " , res);
                     $scope.post.comments = res.data;
-
+            
                 }, function(err){
                     console.log("Error in getting comments", err);
                 })
@@ -68,7 +72,7 @@ angular.module('quoraApp')
                 .then(function(res){
 
                     // add comment to scope
-                    //$scope.comments.push(res.something...)
+                    $scope.post.comments.push(res);
                     console.log("Success post comment", res);
                 }, function(err){
                     console.log("Error in posting comment", err);

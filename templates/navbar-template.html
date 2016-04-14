@@ -38,7 +38,7 @@
         <li class="no-animate"ng-if="currentUser">
             <a style="font-size:0.9em;"class="white-text" href="#/profile">
               <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span >{{currentUser.name}}</span>
+              <span ng-if="currentUser" >{{currentUser.userID}}</span>
             </a>
         </li>
 

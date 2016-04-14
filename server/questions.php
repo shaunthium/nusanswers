@@ -1,4 +1,4 @@
-<?php 
+<?php
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
@@ -6,11 +6,11 @@
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $data->cmd;
-	
+
 	/*
 		Insert new questions into 'Questions' table
 		@param: 	user_id, title, content, tag_string
-		@optional:	content, tag_string	
+		@optional:	content, tag_string
 		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
@@ -26,10 +26,10 @@
 
 		//Content can be empty if user decide not to add addition info to the questions
 		if(!empty($content)){
-			$query = "INSERT INTO Questions(user_id, title, content, score, view_count) 
+			$query = "INSERT INTO Questions(user_id, title, content, score, view_count)
 				VALUES(".$user_id.",'".$title."','".$content."', 0, 0)";
 		}else{
-			$query = "INSERT INTO Questions(user_id, title, score, view_count) 
+			$query = "INSERT INTO Questions(user_id, title, score, view_count)
 				VALUES(".$user_id.",'".$title."', 0, 0)";
 		}
 
@@ -40,8 +40,8 @@
 		$result = $db->query($query_id);
 		$row = mysqli_fetch_array($result);
 		$qns_id =  $row['LAST_INSERT_ID()'];
-		
-		//Add new tags and into the questions if tag_string is !empty 
+
+		//Add new tags and into the questions if tag_string is !empty
 		if(!empty($tag_string)){
 			$tag_array = explode(",", $tag_string);
 			//Call add_tag($tag_array) function inside tags.php to add new tag not in the database
@@ -54,7 +54,7 @@
 		$query_qns_data = "SELECT * FROM Questions WHERE id=" . $qns_id;
 		$result_qns_data = $db->query($query_qns_data);
 		$qns_data_array = array();
-		
+
 		while ($qns_data = mysqli_fetch_assoc($result_qns_data)){
 			//Get the first name and last name of the author from 'users' table
 			$user_id = $qns_data['user_id'];
@@ -94,8 +94,8 @@
 			$result_comment = $db->query($query_comment);
 
 			$comment_array = array();
-		
-		
+
+
 			$qns_data_array[] = array(
 				'id'=>$qns_data['id'],
 				'title'=>$qns_data['title'],
@@ -120,9 +120,9 @@
 				*/
 			);
 		}
-		
-		echo json_encode($qns_data_array);		
-		
+
+		echo json_encode($qns_data_array);
+
 	}
 
 	/*
@@ -138,11 +138,11 @@
 			exit("Title is empty");
 		}
 
-		$query = "UPDATE Questions SET title='" . $title. "', content='" . $content . "' WHERE id=". $qns_id;	
-		$db->query($query);	
+		$query = "UPDATE Questions SET title='" . $title. "', content='" . $content . "' WHERE id=". $qns_id;
+		$db->query($query);
 	}
 
-	/* 
+	/*
 		Delete a question from 'Questions' table
 		@param: qns_id
 	*/
@@ -159,7 +159,7 @@
 	/*
 		Get and return all the infomation of a questions
 		@param:		qns_id
-		@return:	Information of a question in JSON format	
+		@return:	Information of a question in JSON format
 	*/
 	if($cmd == "get_qns_info"){
 		$qns_id= $data->qns_id;
@@ -169,12 +169,12 @@
 		while ($info = mysqli_fetch_assoc($result)){
 			$info_array[] = $info;
 		}
-		echo json_encode($info_array);		
+		echo json_encode($info_array);
 	}
 
 	/*
 		Get and return all latest questions in descending order of id
-		@return:	Information of all latest question in descending order in JSON format	
+		@return:	Information of all latest question in descending order in JSON format
 	*/
 	if($cmd == "latest_qns"){
 		$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
@@ -192,7 +192,7 @@
 			$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id=".$question_id;
 			$result_total_answers = $db->query($query_total_answers);
 			$total_answers = mysqli_fetch_assoc($result_total_answers);
-		
+
 			//Get all tags of a question from 'questions_tags' & 'tags' table
 			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
 			$result_tag_id = $db->query($query_tag_id);
@@ -235,7 +235,7 @@
 					);
 			}
 			$latest_array[] = array(
-				
+
 				'id'=>$latest['id'],
 				'title'=>$latest['title'],
 				'tags'=>$tag_name_array,
@@ -247,9 +247,8 @@
 				'views'=>$latest['view_count'],
 				'content'=>$latest['content'],
 				'upvotes'=>$latest['score'],
-				'comments'=> $comment_array,
-				'total_answers' => $total_answers['total_answers']
-				
+				'comments'=> $comment_array
+
 				/*
 				'id'=>$latest['id'],
 				'user_id'=>$latest['user_id'],
@@ -265,12 +264,12 @@
 				*/
 			);
 		}
-		echo json_encode($latest_array);		
+		echo json_encode($latest_array);
 	}
 
 	/*
 		Get and return all trending questions in descending order of view_count
-		@return:	Information of all trending question in descending order in JSON format	
+		@return:	Information of all trending question in descending order in JSON format
 	*/
 	if($cmd == "trending_qns"){
 		$query = "SELECT * FROM Questions ORDER BY view_count DESC";
@@ -289,7 +288,7 @@
 									.$question_id;
 			$result_total_answers = $db->query($query_total_answers);
 			$total_answers = mysqli_fetch_assoc($result_total_answers);
-		
+
 			//Get all tags of a question from 'questions_tags' & 'tags' table
 			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
 			$result_tag_id = $db->query($query_tag_id);
@@ -345,7 +344,7 @@
 				'upvotes'=>$trending['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers']
-								
+
 				/*
 				'id'=>$trending['id'],
 				'user_id'=>$trending['user_id'],
@@ -361,7 +360,7 @@
 				*/
 			);
 		}
-		echo json_encode($trending_array);		
+		echo json_encode($trending_array);
 	}
 
 	/*
@@ -374,7 +373,7 @@
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
 
-		vote_qns($cmd, $table_name, $qns_id, $user_id);		
+		vote_qns($cmd, $table_name, $qns_id, $user_id);
 	}
 
 	/*
@@ -395,7 +394,7 @@
 		@'votes.php' : vote_qns($cmd, $table_name, $qns_id, $user_id)
 		@param:	qns_id, user_id
 	*/
-	if($cmd == "reset_up_vote_qns"){	
+	if($cmd == "reset_up_vote_qns"){
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -408,7 +407,7 @@
 		@'votes.php' : vote_qns($cmd, $table_name, $qns_id, $user_id)
 		@param:	qns_id, user_id
 	*/
-	if($cmd == "reset_down_vote_qns"){		
+	if($cmd == "reset_down_vote_qns"){
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -429,7 +428,7 @@
 	/*
 		Get all questions of a user
 		@param: user_id
-		@return: list of questions posted by user 
+		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
 		$user_id = $db->escape_string($data->user_id);
@@ -438,7 +437,7 @@
 		$qns_array = array();
 		while ($qns = mysqli_fetch_assoc($result)){
 			//Get the first name and last name of the author from 'users' table
-		
+
 			$qns_array[] = array(
 				'id'=>$qns['id'],
 				'user_id'=>$qns['user_id'],
@@ -450,16 +449,16 @@
 				'updated_at'=>$qns['updated_at'],
 			);
 		}
-		echo json_encode($qns_array);	
+		echo json_encode($qns_array);
 
 	}
 
-	
+
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	/* Code meant for internal testing only */
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	/* 
+	/*
 	For testing purpose only
 	Update 'score' of user using 'id'
 	*/
@@ -474,7 +473,7 @@
 		}
 	}
 
-	/* 
+	/*
 	For testing purpose only
 	Update 'view_count' of user using 'id'
 	*/
@@ -488,7 +487,5 @@
 			echo "Fail to update view_count";
 		}
 	}
-
-	
 
 ?>

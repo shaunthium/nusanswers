@@ -27,10 +27,10 @@ angular.module('quoraApp')
         //$scope.goToPost($scope.newPost(user_question));
         console.log("trying to send " , title_string);
         //user_id, title, content
-        qs.submitNewPost($scope.currentUser.userID, title_string)
+        qs.submitNewPost($scope.currentUser.id, title_string)
         .then(function(res){
-            console.log("Successfully submitted question", res); 
-            console.log("res data in navbar ctrl", res); 
+            console.log("Successfully submitted question", res);
+            console.log("res data in navbar ctrl", res);
             $state.go('qa', {'currPost' : res.data[0]});
         }, function(err){
           console.log("Couldn't post new question", err);

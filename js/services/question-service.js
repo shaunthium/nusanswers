@@ -4,6 +4,7 @@ angular.module('quoraApp')
 .service('questionService', ['$q', '$http', function($q, $http){
 
     var base_url = "http://139.59.247.83/";
+    //var base_url = '';
     var questions_url = "server/questions.php";
     var questions;
     var canceller;
@@ -198,7 +199,7 @@ angular.module('quoraApp')
 
       $http({
          method: "POST",
-         url: base_url + "/server/questions.php",
+         url: base_url + "server/questions.php",
          data: {
            cmd: 'set_up_vote_qns',
            qns_id: postID,
@@ -222,14 +223,14 @@ angular.module('quoraApp')
 
       return $http({
          method: "POST",
-         url: base_url + "/server/questions.php",
+         url: base_url + "server/questions.php",
          data: {
            cmd: 'set_down_vote_qns',
            qns_id: postID,
            user_id: userID
          }
        });
-        
+
     }
 
     function getCommentsFromQuestion(postID){
@@ -238,7 +239,7 @@ angular.module('quoraApp')
 
       return $http({
          method: "POST",
-         url: base_url + "/server/comment_qns.php",
+         url: base_url + "server/comment_qns.php",
          data: {
            cmd: 'get_all_comments_qns',
            qns_id: postID
@@ -271,13 +272,24 @@ angular.module('quoraApp')
     function submitGetTrendingTags(){
         // return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
         return $http({
-          url: base_url + "/server/tags.php",
+          url: base_url + "server/tags.php",
           method: "POST",
           data: {
             cmd: "get_trending_tag"
           }
         });
 
+    }
+
+    function getCurrentUser(id) {
+      return $http({
+        url: base_url + 'server/users/main.php',
+        method: 'POST',
+        data: {
+          cmd: 'show',
+          user_id: id
+        }
+      });
     }
 
     return {
@@ -301,7 +313,8 @@ angular.module('quoraApp')
         submitAnswerToPost       : submitAnswerToPost,
         getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
-        getAnswersToCurrentPost : getAnswersToCurrentPost
+        getAnswersToCurrentPost : getAnswersToCurrentPost,
+        getCurrentUser        : getCurrentUser
     }
 
 }]);

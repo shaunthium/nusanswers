@@ -2,12 +2,14 @@
   require_once('functions.php');
 
   $request_data = file_get_contents("php://input");
-  $data = json_decode($request_data);
-  $cmd = $data->cmd;
+  $data = json_decode($request_data, true);
+  // $cmd = $data->cmd;
+  $cmd = $data['cmd'];
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($cmd == "show") {
       // Get user
-      $user_id = $data->user_id;
+      // $user_id = $data->user_id;
+      $user_id = $data['user_id'];
       $result = get_user($user_id);
 
       if (!$result) {
