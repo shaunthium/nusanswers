@@ -57,6 +57,8 @@ angular.module('quoraApp')
     //   // console.log(res);
     // });
     $scope.currentUser = undefined;
+    $scope.resetQuestionsFeed();
+    $scope.updateQuestionsFeed();
     $state.go('home');
   }
 

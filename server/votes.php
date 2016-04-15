@@ -3,7 +3,7 @@
 	global $db;
 
 	$request_data = file_get_contents("php://input");
-  	$data = json_decode($request_data);
+  	$data = json_decode($request_data, true);
   	$cmd = $data->cmd;
   	
 	/*
