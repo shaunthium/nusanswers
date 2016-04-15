@@ -75,7 +75,7 @@
 		{
 			while($r = mysqli_fetch_assoc($res)){ //for each comment
 				$user_id = $r["user_id"];
-				error_log("Comment user id is >>" . $user_id);
+				
 				/* Here we get the User Info to each comment */
 				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 				$result_author = $db->query($query_author);
@@ -102,18 +102,19 @@
 		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
 		{
 			/*******************Query Question table ***************************/
-			$query = "select Questions.*, '' as tags from Questions where Questions.id = ". $question_id;
+			$query = "select Questions.* from Questions where Questions.id = ". $question_id;
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
 			
+			//$tag_array = explode(",", $post['tags']);
 			
 			
 			$questionResult = array(
 
 				'id'=>$post['id'],
 				'title'=>$post['title'],
-				'tags' => $post['tags'],
+				'tags' => array(),
 				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
@@ -136,12 +137,14 @@
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
-			error_log("here 2!! ". $author['first_name']);
+			
+			$tag_array = explode(",", $post['tags']);
+			
 			$questionResult = array(
 
 				'id'=>$post['id'],
 				'title'=>$post['title'],
-				'tags' => $post['tags'],
+				'tags' => $tag_array,
 				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
@@ -232,7 +235,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
