@@ -36,6 +36,7 @@
 	* Gets details of Questions, Comments and Answers, and answers comments
 	*
 	* @param: question_id
+	* @param: user_id   => UID of CURRENT USER
 	* @return: VISIT :http://www.jsoneditoronline.org/?id=313a2b0f90376c791e4b965fa4b0cdf5
 	* To see how the json_encode looks like
 	*/
@@ -50,21 +51,33 @@
 		/* Here we get the User ID of the question */
 		$query = "SELECT user_id FROM Questions where id = $question_id";
 		$result = $db->query($query);
-		$user_id = mysqli_fetch_assoc($result);
-		$user_id = $user_id["user_id"];
+		$question_user_id = mysqli_fetch_assoc($result);
+		$question_user_id = $question_user_id["user_id"];
 		
 		/* Here we get the User Info to each question */
-		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$question_user_id;
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
-		/* Here we get if a Question has been answered */
-		$query_answered = "Select 1 from Answers where question_id = $question_id";
-		$result_answered = $db->query($query_answered);
-		if(mysqli_num_rows($result_answered) == 0)
+		/* Here we get if a Question has been answered BY CURRENT USER*/
+		if(!isset($data->user_id))
+		{
+			//error_log("IS NOT SET\n");
 			$answered = "false";
-		else
-			$answered = "true";
+		}
+		else //if it is set
+		{
+			//error_log("IS SET\n");
+			$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
+			$result_answered = $db->query($query_answered);
+			if(mysqli_num_rows($result_answered) == 0)
+				$answered = "false";
+			else
+				$answered = "true";
+			
+			//error_log("$answered\n");
+		}
+		
 		
 		
 		/* Here we get the number of answers to each question */
@@ -81,10 +94,10 @@
 		if(!is_bool($res))
 		{
 			while($r = mysqli_fetch_assoc($res)){ //for each comment
-				$user_id = $r["user_id"];
+				$comment_user_id = $r["user_id"];
 				
 				/* Here we get the User Info to each comment */
-				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$comment_user_id;
 				$result_author = $db->query($query_author);
 				$comment_author = mysqli_fetch_assoc($result_author);
 				
@@ -187,8 +200,8 @@
 			while($r = mysqli_fetch_assoc($res)){ //foreach answ
 				
 				/* Here we get the User Info to each answer */
-				$user_id = $r["user_id"];
-				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$answer_user_id = $r["user_id"];
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
 				$result_author = $db->query($query_author);
 				$author = mysqli_fetch_assoc($result_author);
 				
@@ -205,7 +218,7 @@
 					while($a = mysqli_fetch_assoc($res2)){
 						$user_id2 = $a["user_id"];
 						/* Here we get the User Info to each comment */
-						$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+						$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
 						$result_author2 = $db->query($query_author2);
 						$author2 = mysqli_fetch_assoc($result_author2);
 						
