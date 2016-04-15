@@ -2,7 +2,10 @@
     <div class="card-content">
 
         <tag ng-repeat="tag in post.tags"></tag>
-        <br>
+
+        <!-- <br ng-if="type !== 'answer' || post.tags.length > 2"> -->
+        <br ng-if="post.tags.length > 0 && type !== 'answer'"/>
+
         <span ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
                 <!-- <span style="color:red;">{{post.id}}</span> {{post.title}}</span> -->
@@ -11,6 +14,10 @@
                 <!-- <span style="color:red;">{{post.id}}</span> {{post.title}}</span> -->
                 {{post.title}}</span>
         </span>
+
+        <div ng-if="type == 'question'" style="background:red; width:40px; height:40px;">
+            EDIT BUTTON
+        </div>
 
         <ul style="border:0;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">

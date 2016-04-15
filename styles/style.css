@@ -49,26 +49,6 @@ to prevent collapsing during animation*/
 
 
 
-.animate-search-popup.ng-enter,
-.animate-search-popup.ng-leave {
-  -webkit-transition:all linear 0.2s;
-  transition:all linear 0.2s;
-}
-
-.animate-search-popup.ng-leave.ng-leave-active,
-
-.animate-search-popup.ng-enter {
-  opacity:0;
-  top:100px;
-}
-
-.animate-search-popup.ng-leave,
-
-.animate-search-popup.ng-enter.ng-enter-active {
-  opacity:1;
-  top:80px;
-}
-
 .animate-fade-in.ng-move,
 .animate-fade-in.ng-enter,
 .animate-fade-in.ng-leave {
@@ -346,7 +326,6 @@ div.suggestion-box-info{
 
 }
 
-
 /* Need media queries for these  */
 
 search-popup{
@@ -356,7 +335,44 @@ search-popup{
   z-index:999;  
   border-radius:2px;
   top:80px;
-  transition: all 0.1s;
+  transition: all 0.2s;
+}
+
+search-popup.ng-enter, search-popup.ng-leave-active{
+  top:100px;
+  opacity:0;
+}
+
+search-popup.ng-enter-active{
+  top:80px;
+  opacity:1;
+}
+/*
+.animate-search-popup.ng-enter,
+.animate-search-popup.ng-leave {
+  -webkit-transition:all linear 0.2s;
+  transition:all linear 0.2s;
+}*/
+/*
+.animate-search-popup.ng-leave.ng-leave-active,
+.animate-search-popup.ng-enter {
+  opacity:0;
+  top:100px;
+}
+
+.animate-search-popup.ng-leave,
+
+.animate-search-popup.ng-enter.ng-enter-active {
+  opacity:1;
+  top:80px;
+}*/
+
+#overlay-container.ng-enter, #overlay-container.ng-leave-active{
+  opacity:0;
+  
+}
+#overlay-container.ng-enter-active{
+  opacity:1;
 }
 
 search-popup:after {

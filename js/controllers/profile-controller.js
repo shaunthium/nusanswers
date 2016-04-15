@@ -36,9 +36,10 @@ angular.module('quoraApp')
   });
 
   $scope.logout = function(){
-    ezfb.logout(function(res) {
-      // console.log(res);
-    });
+    // ezfb.logout(function(res) {
+    //   // console.log(res);
+    // });
+    $scope.currentUser = undefined;
     $state.go('home');
   }
 

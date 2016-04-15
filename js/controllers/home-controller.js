@@ -27,6 +27,15 @@ angular.module('quoraApp')
 };
 })
 .controller('HomeCtrl', [ '$scope', '$stateParams', 'byTagsFilter', function($scope, $stateParams, filterByTags){
+
+
+
+    $scope.toggleFooter = function(post){
+
+        console.log("ASDASDASDA", post);
+
+    }
+
     $scope.activeTags = [];
 
     //Watch for changes in activeTags, coming from the trending-box
