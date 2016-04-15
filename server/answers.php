@@ -228,7 +228,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
