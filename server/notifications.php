@@ -29,7 +29,7 @@
 
 			$notifications_array[] = array(
 				'id' => $notification['id'],
-				'qns_id' => $notification['qns_id'],
+				'qns_id' => $notification['question_id'],
 				'title' => $notification['title'],
 				'answerer_id' => $notification['answerer_id'],
 				'answerer_name' => $answerer_name['last_name'] . " "  . $answerer_name['first_name'],
@@ -48,7 +48,7 @@
 	if($cmd == "checked_notifications"){
 		$user_id = $db->escape_string($data->user_id);
 		$notification_id_string = $db->escape_string($$data->notification_id_string);
-		
+
 		$notification_id_array = explode(",", $notification_id_string);
 
 		foreach($notification_id_array as $notification_id){
