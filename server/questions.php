@@ -4,7 +4,7 @@
 	require_once('votes.php');
 
 	$request_data = file_get_contents("php://input");
-  	$data = json_decode($request_data, true);
+  	$data = json_decode($request_data);
   	$cmd = $data->cmd;
 
 	/*
