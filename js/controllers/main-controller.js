@@ -1,8 +1,9 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
-
+    $scope.posts = [];
     $scope.loading = true;
+    // $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
     ezfb.getLoginStatus(function (res) {
 
@@ -13,7 +14,6 @@ angular.module('quoraApp')
           $scope.apiMe = res;
           // console.log($scope.apiMe);
           qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-          // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
             // console.log(data);
             $scope.currentUser = data.data;
             $scope.loading = false;
@@ -45,78 +45,6 @@ angular.module('quoraApp')
         $location.path('/profile/' + post);
     }
 
-    $scope.newPost = function(title){
-        return qs.submitNewPost(title, $scope.currentUser);
-    }
-
-    /*
-        postID: identifies the post. FIXME: what does the server need to identify the post?
-        body: body of the comment
-    */
-    $scope.newComment = function(postID, body){
-        //FIXME: should we send the entire user object? the userid? the name?
-        return qs.submitNewComment(postID, body, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.deleteComment = function(postID, commentID){
-        return qs.submitDeleteComment(postID, commentID);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.reportComment = function(postID, commentID){
-        return qs.submitReportComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelReportComment = function(postID, commentID){
-        return qs.submitCancelReportComment(postID, commentID, $scope.currentUser);
-    }
-
-    $scope.reportPost = function(postID){
-        return qs.submitReportPost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelReportPost = function(postID){
-        return qs.submitCancelReportPost(postID, $scope.currentUser);
-    }
-
-    $scope.upvotePost = function(postID){
-        return qs.submitUpvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelUpvotePost = function(postID){
-        return qs.submitCancelUpvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.downvotePost = function(postID){
-        return qs.submitDownvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelDownvotePost = function(postID){
-        return qs.submitCancelDownvotePost(postID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.upvoteComment = function(postID, commentID){
-        return qs.submitUpvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelUpvoteComment = function(postID, commentID){
-        return qs.submitCancelUpvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.downvoteComment = function(postID, commentID){
-        return qs.submitDownvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelDownvoteComment = function(postID, commentID){
-        return qs.submitCancelDownvoteComment(postID, commentID, $scope.currentUser);
-    }
-
     $scope.showLogin = function(){
       $('#login-modal').openModal();
     }
@@ -145,15 +73,24 @@ angular.module('quoraApp')
         }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
+        $scope.updateQuestionsFeed($scope.currentUser.id);
     }
 
     //TODO: get currentUser from database by logging in.
+    $scope.updateQuestionsFeed = function(userID, index){
+        qs.getQuestions(userID, index).then(
+            function (returnedData) {
+                $scope.loading = false;
+                // console.log(returnedData);
+                $scope.posts = $scope.posts.concat(returnedData.data);
+            },
+            function(err){
+                console.log("Error while updating the questions feed!");
+            });
+    }
 
-    qs.getQuestions().then(function (returnedData) {
-        $scope.loading = false;
-      // console.log(returnedData);
-      $scope.posts = returnedData.data;
-    });
+    $scope.updateQuestionsFeed();
+
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
       $scope.trendingTags = data.data;

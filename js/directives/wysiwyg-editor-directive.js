@@ -19,34 +19,33 @@ angular.module('quoraApp')
             });
 
             var submitAnswerToServer = function(post, dangerousHTML){
-
-              // console.log("trying to submit " , dangerousHTML);
-
               questionService.submitAnswerToPost(post.id, $scope.currentUser.id, dangerousHTML)
+
                 .then(function(res){
-                  // console.log("Successfully answered question", res.data);
-                  $scope.post.total_answers++;
-                  if(!$scope.post.answers)
-                    $scope.post.answers = [];
+                    // console.log("Successfully answered question", res.data);
+                    $scope.post.total_answers++;
+                    if(!$scope.post.answers){
+                        $scope.post.answers = [];
+                    }
 
-                  $scope.post.answers.push(res.data[0]);
-
+                    $scope.post.answers.push(res.data[0]);
+                    $scope.answered = true;
                 }, function(err){
                   // console.log("Error in answering question", err);
-                })
+                });
             }
 
-           // TODO: Here goes user on submit click
-           $scope.submit = function(post){
+            // TODO: Here goes user on submit click
+            $scope.submit = function(post){
 
-              submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
-               //clean up
-              $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
-              $scope.toggleFooter();
-           }
+                submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
+                //clean up
+                $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
+                $scope.toggleFooter();
+            }
 
             $scope.toggleTextEditor = function(editorId){
-              $scope.toggleFooter();
+                $scope.toggleFooter();
             }
         },
         link : function(scope, elems, attrs){

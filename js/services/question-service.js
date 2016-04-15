@@ -76,12 +76,14 @@ angular.module('quoraApp')
     var notifications = ["Notification 1","Notification 2","Notification 3","Notification 4"];
     /*END HARDCODED SERVER REPLY OBJECTS*/
 
-    function getQuestions() {
+    function getQuestions(userID, index) {
       return $http({
         method: 'POST',
         url: base_url + questions_url,
         data: {
           cmd: "trending_qns",
+          user_id : userID,
+          index : index
         },
         dataType: 'json'
       });
@@ -195,21 +197,36 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitUpvotePost(postID, userID){
+    function submitUpvotePost(postID, userID, type){
+      if (type != 'answer') {
+        $http({
+           method: "POST",
+           url: base_url + "server/questions.php",
+           data: {
+             cmd: 'set_up_vote_qns',
+             qns_id: postID,
+             user_id: userID
+           }
+         }).then(function(data) {
+            // console.log('Success in upvoting post'); // ?
+         }, function(err){
+            // console.log("Error in upvoting post" , err);
+         });
+      } else {
+        $http({
+          method: 'POST',
+          url: base_url + 'server/answers.php',
+          data: {
+            cmd: 'upvote',
+            answer_id: postID,
+            user_id: userID
+          }
+        }).then(function(data) {
 
-      $http({
-         method: "POST",
-         url: base_url + "server/questions.php",
-         data: {
-           cmd: 'set_up_vote_qns',
-           qns_id: postID,
-           user_id: userID
-         }
-       }).then(function(data) {
-          // console.log('Success in upvoting post'); // ?
-       }, function(err){
-          // console.log("Error in upvoting post" , err);
-       });
+        }, function(err) {
+
+        });
+      }
 
     }
 
@@ -282,12 +299,20 @@ angular.module('quoraApp')
     }
 
     function getPost(postID){
+      // return $http({
+      //   url: base_url + "server/questions.php",
+      //   method: 'POST',
+      //   data: {
+      //     cmd: 'get_qns_info',
+      //     qns_id: postID
+      //   }
+      // });
       return $http({
-        url: base_url + "server/questions.php",
+        url: base_url + 'server/answers.php',
         method: 'POST',
         data: {
-          cmd: 'get_qns_info',
-          qns_id: postID
+          cmd: 'getanswers',
+          question_id: postID
         }
       });
     }
@@ -303,17 +328,17 @@ angular.module('quoraApp')
         }
       });
     }
-
-    function getPost(id) {
-      return $http({
-        url: base_url + 'server/questions.php',
-        method: 'POST',
-        data: {
-          cmd: 'get_qns_info',
-          qns_id: id
-        }
-      });
-    }
+    //
+    // function getPost(id) {
+    //   return $http({
+    //     url: base_url + 'server/questions.php',
+    //     method: 'POST',
+    //     data: {
+    //       cmd: 'get_qns_info',
+    //       qns_id: id
+    //     }
+    //   });
+    // }
 
     return {
         getQuestions                :   getQuestions,
