@@ -183,7 +183,16 @@
 		@return:	Information of all latest question in descending order in JSON format
 	*/
 	if($cmd == "latest_qns"){
-		$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
+
+		if(isset($data->index)){
+			$limit_qns = 10;
+			$index = $_POST["index"];
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
+		}else{
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
+		}
+
+		//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
 		$result = $db->query($query);
 		$latest_array = array();
 		while ($latest = mysqli_fetch_assoc($result)){
@@ -282,7 +291,15 @@
 	if($cmd == "trending_qns"){
 		global $db;
 
-		$query = "SELECT * FROM Questions ORDER BY view_count DESC";
+		if(isset($data->index)){
+			$limit_qns = 10;
+			$index = $_POST["index"];
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
+		}else{
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
+		}
+
+		//$query = "SELECT * FROM Questions ORDER BY view_count DESC";
 		$result = $db->query($query);
 		$trending_array = array();
 		while ($trending = mysqli_fetch_assoc($result)){
