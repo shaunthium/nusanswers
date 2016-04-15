@@ -46,7 +46,7 @@ angular.module('quoraApp')
                 $scope.showLogin();
                 return;
               }
-              
+
               // User should not be able to downvote/upvote multiple times
               // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
@@ -73,7 +73,7 @@ angular.module('quoraApp')
             scope.showFooter = "showFooter" in attrs;
 
             //This watch is for getting the post in question-answers view.
-            scope.$watch(function(){
+            scope.$watchCollection(function(){
                 return scope.post;
             },
             function(post){

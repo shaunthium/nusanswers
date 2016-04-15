@@ -26,9 +26,9 @@ angular.module('quoraApp')
                     if(!$scope.post.answers){
                         $scope.post.answers = [];
                     }
-                    
+
                     $scope.post.answers.push(res.data[0]);
-                    $scope.answered = true;
+                    $scope.post.answered = true;
                 }, function(err){
                     // console.log("Error in answering question", err);
                 });
