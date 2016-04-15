@@ -58,6 +58,13 @@
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
+		/* Here we get if a Question has been answered */
+		$query_answered = "Select 1 from Answers where question_id = $question_id";
+		$result_answered = $db->query($query_answered);
+		if(mysqli_num_rows($result_answered) == 0)
+			$answered = "false";
+		else
+			$answered = "true";
 		
 		
 		/* Here we get the number of answers to each question */
@@ -124,7 +131,8 @@
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult
+				'comments' => $commentsResult,
+				'answered' => $answered
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			
@@ -154,7 +162,8 @@
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult
+				'comments' => $commentsResult,
+				'answered' => $answered
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));
