@@ -72,12 +72,22 @@ angular.module('quoraApp')
             };
 
             $scope.removeTag = function(tag){
-                $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
-                //TODO: communicate with back-end
+                console.log("Remove tag");
+                questionService.removeTag($scope.post.id, tag).then(function(res){
+                    $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
+                },
+                function(err){
+                    console.log("Error while deleting tag from the question!");
+                });
             }
 
             $scope.addTag = function(tag){
-                //TODO: implement addTag functionality
+                questionService.addTag($scope.post.id, tag).then(function(res){
+                    $scope.post.tags.push(tag);
+                },
+                function(err){
+                    console.log("Error while adding tag to the question!");
+                });
             }
         },
         link : function(scope, element, attrs){
@@ -91,8 +101,19 @@ angular.module('quoraApp')
             function(post){
                 if(post){
                     scope.answered = post.answered;
+                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
                 }
             });
+
+            //This watch will make the post editable when the user logs-in in the question-answers view
+            scope.$watchCollection(function(){
+                return scope.currentUser;
+            },
+            function(currentUser){
+                if(currentUser && scope.post){
+                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
+                }
+            })
 
             switch(attrs.type){
                 case "feed-item":

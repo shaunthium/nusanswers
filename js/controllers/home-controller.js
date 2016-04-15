@@ -27,6 +27,13 @@ angular.module('quoraApp')
     };
 })
 .controller('HomeCtrl', [ '$scope', '$stateParams', 'byTagsFilter', function($scope, $stateParams, filterByTags){
+    $scope.resetQuestionsFeed();
+    if($scope.currentUser){
+        $scope.updateQuestionsFeed($scope.currentUser.id);
+    }
+    else{
+        $scope.updateQuestionsFeed();
+    }
     $scope.activeTags = [];
 
     //Watch for changes in posts

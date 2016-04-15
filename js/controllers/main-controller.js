@@ -54,7 +54,7 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+        $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
         // $scope.currentUser = { userID : "10209460093644289" };
         // ezfb.login(function(res) {
@@ -107,8 +107,6 @@ angular.module('quoraApp')
     $scope.resetQuestionsFeed = function(){
         $scope.posts = [];
     }
-
-    $scope.updateQuestionsFeed();
 
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {

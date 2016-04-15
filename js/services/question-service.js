@@ -351,6 +351,30 @@ angular.module('quoraApp')
         });
     }
 
+    function addTag(questionID, tag){
+        return $http({
+          url: base_url + 'server/tags.php',
+          method: 'POST',
+          data: {
+            cmd: 'tag_qns',
+            qns_id : questionID,
+            tag_string : tag
+          }
+        });
+    }
+
+    function removeTag(questionID, tag){
+        return $http({
+          url: base_url + 'server/tags.php',
+          method: 'POST',
+          data: {
+            cmd: 'delete_tag',
+            qns_id : questionID,
+            tag_string : tag
+          }
+        });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -375,7 +399,9 @@ angular.module('quoraApp')
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost,
         getCurrentUser        : getCurrentUser,
-        getQuestionsSummary         :   getQuestionsSummary
+        getQuestionsSummary         :   getQuestionsSummary,
+        addTag                      :   addTag,
+        removeTag                   :   removeTag
     }
 
 }]);

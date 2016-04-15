@@ -19,14 +19,13 @@ angular.module('quoraApp')
             });
 
             var submitAnswerToServer = function(post, dangerousHTML){
-                questionService.submitAnswerToPost(post.id, "10209460093644289", dangerousHTML)
+                questionService.submitAnswerToPost(post.id, $scope.currentUser.id, dangerousHTML)
                 .then(function(res){
                     // console.log("Successfully answered question", res.data);
                     $scope.post.total_answers++;
                     if(!$scope.post.answers){
                         $scope.post.answers = [];
                     }
-
                     $scope.post.answers.push(res.data[0]);
                     $scope.post.answered = true;
                 }, function(err){
