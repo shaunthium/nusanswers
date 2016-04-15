@@ -73,6 +73,10 @@ angular.module('quoraApp')
         }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
+        /*
+
+        */
+        $scope.posts = [];
         $scope.updateQuestionsFeed($scope.currentUser.id);
     }
 
@@ -81,7 +85,6 @@ angular.module('quoraApp')
         qs.getQuestions(userID, index).then(
             function (returnedData) {
                 $scope.loading = false;
-                // console.log(returnedData);
                 $scope.posts = $scope.posts.concat(returnedData.data);
             },
             function(err){
