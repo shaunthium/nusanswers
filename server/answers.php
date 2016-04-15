@@ -58,6 +58,8 @@
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
+		
+		
 		/* Here we get the number of answers to each question */
 		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
 		$result_answers_count = $db->query($query_answers_count);
@@ -73,11 +75,11 @@
 		{
 			while($r = mysqli_fetch_assoc($res)){ //for each comment
 				$user_id = $r["user_id"];
-				
+				error_log("Comment user id is >>" . $user_id);
 				/* Here we get the User Info to each comment */
 				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 				$result_author = $db->query($query_author);
-				$author = mysqli_fetch_assoc($result_author);
+				$comment_author = mysqli_fetch_assoc($result_author);
 				
 				$commentsResult[] = array(
 					'id' => $r["id"],
@@ -85,10 +87,10 @@
 					'reported' => "false",
 					'liked' => "false",
 					'likes' => "0",
-					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
-								'karma' =>$author['score'],
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
-								'flavour'=> $author['flavour']),
+								'flavour'=> $comment_author['flavour']),
 					
 					'body' => $r["content"],
 					'created_at'=>$r['created_at'],
@@ -104,6 +106,8 @@
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
+			
+			
 			
 			$questionResult = array(
 
@@ -132,7 +136,7 @@
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
-			
+			error_log("here 2!! ". $author['first_name']);
 			$questionResult = array(
 
 				'id'=>$post['id'],
@@ -228,7 +232,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		//error_log(json_encode($finalOutput));
+		error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
