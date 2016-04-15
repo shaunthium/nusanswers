@@ -298,7 +298,7 @@ angular.module('quoraApp')
 
     }
 
-    function getPost(postID){
+    function getPost(postID, userID){
       // return $http({
       //   url: base_url + "server/questions.php",
       //   method: 'POST',
@@ -312,7 +312,8 @@ angular.module('quoraApp')
         method: 'POST',
         data: {
           cmd: 'getanswers',
-          question_id: postID
+          question_id: postID,
+          user_id : userID
         }
       });
     }
