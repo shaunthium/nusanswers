@@ -58,6 +58,15 @@
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
+		/* Here we get if a Question has been answered */
+		$query_answered = "Select 1 from Answers where question_id = $question_id";
+		$result_answered = $db->query($query_answered);
+		if(mysqli_num_rows($result_answered) == 0)
+			$answered = "false";
+		else
+			$answered = "true";
+		
+		
 		/* Here we get the number of answers to each question */
 		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
 		$result_answers_count = $db->query($query_answers_count);
@@ -77,7 +86,7 @@
 				/* Here we get the User Info to each comment */
 				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 				$result_author = $db->query($query_author);
-				$author = mysqli_fetch_assoc($result_author);
+				$comment_author = mysqli_fetch_assoc($result_author);
 				
 				$commentsResult[] = array(
 					'id' => $r["id"],
@@ -85,10 +94,10 @@
 					'reported' => "false",
 					'liked' => "false",
 					'likes' => "0",
-					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
-								'karma' =>$author['score'],
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
-								'flavour'=> $author['flavour']),
+								'flavour'=> $comment_author['flavour']),
 					
 					'body' => $r["content"],
 					'created_at'=>$r['created_at'],
@@ -100,16 +109,19 @@
 		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
 		{
 			/*******************Query Question table ***************************/
-			$query = "select Questions.*, '' as tags from Questions where Questions.id = ". $question_id;
+			$query = "select Questions.* from Questions where Questions.id = ". $question_id;
 			$res = $db->query($query);
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
+			
+			//$tag_array = explode(",", $post['tags']);
+			
 			
 			$questionResult = array(
 
 				'id'=>$post['id'],
 				'title'=>$post['title'],
-				'tags' => $post['tags'],
+				'tags' => array(),
 				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
@@ -119,7 +131,8 @@
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult
+				'comments' => $commentsResult,
+				'answered' => $answered
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			
@@ -133,11 +146,13 @@
 			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
 			$post = mysqli_fetch_assoc($res);
 			
+			$tag_array = explode(",", $post['tags']);
+			
 			$questionResult = array(
 
 				'id'=>$post['id'],
 				'title'=>$post['title'],
-				'tags' => $post['tags'],
+				'tags' => $tag_array,
 				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
@@ -147,7 +162,8 @@
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult
+				'comments' => $commentsResult,
+				'answered' => $answered
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));

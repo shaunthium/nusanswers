@@ -50,7 +50,7 @@ angular.module('quoraApp')
                 questionService.getCommentsFromQuestion($scope.post.id)
                 .then(function(res){
 
-                    // console.log("got data " , res);
+                    console.log("got data " , res);
                     $scope.post.comments = res.data;
 
                 }, function(err){
@@ -71,12 +71,11 @@ angular.module('quoraApp')
                     $scope.editedComment = null;
                     $scope.editing = false;
                 }
-
-                questionService.submitNewComment($scope.post.id, comment, $scope.currentUser.userID)
+                questionService.submitNewComment($scope.post.id, comment, $scope.currentUser.id)
                 .then(function(res){
-
+                    //TODO: fix server response indexing. Get rid of unneccessary array.
                     // add comment to scope
-                    $scope.post.comments.push(res);
+                    $scope.post.comments.push(res.data[0]);
                     // console.log("Success post comment", res);
                 }, function(err){
                     // console.log("Error in posting comment", err);
