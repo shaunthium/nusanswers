@@ -84,7 +84,7 @@ angular.module('quoraApp')
     $scope.updateQuestionsFeed = function(userID, index){
         qs.getQuestions(userID, index).then(
             function (returnedData) {
-                $scope.loading = false;
+                // $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
             },
             function(err){
