@@ -184,9 +184,7 @@
 	*/
 	if($cmd == "latest_qns"){
 
-		if(isset($data->user_id)) {
-			$global_user_id = $data->user_id;
-		}
+		
 
 		if(isset($data->index)){
 			$limit_qns = 10;
@@ -256,15 +254,21 @@
 
 			//Set True  or false if user had answered the questions
 			
-			$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-			$result_answered = $db->query($query_answered);
+			if(isset($data->user_id)) {
+				$global_user_id = $data->user_id;
+		
+				$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+				$result_answered = $db->query($query_answered);
 			
-			$num_answered = mysqli_num_rows($result_answered);
+				$num_answered = mysqli_num_rows($result_answered);
 			
-			if($num_answered == 0){
-				$answered = false;
+				if($num_answered == 0){
+					$answered = false;
+				}else{
+					$answered = true;
+				}
 			}else{
-				$answered = true;
+				$answered = false;
 			}
 			
 
@@ -311,9 +315,7 @@
 	if($cmd == "trending_qns"){
 		global $db;
 
-		if(isset($data->user_id)) {
-			$global_user_id = $data->user_id;
-		}
+		
 
 		if(isset($data->index)){
 			$limit_qns = 10;
@@ -387,15 +389,21 @@
 
 			//Set True  or false if user had answered the questions
 			
-			$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-			$result_answered = $db->query($query_answered);
+			if(isset($data->user_id)) {
+				$global_user_id = $data->user_id;
+		
+				$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+				$result_answered = $db->query($query_answered);
 			
-			$num_answered = mysqli_num_rows($result_answered);
+				$num_answered = mysqli_num_rows($result_answered);
 			
-			if($num_answered == 0){
-				$answered = false;
+				if($num_answered == 0){
+					$answered = false;
+				}else{
+					$answered = true;
+				}
 			}else{
-				$answered = true;
+				$answered = false;
 			}
 
 
