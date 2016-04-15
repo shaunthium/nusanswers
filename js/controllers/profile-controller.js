@@ -60,6 +60,7 @@ angular.module('quoraApp')
     $rootScope.currentUser = undefined;
     $scope.resetQuestionsFeed();
     $scope.updateQuestionsFeed();
+    Materialize.toast('Successfully logged out', 2000, 'custom-toast')
     $state.go('home');
   }
 

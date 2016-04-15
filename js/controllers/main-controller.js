@@ -3,8 +3,8 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-
-    //$rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+    
+    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -76,6 +76,7 @@ angular.module('quoraApp')
         // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
+        Materialize.toast('Welcome back' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
 
         /*
             Remove all posts from the feed and replace them with new ones that

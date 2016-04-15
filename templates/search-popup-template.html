@@ -17,9 +17,13 @@
 <div ng-if="!user_question">
 	<div style="height:100px; padding:10px;">
 		<div style="text-align:center;" class="v-align">
-			<span class="v-align">
-				<b>What's your question?</b><br/>
+			<span ng-if="!submitQuestionError"class="v-align">
+				<b>What's your questsdaion?</b><br/>
 				Ask a question about anything related to NUS.
+			</span>
+			<span ng-if="submitQuestionError" class="v-align">
+				<b>What's your queasdasstion?</b><br/>
+				asdasdas
 			</span>
 		</div>
 	</div>

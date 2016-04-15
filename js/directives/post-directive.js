@@ -41,7 +41,10 @@ angular.module('quoraApp')
                 $scope.showFooter = !$scope.showFooter;
             }
 
+             $('.tooltipped').tooltip({delay: 50});
+
             $scope.toggleEditMode = function(){
+
 
                 $('#wysiwyg-editor-questionbody').trumbowyg({
                     fullscreenable: false,
@@ -51,7 +54,7 @@ angular.module('quoraApp')
                 $scope.editMode = !$scope.editMode;
             }
 
-
+        
             $scope.incrementUpvotes = function(post, inc) {
 
               if(!$scope.currentUser){
@@ -91,8 +94,10 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
+
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
+
 
             //This watch is for getting the post in question-answers view.
             scope.$watchCollection(function(){

@@ -37,7 +37,7 @@
 				<hr/>
 				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="question in profileQuestions" href="#!" class="collection-item black-text">
+		        <a ng-repeat="question in profileQuestions | limitTo: 4" href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
 			        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
@@ -63,21 +63,21 @@
 				<hr/>
 				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="answer in profileAnswers" href="#!" class="collection-item black-text">
-		        	<div style="display:table; width:100%;">
-			        	<div style="display:table-cell;">
-			        		<p style="margin-bottom:5px;">{{answer.title}}</p>
-			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
-								    Tag{{tag}}
-								  </div>
-			        	</div>
-			        	<div style="display:table-cell; width:65px;">
-			        		<span class="right orange-text text-darken-2">{{answer.upvotes}}</span>
-			        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
-			        	</div>
-		        	</div>
-		        </a>
-		      </div>
+				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#!" class="collection-item black-text">
+				        	<div style="display:table; width:100%;">
+					        	<div style="display:table-cell;">
+					        		<p style="margin-bottom:5px;">{{answer.title}}</p>
+					        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
+										    Tag{{tag}}
+										  </div>
+					        	</div>
+					        	<div style="display:table-cell; width:65px;">
+					        		<span class="right orange-text text-darken-2">{{answer.upvotes}}</span>
+					        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+					        	</div>
+				        	</div>
+				        </a>
+				      </div>
 				</div>
 			<!-- end answer card -->
 			</div>

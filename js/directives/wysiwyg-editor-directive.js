@@ -36,9 +36,16 @@ angular.module('quoraApp')
             // TODO: Here goes user on submit click
             $scope.submit = function(post){
 
+                if($('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html').length < 10){
+                    alert("Please write a proper answer");
+                    return;
+                }
+
+                Materialize.toast('Question answered:)', 2000, 'custom-toast')
                 submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
                 //clean up
                 $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
+
                 $scope.toggleFooter();
             }
 

@@ -77,10 +77,10 @@ angular.module('quoraApp')
 		},
 
 		/* WARNING HACKY FIX - not in templateUrl due to templateCache and animation wont trigger the first time */
-		template: '<div ng-if="user_question">' +
+		template: '<div ng-if="user_question && !showQuestionError">' +
 						'<div class = "suggestion-box-info">' +
 						  '<p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">' +
-						      'Search for content lah' +
+						      'Search for content' +
 						  '</p>' +
 						'</div>' +
 
@@ -93,7 +93,7 @@ angular.module('quoraApp')
 						'<p style="text-align:center;" ng-hide="relevantPosts.length">No results found!</p>' +
 					'</div>' +
 
-					'<div ng-if="!user_question">' +
+					'<div ng-if="!user_question && !showQuestionError">' +
 						'<div style="height:100px; padding:10px;">' +
 							'<div style="text-align:center;" class="v-align">' +
 								'<span class="v-align">' +
@@ -102,7 +102,18 @@ angular.module('quoraApp')
 								'</span>' +
 							'</div>' +
 						'</div>' +
-					'</div>'
+					'</div>' +
+
+                    '<div ng-if="showQuestionError">' +
+                        '<div class="yellow lighten-3" style="height:100px; padding:10px;">' +
+                            '<div style="text-align:center;" class="v-align">' +
+                                '<span class="v-align">' +
+                                    '<b>This question needs more detail!</b><br/>' +
+                                    'Please provide a full sentence' +
+                                '</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
 
 	}
 })

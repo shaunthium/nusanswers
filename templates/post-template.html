@@ -1,6 +1,7 @@
+
 <div class="card white">
     <div class="card-content">
-
+   
         <tag ng-repeat="tag in post.tags"></tag>
 
         <!-- edit button -->
@@ -29,16 +30,20 @@
                 <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}</p>
-                <a style="margin-right:-15px;"class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
+                <a data-tooltip="This users karma" style="cursor:pointer; margin-right:-15px;" class="tooltip-left secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
             </li>
         </ul>
 
+
+
         <!-- Behave as a table cell for the height to adjust to same as the text column -->
         <div style="display:table-cell; vertical-align:middle; text-align:left;">
-            <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons red-text text-darken-2">thumb_up</i>
-            <p style="padding-left:8px; text-align:center;padding-top:8px; padding-bottom:8px;">{{post.upvotes}}</p>
-            <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+            <i id="vote" ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons grey-text">thumb_up</i>
+            <p class="grey-text"style="font-weight:bold;padding-left:8px; text-align:center;padding-top:8px; padding-bottom:8px;">{{post.upvotes}}</p>
+            <i id="vote" ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons grey-text">thumb_down</i>
         </div>
+
+
 
         <div style="padding-left:25px; display:table-cell; width:100%;">
 

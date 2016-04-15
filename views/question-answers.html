@@ -9,10 +9,10 @@
                         <span ng-switch="answered">
                             <span ng-switch-when="true">
                                 <!-- TODO: clicking on "Answered" in question-answers view scrolls down to your answer -->
-                                <a ng-class="{'disabled' : showFooter}" class="waves-effect waves-light btn green">
-                                    <i class="material-icons">check</i>
-                                    <span style="position:relative; bottom:5px;">Answered</span>
-                                </a>
+                                <a style="opacity:0.8;background:#4caf50 !important; color:white !important;" ng-click="goToPost(post)" class="disabled btn green">
+                                        <i class="material-icons">check</i>
+                                        <span style="position:relative; bottom:5px;">Answered</span>
+                                    </a>
                             </span>
                             <span ng-switch-default>
                                 <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
