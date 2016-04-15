@@ -57,27 +57,27 @@
 			<!-- </div> -->
 
 			<!-- answer card begin -->
-			 <!-- <div class="col s12 m6">
+			 <div class="col s12 m6">
 				<h6>Answers</h6>
-				<hr/> -->
-				<!-- <div class="card">
+				<hr/>
+				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="i in [1,2,3]"href="#!" class="collection-item black-text">
+		        <a ng-repeat="answer in profileAnswers" href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
-			        		<p style="margin-bottom:5px;">Why are three groups doing the same project in CS3226?</p>
+			        		<p style="margin-bottom:5px;">{{answer.title}}</p>
 			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
 								    Tag{{tag}}
 								  </div>
 			        	</div>
 			        	<div style="display:table-cell; width:65px;">
-			        		<span class="right orange-text text-darken-2">500</span>
+			        		<span class="right orange-text text-darken-2">{{answer.upvotes}}</span>
 			        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
 			        	</div>
 		        	</div>
 		        </a>
 		      </div>
-				</div> -->
+				</div>
 			<!-- end answer card -->
 			<!-- </div> -->
 
