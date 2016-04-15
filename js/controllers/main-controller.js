@@ -3,6 +3,7 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
+    $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -74,6 +75,10 @@ angular.module('quoraApp')
         // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
+        /*
+
+        */
+        $scope.posts = [];
         $scope.updateQuestionsFeed($scope.currentUser.id);
     }
 
@@ -82,7 +87,6 @@ angular.module('quoraApp')
         qs.getQuestions(userID, index).then(
             function (returnedData) {
                 $scope.loading = false;
-                // console.log(returnedData);
                 $scope.posts = $scope.posts.concat(returnedData.data);
             },
             function(err){
