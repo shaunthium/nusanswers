@@ -4,7 +4,7 @@ angular.module('quoraApp')
     $scope.posts = [];
     $scope.loading = true;
 
-    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+    //$rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
