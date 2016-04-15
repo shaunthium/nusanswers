@@ -7,6 +7,7 @@ angular.module('quoraApp')
             });
             return questionsSummary;
         }
+        userInput = userInput.replace(/\W/g, " ").replace(/_/g, " ").replace(/ +/g, " "); //Get rid of non-word characters for the sake of search.
         var tagMatchScore = 3;
         var tagContainsScore = 0;
         var titleMatchScore = 20;
