@@ -517,7 +517,7 @@
 	* Creates a new answer only if he has not done so before.
 	*
 	* @param: question_id,
-	* @param: user_id -> ID OF THE PERSON VOTING
+	* @param: user_id 
 	* @param: content
 	*/
 	else if($cmd == "createanswer")
