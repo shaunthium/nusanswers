@@ -21,7 +21,7 @@
 			            <!-- <b>Involved in</b> -->
 			            <!-- <div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
 						    Iamaprettylonghtag1 -->
-			  			</div>
+			  			<!-- </div> -->
 			  			<br/>
 			  			<!-- make som check if user is currentuser to show this ... -->
 			  			<span style="cursor:pointer;" ng-click="logout()" class="grey-text">Logout</span>
@@ -32,29 +32,30 @@
 
 			<!-- question card begin -->
 
-			<!-- <div class="col s12 m6">
+			<div class="col s12 m6">
 				<h6>Questions</h6>
-				<hr/> -->
-				<!-- <div class="card">
+				<hr/>
+				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="i in [1]"href="#!" class="collection-item black-text">
+		        <a ng-repeat="question in profileQuestions" href="#!" class="collection-item black-text">
 		        	<div style="display:table; width:100%;">
 			        	<div style="display:table-cell;">
-			        		<p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p>
+			        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
+                  <p>{{question.title}}</p>
 			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
 								    Iamaprettylonghtag1
 								  </div>
 			        	</div>
 			        	<div style="display:table-cell; width:65px; ">
-			        		<span class="right orange-text text-darken-2">500</span>
+			        		<span class="right orange-text text-darken-2">{{question.score}}</span>
 			        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
 			        	</div>
 		        	</div>
 		        </a>
 		      </div>
-				</div> -->
+				</div>
 			<!-- question card end -->
-			<!-- </div> -->
+			</div>
 
 			<!-- answer card begin -->
 			 <div class="col s12 m6">
@@ -79,10 +80,10 @@
 		      </div>
 				</div>
 			<!-- end answer card -->
-			<!-- </div> -->
+			</div>
 
 		<!-- end row -->
-		<!-- </div> -->
+		</div>
 	<!-- end section -->
 	</div>
 

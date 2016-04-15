@@ -47,9 +47,10 @@ angular.module('quoraApp')
     data: {
       cmd: 'get_all_qns_of_user',
       user_id: id
-    }
+    },
+    method: 'POST'
   }).then(function(data) {
-    console.log('data', data);
+    $scope.profileQuestions = data.data;
   })
 
   $scope.logout = function(){
