@@ -115,7 +115,7 @@
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
 				'views'=>$post['view_count'],
-				'desc'=>$post['content'],
+				'content'=>$post['content'],
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
@@ -143,7 +143,7 @@
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
 				'views'=>$post['view_count'],
-				'desc'=>$post['content'],
+				'content'=>$post['content'],
 				'upvotes'=>$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
@@ -217,7 +217,7 @@
 					'questionid' => $question_id,
 					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
-					'desc'=>$r['content'],
+					'content'=>$r['content'],
 					'upvotes'=>$r['score'],
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at'],
@@ -228,7 +228,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
@@ -611,7 +611,7 @@
 				'questionid'=>$answer['question_id'],
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
-				'desc'=>$answer['content'],
+				'content'=>$answer['content'],
 				'upvotes'=>$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
@@ -649,7 +649,7 @@
 				'questionid'=>$latest['question_id'],
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
-				'desc'=>$latest['content'],
+				'content'=>$latest['content'],
 				'upvotes'=>$latest['score'],
 				'created_at'=>$latest['created_at'],
 				'updated_at'=>$latest['updated_at'],

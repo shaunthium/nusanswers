@@ -51,10 +51,10 @@ angular.module('quoraApp')
               // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
                 post.upvotes++;
-                questionService.submitUpvotePost(post.id, $scope.currentUser.id);
+                questionService.submitUpvotePost(post.id, $scope.currentUser.id, $scope.type);
               } else {
                 post.upvotes--;
-                questionService.submitDownvotePost(post.id, $scope.currentUser.id);
+                questionService.submitDownvotePost(post.id, $scope.currentUser.id, $scope.type);
               }
 
             };

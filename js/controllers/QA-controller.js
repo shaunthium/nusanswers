@@ -6,8 +6,9 @@ angular.module('quoraApp')
   qs.getPost($stateParams.questionId)
     .then(function(res){
 
-      // console.log("ok got post ", res.data[0]);
-      $scope.post = res.data[0];
+      console.log("ok got post", res);
+      console.log($scope.currentUser);
+      $scope.post = res.data.question;
       if(!$scope.post){
         // console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
       } else {
