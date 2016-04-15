@@ -138,12 +138,15 @@
 	if($cmd == "delete_comment_qns"){
 		$comment_id = $db->escape_string($data->comment_id);
 		$user_id = $db->escape_string($data->user_id);
-
+		
 		$query = "DELETE FROM Comments WHERE id=".$comment_id. " AND user_id=". $user_id;
-		if($db->query($query)){
-			echo true;
+		$result = $db->query($query);
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
 		}else{
-			echo false;
+			echo json_encode(false);
 		}
 
 		//echo $comment_id;

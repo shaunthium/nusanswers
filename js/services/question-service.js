@@ -76,12 +76,14 @@ angular.module('quoraApp')
     var notifications = ["Notification 1","Notification 2","Notification 3","Notification 4"];
     /*END HARDCODED SERVER REPLY OBJECTS*/
 
-    function getQuestions() {
+    function getQuestions(userID, index) {
       return $http({
         method: 'POST',
         url: base_url + questions_url,
         data: {
           cmd: "trending_qns",
+          user_id : userID,
+          index : index
         },
         dataType: 'json'
       });
