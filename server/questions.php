@@ -108,7 +108,9 @@
 				'views'=>$qns_data['view_count'],
 				'desc'=>$qns_data['content'],
 				'upvotes'=>$qns_data['score'],
-				'comments'=> $comment_array
+				'comments'=> $comment_array,
+				'total_answers' => $total_answers['total_answers'],
+				'total_comments'=> count($comment_array)
 				/*
 				'id'=>$qns_data['id'],
 				'user_id'=>$qns_data['user_id'],
@@ -252,7 +254,8 @@
 				'content'=>$latest['content'],
 				'upvotes'=>$latest['score'],
 				'comments'=> $comment_array,
-				'total_answers' => $total_answers['total_answers']
+				'total_answers' => $total_answers['total_answers'],
+				'total_comments'=> count($comment_array)
 				
 				/*
 				'id'=>$latest['id'],
@@ -352,6 +355,7 @@
 				'upvotes'=>$trending['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers'],
+				'total_comments'=> count($comment_array)
 								
 				/*
 				'id'=>$trending['id'],
