@@ -66,14 +66,15 @@ angular.module('quoraApp')
 
            // TODO: Here goes user on submit click
            $scope.submit = function(post){
-               submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
+
+              submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
                //clean up
-               $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
-               $scope.toggleFooter();
+              $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
+              $scope.toggleFooter();
            }
 
             $scope.toggleTextEditor = function(editorId){
-                $scope.toggleFooter();
+              $scope.toggleFooter();
             }
         },
         link : function(scope, elems, attrs){

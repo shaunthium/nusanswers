@@ -33,6 +33,13 @@ angular.module('quoraApp')
             });
 
             $scope.toggleAddCommentVisible = function(){
+
+                if(!$scope.currentUser){
+                    $scope.showLogin();
+                    return;
+                }
+
+
                 $scope.isAddCommentActive = !$scope.isAddCommentActive;
 
                 //If adding a comment was cancelled.
@@ -42,6 +49,7 @@ angular.module('quoraApp')
             }
 
             $scope.acceptComment = function(){
+
                 if(!$scope.commentLongEnough || $scope.commentTooLong){
                     alert("Comment not valid"); // TODO: Make this feedback cooler
                     return;

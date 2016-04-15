@@ -31,12 +31,21 @@ angular.module('quoraApp')
             $scope.showFooter = false;
 
             $scope.toggleFooter = function(){
+
+                if(!$scope.currentUser){
+                  $scope.showLogin();
+                  return;
+                }
+
                 $scope.showFooter = !$scope.showFooter;
             }
 
             $scope.incrementUpvotes = function(post, inc) {
 
-              console.log("incrementing upvotes on " , post.id );
+              if(!$scope.currentUser){
+                $scope.showLogin();
+                return;
+              }
 
               // User should not be able to downvote/upvote multiple times
               // change loggedinUserId to $scope.facebookuserid or something..
