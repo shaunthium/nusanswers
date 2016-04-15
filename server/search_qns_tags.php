@@ -14,7 +14,7 @@
 	if($cmd == "get_all_qns_tags"){
 		$query = "SELECT id, title FROM Questions";
 		$result = $db->query($query);
-		
+
 		$qns_array = array();
 		while($qns = mysqli_fetch_assoc($result)){
 
@@ -30,13 +30,13 @@
 			}
 
 			$qns_array[] = array(
-				'qns_id' => $qns['id'],
+				'id' => $qns['id'],
 				'title' => $qns['title'],
 				'tags' => $tag_name_array
 			);
 		}
-		
-		
+
+
 		echo json_encode($qns_array);
 	}
 	/*
@@ -79,8 +79,8 @@
 				//'created_at'=>$qns_result['created_at'],
 				//'updated_at'=>$qns_result['updated_at']
 			);
-		}	
-		
+		}
+
 		echo json_encode($qns_array);
 	}
 	*/

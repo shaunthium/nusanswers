@@ -15,21 +15,21 @@ angular.module('quoraApp')
         }
         return posts.filter(function(post){
             var relevant = false;
-            if(!(!post.tags || typeof post.tags === 'undefined' || post.tags.length === 0))
-            post.tags.forEach(function(postTag){
-                tags.forEach(function(arrayTag){
-                    relevant = relevant || postTag.toUpperCase() === arrayTag.toUpperCase();
-                });
+            if(!(!post.tags || typeof post.tags === 'undefined' || post.tags.length === 0)){
+                    post.tags.forEach(function(postTag){
+                        tags.forEach(function(arrayTag){
+                            relevant = relevant || postTag.toUpperCase() === arrayTag.toUpperCase();
+                        });
+                    });
             }
-        );
-        return relevant;
-    });
-};
+            return relevant;
+        });
+    };
 })
 .controller('HomeCtrl', [ '$scope', '$stateParams', 'byTagsFilter', function($scope, $stateParams, filterByTags){
     $scope.activeTags = [];
 
-    //Watch for changes in activeTags, coming from the trending-box
+    //Watch for changes in posts
     $scope.$watchCollection(function(){
         return $scope.posts;
     },

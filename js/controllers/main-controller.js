@@ -96,6 +96,13 @@ angular.module('quoraApp')
             });
     }
 
+    qs.getQuestionsSummary().then(function(res){
+        $scope.questionsSummary = res.data;
+        //TODO: set $scope.loading to be false only after both posts and the questions summary have been loaded!
+    }, function(err){
+        console.log("Error when getting questions summary.");
+    });
+
     $scope.resetQuestionsFeed = function(){
         $scope.posts = [];
     }

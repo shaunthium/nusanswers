@@ -2,7 +2,7 @@
 angular.module('quoraApp')
 .controller('QACtrl', ['$location', '$scope', '$stateParams', '$http', 'questionService', function($location, $scope, $stateParams, $http, qs){
   // console.log("hey id ", $stateParams.questionId);
-  
+
   if($scope.currentUser){
       $scope.userID = $scope.currentUser.id;
   }
@@ -12,9 +12,6 @@ angular.module('quoraApp')
 
   qs.getPost($stateParams.questionId, $scope.userID)
     .then(function(res){
-
-      console.log("ok got post", res);
-      console.log($scope.currentUser);
       $scope.post = res.data.question;
       if(!$scope.post){
         // console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
