@@ -4,8 +4,8 @@ angular.module('quoraApp')
 
     $scope.loading = true;
 
-    /*ezfb.getLoginStatus(function (res) {
-    
+    ezfb.getLoginStatus(function (res) {
+
       $scope.loginStatus = res;
       // console.log($scope.loginStatus);
       if (res.status == 'connected') {
@@ -24,7 +24,7 @@ angular.module('quoraApp')
         $scope.currentUser = null;
         $scope.loading = false;
       }
-    });*/
+    });
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -124,26 +124,25 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+        // $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
-        // $scope.currentUser = { userID : "10209460093644289" };
-        // ezfb.login(function(res) {
-        //   // console.log(res);
-        //   $scope.loginStatus = res;
-        //   if (res.status == 'connected') {
-        //     ezfb.api('/me',function (res) {
-        //       $scope.apiMe = res;
-        //       // console.log($scope.apiMe);
-        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-        //         $scope.currentUser = data.data;
-        //         // console.log($scope.currentUser);
-        //         // $scope.loading = false;
-        //         // console.log($scope.currentUser);
-        //       });
-        //     });
-        //   }
-        // }, {scope: 'public_profile,email'});
+        ezfb.login(function(res) {
+          // console.log(res);
+          $scope.loginStatus = res;
+          if (res.status == 'connected') {
+            ezfb.api('/me',function (res) {
+              $scope.apiMe = res;
+              // console.log($scope.apiMe);
+              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+              qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+                $scope.currentUser = data.data;
+                // console.log($scope.currentUser);
+                // $scope.loading = false;
+                // console.log($scope.currentUser);
+              });
+            });
+          }
+        }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
     }

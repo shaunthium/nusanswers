@@ -22,7 +22,7 @@ angular.module('quoraApp')
 
               // console.log("trying to submit " , dangerousHTML);
 
-              questionService.submitAnswerToPost(post.id, "10209460093644289", dangerousHTML)
+              questionService.submitAnswerToPost(post.id, $scope.currentUser.id, dangerousHTML)
                 .then(function(res){
                   // console.log("Successfully answered question", res.data);
                   $scope.post.total_answers++;
@@ -34,34 +34,6 @@ angular.module('quoraApp')
                 }, function(err){
                   // console.log("Error in answering question", err);
                 })
-              // console.log('hi');
-              // var userID;
-              // FB.getLoginStatus(function(resp) {
-              //   if (resp.status == 'connected') {
-              //     FB.api('/me', function(response) {
-              //       userID = response.id;
-              //       console.log('userID is:');
-              //       console.log(userID);
-              //       var answersURL = "/server/answers.php";
-              //       var questionID = post.id;
-              //       $http({
-              //         method: 'POST',
-              //         url: answersURL,
-              //         data: {
-              //           cmd: "createanswer",
-              //           user_id: userID,
-              //           question_id: questionID,
-              //           content: dangerousHTML
-              //         },
-              //         dataType: 'json'
-              //       }).success(function() {
-              //         console.log('hahaha');
-              //       });
-              //     });
-              //   }
-              // });
-              // // var userID = 1;
-              // console.log("sending ...", dangerousHTML);
             }
 
            // TODO: Here goes user on submit click
