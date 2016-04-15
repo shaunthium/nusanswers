@@ -141,6 +141,12 @@
 		add_tag($tag_array);
 		
 		tag_qns($qns_id, $tag_array);
+
+		if(count($tag_array) > 0){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
 	}
 
 	/*
@@ -153,6 +159,7 @@
 		$qns_id = $db->escape_string($data->qns_id);
 		$tag_string =  $db->escape_string($data->tag_string);
 		
+		$affected=0;
 		
 		if(!empty($tag_string)){
 			$tag_array = explode(",", $tag_string);
@@ -168,8 +175,15 @@
 			foreach($tag_id_array as $tag_id){
 				$query = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id . " AND tag_id=" . $tag_id;
 				$db->query($query);
+				$affected += $db->affected_rows;
 			}
 			
+		}
+
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
 		}		
 	}
 	
