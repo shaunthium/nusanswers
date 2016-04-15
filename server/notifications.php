@@ -43,11 +43,12 @@
 
 	/*
 		Checked notifications viewed by user, set the checked value in 'Notifications' table to true
-		@param: $user_id, $notification_id_string
+		@param: $user_id  => CURRENT USER ID
+		@param: $notification_id_string => CAN BE MULTIPLE IDs Seperated by  ","
 	*/
 	if($cmd == "checked_notifications"){
 		$user_id = $db->escape_string($data->user_id);
-		$notification_id_string = $db->escape_string($$data->notification_id_string);
+		$notification_id_string = $db->escape_string($data->notification_id_string);
 
 		$notification_id_array = explode(",", $notification_id_string);
 

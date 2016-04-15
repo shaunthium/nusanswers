@@ -29,6 +29,7 @@ angular.module('quoraApp')
             $scope.linkToQuestionPage = false;
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
+            $scope.editMode = false;
 
             $scope.toggleFooter = function(){
 
@@ -39,6 +40,17 @@ angular.module('quoraApp')
 
                 $scope.showFooter = !$scope.showFooter;
             }
+
+            $scope.toggleEditMode = function(){
+
+                $('#wysiwyg-editor-questionbody').trumbowyg({
+                    fullscreenable: false,
+                    btns:['bold', 'italic']
+                });
+
+                $scope.editMode = !$scope.editMode;
+            }
+
 
             $scope.incrementUpvotes = function(post, inc) {
 

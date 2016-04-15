@@ -3,7 +3,8 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+
+    //$rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
