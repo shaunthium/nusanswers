@@ -186,7 +186,7 @@
 
 		if(isset($data->index)){
 			$limit_qns = 10;
-			$index = $_POST["index"];
+			$index = $data->index;
 			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
@@ -293,7 +293,7 @@
 
 		if(isset($data->index)){
 			$limit_qns = 10;
-			$index = $_POST["index"];
+			$index = $data->index;
 			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
