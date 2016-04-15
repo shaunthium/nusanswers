@@ -17,11 +17,11 @@ angular.module('quoraApp')
                                 return $scope.transcluded;
                             },
                             function(newValue){
-                                if($scope.transcluded){
-                                    $scope.lessText = $scope.transcluded.text().substring(0, $scope.maxLength);
-                                    $scope.moreText = $scope.transcluded.text();
+                                if(newValue){
+                                    $scope.lessText = newValue.text().substring(0, $scope.maxLength);
+                                    $scope.moreText = newValue.text();
                                     $scope.readMore = false || $scope.readMore; //If it was arleady true, do not collapse it again.
-                                    $scope.overflow = $scope.moreText ? true : false;
+                                    $scope.overflow = $scope.moreText.length > $scope.lessText.length ? true : false;
                                 }
                             }
                         );
