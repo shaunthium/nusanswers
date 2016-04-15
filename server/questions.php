@@ -418,7 +418,7 @@
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers'],
 				'total_comments'=> count($comment_array),
-				'$answered' => $answered
+				'answered' => $answered
 
 				/*
 				'id'=>$trending['id'],
