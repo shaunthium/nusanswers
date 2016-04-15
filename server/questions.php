@@ -184,6 +184,10 @@
 	*/
 	if($cmd == "latest_qns"){
 
+		if(isset($data->user_id)) {
+			$global_user_id = $data->user_id;
+		}
+
 		if(isset($data->index)){
 			$limit_qns = 10;
 			$index = $data->index;
@@ -249,6 +253,21 @@
 						'id' => $comment['id']
 					);
 			}
+
+			//Set True  or false if user had answered the questions
+			
+			$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+			$result_answered = $db->query($query_answered);
+			
+			$num_answered = mysqli_num_rows($result_answered);
+			
+			if($num_answered == 0){
+				$answered = false;
+			}else{
+				$answered = true;
+			}
+			
+
 			$latest_array[] = array(
 
 				'id'=>$latest['id'],
@@ -264,7 +283,8 @@
 				'upvotes'=>$latest['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers'],
-				'total_comments'=> count($comment_array)
+				'total_comments'=> count($comment_array),
+				'answered' => $answered
 
 				/*
 				'id'=>$latest['id'],
@@ -290,6 +310,10 @@
 	*/
 	if($cmd == "trending_qns"){
 		global $db;
+
+		if(isset($data->user_id)) {
+			$global_user_id = $data->user_id;
+		}
 
 		if(isset($data->index)){
 			$limit_qns = 10;
@@ -361,6 +385,19 @@
 					);
 			}
 
+			//Set True  or false if user had answered the questions
+			
+			$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+			$result_answered = $db->query($query_answered);
+			
+			$num_answered = mysqli_num_rows($result_answered);
+			
+			if($num_answered == 0){
+				$answered = false;
+			}else{
+				$answered = true;
+			}
+
 
 			$trending_array[] = array(
 				'id'=>$trending['id'],
@@ -372,7 +409,8 @@
 				'upvotes'=>$trending['score'],
 				'comments'=> $comment_array,
 				'total_answers' => $total_answers['total_answers'],
-				'total_comments'=> count($comment_array)
+				'total_comments'=> count($comment_array),
+				'$answered' => $answered
 
 				/*
 				'id'=>$trending['id'],
