@@ -55,13 +55,15 @@ angular.module('quoraApp')
                 return $scope.user_question;
             },
             function(newQuestion){
+                if(newQuestion){
+                    $scope.showSuggestions = newQuestion.length > 1;
+                }
                 $scope.relevantPosts = searchFilter($scope.questionsSummary, newQuestion).sort(function(a, b){
                     return b.relevance - a.relevance; //Sort by most relevant first
                 });
             });
         }],
 		link: function(scope, element, attrs){
-
 			scope.mode = attrs.mode;
 
 			element.css('left', document.getElementById("search-field").getBoundingClientRect().left);
@@ -77,7 +79,7 @@ angular.module('quoraApp')
 		},
 
 		/* WARNING HACKY FIX - not in templateUrl due to templateCache and animation wont trigger the first time */
-		template: '<div ng-if="user_question && !showQuestionError">' +
+		template: '<div ng-if="showSuggestions && !showQuestionError">' +
 						'<div class = "suggestion-box-info">' +
 						  '<p class="v-align grey-text" style="font-size:0.9em;padding:0px; margin:0px; text-align:center;">' +
 						      'Search for content' +
@@ -93,7 +95,7 @@ angular.module('quoraApp')
 						'<p style="text-align:center;" ng-hide="relevantPosts.length">No results found!</p>' +
 					'</div>' +
 
-					'<div ng-if="!user_question && !showQuestionError">' +
+					'<div ng-if="!showSuggestions && !showQuestionError">' +
 						'<div style="height:100px; padding:10px;">' +
 							'<div style="text-align:center;" class="v-align">' +
 								'<span class="v-align">' +
