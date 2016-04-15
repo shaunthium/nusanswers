@@ -3,11 +3,15 @@ angular.module('quoraApp')
 .controller('QACtrl', ['$location', '$scope', '$stateParams', '$http', 'questionService', function($location, $scope, $stateParams, $http, qs){
   // console.log("hey id ", $stateParams.questionId);
 
-  qs.getPost($stateParams.questionId)
-    .then(function(res){
+  if($scope.currentUser){
+      $scope.userID = $scope.currentUser.id;
+  }
+  else {
+      $scope.userID = undefined;
+  }
 
-      console.log("ok got post", res);
-      console.log($scope.currentUser);
+  qs.getPost($stateParams.questionId, $scope.userID)
+    .then(function(res){
       $scope.post = res.data.question;
       $scope.post.content = $scope.post.content.trim();
       if(!$scope.post){

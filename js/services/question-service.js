@@ -298,7 +298,7 @@ angular.module('quoraApp')
 
     }
 
-    function getPost(postID){
+    function getPost(postID, userID){
       // return $http({
       //   url: base_url + "server/questions.php",
       //   method: 'POST',
@@ -312,7 +312,8 @@ angular.module('quoraApp')
         method: 'POST',
         data: {
           cmd: 'getanswers',
-          question_id: postID
+          question_id: postID,
+          user_id : userID
         }
       });
     }
@@ -340,6 +341,16 @@ angular.module('quoraApp')
     //   });
     // }
 
+    function getQuestionsSummary(){
+        return $http({
+          url: base_url + 'server/search_qns_tags.php',
+          method: 'POST',
+          data: {
+            cmd: 'get_all_qns_tags'
+          }
+        });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -363,7 +374,8 @@ angular.module('quoraApp')
         getCommentsFromQuestion : getCommentsFromQuestion,
         getNotifications            :   getNotifications,
         getAnswersToCurrentPost : getAnswersToCurrentPost,
-        getCurrentUser        : getCurrentUser
+        getCurrentUser        : getCurrentUser,
+        getQuestionsSummary         :   getQuestionsSummary
     }
 
 }]);

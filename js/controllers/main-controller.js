@@ -3,7 +3,9 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    $scope.currentUser = { id : "1" , first_name : "DummyUser"};
+
+    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+
     /*ezfb.getLoginStatus(function (res) {
 
       $scope.loginStatus = res;
@@ -52,7 +54,7 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
         // $scope.currentUser = { userID : "10209460093644289" };
         // ezfb.login(function(res) {
@@ -74,11 +76,13 @@ angular.module('quoraApp')
         // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
-        /*
 
+        /*
+            Remove all posts from the feed and replace them with new ones that
+            reflect changes the logged-in user has done.
         */
-        $scope.posts = [];
-        $scope.updateQuestionsFeed($scope.currentUser.id);
+        $scope.resetQuestionsFeed();
+        $scope.updateQuestionsFeed($rootScope.currentUser.id);
     }
 
     //TODO: get currentUser from database by logging in.
@@ -91,6 +95,17 @@ angular.module('quoraApp')
             function(err){
                 console.log("Error while updating the questions feed!");
             });
+    }
+
+    qs.getQuestionsSummary().then(function(res){
+        $scope.questionsSummary = res.data;
+        //TODO: set $scope.loading to be false only after both posts and the questions summary have been loaded!
+    }, function(err){
+        console.log("Error when getting questions summary.");
+    });
+
+    $scope.resetQuestionsFeed = function(){
+        $scope.posts = [];
     }
 
     $scope.updateQuestionsFeed();
