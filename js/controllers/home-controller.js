@@ -15,6 +15,7 @@ angular.module('quoraApp')
         }
         return posts.filter(function(post){
             var relevant = false;
+            if(!(!post.tags || typeof post.tags === 'undefined' || post.tags.length === 0))
             post.tags.forEach(function(postTag){
                 tags.forEach(function(arrayTag){
                     relevant = relevant || postTag.toUpperCase() === arrayTag.toUpperCase();
@@ -30,13 +31,21 @@ angular.module('quoraApp')
 
     //Watch for changes in activeTags, coming from the trending-box
     $scope.$watchCollection(function(){
+        return $scope.posts;
+    },
+    function(newPosts){
+        $scope.filteredPosts = filterByTags(newPosts, $scope.tags);
+    });
+
+    //Watch for changes in activeTags, coming from the trending-box
+    $scope.$watchCollection(function(){
         return $scope.activeTags;
     },
     function(newTags){
         $scope.filteredPosts = filterByTags($scope.posts, newTags);
     });
 
-    console.log("in home controller")
+    // console.log("in home controller")
 
     $scope.showTextEditor = false;
     $scope.toggleTextEditor = function(){

@@ -5,7 +5,7 @@ angular.module('quoraApp')
     // have different function input parameters
     enter: function(element, doneFn) {
 
-      console.log("entering")
+      // console.log("entering")
       jQuery(element).fadeIn(500, doneFn);
 
       // remember to call doneFn so that angular
@@ -13,12 +13,12 @@ angular.module('quoraApp')
     },
 
     move: function(element, doneFn) {
-      console.log("moving")
+      // console.log("moving")
       jQuery(element).fadeIn(500, doneFn);
     },
 
     leave: function(element, doneFn) {
-      console.log("leaving")
+      // console.log("leaving")
       jQuery(element).fadeOut(500, doneFn);
     }
   }

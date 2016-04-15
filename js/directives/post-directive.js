@@ -22,7 +22,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($http, $scope, $state, $rootScope, $timeout){
+        controller: function($http, $scope, $state, $rootScope, $timeout, questionService){
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -31,9 +31,9 @@ angular.module('quoraApp')
             $scope.showFooter = false;
 
              // Edit here plx!
-            var submitAnswerToServer = function(post, dangerousHTML){
+          /*  var submitAnswerToServer = function(post, dangerousHTML){
               console.log('hi');
-              var userID;
+              /*var userID;
               FB.getLoginStatus(function(resp) {
                 if (resp.status == 'connected') {
                   FB.api('/me', function(response) {
@@ -59,43 +59,36 @@ angular.module('quoraApp')
                 }
               });
               // var userID = 1;
-              console.log("sending ...", dangerousHTML);
-            }
+            }*/
 
             // Here goes user on submit click
-            $scope.submit = function(post){
+           /* $scope.submit = function(post){
 
+                console.log("lol");
                 submitAnswerToServer(post, $('.wysiwyg-editor').trumbowyg('html'));
-
                 //clean up
                 $('.wysiwyg-editor').trumbowyg('empty')
                 $scope.showTextEditor = !$scope.showTextEditor;
-            }
+            }*/
 
             $scope.toggleFooter = function(){
                 $scope.showFooter = !$scope.showFooter;
             }
 
             $scope.incrementUpvotes = function(post, inc) {
-              var cmd;
-               if (inc == 1) {
-                 post.score++;
-                 cmd = "set_up_vote_qns";
-               } else {
-                 post.score--;
-                 cmd = "set_down_vote_qns";
-               }
-               $http({
-                 method: "POST",
-                 url: "/server/questions.php",
-                 data: {
-                   cmd: cmd,
-                   qns_id: post.id,
-                   user_id: loggedInUserID
-                 }
-               }).success(function() {
-                 console.log('success');
-               });
+
+              // console.log("incrementing upvotes on " , post.id );
+
+              // User should not be able to downvote/upvote multiple times
+              // change loggedinUserId to $scope.facebookuserid or something..
+              if(inc == 1){
+                post.upvotes++;
+                questionService.submitUpvotePost(post.id, $scope.currentUser.id);
+              } else {
+                post.upvotes--;
+                questionService.submitDownvotePost(post.id, $scope.currentUser.id);
+              }
+
             };
 
             $scope.removeTag = function(tag){
@@ -108,6 +101,7 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
+
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
@@ -124,6 +118,7 @@ angular.module('quoraApp')
                     scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
+                    // console.log("answer " , scope.post);
                     scope.includeAuthorFlavor = true;
                     break;
             }

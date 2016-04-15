@@ -4,13 +4,13 @@ angular.module('quoraApp')
     return {
         restrict : 'E',
         scope : true,
-        controller : function($scope){
+        controller : function($scope, questionService){
             $scope.$watch(function(){
                 return $scope.showFooter;
             },
             function(showFooter){
                 if(showFooter){
-                    console.log("Show footer! " + $scope.editorId);
+                    // console.log("Show footer! " + $scope.editorId);
                     $('#wysiwyg-editor-' + $scope.editorId).trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
@@ -19,21 +19,21 @@ angular.module('quoraApp')
             });
 
             var submitAnswerToServer = function(post, dangerousHTML){
-              var answersURL = "/server/answers.php";
-              var questionID = post.id;
-              $http({
-                method: 'POST',
-                url: answersURL,
-                data: {
-                  cmd: "createanswer",
-                  user_id: loggedInUserID,
-                  question_id: questionID,
-                  content: dangerousHTML
-                },
-                dataType: 'json'
-              }).success(function() {
-                console.log('hahaha');
-              });
+
+              // console.log("trying to submit " , dangerousHTML);
+
+              questionService.submitAnswerToPost(post.id, "10209460093644289", dangerousHTML)
+                .then(function(res){
+                  // console.log("Successfully answered question", res.data);
+                  $scope.post.total_answers++;
+                  if(!$scope.post.answers)
+                    $scope.post.answers = [];
+
+                  $scope.post.answers.push(res.data[0]);
+
+                }, function(err){
+                  // console.log("Error in answering question", err);
+                })
               // console.log('hi');
               // var userID;
               // FB.getLoginStatus(function(resp) {

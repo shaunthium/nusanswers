@@ -36,9 +36,9 @@
       <ul class="right hide-on-med-and-down">
 
         <li class="no-animate"ng-if="currentUser">
-            <a style="font-size:0.9em;"class="white-text" href="#/profile">
+            <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
               <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span >{{currentUser.name}}</span>
+              <span ng-if="currentUser" >{{currentUser.first_name}}</span>
             </a>
         </li>
 

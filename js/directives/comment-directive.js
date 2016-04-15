@@ -7,7 +7,8 @@ angular.module('quoraApp')
         scope: true,
         controller : function($scope){
             //TODO: implement current user verifications
-            $scope.belongsToUser = $scope.comment.author.userid === $scope.currentUser.userid;
+            $scope.belongsToUser = $scope.comment.author.userid === $scope.currentUser.userID;
+            // console.log("belongs to user ", $scope.belongsToUser);
 
             $scope.toggleLike = function(){
                 $scope.comment.liked = !$scope.comment.liked;

@@ -3,7 +3,9 @@
 angular.module('quoraApp')
 .service('questionService', ['$q', '$http', function($q, $http){
 
-    var questions_url = "/server/questions.php";
+    var base_url = "http://139.59.247.83/";
+    // var base_url = '';
+    var questions_url = "server/questions.php";
     var questions;
     var canceller;
 
@@ -77,7 +79,7 @@ angular.module('quoraApp')
     function getQuestions() {
       return $http({
         method: 'POST',
-        url: questions_url,
+        url: base_url + questions_url,
         data: {
           cmd: "trending_qns",
         },
@@ -92,27 +94,79 @@ angular.module('quoraApp')
     }
 
     function cancelCall(){
-
         canceller.resolve("User cancelled call");
-
     }
 
     //TODO: implement back-end integration
     /*FIXME: should we sanitize input before sending it to the server?*/
     //TODO: check for duplicate questions before storing a new question
-    function submitNewPost(title, user){
-        var serverReply = JSON.parse(JSON.stringify(newPost));
+
+    // send params:
+    // cmd : new_qns
+    // data : user_id, title, content, tag_string (comma separated tags)
+    function submitNewPost(userID, title){
+        /*var serverReply = JSON.parse(JSON.stringify(newPost));
         serverReply.title = title;
         serverReply.author = user;
-        return serverReply;
+        return serverReply;*/
+        return $http({
+          url: base_url + "server/questions.php",
+          method: "POST",
+          data: {
+            cmd: "new_qns",
+            user_id: userID,
+            title : title,
+            content : "",
+            tag_string : ""
+          }
+        });
+
     }
 
     //TODO: implement back-end integration
     /*FIXME: should we sanitize input before sending it to the server?*/
-    function submitNewComment(postID, commentBody, user){
+    function submitNewComment(postID, commentBody, userID){
         //This function should add the comment to the post server-side and return a comment object, which will be attached to the post client-side.
         //TODO: discuss the best way to add/delete comments and answers from posts
-        return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
+       // return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
+        return $http({
+          url: base_url + "server/comment_qns.php",
+          method: "POST",
+          data: {
+            cmd: "new_comment_qns",
+            user_id: userID,
+            qns_id: postID,
+            comment : commentBody
+          }
+        });
+    }
+
+    function getAnswersToCurrentPost(postID){
+      return $http({
+        url: base_url + "server/answers.php",
+        method: "POST",
+        data: {
+          cmd: "getanswers",
+          question_id: postID
+        }
+      });
+    }
+
+    function submitAnswerToPost(postID, userID, content){
+      //console.log("Submitting answer to post ... ");
+
+      // console.log("Sending from userID " , userID);
+
+      return $http({
+        url: base_url + "server/answers.php",
+        method: 'POST',
+        data: {
+          cmd: "createanswer",
+          user_id: userID,
+          question_id: postID,
+          content: content
+        }
+      });
     }
 
     //TODO: implement back-end integration
@@ -141,8 +195,22 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitUpvotePost(postID, commentID, user){
-        return false;
+    function submitUpvotePost(postID, userID){
+
+      $http({
+         method: "POST",
+         url: base_url + "server/questions.php",
+         data: {
+           cmd: 'set_up_vote_qns',
+           qns_id: postID,
+           user_id: userID
+         }
+       }).then(function(data) {
+          // console.log('Success in upvoting post'); // ?
+       }, function(err){
+          // console.log("Error in upvoting post" , err);
+       });
+
     }
 
     //TODO: implement back-end integration
@@ -151,8 +219,32 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitDownvotePost(postID, commentID, user){
-        return false;
+    function submitDownvotePost(postID, userID){
+
+      return $http({
+         method: "POST",
+         url: base_url + "server/questions.php",
+         data: {
+           cmd: 'set_down_vote_qns',
+           qns_id: postID,
+           user_id: userID
+         }
+       });
+
+    }
+
+    function getCommentsFromQuestion(postID){
+
+      // console.log("sending post id ", postID);
+
+      return $http({
+         method: "POST",
+         url: base_url + "server/comment_qns.php",
+         data: {
+           cmd: 'get_all_comments_qns',
+           qns_id: postID
+         }
+       });
     }
 
     //TODO: implement back-end integration
@@ -162,7 +254,7 @@ angular.module('quoraApp')
 
     //TODO: implement back-end integration
     function submitUpvoteComment(postID, commentID, user){
-        console.log("Upvote!");
+        // console.log("Upvote!");
         return false;
     }
 
@@ -180,12 +272,47 @@ angular.module('quoraApp')
     function submitGetTrendingTags(){
         // return ['These', 'are', 'sample', 'tags', 'Lectures', 'Latest', 'UTown'];
         return $http({
-          url: "/server/tags.php",
+          url: base_url + "server/tags.php",
           method: "POST",
           data: {
             cmd: "get_trending_tag"
           }
         });
+
+    }
+
+    function getPost(postID){
+      return $http({
+        url: base_url + "server/questions.php",
+        method: 'POST',
+        data: {
+          cmd: 'get_qns_info',
+          qns_id: postID
+        }
+      });
+    }
+
+    function getCurrentUser(id, token) {
+      return $http({
+        url: base_url + 'server/users/main.php',
+        method: 'POST',
+        data: {
+          cmd: 'create',
+          user_id: id,
+          token: token
+        }
+      });
+    }
+
+    function getPost(id) {
+      return $http({
+        url: base_url + 'server/questions.php',
+        method: 'POST',
+        data: {
+          cmd: 'get_qns_info',
+          qns_id: id
+        }
+      });
     }
 
     return {
@@ -206,7 +333,12 @@ angular.module('quoraApp')
         submitCancelUpvoteComment   :   submitCancelUpvoteComment,
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
         submitGetTrendingTags       : submitGetTrendingTags,
-        getNotifications            :   getNotifications
+        submitAnswerToPost       : submitAnswerToPost,
+        getPost       : getPost,
+        getCommentsFromQuestion : getCommentsFromQuestion,
+        getNotifications            :   getNotifications,
+        getAnswersToCurrentPost : getAnswersToCurrentPost,
+        getCurrentUser        : getCurrentUser
     }
 
 }]);

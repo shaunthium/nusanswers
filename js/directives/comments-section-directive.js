@@ -4,33 +4,58 @@ angular.module('quoraApp')
     return {
         restrict: 'E',
         transclude: false,
-        controller: function($scope){
+        controller: function($scope, questionService){
             $scope.showComments = false;
             $scope.moreCommentsShown = false;
             $scope.noComments = true;
 
+            // A bit ugly
             $scope.$watchCollection(
-                function(){
-                    //XXX: beware! does tight coupling occur between the comments section and a post?
-                    return $scope.post.comments;
-                },
-                function(newComments){
-                    if(newComments){
-                        $scope.lessComments = newComments.slice(0,2);
-                        $scope.moreComments = newComments.slice(2);
-                        $scope.hasMoreComments = $scope.moreComments.length > 0;
-                        $scope.noComments = false;
-                    }
+              function(){
+                  return $scope.post;
+              },
+              function(post){
+                if(post){
+                  $scope.$watchCollection(
+                    function(){
+                      //XXX: beware! does tight coupling occur between the comments section and a post?
+                      return $scope.post.comments;
+                    },
+                    function(newComments){
+                      if(newComments){
+                          $scope.lessComments = newComments.slice(0,2);
+                          $scope.moreComments = newComments.slice(2);
+                          $scope.hasMoreComments = $scope.moreComments.length > 0;
+                          $scope.noComments = false;
+                      }
 
-                    if(!newComments || newComments.length === 0){
-                        $scope.noComments = true;
+                      if(!newComments || newComments.length === 0){
+                          $scope.noComments = true;
+                      }
                     }
-                }
+                  );
+                };
+              }
             );
 
             $scope.toggleShowComments = function(){
+
+                // console.log("Toggle comments");
+
                 $scope.showComments = !$scope.showComments;
                 $scope.cancelEdit();
+
+                // console.log("post " , $scope.post.id);
+
+                questionService.getCommentsFromQuestion($scope.post.id)
+                .then(function(res){
+
+                    // console.log("got data " , res);
+                    $scope.post.comments = res.data;
+
+                }, function(err){
+                    // console.log("Error in getting comments", err);
+                })
 
             }
 
@@ -46,7 +71,18 @@ angular.module('quoraApp')
                     $scope.editedComment = null;
                     $scope.editing = false;
                 }
-                $scope.post.comments.push($scope.$parent.newComment($scope.post.id, comment));
+
+                questionService.submitNewComment($scope.post.id, comment, $scope.currentUser.userID)
+                .then(function(res){
+
+                    // add comment to scope
+                    $scope.post.comments.push(res);
+                    // console.log("Success post comment", res);
+                }, function(err){
+                    // console.log("Error in posting comment", err);
+                });
+
+                //$scope.post.comments.push($scope.$parent.newComment($scope.post.id, comment));
             }
 
             //Enter edition mode and temporarily remove the comment from the front-end's post's comments.
