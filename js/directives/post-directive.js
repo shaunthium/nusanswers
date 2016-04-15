@@ -30,47 +30,6 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
 
-             // Edit here plx!
-          /*  var submitAnswerToServer = function(post, dangerousHTML){
-              console.log('hi');
-              /*var userID;
-              FB.getLoginStatus(function(resp) {
-                if (resp.status == 'connected') {
-                  FB.api('/me', function(response) {
-                    userID = response.id;
-                    console.log('userID is:');
-                    console.log(userID);
-                    var answersURL = "/server/answers.php";
-                    var questionID = post.id;
-                    $http({
-                      method: 'POST',
-                      url: answersURL,
-                      data: {
-                        cmd: "createanswer",
-                        user_id: userID,
-                        question_id: questionID,
-                        content: dangerousHTML
-                      },
-                      dataType: 'json'
-                    }).success(function() {
-                      console.log('hahaha');
-                    });
-                  });
-                }
-              });
-              // var userID = 1;
-            }*/
-
-            // Here goes user on submit click
-           /* $scope.submit = function(post){
-
-                console.log("lol");
-                submitAnswerToServer(post, $('.wysiwyg-editor').trumbowyg('html'));
-                //clean up
-                $('.wysiwyg-editor').trumbowyg('empty')
-                $scope.showTextEditor = !$scope.showTextEditor;
-            }*/
-
             $scope.toggleFooter = function(){
 
                 if(!$scope.currentUser){
@@ -110,9 +69,18 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, element, attrs){
-
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
+
+            //This watch is for getting the post in question-answers view.
+            scope.$watch(function(){
+                return scope.post;
+            },
+            function(post){
+                if(post){
+                    scope.answered = post.answered;
+                }
+            });
 
             switch(attrs.type){
                 case "feed-item":
@@ -127,12 +95,10 @@ angular.module('quoraApp')
                     scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
-                    // console.log("answer " , scope.post);
                     scope.includeAuthorFlavor = true;
                     break;
             }
         },
 		templateUrl : "templates/post-template.html"
 	}
-
 })

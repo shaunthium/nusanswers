@@ -6,10 +6,21 @@
                     <comments-section parent="post"></comments-section>
                     <!-- fixed footer -->
                     <div class="card-action">
-                        <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()" class="waves-effect waves-light btn blue ">
-                            <i class="material-icons">edit</i>
-                            <span style="position:relative; bottom:5px;">Answer</span>
-                        </a>
+                        <span ng-switch="answered">
+                            <span ng-switch-when="true">
+                                <!-- TODO: clicking on "Answered" in question-answers view scrolls down to your answer -->
+                                <a ng-class="{'disabled' : showFooter}" class="waves-effect waves-light btn green">
+                                    <i class="material-icons">check</i>
+                                    <span style="position:relative; bottom:5px;">Answered</span>
+                                </a>
+                            </span>
+                            <span ng-switch-default>
+                                <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
+                                    <i class="material-icons">edit</i>
+                                    <span style="position:relative; bottom:5px;">Answer</span>
+                                </a>
+                            </span>
+                        </span>
                     </div>
                     <wysiwyg-editor editor-id="{{post.id}}" ng-show="showFooter"></wysiwyg-editor>
                 </post>

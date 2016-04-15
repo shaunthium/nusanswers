@@ -21,11 +21,21 @@
                     <post type="feed-item">
                         <!-- fixed footer -->
                         <div class="card-action">
-                            <span style="padding-right:15px;"class="grey-text">{{post.total_answers}} Answer<span ng-show="post.total_answers != 1">s</span></span>
-                            <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
-                                <i class="material-icons">edit</i>
-                                <span style="position:relative; bottom:5px;">Answer</span>
-                            </a>
+                            <span style="padding-right:15px; cursor:pointer;"class="grey-text" ng-click="goToPost(post)">{{post.total_answers}} Answer<span ng-show="post.total_answers != 1">s</span></span>
+                            <span ng-switch="answered">
+                                <span ng-switch-when="true">
+                                    <a ng-class="{'disabled' : showFooter}" ng-click="goToPost(post)" class="waves-effect waves-light btn green">
+                                        <i class="material-icons">check</i>
+                                        <span style="position:relative; bottom:5px;">Answered</span>
+                                    </a>
+                                </span>
+                                <span ng-switch-default>
+                                    <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
+                                        <i class="material-icons">edit</i>
+                                        <span style="position:relative; bottom:5px;">Answer</span>
+                                    </a>
+                                </span>
+                            </span>
                         </div>
                         <!-- add answer -->
                         <!-- <div ng-if="showTextEditor"> -->
