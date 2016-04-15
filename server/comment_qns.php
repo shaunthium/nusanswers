@@ -43,7 +43,7 @@
 
 	if($cmd == "new_comment_qns"){
 		$user_id = $db->escape_string($data->user_id);
-		$qns_id = $db->escape_string($data->qns_id;
+		$qns_id = $db->escape_string($data->qns_id);
 		$comment = $db->escape_string($data->comment);
 
 		$query = "INSERT INTO Comments(user_id, question_id, content) VALUES(".$user_id. ", " . $qns_id . 
