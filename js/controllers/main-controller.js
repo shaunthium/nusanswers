@@ -3,30 +3,28 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
 
     $scope.loading = true;
-    $scope.currentUser = { id: "10209460093644289" };
 
-    // ezfb.getLoginStatus(function (res) {
-    //
-    //   $scope.loginStatus = res;
-    //   // console.log($scope.loginStatus);
-    //
-    //   if (res.status == 'connected') {
-    //     ezfb.api('/me',function (res) {
-    //       $scope.apiMe = res;
-    //       // console.log($scope.apiMe);
-    //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-    //       // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-    //         // console.log(data);
-    //         $scope.currentUser = data.data;
-    //         $scope.loading = false;
-    //         // console.log($scope.currentUser);
-    //       });
-    //     });
-    //   } else {
-    //     $scope.currentUser = null;
-    //     $scope.loading = false;
-    //   }
-    // });
+    /*ezfb.getLoginStatus(function (res) {
+    
+      $scope.loginStatus = res;
+      // console.log($scope.loginStatus);
+      if (res.status == 'connected') {
+        ezfb.api('/me',function (res) {
+          $scope.apiMe = res;
+          // console.log($scope.apiMe);
+          qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+          // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+            // console.log(data);
+            $scope.currentUser = data.data;
+            $scope.loading = false;
+            // console.log($scope.currentUser);
+          });
+        });
+      } else {
+        $scope.currentUser = null;
+        $scope.loading = false;
+      }
+    });*/
 
     /*TODO: back-end integration
         "post" should actually be "postID". The post, with its associated
@@ -125,25 +123,28 @@ angular.module('quoraApp')
 
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
-        // $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+
+        $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+
         // $scope.currentUser = { userID : "10209460093644289" };
-        ezfb.login(function(res) {
-          // console.log(res);
-          $scope.loginStatus = res;
-          if (res.status == 'connected') {
-            ezfb.api('/me',function (res) {
-              $scope.apiMe = res;
-              // console.log($scope.apiMe);
-              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-              qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-                $scope.currentUser = data.data;
-                // console.log($scope.currentUser);
-                // $scope.loading = false;
-                // console.log($scope.currentUser);
-              });
-            });
-          }
-        }, {scope: 'public_profile,email'});
+        // ezfb.login(function(res) {
+        //   // console.log(res);
+        //   $scope.loginStatus = res;
+        //   if (res.status == 'connected') {
+        //     ezfb.api('/me',function (res) {
+        //       $scope.apiMe = res;
+        //       // console.log($scope.apiMe);
+        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //         $scope.currentUser = data.data;
+        //         // console.log($scope.currentUser);
+        //         // $scope.loading = false;
+        //         // console.log($scope.currentUser);
+        //       });
+        //     });
+        //   }
+        // }, {scope: 'public_profile,email'});
+
         $('#login-modal').closeModal();
     }
 

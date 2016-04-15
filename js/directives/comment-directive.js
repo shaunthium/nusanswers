@@ -11,6 +11,12 @@ angular.module('quoraApp')
             // console.log("belongs to user ", $scope.belongsToUser);
 
             $scope.toggleLike = function(){
+
+                if(!$scope.currentUser){
+                    $scope.showLogin();
+                    return;
+                }
+
                 $scope.comment.liked = !$scope.comment.liked;
                 if($scope.comment.liked == true){
                     $scope.comment.upvotes++;
@@ -23,6 +29,12 @@ angular.module('quoraApp')
             }
 
             $scope.toggleReport = function(){
+
+                if(!$scope.currentUser){
+                    $scope.showLogin();
+                    return;
+                }
+
                 $scope.comment.reported = !$scope.comment.reported;
                 if($scope.comment.reported){
                     $scope.reportComment($scope.comment.id);
