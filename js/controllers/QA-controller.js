@@ -9,6 +9,7 @@ angular.module('quoraApp')
       console.log("ok got post", res);
       console.log($scope.currentUser);
       $scope.post = res.data.question;
+      $scope.post.content = $scope.post.content.trim();
       if(!$scope.post){
         // console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
       } else {
