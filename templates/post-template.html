@@ -5,9 +5,11 @@
         <br>
         <span ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
-                <span style="color:red;">{{post.id}}</span> {{post.title}}</span>
+                <!-- <span style="color:red;">{{post.id}}</span> {{post.title}}</span> -->
+                {{post.title}}</span>
             <span ng-switch-when="false" ng-if="includeTitle" class="card-title">
-                <span style="color:red;">{{post.id}}</span> {{post.title}}</span>
+                <!-- <span style="color:red;">{{post.id}}</span> {{post.title}}</span> -->
+                {{post.title}}</span>
         </span>
 
         <ul style="border:0;"class="collection">

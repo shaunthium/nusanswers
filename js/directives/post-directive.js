@@ -87,7 +87,7 @@ angular.module('quoraApp')
                 $scope.showLogin();
                 return;
               }
-
+              
               // User should not be able to downvote/upvote multiple times
               // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
@@ -127,7 +127,7 @@ angular.module('quoraApp')
                     scope.includeAuthorFlavor = true;
                     break;
                 case "answer":
-                    console.log("answer " , scope.post);
+                    // console.log("answer " , scope.post);
                     scope.includeAuthorFlavor = true;
                     break;
             }

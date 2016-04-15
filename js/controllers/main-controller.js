@@ -5,17 +5,25 @@ angular.module('quoraApp')
     $scope.loading = true;
 
     /*ezfb.getLoginStatus(function (res) {
+    
       $scope.loginStatus = res;
-
-      ezfb.api('/me',function (res) {
-        $scope.apiMe = res;
-        console.log($scope.apiMe);
-        qs.getCurrentUser($scope.apiMe.id).then(function(data) {
-          $scope.currentUser = data.data;
-          console.log($scope.currentUser);
-          
-        })
-      });
+      // console.log($scope.loginStatus);
+      if (res.status == 'connected') {
+        ezfb.api('/me',function (res) {
+          $scope.apiMe = res;
+          // console.log($scope.apiMe);
+          qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+          // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+            // console.log(data);
+            $scope.currentUser = data.data;
+            $scope.loading = false;
+            // console.log($scope.currentUser);
+          });
+        });
+      } else {
+        $scope.currentUser = null;
+        $scope.loading = false;
+      }
     });*/
 
     /*TODO: back-end integration
@@ -24,17 +32,17 @@ angular.module('quoraApp')
         state parameter.
     */
     $scope.goToPost = function(post){
-
         //$state.go('qa', {'currPost' : post});
         $location.path('/qa/' + post.id);
-        console.log("going to post", post);
+        // console.log("going to post", post);
        // $location.path('qa').search({id: post.id});
     }
 
     //TODO: implement goToProfile function
     $scope.goToProfile = function(post){
         //FIXME: this is just a simple placeholder to demonstrate functionality
-        $state.go('profile', {'author' : post.author});
+        // $state.go('profile', {'author' : post.author});
+        $location.path('/profile/' + post);
     }
 
     $scope.newPost = function(title){
@@ -110,13 +118,33 @@ angular.module('quoraApp')
     }
 
     $scope.showLogin = function(){
-        $('#login-modal').openModal();
+      $('#login-modal').openModal();
     }
 
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
-        // $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
-        $scope.currentUser = { id : "10209460093644289" };
+
+        $scope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+
+        // $scope.currentUser = { userID : "10209460093644289" };
+        // ezfb.login(function(res) {
+        //   // console.log(res);
+        //   $scope.loginStatus = res;
+        //   if (res.status == 'connected') {
+        //     ezfb.api('/me',function (res) {
+        //       $scope.apiMe = res;
+        //       // console.log($scope.apiMe);
+        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //         $scope.currentUser = data.data;
+        //         // console.log($scope.currentUser);
+        //         // $scope.loading = false;
+        //         // console.log($scope.currentUser);
+        //       });
+        //     });
+        //   }
+        // }, {scope: 'public_profile,email'});
+
         $('#login-modal').closeModal();
     }
 
@@ -124,7 +152,7 @@ angular.module('quoraApp')
 
     qs.getQuestions().then(function (returnedData) {
         $scope.loading = false;
-      console.log(returnedData);
+      // console.log(returnedData);
       $scope.posts = returnedData.data;
     });
     $scope.notifications = qs.getNotifications();

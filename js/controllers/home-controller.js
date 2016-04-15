@@ -45,7 +45,7 @@ angular.module('quoraApp')
         $scope.filteredPosts = filterByTags($scope.posts, newTags);
     });
 
-    console.log("in home controller")
+    // console.log("in home controller")
 
     $scope.showTextEditor = false;
     $scope.toggleTextEditor = function(){

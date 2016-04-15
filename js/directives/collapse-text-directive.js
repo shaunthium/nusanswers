@@ -13,18 +13,18 @@ angular.module('quoraApp')
             }
 
             $scope.$watch(
-                            function(){
-                                return $scope.transcluded;
-                            },
-                            function(newValue){
-                                if(newValue){
-                                    $scope.lessText = newValue.text().substring(0, $scope.maxLength);
-                                    $scope.moreText = newValue.text();
-                                    $scope.readMore = false || $scope.readMore; //If it was arleady true, do not collapse it again.
-                                    $scope.overflow = $scope.moreText.length > $scope.lessText.length ? true : false;
-                                }
-                            }
-                        );
+                function(){
+                    return $scope.transcluded;
+                },
+                function(newValue){
+                    if(newValue){
+                        $scope.lessText = newValue.text().substring(0, $scope.maxLength);
+                        $scope.moreText = newValue.text();
+                        $scope.readMore = false || $scope.readMore; //If it was arleady true, do not collapse it again.
+                        $scope.overflow = $scope.moreText.length > $scope.lessText.length ? true : false;
+                    }
+                }
+            );
         },
         link: function(scope, element, attrs, ctrl, transclude){
             scope.maxLength = attrs.maxLength;

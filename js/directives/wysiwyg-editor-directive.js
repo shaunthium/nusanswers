@@ -10,7 +10,7 @@ angular.module('quoraApp')
             },
             function(showFooter){
                 if(showFooter){
-                    console.log("Show footer! " + $scope.editorId);
+                    // console.log("Show footer! " + $scope.editorId);
                     $('#wysiwyg-editor-' + $scope.editorId).trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
@@ -20,19 +20,19 @@ angular.module('quoraApp')
 
             var submitAnswerToServer = function(post, dangerousHTML){
 
-              console.log("trying to submit " , dangerousHTML);
+              // console.log("trying to submit " , dangerousHTML);
 
               questionService.submitAnswerToPost(post.id, "10209460093644289", dangerousHTML)
                 .then(function(res){
-                  console.log("Successfully answered question", res.data);
+                  // console.log("Successfully answered question", res.data);
                   $scope.post.total_answers++;
                   if(!$scope.post.answers)
                     $scope.post.answers = [];
-                  
+
                   $scope.post.answers.push(res.data[0]);
 
                 }, function(err){
-                  console.log("Error in answering question", err);
+                  // console.log("Error in answering question", err);
                 })
               // console.log('hi');
               // var userID;

@@ -4,7 +4,7 @@ angular.module('quoraApp')
 .service('questionService', ['$q', '$http', function($q, $http){
 
     var base_url = "http://139.59.247.83/";
-    //var base_url = '';
+    // var base_url = '';
     var questions_url = "server/questions.php";
     var questions;
     var canceller;
@@ -155,7 +155,7 @@ angular.module('quoraApp')
     function submitAnswerToPost(postID, userID, content){
       //console.log("Submitting answer to post ... ");
 
-      console.log("Sending from userID " , userID);
+      // console.log("Sending from userID " , userID);
 
       return $http({
         url: base_url + "server/answers.php",
@@ -206,9 +206,9 @@ angular.module('quoraApp')
            user_id: userID
          }
        }).then(function(data) {
-          console.log('Success in upvoting post'); // ?
+          // console.log('Success in upvoting post'); // ?
        }, function(err){
-          console.log("Error in upvoting post" , err);
+          // console.log("Error in upvoting post" , err);
        });
 
     }
@@ -235,7 +235,7 @@ angular.module('quoraApp')
 
     function getCommentsFromQuestion(postID){
 
-      console.log("sending post id ", postID);
+      // console.log("sending post id ", postID);
 
       return $http({
          method: "POST",
@@ -254,7 +254,7 @@ angular.module('quoraApp')
 
     //TODO: implement back-end integration
     function submitUpvoteComment(postID, commentID, user){
-        console.log("Upvote!");
+        // console.log("Upvote!");
         return false;
     }
 
@@ -292,13 +292,25 @@ angular.module('quoraApp')
       });
     }
 
-    function getCurrentUser(id) {
+    function getCurrentUser(id, token) {
       return $http({
         url: base_url + 'server/users/main.php',
         method: 'POST',
         data: {
-          cmd: 'show',
-          user_id: id
+          cmd: 'create',
+          user_id: id,
+          token: token
+        }
+      });
+    }
+
+    function getPost(id) {
+      return $http({
+        url: base_url + 'server/questions.php',
+        method: 'POST',
+        data: {
+          cmd: 'get_qns_info',
+          qns_id: id
         }
       });
     }
