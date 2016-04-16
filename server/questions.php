@@ -250,7 +250,7 @@
 	*/
 	if($cmd == "latest_qns"){
 
-		
+		global $db; 
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
@@ -340,6 +340,7 @@
 				$answered = false;
 			}
 			
+
 
 			$latest_array[] = array(
 
