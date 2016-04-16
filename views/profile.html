@@ -67,8 +67,8 @@
 				        	<div style="display:table; width:100%;">
 					        	<div style="display:table-cell;">
 					        		<p style="margin-bottom:5px;">{{answer.title}}</p>
-					        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
-										    Tag{{tag}}
+					        		<div ng-repeat="tag in answer.tags"class="tag chip blue lighten-5">
+										    {{tag}}
 										  </div>
 					        	</div>
 					        	<div style="display:table-cell; width:65px;">
