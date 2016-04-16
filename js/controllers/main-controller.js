@@ -82,8 +82,8 @@ angular.module('quoraApp')
             Remove all posts from the feed and replace them with new ones that
             reflect changes the logged-in user has done.
         */
-        $scope.resetQuestionsFeed();
-        $scope.updateQuestionsFeed(0, 10, $rootScope.currentUser.id);
+        // $scope.resetQuestionsFeed();
+        // $scope.updateQuestionsFeed(0, 10, $rootScope.currentUser.id);
     }
 
     //TODO: get currentUser from database by logging in.
@@ -93,7 +93,6 @@ angular.module('quoraApp')
             function (returnedData) {
                 $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
-                console.log($scope.posts);
                 $scope.doneUpdatingFeed = true;
             },
             function(err){
