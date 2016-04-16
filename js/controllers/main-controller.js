@@ -82,7 +82,7 @@ angular.module('quoraApp')
     }
 
     $scope.resetQuestionsFeed = function(){
-        $scope.loading = true;
+        $scope.loading = false;
         $scope.posts = [];
     }
 
