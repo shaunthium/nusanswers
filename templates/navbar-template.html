@@ -64,12 +64,28 @@
       </form>
 
       <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
-      
+
       <a ng-if="showOverlay" ng-class="{'disabled' : !user_question}" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
         <li><a ui-sref="home" >Home</a></li>
-        <li><a ng-href="{{'#/profile/'+ currentUser.id}}">Profile</a></li>
+        <!-- <li><a ng-href="{{'#/profile/'+ currentUser.id}}">Profile</a></li> -->
+        <li ng-if="currentUser">
+            <!-- <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span ng-if="currentUser" >{{currentUser.first_name}}</span>
+            </a> -->
+            <a ng-href="{{'#/profile/'+ currentUser.id}}">{{currentUser.first_name}}</a>
+        </li>
+
+        <li class="no-animate" ng-if="!currentUser">
+            <!-- <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span ng-if="!currentUser">Login</span>
+            </a> -->
+            <a ng-click="showLogin()">Login</a>
+        </li>
+
         <!-- this one needs more work
         <li>
           <a class="dropdown-button" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a>

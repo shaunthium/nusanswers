@@ -76,7 +76,7 @@ angular.module('quoraApp')
         // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
-        Materialize.toast('Welcome back' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
+        Materialize.toast('Welcome back ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
 
         /*
             Remove all posts from the feed and replace them with new ones that
