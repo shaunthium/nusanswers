@@ -52,8 +52,9 @@ angular.module('quoraApp')
     });
 
     $scope.feedIndex = 0;
+    $scope.questionsPerUpdate = 10;
     $scope.resetQuestionsFeed();
-    $scope.updateQuestionsFeed($scope.feedIndex++, $scope.userID); //Infinite scroll feed
+    $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID); //Infinite scroll feed
     // $scope.updateQuestionsFeed(); //Use this to load all questions at a time. No infinite scroll feed.
     $scope.activeTags = [];
 
@@ -67,13 +68,16 @@ angular.module('quoraApp')
     });
 
     $(window).scroll(function(){
-        // console.log("scrolling!");
-        // console.log($(window).scrollTop() + $(window).height());
+        console.log("scrolling!");
+        // console.log($(window).scrollTop()+  $(window).height());
+        // console.log($(window).height());
         // console.log($(document).height());
+        // console.log($(window).scrollTop() - ($(document).height() - 3*$(window).height()));
         //FIXME: arbitrarily defined update height
-        if($(window).scrollTop() + $(window).height() >= $(document).height() - 1000 && $scope.doneUpdatingFeed) {
+        //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
+        if(($(window).scrollTop() >= $(document).height() - 2*$(window).height()) && $scope.doneUpdatingFeed) {
             console.log("Update feed!");
-            $scope.updateQuestionsFeed($scope.feedIndex++, $scope.userID);
+            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
         }
     });
 

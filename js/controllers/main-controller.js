@@ -83,13 +83,13 @@ angular.module('quoraApp')
             reflect changes the logged-in user has done.
         */
         $scope.resetQuestionsFeed();
-        $scope.updateQuestionsFeed(0, $rootScope.currentUser.id);
+        $scope.updateQuestionsFeed(0, 10, $rootScope.currentUser.id);
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.updateQuestionsFeed = function(index, userID){
+    $scope.updateQuestionsFeed = function(startIndex, requestedQuestions, userID){
         $scope.doneUpdatingFeed = false;
-        qs.getQuestions(index, userID).then(
+        qs.getQuestions(startIndex, requestedQuestions, userID).then(
             function (returnedData) {
                 $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);

@@ -18,31 +18,29 @@ angular.module('quoraApp')
                 }
             });
 
-            var submitAnswerToServer = function(post, dangerousHTML){
-                questionService.submitAnswerToPost(post.id, $scope.currentUser.id, dangerousHTML)
+            // TODO: Here goes user on submit click
+            $scope.submit = function(post){
+
+                if($('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html').length < 10){
+                    alert("Your answer is too short!");
+                    return;
+                }
+
+                Materialize.toast('Question answered! :)', 2000, 'custom-toast')
+                questionService.submitAnswerToPost(post.id, $scope.currentUser.id, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'))
                 .then(function(res){
                     // console.log("Successfully answered question", res.data);
                     $scope.post.total_answers++;
                     if(!$scope.post.answers){
                         $scope.post.answers = [];
                     }
+                    console.log(res)
                     $scope.post.answers.push(res.data[0]);
                     $scope.post.answered = true;
                 }, function(err){
                     // console.log("Error in answering question", err);
                 });
-            }
-
-            // TODO: Here goes user on submit click
-            $scope.submit = function(post){
-
-                if($('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html').length < 10){
-                    alert("Please write a proper answer");
-                    return;
-                }
-
-                Materialize.toast('Question answered:)', 2000, 'custom-toast')
-                submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
+                // submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
                 //clean up
                 $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
 
