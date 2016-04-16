@@ -52,7 +52,7 @@ angular.module('quoraApp')
         qs.submitNewPost($scope.currentUser.id, title_string)
         .then(function(res){
 
-            Materialize.toast('Yay, question asked! :)', 2000, 'custom-toast')
+            // Materialize.toast('Yay, question asked! :)', 2000, 'custom-toast')
             // console.log("Successfully submitted question", res);
             //$state.go('qa', {'currPost' : res.data[0]});
             $location.path('/qa/' + res.data[0].id);
