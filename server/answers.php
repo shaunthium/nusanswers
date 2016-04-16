@@ -5,19 +5,19 @@
   $cmd = $data->cmd;
 	// if(isset($_POST["question_id"]))
   if (isset($data->question_id)) {
-    $question_id = $data->question_id;
+    $question_id = $db->escape_string($data->question_id);
   }
   if (isset($data->answer_id)) {
-    $answer_id = $data->answer_id;
+    $answer_id = $db->escape_string($data->answer_id);
   }
   if (isset($data->user_id)) {
-    $user_id = $data->user_id;
+    $user_id = $db->escape_string($data->user_id);
   }
   if (isset($data->content)) {
-    $content = $data->content;
+    $content = $db->escape_string($data->content);
   }
   if (isset($data->comment_id)) {
-    $comment_id = $data->comment_id;
+    $comment_id = $db->escape_string($data->comment_id);
   }
 	// 	$question_id = $_POST["question_id"];
 	// if(isset($_POST["answer_id"]))
@@ -597,6 +597,7 @@
 					);
 				}
 			}
+			//error_log(json_encode($answersResult));
 			json_encode($answersResult);
 		}
 		else
@@ -693,6 +694,7 @@
 					);
 				}
 			}
+			//error_log(json_encode($answersResult));
 			json_encode($answersResult);
 		}
 		
