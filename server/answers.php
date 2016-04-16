@@ -142,6 +142,21 @@
 			
 			//$tag_array = explode(",", $post['tags']);
 			
+			if($voted == "1")
+			{
+				$upvote = "true";
+				$downvote = "false";
+			}
+			else if ($voted == "-1")
+			{
+				$upvote = "false";
+				$downvote = "true";
+			}
+			else
+			{
+				$upvote = "false";
+				$downvote = "false";
+			}
 			
 			$questionResult = array(
 
@@ -159,7 +174,8 @@
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
 				'answered' => $answered,
-				'voted' => $voted
+				'upvoted' => $upvote,
+				'downvoted' =>$downvote
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			
@@ -175,6 +191,21 @@
 			
 			$tag_array = explode(",", $post['tags']);
 			
+			if($voted == "1")
+			{
+				$upvote = "true";
+				$downvote = "false";
+			}
+			else if ($voted == "-1")
+			{
+				$upvote = "false";
+				$downvote = "true";
+			}
+			else
+			{
+				$upvote = "false";
+				$downvote = "false";
+			}
 			$questionResult = array(
 
 				'id'=>$post['id'],
@@ -191,7 +222,8 @@
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
 				'answered' => $answered,
-				'voted' => $voted
+				'upvoted' => $upvote,
+				'downvoted' =>$downvote
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));
@@ -278,6 +310,22 @@
 						
 				}
 				
+				if($voted == "1")
+				{
+					$upvote = "true";
+					$downvote = "false";
+				}
+				else if ($voted == "-1")
+				{
+					$upvote = "false";
+					$downvote = "true";
+				}
+				else
+				{
+					$upvote = "false";
+					$downvote = "false";
+				}
+			
 				$answersResult[] = array(
 
 					'id'=>$r['id'],
@@ -290,7 +338,8 @@
 					'updated_at'=>$r['updated_at'],
 					'chosen' => $r['chosen'],
 					'comments' => $answersCommentsResult,
-					'voted' => $voted
+					'upvoted' => $upvote,
+					'downvoted' =>$downvote
 				);
 			}
 		}
@@ -454,7 +503,6 @@
 			/* Get current vote info to the Answer */
 			$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
 			$result = $db->query($query);
-			
 
 			if(mysqli_num_rows($result) == 0) //Never voted before, proceed to upvote!
 			{
@@ -476,7 +524,7 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "upvoted by user $user_id . Credited(+1): answer_id: $answer_id user_id: $answer_user_id ";
+				echo "true";
 			}
 			else //have voted before!
 			{
@@ -516,7 +564,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "upvoted by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+					echo "true";
 			}
 		}
 	}
