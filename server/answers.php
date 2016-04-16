@@ -204,7 +204,7 @@
 			else
 			{
 				$upvote = false;
-				$downvote = true;
+				$downvote = false;
 			}
 			$questionResult = array(
 
