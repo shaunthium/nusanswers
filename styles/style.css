@@ -1,7 +1,7 @@
-/* Have to set height explicity on ui-view 
+/* Have to set height explicity on ui-view
 to prevent collapsing during animation*/
 /*.well[ui-view]{
- height: 65px; 
+ height: 65px;
 }*/
 /*.ui-view-container {
   position: relative;
@@ -42,7 +42,7 @@ to prevent collapsing during animation*/
 
 [ui-view].ng-leave {
   opacity: 1;
-  /*padding-left: 0px;*/  
+  /*padding-left: 0px;*/
   -webkit-transform:translate3d(0, 0, 0);
   -moz-transform:translate3d(0, 0, 0);
   transform:translate3d(0, 0, 0);
@@ -73,15 +73,15 @@ to prevent collapsing during animation*/
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: 
+  -webkit-transition:
       opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition:    
+    -moz-transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    transition:         
+    transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -153,15 +153,15 @@ to prevent collapsing during animation*/
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: 
+  -webkit-transition:
       opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition:    
+    -moz-transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    transition:         
+    transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -252,7 +252,7 @@ to prevent collapsing during animation*/
 .tooltip-top:focus:after {
   -webkit-transform: translateY(-12px);
   -moz-transform:    translateY(-12px);
-  transform:         translateY(-12px); 
+  transform:         translateY(-12px);
 }
 
 /* Left */
@@ -278,7 +278,7 @@ to prevent collapsing during animation*/
 .tooltip-left:focus:after {
   -webkit-transform: translateX(-12px);
   -moz-transform:    translateX(-12px);
-  transform:         translateX(-12px); 
+  transform:         translateX(-12px);
 }
 
 /* Bottom */
@@ -303,7 +303,7 @@ to prevent collapsing during animation*/
 .tooltip-bottom:focus:after {
   -webkit-transform: translateY(12px);
   -moz-transform:    translateY(12px);
-  transform:         translateY(12px); 
+  transform:         translateY(12px);
 }
 
 /* Right */
@@ -327,7 +327,7 @@ to prevent collapsing during animation*/
 .tooltip-right:focus:after {
   -webkit-transform: translateX(12px);
   -moz-transform:    translateX(12px);
-  transform:         translateX(12px); 
+  transform:         translateX(12px);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */
@@ -388,15 +388,15 @@ input[type="text"] {
 
 #overlay-container.ng-enter, #overlay-container.ng-leave-active{
   opacity:0;
-  
+
 }
 #overlay-container.ng-enter-active{
   opacity:1;
 }
 
-html,body{ 
+html,body{
   background:#EEEEEE;
-  height:100%;
+  /*height:100%;*/
 }
 
 html{
@@ -411,9 +411,9 @@ div.logo-container{
 
   padding:2px;
   background:white;
-  cursor:pointer; 
-  font-size:1.3em; 
-  color:white; 
+  cursor:pointer;
+  font-size:1.3em;
+  color:white;
   float:left;
   border-radius:2px;
 }
@@ -423,9 +423,9 @@ div.logo-container{
 }
 
 div.nus-logo{
-  position:fixed; 
-  left:20px; 
-  top:16px; 
+  position:fixed;
+  left:20px;
+  top:16px;
   z-index:1000;
   cursor:pointer !important;
 }
@@ -438,7 +438,7 @@ nav{
 form.main-search-field{
 
   border-radius:2px;
-  height:40px; 
+  height:40px;
   width:450px;
   /*width:90%;*/
   float:left;
@@ -468,7 +468,7 @@ form.main-search-field{
   /*form.main-search-field{
     margin-left:50px;
   }*/
-  
+
 }
 
 @media (max-width:1100px){
@@ -480,7 +480,7 @@ form.main-search-field{
   /*form.main-search-field{
     margin-left:50px;
   }*/
-  
+
 }
 
 
@@ -489,7 +489,7 @@ form.main-search-field{
   form.main-search-field, search-popup{
     width:270px !important;
   }
-  
+
 }
 
 @media (max-width: 750px){
@@ -505,7 +505,7 @@ form.main-search-field{
   textarea.comment-input-area{
 
     width:300px !important;
-    
+
   }
 
 }
@@ -542,8 +542,8 @@ form.main-search-field{
 
 div.tag{
 
-  font-size:0.8em; 
-  height:20px; 
+  font-size:0.8em;
+  height:20px;
   line-height:20px;
   border-radius:3px;
   margin-left:0px;
@@ -562,7 +562,7 @@ div.tag{
 
 i.comment-icon{
 
-  cursor:pointer; 
+  cursor:pointer;
   visibility: hidden;
 
 }
@@ -583,7 +583,7 @@ textarea.comment-input-area{
 
   padding:10px;
   resize:vertical;
-  width:400px; 
+  width:400px;
   height:100px;
 
 }
@@ -636,7 +636,7 @@ search-popup{
   position:absolute;
   background:white;
   width:450px;
-  z-index:999;  
+  z-index:999;
   border-radius:2px;
   top:80px;
   transition: all 0.2s;
@@ -673,7 +673,7 @@ search-popup.ng-enter-active{
 
 #overlay-container.ng-enter, #overlay-container.ng-leave-active{
   opacity:0;
-  
+
 }
 #overlay-container.ng-enter-active{
   opacity:1;
@@ -767,7 +767,7 @@ search-popup.fake-yellow:after{
   margin: 3px 10px;
 }
 
-.btn-fb-login .title { 
+.btn-fb-login .title {
   font-size: 0.8125em;
   color: #fff;
   line-height: 28px;
@@ -777,6 +777,3 @@ search-popup.fake-yellow:after{
   box-shadow: -1px 0 0 rgba(255, 255, 255, 0.1);*/
   border-left: 1px solid rgba(0, 0, 0, 0.3);
 }
-
-
-

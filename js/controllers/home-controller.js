@@ -89,15 +89,10 @@ angular.module('quoraApp')
     });
 
     $(window).scroll(function(){
-        // console.log("scrolling!");
-        // console.log($(window).scrollTop()+  $(window).height());
-        // console.log($(window).height());
-        // console.log($(document).height());
-        // console.log($(window).scrollTop() - ($(document).height() - 3*$(window).height()));
         //FIXME: arbitrarily defined update height
         //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
-        if(($(window).scrollTop() >= $(document).height() - 2*$(window).height()) && $scope.doneUpdatingFeed) {
-            // console.log("Update feed!");
+        if(($(window).scrollTop() >= 0.7*$(document).height() || $(window).scrollTop() + 2000 >= 0.9*$(document).height()) && $scope.doneUpdatingFeed) {
+            console.log("Update feed!");
             $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
         }
     });
