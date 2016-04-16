@@ -59,7 +59,7 @@
 		if(!isset($data->user_id))
 		{
 			//error_log("IS NOT SET\n");
-			$answered = "false";
+			$answered = false;
 			$voted = "0";
 		}
 		else //if it is set
@@ -68,9 +68,9 @@
 			$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
 			$result_answered = $db->query($query_answered);
 			if(mysqli_num_rows($result_answered) == 0)
-				$answered = "false";
+				$answered = false;
 			else
-				$answered = "true";
+				$answered = true;
 			
 			$query_voted = "Select * from Questions_Voted_By_Users where question_id = $question_id and user_id= $user_id";
 			$result_voted = $db->query($query_voted);
@@ -117,8 +117,8 @@
 				$commentsResult[] = array(
 					'id' => $r["id"],
 					'questionid' => $question_id,
-					'reported' => "false",
-					'liked' => "false",
+					'reported' => false,
+					'liked' => false,
 					'likes' => "0",
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
@@ -144,18 +144,18 @@
 			
 			if($voted == "1")
 			{
-				$upvote = "true";
-				$downvote = "false";
+				$upvote = true;
+				$downvote = false;
 			}
 			else if ($voted == "-1")
 			{
-				$upvote = "false";
-				$downvote = "true";
+				$upvote = false;
+				$downvote = true;
 			}
 			else
 			{
-				$upvote = "false";
-				$downvote = "false";
+				$upvote = false;
+				$downvote = false;
 			}
 			
 			$questionResult = array(
@@ -193,18 +193,18 @@
 			
 			if($voted == "1")
 			{
-				$upvote = "true";
-				$downvote = "false";
+				$upvote = true;
+				$downvote = false;
 			}
 			else if ($voted == "-1")
 			{
-				$upvote = "false";
-				$downvote = "true";
+				$upvote = false;
+				$downvote = true;
 			}
 			else
 			{
-				$upvote = "false";
-				$downvote = "false";
+				$upvote = false;
+				$downvote = true;
 			}
 			$questionResult = array(
 
@@ -269,8 +269,8 @@
 						$answersCommentsResult[] = array(
 							'id' => $a["id"],
 							'answerid' => $answers_id,
-							'reported' => "false",
-							'liked' => "false",
+							'reported' => false,
+							'liked' => false,
 							'likes' => "0",
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
@@ -312,18 +312,18 @@
 				
 				if($voted == "1")
 				{
-					$upvote = "true";
-					$downvote = "false";
+					$upvote = true;
+					$downvote = false;
 				}
 				else if ($voted == "-1")
 				{
-					$upvote = "false";
-					$downvote = "true";
+					$upvote = false;
+					$downvote = true;
 				}
 				else
 				{
-					$upvote = "false";
-					$downvote = "false";
+					$upvote = false;
+					$downvote = false;
 				}
 			
 				$answersResult[] = array(
@@ -527,7 +527,7 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "true";
+				echo true;
 			}
 			else //have voted before!
 			{
@@ -567,7 +567,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "true";
+					echo true;
 			}
 		}
 	}
@@ -584,9 +584,9 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo "false";
+			echo false;
 		else if (!isset($data->answer_id))
-			echo "false";
+			echo false;
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -614,7 +614,7 @@
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "true";
+				echo true;
 			}
 			else //have voted before!
 			{
@@ -654,7 +654,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "true";
+					echo true;
 			}
 		}
 	}
@@ -719,7 +719,7 @@
 			echo json_encode($answersResult);
 		}
 		else
-			echo "false";
+			echo false;
 		
 		
 	}
@@ -739,7 +739,7 @@
 		
 		if(mysqli_num_rows($result) == 0) // does not exist!
 		{
-			echo "false";
+			echo false;
 		}
 		else
 		{
@@ -781,8 +781,8 @@
 							$answersCommentsResult[] = array(
 								'id' => $a["id"],
 								'answerid' => $r["id"],
-								'reported' => "false",
-								'liked' => "false",
+								'reported' => false,
+								'liked' => false,
 								'likes' => "0",
 								'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 											'karma' =>$author2['score'],
