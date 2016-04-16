@@ -11,16 +11,17 @@
 	/*
 		Get all notifications of a user
 		@param: $user_id
-		@param: $index
+		@param: $index //start index of notification
+		@paramL $limit //Number of notifications
 		@return: list of unread notification
 	*/
 	if($cmd == "get_notifications"){
 		$user_id = $db->escape_string($data->user_id);
 		
 		if(isset($data->index)){
-			$limit_qns = 5;
+			$limit = $data->limit;
 			$index = $data->index;
-			$query = "SELECT * FROM Notifications  where user_id = 1 order by checked, id desc LIMIT " . $index . ", " . $limit_qns;
+			$query = "SELECT * FROM Notifications  where user_id = 1 order by checked, id desc LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Notifications  where user_id = 1 order by checked, id desc";
 		}
