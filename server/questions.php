@@ -146,6 +146,13 @@
 
 		$query = "UPDATE Questions SET title='" . $title. "', content='" . $content . "' WHERE id=". $qns_id;
 		$db->query($query);
+
+		$affected = $db->affected_rows;
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}	
 	}
 
 	/*
