@@ -598,7 +598,7 @@
 				}
 			}
 			//error_log(json_encode($answersResult));
-			json_encode($answersResult);
+			echo json_encode($answersResult);
 		}
 		else
 			echo "false";
@@ -695,7 +695,7 @@
 				}
 			}
 			//error_log(json_encode($answersResult));
-			json_encode($answersResult);
+			echo json_encode($answersResult);
 		}
 		
 	}
