@@ -625,7 +625,7 @@
 					);
 				}
 			}
-			error_log(json_encode($answersResult));
+			//error_log(json_encode($answersResult));
 			echo json_encode($answersResult);
 		}
 		else
@@ -722,7 +722,7 @@
 					);
 				}
 			}
-			error_log(json_encode($answersResult));
+			//error_log(json_encode($answersResult));
 			echo json_encode($answersResult);
 		}
 		
