@@ -522,6 +522,21 @@
 		while ($qns = mysqli_fetch_assoc($result)){
 			//Get the first name and last name of the author from 'users' table
 
+			//Get all tags of a qns
+			
+
+			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $qns['id'];
+			$result_tag_id = $db->query($query_tag_id);
+
+			$tag_name_array = array();
+			while ($row = mysqli_fetch_assoc($result_tag_id)){
+				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+				$result_tag_name = $db->query($query_tag_name);
+				$tag = mysqli_fetch_assoc($result_tag_name);
+				$tag_name_array[]  = $tag["content"];
+			}
+
+
 			$qns_array[] = array(
 				'id'=>$qns['id'],
 				'user_id'=>$qns['user_id'],
@@ -531,6 +546,7 @@
 				'view_count'=>$qns['view_count'],
 				'created_at'=>$qns['created_at'],
 				'updated_at'=>$qns['updated_at'],
+				'tags' => $tag_name_array
 			);
 		}
 		echo json_encode($qns_array);
