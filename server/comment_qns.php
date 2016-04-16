@@ -152,4 +152,88 @@
 		//echo $comment_id;
 	}
 
+	/*
+		upvote a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "set_upvote_comment"){
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "INSERT INTO Comments_Liked_By_Users VALUES(".$user_id. ", ".$comment_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
+
+	}
+
+	/*
+		Unlike a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "reset_upvote_comment"){
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "DELETE FROM Comments_Liked_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
+
+	}
+
+	/*
+		Report a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "set_report_comment"){
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "INSERT INTO Comments_Reported_By_Users VALUES(".$user_id. ", ".$comment_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
+
+	}
+
+	/*
+		Unreport a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "reset_report_comment"){
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "DELETE FROM Comments_Reported_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
+
+	}
+
 ?>
