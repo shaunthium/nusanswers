@@ -5,7 +5,6 @@ angular.module('quoraApp')
 
     // var base_url = "http://139.59.247.83/";
     var base_url = '';
-    var questions_url = "server/questions.php";
     var questions;
     var canceller;
 
@@ -76,14 +75,15 @@ angular.module('quoraApp')
     var notifications = ["Notification 1","Notification 2","Notification 3","Notification 4"];
     /*END HARDCODED SERVER REPLY OBJECTS*/
 
-    function getQuestions(userID, index) {
+    function getQuestions(startIndex, requestedQuestions, userID) {
       return $http({
         method: 'POST',
-        url: base_url + questions_url,
+        url: base_url + "server/questions.php",
         data: {
           cmd: "trending_qns",
           user_id : userID,
-          index : index
+          index : startIndex,
+          limit : requestedQuestions
         },
         dataType: 'json'
       });
