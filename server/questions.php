@@ -160,13 +160,70 @@
 		@param: qns_id
 	*/
 	if($cmd == "delete_qns"){
-		$qns_id= $data->qns_id;
+		$user_id = $db->escape_string($data->user_id);
+		$qns_id= $db->escape_string($data->qns_id);
+
+
+		//Delete answers, answers_comments, answer_comments_liked_by_users, answer_comments_reported_by_users
+		$query_ans_id = "SELECT * FROM Answers WHERE question_id=" . $qns_id;
+		$result_ans_id = $db->query($query_ans_id);
+		
+		while($ans_id_array = mysqli_fetch_assoc($result_ans_id)){
+			$ans_id = $ans_id_array['id'];
+
+			$query_ans_comment = "SELECT * FROM Answers_Comments WHERE answer_id=" . $ans_id;
+			$result_ans_comment = $db->query($query_ans_comment);
+			while($ans_comment_array = mysqli_fetch_assoc($result_ans_comment)){
+				$ans_comment = $ans_comment_array['id'];
+				//Delete ans_liked & reported
+				$query_ans_liked = "DELETE FROM Answer_Comments_Liked_By_Users WHERE comment_id=". $ans_comment;
+				$db->query($query_ans_liked); 
+				$query_ans_reported = "DELETE FROM Answer_Comments_Reported_By_Users WHERE comment_id=". $ans_comment;
+				$db->query($query_ans_reported); 
+			}
+
+			$query_delete_ans_comment = "DELETE FROM Answers_Comments WHERE answer_id=" . $ans_id;
+			$db->query($query_delete_ans_comment); 
+
+			$query_delete_ans_voted = "DELETE FROM Answers_Voted_By_Users WHERE answer_id=" . $ans_id;
+			$db->query($query_delete_ans_voted); 
+		}
+		$query_delete_ans_id = "DELETE FROM Answers WHERE question_id=" . $qns_id;
+		$db->query($query_delete_ans_id); 
+
+		//Delete comments, comments_liked_by_users, comments_reported_by_users
+		$query_comment_id = "SELECT * FROM Comments WHERE question_id=" . $qns_id;
+		$result_comment_id = $db->query($query_comment_id);
+
+		while($comment_id_array = mysqli_fetch_assoc($result_comment_id)){
+			$comment_id = $comment_id_array['id'];
+			//Delete comment_liked & reported
+			$query_comment_liked = "DELETE FROM Comments_Liked_By_Users WHERE comment_id=". $comment_id;
+			$db->query($query_comment_liked); 
+			$query_comment_reported = "DELETE FROM Comments_Reported_By_Users WHERE comment_id=". $comment_id;
+			$db->query($query_comment_reported); 
+		}
+		$query_delete_comment_id = "DELETE FROM Comments WHERE question_id=" . $qns_id;
+		$db->query($query_delete_comment_id); 
+
+		//Others
 		$query_qns_tag = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id;
 		$db->query($query_qns_tag);
-		$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id;
-		$db->query($query_qns);
-		$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
+		//$query_qns_tag = "DELETE FROM Answers WHERE question_id=" . $qns_id;
+		//$db->query($query_qns_tag);
+		$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;	
 		$db->query($query_vote);
+
+		$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id ." AND user_id=". $user_id;	
+		$db->query($query_qns);
+	
+		
+		$affected = $db->affected_rows;
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}	
 	}
 
 	/*
