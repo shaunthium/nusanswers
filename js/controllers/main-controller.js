@@ -3,8 +3,8 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    
-    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -83,30 +83,54 @@ angular.module('quoraApp')
             reflect changes the logged-in user has done.
         */
         $scope.resetQuestionsFeed();
-        $scope.updateQuestionsFeed($rootScope.currentUser.id);
+        $scope.updateQuestionsFeed(0, $rootScope.currentUser.id);
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.updateQuestionsFeed = function(userID, index){
-        qs.getQuestions(userID, index).then(
+    $scope.updateQuestionsFeed = function(index, userID){
+        $scope.doneUpdatingFeed = false;
+        qs.getQuestions(index, userID).then(
             function (returnedData) {
                 $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
+                console.log($scope.posts);
+                $scope.doneUpdatingFeed = true;
             },
             function(err){
                 console.log("Error while updating the questions feed!");
             });
     }
 
-    qs.getQuestionsSummary().then(function(res){
-        $scope.questionsSummary = res.data;
-        //TODO: set $scope.loading to be false only after both posts and the questions summary have been loaded!
-    }, function(err){
-        console.log("Error when getting questions summary.");
-    });
-
     $scope.resetQuestionsFeed = function(){
+        $scope.loading = true;
         $scope.posts = [];
+    }
+
+    $scope.getPost = function(questionID, userID){
+        $scope.loading = true;
+        qs.getPost(questionID, userID)
+        .then(function(res){
+            $scope.post = res.data.question;
+            if(!$scope.post){
+                //TODO: remember to set $scope.loading = false when switching to 404 page.
+                console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
+            } else {
+                qs.getAnswersToCurrentPost($scope.post.id)
+                .then(function(res){
+                    //TODO: we will need a "numAnswers" field in the post object in order to get the number of answers if we want to implement infinite scroll on answers as well.
+                    $scope.post.answers = res.data.answers;
+                    if($scope.post.answers.length > 0)
+                    $scope.numAnswers = $scope.post.answers.length;
+                    else
+                    $scope.numAnswers = 0;
+                    $scope.loading = false;
+                }, function(err){
+
+                });
+            }
+        }, function(err){
+
+        });
     }
 
     $scope.notifications = qs.getNotifications();

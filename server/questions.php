@@ -189,9 +189,9 @@
 		if(isset($data->index)){
 			$limit_qns = 10;
 			$index = $data->index;
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
+			$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit_qns;
 		}else{
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
+			$query = "SELECT * FROM Questions ORDER BY id DESC";
 		}
 
 		//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
@@ -320,9 +320,9 @@
 		if(isset($data->index)){
 			$limit_qns = 10;
 			$index = $data->index;
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC LIMIT " . $index . ", " . $limit_qns;
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC LIMIT " . $index . ", " . $limit_qns;
 		}else{
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC";
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC";
 		}
 
 		//$query = "SELECT * FROM Questions ORDER BY view_count DESC";
