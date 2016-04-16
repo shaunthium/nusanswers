@@ -533,9 +533,9 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo "user_id of current user NOT SET!";
+			echo "false";
 		else if (!isset($data->answer_id))
-			echo "answer_id not set!";
+			echo "false";
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -563,7 +563,7 @@
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "downvote by user $user_id . Credited(-1): answer_id: $answer_id user_id: $answer_user_id ";
+				echo "true";
 			}
 			else //have voted before!
 			{
@@ -603,7 +603,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "downvote by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+					echo "true";
 			}
 		}
 	}
