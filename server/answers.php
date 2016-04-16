@@ -266,14 +266,31 @@
 	* Deletes an answer
 	*
 	* @param: answer_id
+	* @param: user_id => USER ID OF CURRENT USER
 	*/
 	else if ($cmd == "deleteanswer")
 	{
 		global $db;
-		//WARNING: Authorization check not implemented!!
-		$query = "delete from Answers where id = $answer_id";
-		$res = $db->query($query);
-
+		
+		if (!isset($data->user_id))
+			echo "user_id of current user NOT SET!";
+		else if (!isset($data->answer_id))
+			echo "answer_id not set!";
+		else{
+			$query = "select user_id from Answers where id = $answer_id";
+			$res = $db->query($query);	
+			$fetch_user_id = mysqli_fetch_assoc($res);
+			$uid = $fetch_user_id["user_id"];
+			if($uid != $user_id)
+				echo "Unauthorized!";
+			else
+			{
+				$query = "delete from Answers where id = $answer_id";
+				$res = $db->query($query);	
+				echo "deleted!";
+			}
+			
+		}
 	}
 	
 	/*
