@@ -36,7 +36,7 @@
         <ul style="border:0;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <!-- TODO: replace dummy image with proper image -->
-                <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
+                <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}</p>
                 <a data-tooltip="This users karma" style="cursor:pointer; margin-right:-15px;" class="tooltip-left secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>

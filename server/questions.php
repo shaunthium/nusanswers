@@ -250,7 +250,7 @@
 	*/
 	if($cmd == "latest_qns"){
 
-		
+		global $db; 
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
@@ -291,7 +291,9 @@
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => $author['score'],
-									'userid' => $trending['user_id']);
+									'userid' => $latest['user_id'],
+									'flavour' => 'New User'
+									);
 
 			//Get all comment of a question including the author from 'comment' table
 			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
@@ -338,6 +340,7 @@
 				$answered = false;
 			}
 			
+
 
 			$latest_array[] = array(
 

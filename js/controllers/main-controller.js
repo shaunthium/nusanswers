@@ -3,6 +3,11 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
+    $scope.feedType = 'trending';
+
+    $scope.setFeedType = function(type){
+        $scope.feedType = type;
+    }
 
     // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
@@ -68,9 +73,9 @@ angular.module('quoraApp')
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.updateQuestionsFeed = function(startIndex, requestedQuestions, userID){
+    $scope.updateQuestionsFeed = function(feedType, startIndex, requestedQuestions, userID){
         $scope.doneUpdatingFeed = false;
-        qs.getQuestions(startIndex, requestedQuestions, userID).then(
+        qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
                 $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
