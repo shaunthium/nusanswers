@@ -17,7 +17,8 @@
 		$user_id= $db->escape_string($data->user_id);
 		$title = $db->escape_string($data->title);
 		$content= $db->escape_string($data->content);
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
+		$tag_array = json_decode($data->tag_string);
 
 		//Exit if there is no title for questions
 		if(empty($title)){
@@ -42,8 +43,9 @@
 		$qns_id =  $row['LAST_INSERT_ID()'];
 
 		//Add new tags and into the questions if tag_string is !empty
-		if(!empty($tag_string)){
-			$tag_array = explode(",", $tag_string);
+		if(!empty($tag_array)){
+		//if(!empty($tag_string)){
+			//$tag_array = explode(",", $tag_string);
 			//Call add_tag($tag_array) function inside tags.php to add new tag not in the database
 			add_tag($tag_array);
 			//Call tag_qns($qns_id, $tag_array) function inside tags.php to tag qns and the list of related tags together
