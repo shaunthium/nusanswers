@@ -24,7 +24,7 @@
 			  			<!-- </div> -->
 			  			<br/>
 			  			<!-- make som check if user is currentuser to show this ... -->
-			  			<span style="cursor:pointer;" ng-click="logout()" class="grey-text">Logout</span>
+			  			<span ng-if="profileId == currentUser.id" style="cursor:pointer;" ng-click="logout()" class="grey-text">Logout</span>
 					</div>
 				</div>
 			<!-- profile card end -->

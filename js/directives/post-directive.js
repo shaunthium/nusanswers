@@ -18,7 +18,7 @@
 'use strict'
 angular.module('quoraApp')
 
-.directive('post', function($window){
+.directive('post', function($http, $window){
 	return {
 		restrict: 'E',
 		transclude: true,
@@ -98,7 +98,6 @@ angular.module('quoraApp')
             }
 
             $scope.removeTag = function(tag){
-                console.log("Remove tag");
                 questionService.removeTag($scope.post.id, JSON.stringify([tag]))
                 .then(
                     function(res){
@@ -146,6 +145,18 @@ angular.module('quoraApp')
                     scope.answered = post.answered;
                     scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
                     scope.temp = {title : post.title};
+
+                    $http({
+                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
+                      method: 'GET',
+                      data: {
+                        width: '1000'
+                      }
+                    }).success(function(data) {
+                      scope.profileImg = data.data.url;
+                    }).error(function(data) {
+                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    });
                 }
             });
 
