@@ -351,6 +351,7 @@ angular.module('quoraApp')
         });
     }
 
+    //FIXME: Verify back-end: for addTag and removeTag, the format was updated from CSV string to JSON_encoded array.
     function addTag(questionID, tag){
         return $http({
           url: base_url + 'server/tags.php',
@@ -363,6 +364,7 @@ angular.module('quoraApp')
         });
     }
 
+    //FIXME: Verify back-end: for addTag and removeTag, the format was updated from CSV string to JSON_encoded array.
     function removeTag(questionID, tag){
         return $http({
           url: base_url + 'server/tags.php',
@@ -372,6 +374,19 @@ angular.module('quoraApp')
             qns_id : questionID,
             tag_string : tag
           }
+        });
+    }
+
+    function editQuestion(questionID, title, content){
+        return $http({
+            url: base_url + 'server/questions.php',
+            method: 'POST',
+            data: {
+                cmd: 'edit_qns',
+                qns_id : questionID,
+                title : title,
+                content : content
+           }
         });
     }
 
@@ -401,7 +416,8 @@ angular.module('quoraApp')
         getCurrentUser        : getCurrentUser,
         getQuestionsSummary         :   getQuestionsSummary,
         addTag                      :   addTag,
-        removeTag                   :   removeTag
+        removeTag                   :   removeTag,
+        editQuestion                :   editQuestion
     }
 
 }]);

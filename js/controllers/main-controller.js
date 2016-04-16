@@ -54,7 +54,7 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+        $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
         // $scope.currentUser = { userID : "10209460093644289" };
         // ezfb.login(function(res) {
@@ -76,14 +76,7 @@ angular.module('quoraApp')
         // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
-        Materialize.toast('Welcome back' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
-
-        /*
-            Remove all posts from the feed and replace them with new ones that
-            reflect changes the logged-in user has done.
-        */
-        // $scope.resetQuestionsFeed();
-        // $scope.updateQuestionsFeed(0, 10, $rootScope.currentUser.id);
+        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
     }
 
     //TODO: get currentUser from database by logging in.
