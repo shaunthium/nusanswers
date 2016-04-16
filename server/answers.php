@@ -439,59 +439,68 @@
 	* @param: user_id -> ID OF THE PERSON VOTING
 	* @param: comment_id
 	*/
-	else if($cmd == "like")
+	else if($cmd == "like" || $cmd == "unlike")
 	{
 		
 		global $db;
 		
-		/* Get current vote info to the Answer */
-		$query = "SELECT 1 FROM  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-		$result = $db->query($query);
-		
-
-		if(mysqli_num_rows($result) == 0) //Never liked before, proceed to like!
+		if (!isset($data->user_id))
+			echo false;
+		else if (!isset($data->comment_id))
+			echo false;
+		else
 		{
-			/* Insert like entry */
-			$query = "Insert Into Answer_Comments_Liked_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Comment */
-			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+			/* Get current vote info to the Answer */
+			$query = "SELECT 1 FROM  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
 			$result = $db->query($query);
-			$comment_user_id = mysqli_fetch_assoc($result);
-			$comment_user_id = $comment_user_id["user_id"];
 			
-			/* Here we upvote the Comments likes by 1 */
-			$query = "UPDATE Answers_Comments SET likes = likes + 1 where id = $comment_id";
-			$db->query($query);
-			
-			/* Here we upvote the User score by 1*/
-			$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
-			$db->query($query);
-			
-		}
-		else //have voted before! Proceed to unlike
-		{
-			
-			/* Remove like entry */
-			$query = "Delete From Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-			$db->query($query);
-			
-			/* Here we downvote the Comments likes by 1 */
-			$query = "UPDATE Answers_Comments SET likes = likes - 1 where id = $comment_id";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Comment */
-			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
-			$result = $db->query($query);
-			$comment_user_id = mysqli_fetch_assoc($result);
-			$comment_user_id = $comment_user_id["user_id"];
-			
-			/* Here we upvote the User score by 1*/
-			$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
-			$db->query($query);
-		}
 
+			if(mysqli_num_rows($result) == 0) //Never liked before, proceed to like!
+			{
+				/* Insert like entry */
+				$query = "Insert Into Answer_Comments_Liked_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
+				$db->query($query);
+				
+				/* Here we get the User ID of the user who posted the Comment */
+				$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+				$result = $db->query($query);
+				$comment_user_id = mysqli_fetch_assoc($result);
+				$comment_user_id = $comment_user_id["user_id"];
+				
+				/* Here we upvote the Comments likes by 1 */
+				$query = "UPDATE Answers_Comments SET likes = likes + 1 where id = $comment_id";
+				$db->query($query);
+				
+				/* Here we upvote the User score by 1*/
+				$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
+				$db->query($query);
+				
+				return true;
+			}
+			else //have voted before! Proceed to unlike
+			{
+				
+				/* Remove like entry */
+				$query = "Delete From Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+				$db->query($query);
+				
+				/* Here we downvote the Comments likes by 1 */
+				$query = "UPDATE Answers_Comments SET likes = likes - 1 where id = $comment_id";
+				$db->query($query);
+				
+				/* Here we get the User ID of the user who posted the Comment */
+				$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+				$result = $db->query($query);
+				$comment_user_id = mysqli_fetch_assoc($result);
+				$comment_user_id = $comment_user_id["user_id"];
+				
+				/* Here we upvote the User score by 1*/
+				$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
+				$db->query($query);
+				
+				return true;
+			}
+		}
 	}
 	
 	/*
