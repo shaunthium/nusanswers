@@ -186,10 +186,11 @@
 
 		
 
-		if(isset($data->index)){
-			$limit_qns = 10;
+		if(isset($data->index) && isset($data->limit) ){
+			//$limit_qns = 10;
 			$index = $data->index;
-			$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit_qns;
+			$limit = $data->limit;
+			$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY id DESC";
 		}
@@ -317,10 +318,11 @@
 
 		
 
-		if(isset($data->index)){
-			$limit_qns = 10;
+		if(isset($data->index) && isset($data->limit) ){
+			//$limit_qns = 10;
 			$index = $data->index;
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC LIMIT " . $index . ", " . $limit_qns;
+			$limit = $data->limit;
+			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC";
 		}
