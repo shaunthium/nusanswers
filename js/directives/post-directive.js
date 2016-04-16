@@ -18,7 +18,7 @@
 'use strict'
 angular.module('quoraApp')
 
-.directive('post', function($window){
+.directive('post', function($http, $window){
 	return {
 		restrict: 'E',
 		transclude: true,
@@ -147,15 +147,15 @@ angular.module('quoraApp')
                     scope.temp = {title : post.title};
 
                     $http({
-                      url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
+                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
                       method: 'GET',
                       data: {
                         width: '1000'
                       }
                     }).success(function(data) {
-                      $scope.profileImg = data.data.url;
+                      scope.profileImg = data.data.url;
                     }).error(function(data) {
-                      $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
                     });
                 }
             });
