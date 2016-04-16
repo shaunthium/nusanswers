@@ -24,7 +24,7 @@
                             <span style="padding-right:15px; cursor:pointer;"class="grey-text" ng-click="goToPost(post)">{{post.total_answers}} Answer<span ng-show="post.total_answers != 1">s</span></span>
                             <span ng-switch="answered">
                                 <span ng-switch-when="true">
-                                    <a ng-class="{'disabled' : showFooter}" ng-click="goToPost(post)" class="waves-effect waves-light btn green">
+                                    <a style=" opacity:0.8;background:#4caf50 !important; color:white !important;" ng-click="goToPost(post)" class="disabled btn green">
                                         <i class="material-icons">check</i>
                                         <span style="position:relative; bottom:5px;">Answered</span>
                                     </a>

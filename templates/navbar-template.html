@@ -8,15 +8,15 @@
 <!-- Stuff that appears when user starts typing question -->
 <div style="position:fixed;"ng-if="showOverlay" id="overlay-container"></div>
 
-<search-popup style="position:fixed;" ng-class="{'fake-white' : !user_question}" ng-if="showOverlay"></search-popup>
+<search-popup style="position:fixed;" ng-class="{'fake-white' : !user_question, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
 
  <!-- Login modal -->
   <div style="max-width:500px;" id="login-modal" class="modal">
     <div class="modal-content">
-      <p style="font-size:1.1em;" class="center">For now we only support facebook login</p>
-      <div ng-click="makeFacebookLogin()" style="margin:0 auto;width:200px;"class="btn-fb-login">
+      <p style="font-size:1.1em;" class="center">Help us keep spammers away! <br> Login with Facebook to participate in the discussion!</p>
+      <div ng-click="makeFacebookLogin()" style="margin:0 auto;width:150px;"class="btn-fb-login">
         <span class="icon icon-fb"></span>
-        <span class="title">Login with Facebook</span>
+        <span class="title">Facebook Login!</span>
       </div>
     </div>
     <div class="modal-footer">
@@ -64,11 +64,12 @@
       </form>
 
       <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
-      <a ng-if="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
+      
+      <a ng-if="showOverlay" ng-class="{'disabled' : !user_question}" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="#/home">Home</a></li>
-        <li><a href="#/profile">Profile</a></li>
+        <li><a ui-sref="home" >Home</a></li>
+        <li><a ng-href="{{'#/profile/'+ currentUser.id}}">Profile</a></li>
         <!-- this one needs more work
         <li>
           <a class="dropdown-button" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a>

@@ -1,5 +1,5 @@
 angular.module('quoraApp')
-.controller('ProfileCtrl', ['$stateParams','ezfb', '$scope', '$http', '$state', function($stateParams, ezfb, $scope, $http, $state){
+.controller('ProfileCtrl', ['$stateParams','ezfb', '$scope', '$rootScope', '$http', '$state', function($stateParams, ezfb, $scope, $rootScope, $http, $state){
   // var base_url = "http://139.59.247.83/";
   var base_url = '';
 
@@ -60,6 +60,7 @@ angular.module('quoraApp')
     $rootScope.currentUser = undefined;
     $scope.resetQuestionsFeed();
     $scope.updateQuestionsFeed();
+    Materialize.toast('Successfully logged out', 2000, 'custom-toast')
     $state.go('home');
   }
 

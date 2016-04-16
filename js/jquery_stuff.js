@@ -22,16 +22,30 @@ angular.module('quoraApp')
 .directive('body', function(){
 	return {
 		restrict:'E',
-		link:function(scope, element, attributes){
+		controller: function($scope, $timeout){
+
 			$('html').click(function(){
 				if( $('#search').is(':focus')) {
-					scope.showOverlay = true;
+					$scope.user_question = "?";
+					$timeout(function(){
+						$('#search').get(0).setSelectionRange(0,0);
+					}, 0)
+					$scope.showOverlay = true;
 				} else {
-					scope.user_question = "";	
-					scope.showOverlay = false;
+					if(!$scope.submitQuestionError){
+						$scope.user_question = "";
+						$scope.showOverlay = false;
+						$scope.showQuestionError = false;
+					}
 				}	
-				scope.$apply(); 
+
+				$scope.$apply(); 
 			});
+
+
+		},
+		link:function(scope, element, attributes){
+			
 		}
 	}
 })

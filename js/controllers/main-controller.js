@@ -3,7 +3,8 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     ezfb.getLoginStatus(function (res) {
 
@@ -15,13 +16,13 @@ angular.module('quoraApp')
           // console.log($scope.apiMe);
           qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
             // console.log(data);
-            $scope.currentUser = data.data;
+            $rootScope.currentUser = data.data;
             $scope.loading = false;
             // console.log($scope.currentUser);
           });
         });
       } else {
-        $scope.currentUser = null;
+        $rootScope.currentUser = null;
         $scope.loading = false;
       }
     });
@@ -71,6 +72,7 @@ angular.module('quoraApp')
         }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
+        Materialize.toast('Welcome back' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
 
         /*
             Remove all posts from the feed and replace them with new ones that
@@ -92,11 +94,16 @@ angular.module('quoraApp')
             });
     }
 
+    qs.getQuestionsSummary().then(function(res){
+        $scope.questionsSummary = res.data;
+        //TODO: set $scope.loading to be false only after both posts and the questions summary have been loaded!
+    }, function(err){
+        console.log("Error when getting questions summary.");
+    });
+
     $scope.resetQuestionsFeed = function(){
         $scope.posts = [];
     }
-
-    $scope.updateQuestionsFeed();
 
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {

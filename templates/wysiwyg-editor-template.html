@@ -1,10 +1,10 @@
 <!-- shows user profile on add answer -->
 <div style="padding:0px;"class="card-action">
     <ul style="border:0;"class="collection">
-        <li style="margin-left:5px; min-height:0px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
+        <li style="margin-left:5px; min-height:50px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
             <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
             <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
-            <p ng-if="includeViews" class="grey-text">{{post.author.flavor}}</p>
+            <p class="grey-text">{{post.author.flavour}}</p>
             <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.score}}</a>
         </li>
     </ul>
