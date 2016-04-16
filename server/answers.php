@@ -347,6 +347,7 @@
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
 		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
+
 	}
 	
 	/*
@@ -360,16 +361,16 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo "user_id of current user NOT SET!";
+			echo false;
 		else if (!isset($data->answer_id))
-			echo "answer_id not set!";
+			echo false;
 		else{
 			$query = "select user_id from Answers where id = $answer_id";
 			$res = $db->query($query);	
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
 			if($uid != $user_id)
-				echo "Unauthorized!";
+				echo false;
 			else
 			{
 				$query = "delete from Answers_Comments where answer_id = $answer_id";
@@ -377,7 +378,7 @@
 				
 				$query = "delete from Answers where id = $answer_id";
 				$res = $db->query($query);	
-				echo "deleted!";
+				echo true;
 			}
 			
 		}
@@ -825,31 +826,122 @@
 	else if ($cmd == "createcomment")
 	{
 		global $db;
+		
+		/* Here we get the User Info to each question */
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$result_author = $db->query($query_author);
+		$comment_author = mysqli_fetch_assoc($result_author);
+		
 		$query = "insert into Answers_Comments (user_id, answer_id, content) Values ($user_id, $answer_id, '$content')";
 		$db->query($query);
+		
+		$comment_id = $db->insert_id;
+		$query = "select * from Answers_Comments where id = $comment_id";
+		$result = $db->query($query);
+		if(mysqli_num_rows($result) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($result);
+		$commentsResult = array();
+		
+		$commentsResult[] = array(
+					'id' => $r["id"],
+					'answerid' => $answer_id,
+					'reported' => false,
+					'liked' => false,
+					'likes' => "0",
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
+								'userid'=>$r["user_id"],
+								'flavour'=> $comment_author['flavour']),
+					
+					'body' => $r["content"],
+					'created_at'=>$r['created_at'],
+					'updated_at'=>$r['updated_at']
+				);
+		//error_log(json_encode($commentsResult));
+		echo json_encode($commentsResult);
 	}
 	/*
 	* Updates an Answer's COMMENT
 	*
-	* @param: comment_id, content
+	* @param: comment_id,
+	* @param: content
+	* @param user_id OF CURRENT USER;
 	*/
 	else if ($cmd == "updatecomment")
 	{
 		global $db;
+		
+		$query = "select user_id from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($res);
+		$uid = $r["user_id"];
+		if($uid != $user_id) //unauthorized
+			return false;
+			
 		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
 		$db->query($query);
+		
+		$query = "select * from Answers_Comments where id = $comment_id";
+		$result = $db->query($query);
+		if(mysqli_num_rows($result) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($result);
+		$commentsResult = array();
+		
+		/* Here we get the User Info to each question */
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$result_author = $db->query($query_author);
+		$comment_author = mysqli_fetch_assoc($result_author);
+		
+		
+		$commentsResult[] = array(
+					'id' => $r["id"],
+					'answerid' => $answer_id,
+					'reported' => false,
+					'liked' => false,
+					'likes' => "0",
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
+								'userid'=>$r["user_id"],
+								'flavour'=> $comment_author['flavour']),
+					
+					'body' => $r["content"],
+					'created_at'=>$r['created_at'],
+					'updated_at'=>$r['updated_at']
+				);
+		//error_log(json_encode($commentsResult));
+		echo json_encode($commentsResult);
 	}
 	/*
 	* Delete's a Comment
 	*
 	* @param: comment_id
+	* @PARAML user_id OF CURRENT USER
 	*/
 	else if ($cmd == "deletecomment")
 	{
 		global $db;
-		//WARNING: Authorization check not implemented!!
+		
+		$query = "select user_id from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($res);
+		$uid = $r["user_id"];
+		if($uid != $user_id) //unauthorized
+			return false;
+		
 		$query = "delete from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
+		
+		return true;
 	}
 	
 	/*
