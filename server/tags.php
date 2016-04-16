@@ -79,8 +79,9 @@
 		@param: tag_string
 	*/
 	if($cmd == "get_all_qns_of_tags"){
-		$tag_string = $db->escape_string($data->tag_string);
-		$tag_array = explode(",", $tag_string);
+		//$tag_string = $db->escape_string($data->tag_string);
+		//$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);
 
 		$tag_id_array = array();
 		foreach($tag_array as $tag){
@@ -123,9 +124,10 @@
 		@param: tag_string
 	*/
 	if($cmd == "add_tag"){
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
 		
-		$tag_array = explode(",", $tag_string);
+		//$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);
 		add_tag($tag_array);
 	}	
 
