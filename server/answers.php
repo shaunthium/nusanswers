@@ -114,11 +114,25 @@
 				$result_author = $db->query($query_author);
 				$comment_author = mysqli_fetch_assoc($result_author);
 				
+				/* Here we determine if current user has liked this comment */
+				$comment_id = $r["id"];
+				$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+				$comment_result = $db->query($query);
+				
+				if(mysqli_num_rows($comment_result) == 0) //Never reported before
+				{
+					$liked = false;
+				}
+				else
+				{
+					$liked = true;
+				}
+				
 				$commentsResult[] = array(
 					'id' => $r["id"],
 					'questionid' => $question_id,
 					'reported' => false,
-					'liked' => false,
+					'liked' => $liked,
 					'likes' => "0",
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
@@ -266,11 +280,25 @@
 						$result_author2 = $db->query($query_author2);
 						$author2 = mysqli_fetch_assoc($result_author2);
 						
+						/* Here we determine if current user has liked this comment */
+						$comment_id = $a["id"];
+						$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+						$comment_result = $db->query($query);
+						
+						if(mysqli_num_rows($comment_result) == 0) //Never reported before
+						{
+							$liked = false;
+						}
+						else
+						{
+							$liked = true;
+						}
+						
 						$answersCommentsResult[] = array(
 							'id' => $a["id"],
 							'answerid' => $answers_id,
 							'reported' => false,
-							'liked' => false,
+							'liked' => $liked,
 							'likes' => "0",
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
@@ -859,7 +887,7 @@
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at']
 				);
-		//error_log(json_encode($commentsResult));
+		error_log(json_encode($commentsResult));
 		echo json_encode($commentsResult);
 	}
 	/*
@@ -915,7 +943,7 @@
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at']
 				);
-		//error_log(json_encode($commentsResult));
+		error_log(json_encode($commentsResult));
 		echo json_encode($commentsResult);
 	}
 	/*
