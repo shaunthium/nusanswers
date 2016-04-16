@@ -44,17 +44,41 @@ angular.module('quoraApp')
              $('.tooltipped').tooltip({delay: 50});
 
             $scope.toggleEditMode = function(){
-
-
-                $('#wysiwyg-editor-questionbody').trumbowyg({
-                    fullscreenable: false,
-                    btns:['bold', 'italic']
-                });
-
                 $scope.editMode = !$scope.editMode;
+                if($scope.editMode){
+                    $scope.temp.title = $scope.post.title;
+                    $('#wysiwyg-editor-questionbody').trumbowyg({
+                        fullscreenable: false,
+                        btns:['bold', 'italic']
+                    });
+                }
+                else{
+                    Materialize.toast('Changes not saved.', 2000, 'custom-toast')
+                }
             }
 
-        
+            $scope.saveChanges = function(){
+                $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
+                questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+                .then(
+                    function(res){
+                        if(res.data){
+                            $scope.post.title = $scope.temp.title;
+                            $scope.post.content = $scope.temp.content;
+                            Materialize.toast('Changes saved successfully!', 2000, 'custom-toast');
+                            $scope.editMode = !$scope.editMode;
+                        }
+                        else{
+                            console.log("Error while editing question!");
+                        }
+                    },
+                    function(err){
+                        console.log("Error while editing question!");
+                    }
+                );
+            }
+
+
             $scope.incrementUpvotes = function(post, inc) {
 
               if(!$scope.currentUser){
@@ -71,30 +95,44 @@ angular.module('quoraApp')
                 post.upvotes--;
                 questionService.submitDownvotePost(post.id, $scope.currentUser.id, $scope.type);
               }
-
-            };
+            }
 
             $scope.removeTag = function(tag){
                 console.log("Remove tag");
-                questionService.removeTag($scope.post.id, tag).then(function(res){
-                    $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
-                },
-                function(err){
-                    console.log("Error while deleting tag from the question!");
-                });
+                questionService.removeTag($scope.post.id, JSON.stringify([tag]))
+                .then(
+                    function(res){
+                        if(res.data){
+                            $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
+                        }
+                        else{
+                            console.log("Error in removing tag from question!");
+                        }
+                    },
+                    function(err){
+                        console.log("Error while deleting tag from the question!");
+                    }
+                );
             }
 
             $scope.addTag = function(tag){
-                questionService.addTag($scope.post.id, tag).then(function(res){
-                    $scope.post.tags.push(tag);
-                },
-                function(err){
-                    console.log("Error while adding tag to the question!");
-                });
+                questionService.addTag($scope.post.id, JSON.stringify([tag]))
+                .then(
+                    function(res){
+                        if(res.data){
+                            $scope.post.tags.push(tag);
+                        }
+                        else{
+                            console.log("Error in adding data to question!");
+                        }
+                    },
+                    function(err){
+                        console.log("Error while adding tag to the question!");
+                    }
+                );
             }
         },
         link : function(scope, element, attrs){
-
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
@@ -107,6 +145,7 @@ angular.module('quoraApp')
                 if(post){
                     scope.answered = post.answered;
                     scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
+                    scope.temp = {title : post.title};
                 }
             });
 

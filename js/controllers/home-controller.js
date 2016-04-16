@@ -27,6 +27,11 @@ angular.module('quoraApp')
     };
 })
 .controller('HomeCtrl', [ '$scope', '$rootScope', '$stateParams', 'byTagsFilter', 'questionService', function($scope, $rootScope, $stateParams, filterByTags, questionService){
+    $scope.feedIndex = 0;
+    $scope.questionsPerUpdate = 10;
+    $scope.activeTags = [];
+    // $scope.updateQuestionsFeed(); //Use this to load all questions at a time. No infinite scroll feed.
+
     //Watch for changes in posts
     $scope.$watchCollection(function(){
         return $scope.posts;
@@ -42,21 +47,22 @@ angular.module('quoraApp')
     function(newTags){
         $scope.filteredPosts = filterByTags($scope.posts, newTags);
     });
+
     $scope.$watch(function(){
         return $scope.currentUser;
     },
     function(currentUser){
+        $scope.feedIndex = 0;
         if(currentUser){
-            $scope.userID = currentUser.id;
+            $scope.resetQuestionsFeed();
+            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, currentUser.id); //Infinite scroll feed
+        }
+        else{
+            $scope.resetQuestionsFeed();
+            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate); //Infinite scroll feed
         }
     });
 
-    $scope.feedIndex = 0;
-    $scope.questionsPerUpdate = 10;
-    $scope.resetQuestionsFeed();
-    $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID); //Infinite scroll feed
-    // $scope.updateQuestionsFeed(); //Use this to load all questions at a time. No infinite scroll feed.
-    $scope.activeTags = [];
 
     //FIXME: currently, search parameters are only updated when the user goes to the home view.
     questionService.getQuestionsSummary().then(function(res){
@@ -68,7 +74,7 @@ angular.module('quoraApp')
     });
 
     $(window).scroll(function(){
-        console.log("scrolling!");
+        // console.log("scrolling!");
         // console.log($(window).scrollTop()+  $(window).height());
         // console.log($(window).height());
         // console.log($(document).height());
@@ -76,7 +82,7 @@ angular.module('quoraApp')
         //FIXME: arbitrarily defined update height
         //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
         if(($(window).scrollTop() >= $(document).height() - 2*$(window).height()) && $scope.doneUpdatingFeed) {
-            console.log("Update feed!");
+            // console.log("Update feed!");
             $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
         }
     });

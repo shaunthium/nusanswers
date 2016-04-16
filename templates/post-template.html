@@ -1,13 +1,22 @@
 
 <div class="card white">
     <div class="card-content">
-   
+
         <tag ng-repeat="tag in post.tags"></tag>
 
+        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="blue-text" ng-click="toggleEditMode()">
+            Cancel
+        </span>
         <!-- edit button -->
-        <a ng-if="isEditable" style="padding-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn indigo right">
-            <i class="material-icons">edit</i>
-            <span style="position:relative; bottom:5px;"></span>
+        <a ng-if="isEditable" style="padding-right:10px;" class="waves-effect waves-light btn indigo right">
+            <span ng-if="!editMode" ng-click="toggleEditMode()">
+                <i class="material-icons">edit</i>
+                <span style="position:relative; bottom:5px;"></span>
+            </span>
+            <span ng-if="editMode" ng-click="saveChanges()">
+                <i class="material-icons">edit</i>
+                <span style="position:relative; bottom:5px;">Save changes</span>
+            </span>
         </a>
 
         <tag-input-field ng-if="editMode"></tag-input-field>
@@ -15,7 +24,7 @@
         <!-- <br ng-if="type !== 'answer' || post.tags.length > 2"> -->
         <br ng-if="post.tags.length > 0 && type !== 'answer'"/>
 
-        <input ng-model="post.title" class="animate-fade-in" ng-if="editMode && type==='question'" type="text" name="FirstName" value="{{post.title}}">
+        <input ng-model="temp.title" class="animate-fade-in" ng-if="editMode && type==='question'" type="text" name="FirstName"/>
 
         <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='feed-item' || type==='answer'" ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">

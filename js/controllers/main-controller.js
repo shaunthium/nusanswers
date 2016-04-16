@@ -7,18 +7,13 @@ angular.module('quoraApp')
     // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     ezfb.getLoginStatus(function (res) {
-
       $scope.loginStatus = res;
-      // console.log($scope.loginStatus);
       if (res.status == 'connected') {
         ezfb.api('/me',function (res) {
           $scope.apiMe = res;
-          // console.log($scope.apiMe);
           qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-            // console.log(data);
             $rootScope.currentUser = data.data;
             $scope.loading = false;
-            // console.log($scope.currentUser);
           });
         });
       } else {
@@ -54,13 +49,10 @@ angular.module('quoraApp')
     $scope.makeFacebookLogin = function(){
     // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
         ezfb.login(function(res) {
-          // console.log(res);
           $scope.loginStatus = res;
           if (res.status == 'connected') {
             ezfb.api('/me',function (res) {
               $scope.apiMe = res;
-              // console.log($scope.apiMe);
-              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
               qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
                 $rootScope.currentUser = data.data;
                 // console.log($scope.currentUser);
@@ -72,14 +64,7 @@ angular.module('quoraApp')
         }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
-        Materialize.toast('Welcome back ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
-
-        /*
-            Remove all posts from the feed and replace them with new ones that
-            reflect changes the logged-in user has done.
-        */
-        $scope.resetQuestionsFeed();
-        $scope.updateQuestionsFeed(0, 10, $rootScope.currentUser.id);
+        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
     }
 
     //TODO: get currentUser from database by logging in.
@@ -89,7 +74,6 @@ angular.module('quoraApp')
             function (returnedData) {
                 // $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
-                console.log($scope.posts);
                 $scope.doneUpdatingFeed = true;
             },
             function(err){

@@ -8,11 +8,9 @@ angular.module('quoraApp')
   },
     function(currentUser){
         if(currentUser){
-            console.log(currentUser.id);
             $scope.getPost($stateParams.questionId, currentUser.id);
         }
         else{
-            console.log(currentUser);
             $scope.getPost($stateParams.questionId);
         }
     })
