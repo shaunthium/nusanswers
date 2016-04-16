@@ -42,8 +42,8 @@
 			        	<div style="display:table-cell;">
 			        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
                   <p>{{question.title}}</p>
-			        		<div ng-repeat="tag in [1,2,3]"class="tag chip blue lighten-5">
-								    Iamaprettylonghtag1
+			        		<div ng-repeat="tag in question.tags"class="tag chip blue lighten-5">
+								    {{tag}}
 								  </div>
 			        	</div>
 			        	<div style="display:table-cell; width:65px; ">
