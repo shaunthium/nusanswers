@@ -381,8 +381,8 @@
 				'total_answers' => $total_answers['total_answers'],
 				'total_comments'=> count($comment_array),
 				'answered' => $answered,
-				'up_vote' => $voted_up,
-				'down_vote' => $voted_down
+				'upvoted' => $voted_up,
+				'downvoted' => $voted_down
 
 				/*
 				'id'=>$latest['id'],
@@ -535,8 +535,8 @@
 				'total_answers' => $total_answers['total_answers'],
 				'total_comments'=> count($comment_array),
 				'answered' => $answered,
-				'up_vote' => $voted_up,
-				'down_vote' => $voted_down
+				'upvoted' => $voted_up,
+				'downvoted' => $voted_down
 
 				/*
 				'id'=>$trending['id'],
