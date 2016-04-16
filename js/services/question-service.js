@@ -75,12 +75,20 @@ angular.module('quoraApp')
     var notifications = ["Notification 1","Notification 2","Notification 3","Notification 4"];
     /*END HARDCODED SERVER REPLY OBJECTS*/
 
-    function getQuestions(startIndex, requestedQuestions, userID) {
+    function getQuestions(feedType, startIndex, requestedQuestions, userID) {
+        var cmd;
+        if(feedType === "trending"){
+            cmd = "trending_qns";
+        }
+        else{
+            cmd = "latest_qns";
+        }
+
       return $http({
         method: 'POST',
         url: base_url + "server/questions.php",
         data: {
-          cmd: "trending_qns",
+          cmd   : cmd,
           user_id : userID,
           index : startIndex,
           limit : requestedQuestions

@@ -3,8 +3,13 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
+    $scope.feedType = 'trending';
 
-    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+    $scope.setFeedType = function(type){
+        $scope.feedType = type;
+    }
+
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -54,7 +59,7 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
         // $scope.currentUser = { userID : "10209460093644289" };
         // ezfb.login(function(res) {
@@ -80,9 +85,9 @@ angular.module('quoraApp')
     }
 
     //TODO: get currentUser from database by logging in.
-    $scope.updateQuestionsFeed = function(startIndex, requestedQuestions, userID){
+    $scope.updateQuestionsFeed = function(feedType, startIndex, requestedQuestions, userID){
         $scope.doneUpdatingFeed = false;
-        qs.getQuestions(startIndex, requestedQuestions, userID).then(
+        qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
                 $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
