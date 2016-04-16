@@ -766,23 +766,42 @@
 	/*
 	*	Gets the answers posted by a user sorted by latest.
 	*	The question Title pertaining to the answer is also included.
-	*	@param: user_id
+	*	@param: user_id of user profile
 	*	@result VISIT: http://www.jsoneditoronline.org/?id=14eeaf9a6225a352da51c25fe5afc96a
 	*
 	*/
 	else if ($cmd == "profileanswers")
 	{
 		global $db;
-		/* Here we get the User Info to each question */
+		
+
+		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
+		if(mysqli_num_rows($result_author) == 0) //no such user
+		{
+			echo "User not found!";
+			return;
+		}
 		$author = mysqli_fetch_assoc($result_author);
 		
 		$query = "select Questions.title, Answers.* from Answers inner join Questions on  Questions.id = Answers.question_id where Answers.user_id = $user_id order by Answers.updated_at desc";
 		$result = $db->query($query);
 		$answers_array = array();
-		while ($answer = mysqli_fetch_assoc($result)){
+		while ($answer = mysqli_fetch_assoc($result))
+		{
+			$qid = $answer["question_id"];
+			$query = "select group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = $qid group by Questions.id";
+			$tags_result = $db->query($query);
 			
+			if(mysqli_num_rows($tags_result) == 0) //no tags
+				$tags = array();
+			else
+			{
+				$tags = mysqli_fetch_assoc($tags_result);
+				$tags = $tags["tags"];
+				$tags = explode(",", $tags);
+			}
 			$answers_array[] = array(
 				'title'=>$answer['title'],
 				'id'=>$answer['id'],
@@ -793,12 +812,13 @@
 				'upvotes'=>$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
-				'chosen'=>$answer['chosen']
+				'chosen'=>$answer['chosen'],
+				'tags'=>$tags
 			);
 			
 			
 		}
-		//error_log(json_encode($answers_array));
+		error_log(json_encode($answers_array));
 		echo json_encode($answers_array);	
 	}
 	
