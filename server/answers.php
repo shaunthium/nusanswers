@@ -28,10 +28,6 @@
 	// 	$content = $_POST["content"];
 
 
-
-	
-
-
 	/*
 	* Gets details of Questions, Comments and Answers, and answers comments
 	*
@@ -59,11 +55,12 @@
 		$result_author = $db->query($query_author);
 		$author = mysqli_fetch_assoc($result_author);
 		
-		/* Here we get if a Question has been answered BY CURRENT USER*/
+		/* Here we get if a Question has been answered or voted BY CURRENT USER*/
 		if(!isset($data->user_id))
 		{
 			//error_log("IS NOT SET\n");
 			$answered = "false";
+			$voted = "0";
 		}
 		else //if it is set
 		{
@@ -75,7 +72,22 @@
 			else
 				$answered = "true";
 			
-			//error_log("$answered\n");
+			$query_voted = "Select * from Questions_Voted_By_Users where question_id = $question_id and user_id= $user_id";
+			$result_voted = $db->query($query_voted);
+			if(mysqli_num_rows($result_voted) == 0) //no entry!
+				$voted = "0";
+			else
+			{
+				$voteInfo = mysqli_fetch_assoc($result_voted);
+				
+				if($voteInfo["up_vote"] == "1")
+					$voted = "1";
+				else if ($voteInfo["down_vote"] == "1")
+					$voted = "-1";
+				else
+					$voted = "0";
+			}
+				
 		}
 		
 		
@@ -93,7 +105,8 @@
 		
 		if(!is_bool($res))
 		{
-			while($r = mysqli_fetch_assoc($res)){ //for each comment
+			while($r = mysqli_fetch_assoc($res)){ 
+				//for each comment
 				$comment_user_id = $r["user_id"];
 				
 				/* Here we get the User Info to each comment */
@@ -145,7 +158,8 @@
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
-				'answered' => $answered
+				'answered' => $answered,
+				'voted' => $voted
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			
@@ -176,7 +190,8 @@
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
-				'answered' => $answered
+				'answered' => $answered,
+				'voted' => $voted
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));
@@ -184,11 +199,6 @@
 			
 		}
 		
-		
-
-
-		
-
 		/*******************Query Answers table ***************************/
 		
 		$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
@@ -197,7 +207,8 @@
 		//| answers_id | user_id | content| score | created_at| updated_at| chosen
 		if(!is_bool($res))
 		{
-			while($r = mysqli_fetch_assoc($res)){ //foreach answ
+			while($r = mysqli_fetch_assoc($res)){ 
+				//foreach answer
 				
 				/* Here we get the User Info to each answer */
 				$answer_user_id = $r["user_id"];
@@ -210,6 +221,7 @@
 				/* Here we get the comments for each answer */
 				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
+				
 				
 				 $answersCommentsResult = array();
 				//| comments_id |  users_id|content| created_at| updated_at |
@@ -240,6 +252,32 @@
 					}
 				}
 				
+				/* Here we get if a Question has been answered or voted BY CURRENT USER*/
+				if(!isset($data->user_id))
+				{
+					$voted = "0";
+				}
+				else //if it is set
+				{
+					
+					$query_voted = "Select * from Answers_Voted_By_Users where answer_id = $answers_id and user_id= $user_id";
+					$result_voted = $db->query($query_voted);
+					if(mysqli_num_rows($result_voted) == 0) //no entry!
+						$voted = "0";
+					else
+					{
+						$voteInfo = mysqli_fetch_assoc($result_voted);
+						
+						if($voteInfo["up_vote"] == "1")
+							$voted = "1";
+						else if ($voteInfo["down_vote"] == "1")
+							$voted = "-1";
+						else
+							$voted = "0";
+					}
+						
+				}
+				
 				$answersResult[] = array(
 
 					'id'=>$r['id'],
@@ -251,7 +289,8 @@
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at'],
 					'chosen' => $r['chosen'],
-					'comments' => $answersCommentsResult
+					'comments' => $answersCommentsResult,
+					'voted' => $voted
 				);
 			}
 		}
@@ -818,7 +857,7 @@
 			
 			
 		}
-		error_log(json_encode($answers_array));
+		//error_log(json_encode($answers_array));
 		echo json_encode($answers_array);	
 	}
 	
