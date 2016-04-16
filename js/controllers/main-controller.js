@@ -72,7 +72,7 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                // $scope.loading = false;
+                $scope.loading = false;
                 $scope.posts = $scope.posts.concat(returnedData.data);
                 $scope.doneUpdatingFeed = true;
             },
@@ -82,7 +82,7 @@ angular.module('quoraApp')
     }
 
     $scope.resetQuestionsFeed = function(){
-        $scope.loading = false;
+        $scope.loading = true;
         $scope.posts = [];
     }
 
