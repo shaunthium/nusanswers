@@ -291,7 +291,8 @@
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => $author['score'],
-									'userid' => $trending['user_id']);
+									'userid' => $latest['user_id']
+									);
 
 			//Get all comment of a question including the author from 'comment' table
 			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
