@@ -266,14 +266,31 @@
 	* Deletes an answer
 	*
 	* @param: answer_id
+	* @param: user_id => USER ID OF CURRENT USER
 	*/
 	else if ($cmd == "deleteanswer")
 	{
 		global $db;
-		//WARNING: Authorization check not implemented!!
-		$query = "delete from Answers where id = $answer_id";
-		$res = $db->query($query);
-
+		
+		if (!isset($data->user_id))
+			echo "user_id of current user NOT SET!";
+		else if (!isset($data->answer_id))
+			echo "answer_id not set!";
+		else{
+			$query = "select user_id from Answers where id = $answer_id";
+			$res = $db->query($query);	
+			$fetch_user_id = mysqli_fetch_assoc($res);
+			$uid = $fetch_user_id["user_id"];
+			if($uid != $user_id)
+				echo "Unauthorized!";
+			else
+			{
+				$query = "delete from Answers where id = $answer_id";
+				$res = $db->query($query);	
+				echo "deleted!";
+			}
+			
+		}
 	}
 	
 	/*
@@ -388,156 +405,167 @@
 	{
 		
 		global $db;
-		//WARNING: Authorization check not implemented!!
-		//WARNING: Amount of upvotes not tracked!
 		
-		/* Get current vote info to the Answer */
-		$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id";
-		$result = $db->query($query);
-		
-
-		if(mysqli_num_rows($result) == 0) //Never voted before, proceed to upvote!
+		if (!isset($data->user_id))
+			echo "user_id of current user NOT SET!";
+		else if (!isset($data->answer_id))
+			echo "answer_id not set!";
+		else
 		{
-			
-			$answer_user_id = mysqli_fetch_assoc($result);
-			$answer_user_id = $answer_user_id["up_vote"];
-			
-			
-			/* Insert upvote entry */
-			$query = "Insert Into Answers_Voted_By_Users Values($answer_id,$user_id, 1, 0)";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Answer */
-			$query = "SELECT user_id FROM Answers where id = $answer_id";
+			/* Get current vote info to the Answer */
+			$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
 			$result = $db->query($query);
-			$answer_user_id = mysqli_fetch_assoc($result);
-			$answer_user_id = $answer_user_id["user_id"];
 			
-			/* Here we upvote the Answer score by 1 */
-			$query = "UPDATE Answers SET score = score + 1 where id = $answer_id";
-			$db->query($query);
-			
-			/* Here we upvote the User score */
-			$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
-			$db->query($query);
-		}
-		else //have voted before!
-		{
-			
-			$votes = mysqli_fetch_assoc($result);
-			
-			if($votes["down_vote"] == "1") 
+
+			if(mysqli_num_rows($result) == 0) //Never voted before, proceed to upvote!
 			{
-				
-				$score = 2;
-				
-				/* Update upvote entry */
-				$query = "Update Answers_Voted_By_Users Set up_vote = 1, down_vote = 0 where answer_id = $answer_id";
+				/* Insert upvote entry */
+				$query = "Insert Into Answers_Voted_By_Users Values($answer_id,$user_id, 1, 0)";
 				$db->query($query);
-			}
-			else //up_vote == 1
-			{
 				
-				$score = -1;
-				
-				/* Delete upvote entry */
-				$query = "Delete from Answers_Voted_By_Users where answer_id = $answer_id";
-				$db->query($query);
-			}
-			
-			/* Here we get the User ID of the user who posted the Answer */
+				/* Here we get the User ID of the user who posted the Answer */
 				$query = "SELECT user_id FROM Answers where id = $answer_id";
 				$result = $db->query($query);
 				$answer_user_id = mysqli_fetch_assoc($result);
 				$answer_user_id = $answer_user_id["user_id"];
 				
-				/* Here we upvote the Answer score by $score */
-				$query = "UPDATE Answers SET score = score + $score where id = $answer_id";
+				/* Here we upvote the Answer score by 1 */
+				$query = "UPDATE Answers SET score = score + 1 where id = $answer_id";
 				$db->query($query);
 				
 				/* Here we upvote the User score */
-				$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
+				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
+				
+				echo "upvoted by user $user_id . Credited(+1): answer_id: $answer_id user_id: $answer_user_id ";
+			}
+			else //have voted before!
+			{
+				
+				$votes = mysqli_fetch_assoc($result);
+				
+				if($votes["down_vote"] == "1") 
+				{
+					
+					$score = 2;
+					
+					/* Update upvote entry */
+					$query = "Update Answers_Voted_By_Users Set up_vote = 1, down_vote = 0 where answer_id = $answer_id and user_id = $user_id";
+					$db->query($query);
+				}
+				else //up_vote == 1
+				{
+					
+					$score = -1;
+					
+					/* Delete upvote entry */
+					$query = "Delete from Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
+					$db->query($query);
+				}
+				
+					/* Here we get the User ID of the user who posted the Answer */
+					$query = "SELECT user_id FROM Answers where id = $answer_id";
+					$result = $db->query($query);
+					$answer_user_id = mysqli_fetch_assoc($result);
+					$answer_user_id = $answer_user_id["user_id"];
+					
+					/* Here we upvote the Answer score by $score */
+					$query = "UPDATE Answers SET score = score + $score where id = $answer_id and user_id = $answer_user_id";
+					$db->query($query);
+					
+					/* Here we upvote the User score */
+					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
+					$db->query($query);
+					
+					echo "upvoted by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+			}
 		}
-
 	}
 	
 	/*
 	* Decreases the score of the User and the Answer by 1
 	*
-	* @param: answer_id
+	* @param: answer_id,
+	* @param: user_id -> ID OF THE PERSON VOTING
 	*/
 	else if($cmd == "downvote")
 	{
 		
 		global $db;
-		//WARNING: Authorization check not implemented!!
-		//WARNING: Amount of upvotes not tracked!
 		
-		/* Get current vote info to the Answer */
-		$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id";
-		$result = $db->query($query);
-		
-
-		if(mysqli_num_rows($result) == 0) //Never voted before, proceed to downvote!
+		if (!isset($data->user_id))
+			echo "user_id of current user NOT SET!";
+		else if (!isset($data->answer_id))
+			echo "answer_id not set!";
+		else
 		{
-			
-			$answer_user_id = mysqli_fetch_assoc($result);
-			$answer_user_id = $answer_user_id["down_vote"];
-			
-			/* Insert downvote entry */
-			$query = "Insert Into Answers_Voted_By_Users Values($answer_id,$user_id, 0, 1)";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Answer */
-			$query = "SELECT user_id FROM Answers where id = $answer_id";
+			/* Get current vote info to the Answer */
+			$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
 			$result = $db->query($query);
-			$answer_user_id = mysqli_fetch_assoc($result);
-			$answer_user_id = $answer_user_id["user_id"];
 			
-			/* Here we downvote the Answer score by 1 */
-			$query = "UPDATE Answers SET score = score - 1 where id = $answer_id";
-			$db->query($query);
-			
-			/* Here we downvote the User score */
-			$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
-			$db->query($query);
-		}
-		else //have voted before!
-		{
-			$votes = mysqli_fetch_assoc($result);
-			
-			if($votes["up_vote"] == "1") 
+
+			if(mysqli_num_rows($result) == 0) //Never voted before, proceed to downvote!
 			{
-				$score = 2;
-				
-				/* Update downvote entry */
-				$query = "Update Answers_Voted_By_Users Set up_vote = 0, down_vote = 1 where answer_id = $answer_id";
+				/* Insert downvote entry */
+				$query = "Insert Into Answers_Voted_By_Users Values($answer_id,$user_id, 0, 1)";
 				$db->query($query);
-			}
-			else //down_vote == 1
-			{
 				
-				$score = -1;
-				
-				/* Delete downvote entry */
-				$query = "Delete from Answers_Voted_By_Users where answer_id = $answer_id";
-				$db->query($query);
-			}
-			
-			/* Here we get the User ID of the user who posted the Answer */
+				/* Here we get the User ID of the user who posted the Answer */
 				$query = "SELECT user_id FROM Answers where id = $answer_id";
 				$result = $db->query($query);
 				$answer_user_id = mysqli_fetch_assoc($result);
 				$answer_user_id = $answer_user_id["user_id"];
 				
-				/* Here we downvote the Answer score by $score */
-				$query = "UPDATE Answers SET score = score - $score where id = $answer_id";
+				/* Here we downvote the Answer score by 1 */
+				$query = "UPDATE Answers SET score = score - 1 where id = $answer_id";
 				$db->query($query);
 				
 				/* Here we downvote the User score */
-				$query = "UPDATE Users SET score = score - $score where id = $answer_user_id";
+				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
+				
+				echo "downvote by user $user_id . Credited(-1): answer_id: $answer_id user_id: $answer_user_id ";
+			}
+			else //have voted before!
+			{
+				
+				$votes = mysqli_fetch_assoc($result);
+				
+				if($votes["up_vote"] == "1") 
+				{
+					
+					$score = -2;
+					
+					/* Update downvote entry */
+					$query = "Update Answers_Voted_By_Users Set up_vote = 0, down_vote = 1 where answer_id = $answer_id and user_id = $user_id";
+					$db->query($query);
+				}
+				else //down_vote == 1
+				{
+					
+					$score = +1;
+					
+					/* Delete upvote entry */
+					$query = "Delete from Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
+					$db->query($query);
+				}
+				
+					/* Here we get the User ID of the user who posted the Answer */
+					$query = "SELECT user_id FROM Answers where id = $answer_id";
+					$result = $db->query($query);
+					$answer_user_id = mysqli_fetch_assoc($result);
+					$answer_user_id = $answer_user_id["user_id"];
+					
+					/* Here we downvote the Answer score by $score */
+					$query = "UPDATE Answers SET score = score + $score where id = $answer_id and user_id = $answer_user_id";
+					$db->query($query);
+					
+					/* Here we downvote the User score */
+					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
+					$db->query($query);
+					
+					echo "downvote by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+			}
 		}
 	}
 	
@@ -738,23 +766,42 @@
 	/*
 	*	Gets the answers posted by a user sorted by latest.
 	*	The question Title pertaining to the answer is also included.
-	*	@param: user_id
+	*	@param: user_id of user profile
 	*	@result VISIT: http://www.jsoneditoronline.org/?id=14eeaf9a6225a352da51c25fe5afc96a
 	*
 	*/
 	else if ($cmd == "profileanswers")
 	{
 		global $db;
-		/* Here we get the User Info to each question */
+		
+
+		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
+		if(mysqli_num_rows($result_author) == 0) //no such user
+		{
+			echo "User not found!";
+			return;
+		}
 		$author = mysqli_fetch_assoc($result_author);
 		
 		$query = "select Questions.title, Answers.* from Answers inner join Questions on  Questions.id = Answers.question_id where Answers.user_id = $user_id order by Answers.updated_at desc";
 		$result = $db->query($query);
 		$answers_array = array();
-		while ($answer = mysqli_fetch_assoc($result)){
+		while ($answer = mysqli_fetch_assoc($result))
+		{
+			$qid = $answer["question_id"];
+			$query = "select group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = $qid group by Questions.id";
+			$tags_result = $db->query($query);
 			
+			if(mysqli_num_rows($tags_result) == 0) //no tags
+				$tags = array();
+			else
+			{
+				$tags = mysqli_fetch_assoc($tags_result);
+				$tags = $tags["tags"];
+				$tags = explode(",", $tags);
+			}
 			$answers_array[] = array(
 				'title'=>$answer['title'],
 				'id'=>$answer['id'],
@@ -765,12 +812,13 @@
 				'upvotes'=>$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
-				'chosen'=>$answer['chosen']
+				'chosen'=>$answer['chosen'],
+				'tags'=>$tags
 			);
 			
 			
 		}
-		//error_log(json_encode($answers_array));
+		error_log(json_encode($answers_array));
 		echo json_encode($answers_array);	
 	}
 	

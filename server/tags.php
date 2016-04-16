@@ -135,9 +135,9 @@
 	*/
 	if($cmd == "tag_qns"){
 		$qns_id = $db->escape_string($data->qns_id);
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
 		
-		$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);//explode(",", $tag_string);
 		add_tag($tag_array);
 		
 		tag_qns($qns_id, $tag_array);
@@ -157,12 +157,15 @@
 		global $db;
 
 		$qns_id = $db->escape_string($data->qns_id);
-		$tag_string =  $db->escape_string($data->tag_string);
-		
+		//$tag_string =  $db->escape_string($data->tag_string);
+		$tag_array = json_decode($data->tag_string);
+
 		$affected=0;
 		
-		if(!empty($tag_string)){
-			$tag_array = explode(",", $tag_string);
+		if(!empty($tag_array)){
+		//if(!empty($tag_string)){
+			//$tag_array = explode(",", $tag_string);
+
 			$tag_id_array = array();
 			$i=0;
 			foreach($tag_array as $tag){
