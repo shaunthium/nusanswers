@@ -232,7 +232,7 @@
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
-		$query = "DELETE FROM Comments_Reported_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id.")";
+		$query = "DELETE FROM Comments_Reported_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id;
 		$db->query($query);
 
 		$affected = $db->affected_rows;
