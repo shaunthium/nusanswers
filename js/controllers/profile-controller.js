@@ -6,6 +6,7 @@ angular.module('quoraApp')
   // Pull user's id from state params
   var id = $stateParams.profileId;
 
+  $scope.profileId = id;
   // Get user from id
   var user = $http({
     url: base_url + 'server/users/main.php',
@@ -27,6 +28,8 @@ angular.module('quoraApp')
     }
   }).success(function(data) {
     $scope.profileImg = data.data.url;
+  }).error(function(data) {
+    $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
   });
 
   // Get answers for user
