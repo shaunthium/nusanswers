@@ -204,58 +204,100 @@ angular.module('quoraApp')
         return false;
     }
 
-    //TODO: implement back-end integration
     function submitUpvotePost(postID, userID, type){
-      if (type != 'answer') {
-        $http({
-           method: "POST",
-           url: base_url + "server/questions.php",
-           data: {
-             cmd: 'set_up_vote_qns',
-             qns_id: postID,
-             user_id: userID
-           }
-         }).then(function(data) {
-            // console.log('Success in upvoting post'); // ?
-         }, function(err){
-            // console.log("Error in upvoting post" , err);
-         });
-      } else {
-        $http({
-          method: 'POST',
-          url: base_url + 'server/answers.php',
-          data: {
-            cmd: 'upvote',
-            answer_id: postID,
-            user_id: userID
-          }
-        }).then(function(data) {
-
-        }, function(err) {
-
-        });
-      }
-
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'set_up_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'upvote',
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
-    //TODO: implement back-end integration
-    function submitCancelUpvotePost(postID, commentID, user){
-        return false;
+    function submitCancelUpvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'reset_up_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'upvote', //FIXME: server-side it's weird to use toggle for answers and "set/reset" for questions...
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
-    //TODO: implement back-end integration
-    function submitDownvotePost(postID, userID){
+    function submitDownvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'set_down_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'downvote',
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
+    }
 
-      return $http({
-         method: "POST",
-         url: base_url + "server/questions.php",
-         data: {
-           cmd: 'set_down_vote_qns',
-           qns_id: postID,
-           user_id: userID
-         }
-       });
-
+    function submitCancelDownvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'reset_down_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'downvote', //FIXME: server-side it's weird to use toggle for answers and "set/reset" for questions...
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
     function getCommentsFromQuestion(postID){
@@ -270,11 +312,6 @@ angular.module('quoraApp')
            qns_id: postID
          }
        });
-    }
-
-    //TODO: implement back-end integration
-    function submitCancelDownvotePost(postID, commentID, user){
-        return false;
     }
 
     //TODO: implement back-end integration

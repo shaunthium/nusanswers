@@ -79,21 +79,104 @@ angular.module('quoraApp')
             }
 
 
-            $scope.incrementUpvotes = function(post, inc) {
-
+            $scope.incrementUpvotes = function(inc) {
               if(!$scope.currentUser){
                 $scope.showLogin();
                 return;
               }
-
-              // User should not be able to downvote/upvote multiple times
-              // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
-                post.upvotes++;
-                questionService.submitUpvotePost(post.id, $scope.currentUser.id, $scope.type);
-              } else {
-                post.upvotes--;
-                questionService.submitDownvotePost(post.id, $scope.currentUser.id, $scope.type);
+                  if($scope.post.upvoted){
+                      questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes--;
+                                  $scope.post.upvoted = false;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+                  else {
+                      if($scope.post.downvoted){
+                          questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                          .then(
+                              function(res){
+                                  console.log(res);
+                                  if(res.data){
+                                      $scope.post.upvotes++;
+                                      $scope.post.downvoted = false;
+                                }
+                              },
+                              function(err){
+
+                              }
+                          );
+                      }
+                      questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes++;
+                                  $scope.post.upvoted = true;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+              }
+              else{
+                  if($scope.post.downvoted){
+                      questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes++;
+                                  $scope.post.downvoted = false;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+                  else{
+                      if($scope.post.upvoted){
+                          questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                          .then(
+                              function(res){
+                                  console.log(res);
+                                  if(res.data){
+                                      $scope.post.upvotes--;
+                                      $scope.post.upvoted = false;
+                                }
+                              },
+                              function(err){
+
+                              }
+                          );
+                      }
+                      questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes--;
+                                  $scope.post.downvoted = true;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
               }
             }
 
@@ -135,7 +218,6 @@ angular.module('quoraApp')
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
-
             //This watch is for getting the post in question-answers view.
             scope.$watchCollection(function(){
                 return scope.post;
@@ -146,17 +228,17 @@ angular.module('quoraApp')
                     scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
                     scope.temp = {title : post.title};
 
-                    $http({
-                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
-                      method: 'GET',
-                      data: {
-                        width: '1000'
-                      }
-                    }).success(function(data) {
-                      scope.profileImg = data.data.url;
-                    }).error(function(data) {
-                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-                    });
+                    // $http({
+                    //   url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
+                    //   method: 'GET',
+                    //   data: {
+                    //     width: '1000'
+                    //   }
+                    // }).success(function(data) {
+                    //   scope.profileImg = data.data.url;
+                    // }).error(function(data) {
+                    //   scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    // });
                 }
             });
 

@@ -8,11 +8,15 @@ to prevent collapsing during animation*/
 }*/
 
 
-#vote{
+.vote{
   transition: all .2s ease-in;
 }
 
-#vote:hover{
+.upvote:hover, .upvoteSelected{
+    color:green !important;
+}
+
+.downvote:hover, .downvoteSelected{
   color:red !important;
 }
 
