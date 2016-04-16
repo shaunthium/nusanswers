@@ -373,6 +373,9 @@
 				echo "Unauthorized!";
 			else
 			{
+				$query = "delete from Answers_Comments where answer_id = $answer_id";
+				$res = $db->query($query);
+				
 				$query = "delete from Answers where id = $answer_id";
 				$res = $db->query($query);	
 				echo "deleted!";
