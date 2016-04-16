@@ -39,6 +39,13 @@
 		$query = "INSERT INTO ". $table_name . " VALUES(" . $qns_id . ", " . $user_id . ", " . $up_vote . ", " . 
 					$down_vote . ")ON DUPLICATE KEY UPDATE up_vote=" . $up_vote . ", down_vote=". $down_vote;
 		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
 	}
 
 	/*
