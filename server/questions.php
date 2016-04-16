@@ -358,6 +358,8 @@
 
 			}else{
 				$answered = false;
+				$voted_up = false;
+				$voted_down = false;
 			}
 			
 
@@ -495,8 +497,29 @@
 				}else{
 					$answered = true;
 				}
+
+				$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+				$result_voted = $db->query($query_voted);
+
+				$voted = mysqli_fetch_assoc($result_voted);
+				$up_vote = $voted['up_vote'];
+				$down_vote = $voted['down_vote'];
+
+				if($up_vote == 1){
+					$voted_up = true;
+				}else{
+					$voted_up = false;
+				}
+
+				if($down_vote == 1){
+					$voted_down = true;
+				}else{
+					$voted_down = false;
+				}
 			}else{
 				$answered = false;
+				$voted_up = false;
+				$voted_down = false;
 			}
 
 
