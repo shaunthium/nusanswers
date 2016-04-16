@@ -30,7 +30,7 @@ angular.module('quoraApp')
     $scope.feedIndex = 0;
     $scope.questionsPerUpdate = 10;
     $scope.activeTags = [];
-    // $scope.updateQuestionsFeed(); //Use this to load all questions at a time. No infinite scroll feed.
+    // $scope.updateQuestionsFeed($scope.feedType, ); //Use this to load all questions at a time. No infinite scroll feed.
 
     //Watch for changes in posts
     $scope.$watchCollection(function(){
@@ -48,18 +48,33 @@ angular.module('quoraApp')
         $scope.filteredPosts = filterByTags($scope.posts, newTags);
     });
 
+    //Watch for changes in login status
     $scope.$watch(function(){
         return $scope.currentUser;
     },
     function(currentUser){
         $scope.feedIndex = 0;
+        $scope.resetQuestionsFeed();
         if(currentUser){
-            $scope.resetQuestionsFeed();
-            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, currentUser.id); //Infinite scroll feed
+            $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, currentUser.id); //Infinite scroll feed
         }
         else{
-            $scope.resetQuestionsFeed();
-            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate); //Infinite scroll feed
+            $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate); //Infinite scroll feed
+        }
+    });
+
+    //Watch for changes in feed type requests
+    $scope.$watch(function(){
+        return $scope.feedType;
+    },
+    function(feedType){
+        $scope.feedIndex = 0;
+        $scope.resetQuestionsFeed();
+        if($scope.currentUser){
+            $scope.updateQuestionsFeed(feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.currentUser.id); //Infinite scroll feed
+        }
+        else{
+            $scope.updateQuestionsFeed(feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate); //Infinite scroll feed
         }
     });
 
@@ -83,7 +98,7 @@ angular.module('quoraApp')
         //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
         if(($(window).scrollTop() >= $(document).height() - 2*$(window).height()) && $scope.doneUpdatingFeed) {
             // console.log("Update feed!");
-            $scope.updateQuestionsFeed(($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
+            $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
         }
     });
 
@@ -95,5 +110,4 @@ angular.module('quoraApp')
         });
         $scope.showTextEditor = !$scope.showTextEditor;
     }
-
 }]);
