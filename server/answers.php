@@ -440,7 +440,7 @@
 	* @param: answer_id,
 	* @param: user_id -> ID OF THE PERSON VOTING
 	*/
-	else if($cmd == "upvote")
+	else if($cmd == "upvote" || $cmd == "cancelupvote")
 	{
 		
 		global $db;
@@ -527,7 +527,7 @@
 	* @param: answer_id,
 	* @param: user_id -> ID OF THE PERSON VOTING
 	*/
-	else if($cmd == "downvote")
+	else if($cmd == "downvote" || $cmd == "canceldownvote")
 	{
 		
 		global $db;
