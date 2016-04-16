@@ -1,7 +1,7 @@
 <?php
 	require_once ('connect.php');
 
-	
+	global $db;
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $data->cmd;
@@ -157,6 +157,8 @@
 		@param: user_id, comment_id
 	*/
 	if($cmd == "set_upvote_comment"){
+		global $db;
+
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
@@ -178,6 +180,8 @@
 		@param: user_id, comment_id
 	*/
 	if($cmd == "reset_upvote_comment"){
+		global $db;
+
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
@@ -199,6 +203,8 @@
 		@param: user_id, comment_id
 	*/
 	if($cmd == "set_report_comment"){
+		global $db;
+
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
@@ -221,6 +227,8 @@
 		@param: user_id, comment_id
 	*/
 	if($cmd == "reset_report_comment"){
+		global $db;
+		
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 

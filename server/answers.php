@@ -776,14 +776,14 @@
 	/*
 	* Updates an Answer's content
 	*
-	* @param: answer_id, content
+	* @param: answer_id, content, user_id OF CURRENT USER
 	*/
 	else if($cmd == "updateanswer")
 	{
 		global $db;
 		
 		//Check if that answer exists
-		$query = "Select 1 from Answers where id = $answer_id";
+		$query = "Select user_id from Answers where id = $answer_id";
 		$result = $db->query($query);
 		
 		if(mysqli_num_rows($result) == 0) // does not exist!
@@ -792,77 +792,88 @@
 		}
 		else
 		{
-			$query = "update Answers set content = '$content' where id = $answer_id";
-			$db->query($query);
+			//Check if user matches
+			$r = mysqli_fetch_assoc($result);
+			$uid = $r["user_id"];
 			
-			/*******************Query Answers table ***************************/
-		
-			$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where id = $answer_id";
-			$res = $db->query($query);
-			$answersResult = array();
-			//| answers_id | user_id | content| score | created_at| updated_at| chosen
-			$answersResult = array();
-			if(!is_bool($res))
+			if($uid != $user_id)
+				echo false;
+			else
 			{
-				while($r = mysqli_fetch_assoc($res)){ //foreach answ
-					
-					/* Here we get the User Info to each answer */
-					$answer_user_id = $r["user_id"];
-					$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
-					$result_author = $db->query($query_author);
-					$author = mysqli_fetch_assoc($result_author);
-					
-					/* Here we get the comments for each answer */
-					$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
-					$res2 = $db->query($query);
+				$query = "update Answers set content = '$content' where id = $answer_id";
+				$db->query($query);
 				
-					$answersCommentsResult = array();
-					//| comments_id |  users_id|content| created_at| updated_at |
-					if(!is_bool($res2))
-					{
-						while($a = mysqli_fetch_assoc($res2)){
-							$user_id2 = $a["user_id"];
-							/* Here we get the User Info to each comment */
-							$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
-							$result_author2 = $db->query($query_author2);
-							$author2 = mysqli_fetch_assoc($result_author2);
-							
-							$answersCommentsResult[] = array(
-								'id' => $a["id"],
-								'answerid' => $r["id"],
-								'reported' => false,
-								'liked' => false,
-								'likes' => "0",
-								'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
-											'karma' =>$author2['score'],
-											'userid'=>$a["user_id"],
-											'flavour'=> $author2['flavour']),
+				/*******************Query Answers table ***************************/
+			
+				$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where id = $answer_id";
+				$res = $db->query($query);
+				$answersResult = array();
+				//| answers_id | user_id | content| score | created_at| updated_at| chosen
+				$answersResult = array();
+				if(!is_bool($res))
+				{
+					while($r = mysqli_fetch_assoc($res)){ //foreach answ
+						
+						/* Here we get the User Info to each answer */
+						$answer_user_id = $r["user_id"];
+						$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
+						$result_author = $db->query($query_author);
+						$author = mysqli_fetch_assoc($result_author);
+						
+						/* Here we get the comments for each answer */
+						$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
+						$res2 = $db->query($query);
+					
+						$answersCommentsResult = array();
+						//| comments_id |  users_id|content| created_at| updated_at |
+						if(!is_bool($res2))
+						{
+							while($a = mysqli_fetch_assoc($res2)){
+								$user_id2 = $a["user_id"];
+								/* Here we get the User Info to each comment */
+								$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
+								$result_author2 = $db->query($query_author2);
+								$author2 = mysqli_fetch_assoc($result_author2);
 								
-								'body' => $a["content"],
-								'created_at'=>$a['created_at'],
-								'updated_at'=>$a['updated_at']
-							);
+								$answersCommentsResult[] = array(
+									'id' => $a["id"],
+									'answerid' => $r["id"],
+									'reported' => false,
+									'liked' => false,
+									'likes' => "0",
+									'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
+												'karma' =>$author2['score'],
+												'userid'=>$a["user_id"],
+												'flavour'=> $author2['flavour']),
+									
+									'body' => $a["content"],
+									'created_at'=>$a['created_at'],
+									'updated_at'=>$a['updated_at']
+								);
+							}
 						}
-					}
-				
-					$answers_id= $r["id"];
-					$answersResult[] = array(
+					
+						$answers_id= $r["id"];
+						$answersResult[] = array(
 
-						'id'=>$r['id'],
-						'questionid' => $r['question_id'],
-						'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
-										'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
-						'content'=>$r['content'],
-						'upvotes'=>$r['score'],
-						'created_at'=>$r['created_at'],
-						'updated_at'=>$r['updated_at'],
-						'chosen' => $r['chosen'],
-						'comments' => $answersCommentsResult
-					);
+							'id'=>$r['id'],
+							'questionid' => $r['question_id'],
+							'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+											'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
+							'content'=>$r['content'],
+							'upvotes'=>$r['score'],
+							'created_at'=>$r['created_at'],
+							'updated_at'=>$r['updated_at'],
+							'chosen' => $r['chosen'],
+							'comments' => $answersCommentsResult
+						);
+					}
 				}
+				//error_log(json_encode($answersResult));
+				echo json_encode($answersResult);
 			}
-			//error_log(json_encode($answersResult));
-			echo json_encode($answersResult);
+			
+			
 		}
 		
 	}
