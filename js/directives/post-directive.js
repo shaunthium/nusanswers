@@ -31,18 +31,6 @@ angular.module('quoraApp')
             $scope.showFooter = false;
             $scope.editMode = false;
 
-            $http({
-              url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
-              method: 'GET',
-              data: {
-                width: '1000'
-              }
-            }).success(function(data) {
-              $scope.profileImg = data.data.url;
-            }).error(function(data) {
-              $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-            });
-
             $scope.toggleFooter = function(){
 
                 if(!$scope.currentUser){
