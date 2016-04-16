@@ -162,7 +162,7 @@
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
-		$query = "INSERT INTO Comments_Liked_By_Users VALUES(".$user_id. ", ".$comment_id.")";
+		$query = "INSERT INTO Comments_Liked_By_Users VALUES(".$comment_id. ", ".$user_id.")";
 		$db->query($query);
 
 		$affected = $db->affected_rows;
@@ -208,7 +208,7 @@
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
-		$query = "INSERT INTO Comments_Reported_By_Users VALUES(".$user_id. ", ".$comment_id.")";
+		$query = "INSERT INTO Comments_Reported_By_Users VALUES(".$comment_id. ", ".$user_id.")";
 		$db->query($query);
 
 		$affected = $db->affected_rows;
@@ -228,7 +228,7 @@
 	*/
 	if($cmd == "reset_report_comment"){
 		global $db;
-		
+
 		$user_id = $db->escape_string($data->user_id);
 		$comment_id = $db->escape_string($data->comment_id);
 
