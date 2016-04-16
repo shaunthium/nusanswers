@@ -166,9 +166,9 @@
 		$affected = $db->affected_rows;
 		
 		if( $affected > 0 ){
-			echo true;
+			echo json_encode(true);
 		}else{
-			echo false;
+			echo json_encode(false);
 		}
 
 	}
@@ -187,9 +187,9 @@
 		$affected = $db->affected_rows;
 		
 		if( $affected > 0 ){
-			echo true;
+			echo json_encode(true);
 		}else{
-			echo false;
+			echo json_encode(false);
 		}
 
 	}
@@ -207,11 +207,10 @@
 
 		$affected = $db->affected_rows;
 		
-		
 		if( $affected > 0 ){
-			echo true;
+			echo json_encode(true);
 		}else{
-			echo false;
+			echo json_encode(false);
 		}
 
 	}
@@ -229,11 +228,10 @@
 
 		$affected = $db->affected_rows;
 		
-		
 		if( $affected > 0 ){
-			echo true;
+			echo json_encode(true);
 		}else{
-			echo false;
+			echo json_encode(false);
 		}
 
 	}
