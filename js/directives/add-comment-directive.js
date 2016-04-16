@@ -6,8 +6,8 @@ angular.module('quoraApp')
 		restrict: 'E',
         controller: function($scope){
             $scope.isAddCommentActive = false;
-            $scope.COMMENTS_MIN_SIZE = 15;
-            $scope.COMMENTS_MAX_SIZE = 30;
+            $scope.COMMENTS_MIN_SIZE = 5;
+            $scope.COMMENTS_MAX_SIZE = 100;
 
             /*
                 XXX: this $watch hack is a solution to the lack of two-way binding seen in the text area

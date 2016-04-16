@@ -4,7 +4,7 @@ angular.module('quoraApp')
     return {
         restrict: 'E',
         transclude: false,
-        controller: function($scope, questionService){
+        controller: ['$scope', 'questionService', function($scope, questionService){
             $scope.showComments = false;
             $scope.moreCommentsShown = false;
             $scope.noComments = true;
@@ -39,24 +39,40 @@ angular.module('quoraApp')
             );
 
             $scope.toggleShowComments = function(){
+                if(!$scope.showComments){
+                    if($scope.type === 'answer'){
+                        questionService.getCommentsFromAnswer($scope.post.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.showComments = true;
+                                    $scope.post.comments = res.data;
+                                }
+                            },
+                            function(err){
 
-                // console.log("Toggle comments");
-
-                $scope.showComments = !$scope.showComments;
-                $scope.cancelEdit();
-
-                // console.log("post " , $scope.post.id);
-
-                questionService.getCommentsFromQuestion($scope.post.id)
-                .then(function(res){
-
-                    console.log("got data " , res);
-                    $scope.post.comments = res.data;
-
-                }, function(err){
-                    // console.log("Error in getting comments", err);
-                })
-
+                            }
+                        )
+                    }
+                    else{
+                        questionService.getCommentsFromQuestion($scope.post.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.showComments = true;
+                                    $scope.post.comments = res.data;
+                                }
+                            },
+                            function(err){
+                                // console.log("Error in getting comments", err);
+                            }
+                        );
+                    }
+                }
+                else{
+                    $scope.cancelEdit();
+                    $scope.showComments = false;
+                }
             }
 
             $scope.showMoreComments = function(){
@@ -65,23 +81,46 @@ angular.module('quoraApp')
 
             //Editing a comment is a two-step process: the previous comment is deleted and the new comment is added.
             $scope.addComment = function(comment){
-                if($scope.editing){
-                    //Remove the edited from the post
-                    $scope.deleteComment($scope.editedComment, false);
-                    $scope.editedComment = null;
-                    $scope.editing = false;
+                if($scope.type === 'answer'){
+                    questionService.addCommentToAnswer(comment, $scope.currentUser.id, $scope.post.id)
+                        .then(function(res){
+                            console.log("Add comment to answer", res);
+                            if(res.data){
+                                if($scope.editing){
+                                    //Remove the edited from the post
+                                    $scope.deleteComment($scope.editedComment, false);
+                                    $scope.editedComment = null;
+                                    $scope.editing = false;
+                                }
+                                //TODO: fix server response indexing. Get rid of unneccessary array.
+                                // add comment to scope
+                                $scope.post.comments.push(res.data[0]);
+                                // console.log("Success post comment", res);
+                            }
+                        }, function(err){
+                            // console.log("Error in posting comment", err);
+                        });
                 }
-                questionService.submitNewComment($scope.post.id, comment, $scope.currentUser.id)
-                .then(function(res){
-                    //TODO: fix server response indexing. Get rid of unneccessary array.
-                    // add comment to scope
-                    $scope.post.comments.push(res.data[0]);
-                    // console.log("Success post comment", res);
-                }, function(err){
-                    // console.log("Error in posting comment", err);
-                });
-
-                //$scope.post.comments.push($scope.$parent.newComment($scope.post.id, comment));
+                else{
+                    questionService.submitNewComment(comment, $scope.currentUser.id, $scope.post.id)
+                    .then(function(res){
+                        if(res.data){
+                            console.log(res);
+                            if($scope.editing){
+                                //Remove the edited from the post
+                                $scope.deleteComment($scope.editedComment, false);
+                                $scope.editedComment = null;
+                                $scope.editing = false;
+                            }
+                            //TODO: fix server response indexing. Get rid of unneccessary array.
+                            // add comment to scope
+                            $scope.post.comments.push(res.data[0]);
+                            // console.log("Success post comment", res);
+                        }
+                    }, function(err){
+                        // console.log("Error in posting comment", err);
+                    });
+                }
             }
 
             //Enter edition mode and temporarily remove the comment from the front-end's post's comments.
@@ -107,10 +146,33 @@ angular.module('quoraApp')
             $scope.deleteComment = function(comment, requireConfirmation){
                 //TODO: implement fancier confirmation.
                 if(requireConfirmation && confirm("Are you sure you want to delete this comment?")){
-                    //FIXME: rename deleteComment either here or in the main controller so that there are no confusions
-                    $scope.removeComment(comment);
-                    $scope.tempComments = null;
-                    $scope.$parent.deleteComment($scope.post, comment.id);
+                    if($scope.type === 'answer'){
+                        questionService.deleteCommentFromAnswer(comment.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+
+                                }
+                            },
+                            function(err){
+
+                            }
+                        );
+                    }
+                    else{
+                        questionService.submitDeleteComment(comment.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.removeComment(comment);
+                                    $scope.tempComments = null;
+                                }
+                            },
+                            function(err){
+
+                            }
+                        );
+                    }
                 }
             }
 
@@ -125,7 +187,7 @@ angular.module('quoraApp')
                     $scope.post.comments = $scope.tempComments;
                 }
             }
-        },
+        }],
         templateUrl: 'templates/comments-section-template.html'
     }
 });
