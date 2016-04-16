@@ -100,7 +100,7 @@
 		$answers_count = mysqli_fetch_assoc($result_answers_count);
 		
 		/*******************Query Questions Comments table ***************************/
-		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
+		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at, Comments.likes from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
 		$res = $db->query($query);
 		$commentsResult = array();
 		//| comments_id |  users_id|content| created_at| updated_at |
@@ -139,12 +139,14 @@
 				}
 				
 				
+				
+				
 				$commentsResult[] = array(
 					'id' => $r["id"],
 					'questionid' => $question_id,
 					'reported' => false,
 					'liked' => $liked,
-					'likes' => "0",
+					'likes' => $r["likes"],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -276,7 +278,7 @@
 				$answers_id= $r["id"];
 				
 				/* Here we get the comments for each answer */
-				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
+				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers-Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
 				
 				
@@ -320,7 +322,7 @@
 							'answerid' => $answers_id,
 							'reported' => false,
 							'liked' => $liked,
-							'likes' => "0",
+							'likes' => $a["likes"],
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
 										'userid'=>$a["user_id"],
@@ -830,7 +832,7 @@
 						$author = mysqli_fetch_assoc($result_author);
 						
 						/* Here we get the comments for each answer */
-						$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
+						$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
 						$res2 = $db->query($query);
 					
 						$answersCommentsResult = array();
@@ -849,7 +851,7 @@
 									'answerid' => $r["id"],
 									'reported' => false,
 									'liked' => false,
-									'likes' => "0",
+									'likes' => $a["likes"],
 									'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 												'karma' =>$author2['score'],
 												'userid'=>$a["user_id"],
@@ -918,7 +920,7 @@
 					'answerid' => $answer_id,
 					'reported' => false,
 					'liked' => false,
-					'likes' => "0",
+					'likes' => $r["likes"],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -974,7 +976,7 @@
 					'answerid' => $answer_id,
 					'reported' => false,
 					'liked' => false,
-					'likes' => "0",
+					'likes' => $r['likes'],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -1066,7 +1068,7 @@
 						'answerid' => $answer_id,
 						'reported' => false,
 						'liked' => $liked,
-						'likes' => "0",
+						'likes' => $r["likes"],
 						'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 									'karma' =>$comment_author['score'],
 									'userid'=>$r["user_id"],
