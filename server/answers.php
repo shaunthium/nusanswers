@@ -278,7 +278,7 @@
 				$answers_id= $r["id"];
 				
 				/* Here we get the comments for each answer */
-				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers-Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
+				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
 				
 				
