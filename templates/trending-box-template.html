@@ -25,7 +25,7 @@
 
 
 	<div class="collection-item black-text text-accent-2">
-	    <tag style="cursor:pointer;" ng-click="setFeedType('trending'); toggleTagFilter(tag)"  ng-repeat="tag in trendingTags track by $index" is-filter>
+	    <tag style="cursor:pointer;" ng-click="toggleTagFilter(tag)"  ng-repeat="tag in trendingTags track by $index" is-filter>
 	        <span class="grey-text right"></span> <!--TODO: decide what additional info we wish to include, if any -->
 	    </tag>
 	</div>

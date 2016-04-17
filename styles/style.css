@@ -17,14 +17,14 @@ input:focus {
 
 
 .vote{
-  transition: all .2s ease-in;
+  transition: all .1s ease-in;
 }
 
-.upvote:hover, .upvoteSelected{
+ .upvoteSelected{
     color:#4caf50 !important;
 }
 
-.downvote:hover, .downvoteSelected{
+.downvoteSelected{
   color:#d32f2f !important;
 }
 
@@ -567,7 +567,7 @@ form.main-search-field{
     color:white;
 }
 
-.card-title{font-size:1.4em !important; line-height:45px !important; }
+.card-title{font-size:1.5em !important; font-weight:400 !important;line-height:45px !important; }
 .no-underline{text-decoration: none !important;  }
 .card-title:hover{text-decoration: underline;}
 
