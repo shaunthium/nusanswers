@@ -4,18 +4,30 @@
 			<!-- profile card begin -->
 			<div class="col s12">
 				<div class="card">
-					<div style="min-height:210px;"class="card-content">
-						<div style="float:left; padding:15px; padding-right:25px;"class="image-upload">
+
+					<div style="min-height:100px;"class="card-content">
+						<!-- edit button -->
+				        <a ng-if="profileId === currentUser.id"style="padding-right:10px;" class="waves-effect waves-light btn red right">
+				            <span ng-click="logout()">
+				                <i class="material-icons">lock_outline</i>
+				                <span ng-if="profileId == currentUser.id" style="position:relative; bottom:5px;">Logout</span>
+				            </span>
+				        </a>
+
+						<div style="float:left; padding:15px; padding-right:25px;">
 					    <label for="file-input">
-					         <img style="width:130px; cursor:pointer; height:130px;" ng-src="{{profileImg}}" alt="" class="circle">
+					         <img style="width:60px; cursor:pointer; height:60px;" ng-src="{{currentUser.profileImg}}" alt="" class="circle">
 					    </label>
-							<input type="file" id="file-input"/>
+							
 						</div>
 						<span class="card-title">{{user.first_name}} {{user.last_name}}</span>
 						<br/>
 						<!-- karma -->
-						<span style="line-height:25px;font-size:1.1em;"class="card-title green-text ">Karma {{user.score}}</span>
+						<span style="font-size:1.1em;line-height:20px;font-size:1.1em;"class="grey-text">New User</span>
 			            <!-- <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p> -->
+
+			          
+
 			            <hr/>
 			            <!-- involved tags -->
 			            <!-- <b>Involved in</b> -->
@@ -23,8 +35,12 @@
 						    Iamaprettylonghtag1 -->
 			  			<!-- </div> -->
 			  			<br/>
-			  			<!-- make som check if user is currentuser to show this ... -->
-			  			<span ng-if="profileId == currentUser.id" style="cursor:pointer;" ng-click="logout()" class="grey-text">Logout</span>
+
+
+			  			<div class="animate-fade-in" ng-show="editMode" class="row">
+			               <div id="wysiwyg-editor-questionbody" class="wysiwyg-editor">{{post.content}}</div>
+			            </div>
+
 					</div>
 				</div>
 			<!-- profile card end -->
@@ -38,7 +54,7 @@
 				<div class="card">
 					<div class="collection">
 
-				        <a ng-repeat="question in profileQuestions | limitTo: 4" href="#!" class="collection-item black-text">
+				        <a ng-repeat="question in profileQuestions | limitTo: 4" href="#/qa/{{question.id}}" class="collection-item black-text">
 				        	<div style="display:table; width:100%;">
 					        	<div style="display:table-cell;">
 					        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
@@ -48,8 +64,8 @@
 									</div>
 					        	</div>
 					        	<div style="display:table-cell; width:65px; ">
-					        		<span class="right orange-text text-darken-2">{{question.score}}</span>
-					        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+					        		<span style="font-weight:bold;"class="right yellow-text text-darken-2">{{question.score}}</span>
+					        		<!-- <i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i> -->
 					        	</div>
 				        	</div>
 				        </a>
@@ -68,18 +84,19 @@
 				<hr/>
 				<div class="card">
 
+
 					<div class="collection">
-				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#!" class="collection-item black-text">
+				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#/qa/{{answer.questionid}}" class="collection-item black-text">
 				        	<div style="display:table; width:100%;">
 					        	<div style="display:table-cell;">
 					        		<p style="margin-bottom:5px;">{{answer.title}}</p>
 					        		<div ng-repeat="tag in answer.tags"class="tag chip blue lighten-5">
-										    {{tag}}
+									    {{tag}}
 									</div>
 					        	</div>
 					        	<div style="display:table-cell; width:65px;">
-					        		<span class="right orange-text text-darken-2">{{answer.upvotes}}</span>
-					        		<i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+					        		<span style="font-weight:bold;"class="right yellow-text text-darken-2">{{answer.upvotes}}</span>
+					        		<!-- <i style="font-size:1.35em;"class="small material-icons orange-text text-darken-2 right ">grade</i> -->
 					        	</div>
 				        	</div>
 				        </a>

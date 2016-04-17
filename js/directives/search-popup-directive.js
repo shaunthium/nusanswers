@@ -58,7 +58,7 @@ angular.module('quoraApp')
             },
             function(userInput){
                 if(userInput !== questionTitleFilter(userInput)){
-                    $scope.displayErrorMessage("Warning: your question contains invalid characters!");
+                    $scope.displayErrorMessage("Your question contains invalid characters!");
                 }
                 else{
                     $scope.clearErrorMessage();
@@ -123,6 +123,7 @@ angular.module('quoraApp')
                         '<div class="yellow lighten-3" style="height:100px; padding:10px;">' +
                             '<div style="text-align:center;" class="v-align">' +
                                 '<span class="v-align">' +
+                                    '<b>Warning!</b><br/>' +
                                     '{{errorMessage}}' +
                                 '</span>' +
                             '</div>' +
