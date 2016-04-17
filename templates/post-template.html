@@ -8,7 +8,7 @@
             Cancel
         </span>
         <!-- edit button -->
-        <a ng-if="isEditable" style="padding-right:10px;" class="waves-effect waves-light btn indigo right">
+        <a ng-if="isEditable" style="padding-right:10px;" class="waves-effect waves-light btn blue right">
             <span ng-if="!editMode" ng-click="toggleEditMode()">
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;"></span>
@@ -29,7 +29,7 @@
         <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='feed-item' || type==='answer'" ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
                 {{post.title}}</span>
-            <span ng-switch-when="false" ng-if="includeTitle" class="card-title">
+            <span ng-switch-when="false" ng-if="includeTitle" class="card-title no-underline">
                 {{post.title}}</span>
         </span>
 
@@ -39,7 +39,7 @@
                 <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}</p>
-                <a data-tooltip="This users karma" style="cursor:pointer; margin-right:-15px;" class="tooltip-left secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.karma}}</a>
+                <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;margin-right:-15px;" class="tooltip-left secondary-content grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a>
             </li>
         </ul>
 

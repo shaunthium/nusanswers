@@ -5,6 +5,7 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
 
 .config(['ezfbProvider', '$stateProvider', '$urlRouterProvider', function(ezfbProvider, $stateProvider, $urlRouterProvider) {
 
+    var QUESTION_TITLE_MIN_LENGTH = 6;
 
 	  $stateProvider
 	    .state('home', {

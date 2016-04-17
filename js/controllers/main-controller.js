@@ -3,13 +3,13 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    $scope.feedType = 'trending';
+    $scope.feedType = 'latest';
 
     $scope.setFeedType = function(type){
         $scope.feedType = type;
     }
 
-    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+    $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 

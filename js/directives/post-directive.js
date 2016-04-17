@@ -22,7 +22,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($http, $scope, $state, $rootScope, $timeout, questionService){
+        controller: function($http, $scope, $state, $rootScope, $timeout, questionService, $sce){
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -30,6 +30,45 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
             $scope.editMode = false;
+
+            //This watch is for getting the post in question-answers view.
+            $scope.$watchCollection(function(){
+                return $scope.post;
+            },
+            function(post){
+                if(post){
+                    $scope.answered = post.answered;
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.temp = {title : post.title};
+
+                    // TODO: Can't get this to work, we need to render the html tags somehow
+                    //post.content = $sce.trustAsHtml(post.content);
+
+                    // $http({
+                    //   url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
+                    //   method: 'GET',
+                    //   data: {
+                    //     width: '1000'
+                    //   }
+                    // }).success(function(data) {
+                    //   $scope.profileImg = data.data.url;
+                    // }).error(function(data) {
+                    //   $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    // });
+                }
+            });
+
+            //This watch will make the post editable when the user logs-in in the question-answers view
+            $scope.$watchCollection(function(){
+                return $scope.currentUser;
+            },
+            function(currentUser){
+                if(currentUser && $scope.post){
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                }
+            });
+
+
 
             $scope.toggleFooter = function(){
 
@@ -53,29 +92,35 @@ angular.module('quoraApp')
                     });
                 }
                 else{
-                    Materialize.toast('Changes not saved.', 2000, 'custom-toast')
+                    Materialize.toast('Changes not saved.', 2000, 'err-toast')
                 }
             }
 
             $scope.saveChanges = function(){
-                $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
-                questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
-                .then(
-                    function(res){
-                        if(res.data){
-                            $scope.post.title = $scope.temp.title;
-                            $scope.post.content = $scope.temp.content;
-                            Materialize.toast('Changes saved successfully!', 2000, 'custom-toast');
-                            $scope.editMode = !$scope.editMode;
-                        }
-                        else{
-                            console.log("Error while editing question!");
-                        }
-                    },
-                    function(err){
-                        console.log("Error while editing question!");
-                    }
-                );
+
+              if($scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
+                 Materialize.toast('Please write a proper question', 2000, 'err-toast');
+                 return;
+              }
+
+              $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
+              questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+              .then(
+                  function(res){
+                      if(res.data){
+                          $scope.post.title = $scope.temp.title;
+                          $scope.post.content = $scope.temp.content;
+                          Materialize.toast('Changes successfully saved!', 2000, 'custom-toast');
+                          $scope.editMode = !$scope.editMode;
+                      }
+                      else{
+                          console.log("Error while editing question!");
+                      }
+                  },
+                  function(err){
+                      console.log("Error while editing question!");
+                  }
+              );
             }
 
 
@@ -218,39 +263,7 @@ angular.module('quoraApp')
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
-            //This watch is for getting the post in question-answers view.
-            scope.$watchCollection(function(){
-                return scope.post;
-            },
-            function(post){
-                if(post){
-                    scope.answered = post.answered;
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                    scope.temp = {title : post.title};
-
-                    $http({
-                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
-                      method: 'GET',
-                      data: {
-                        width: '1000'
-                      }
-                    }).success(function(data) {
-                      scope.profileImg = data.data.url;
-                    }).error(function(data) {
-                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-                    });
-                }
-            });
-
-            //This watch will make the post editable when the user logs-in in the question-answers view
-            scope.$watchCollection(function(){
-                return scope.currentUser;
-            },
-            function(currentUser){
-                if(currentUser && scope.post){
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                }
-            })
+            
 
             switch(attrs.type){
                 case "feed-item":
