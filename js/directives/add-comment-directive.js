@@ -49,9 +49,12 @@ angular.module('quoraApp')
             }
 
             $scope.acceptComment = function(){
-
-                if(!$scope.commentLongEnough || $scope.commentTooLong){
-                    alert("Comment not valid"); // TODO: Make this feedback cooler
+                if(!$scope.commentLongEnough){
+                    Materialize.toast("The comment does not meet minimum length.", 2000, 'information-toast');
+                    return;
+                }
+                if($scope.commentTooLong){
+                    Materialize.toast("The comment exceeds maximum length.", 2000, 'information-toast');
                     return;
                 }
 

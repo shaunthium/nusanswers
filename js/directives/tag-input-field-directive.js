@@ -11,9 +11,9 @@ angular.module('quoraApp')
                 //Filter out any character that is not a-z A-Z 0-9 and remove continuous spaces
                 var filtered = $scope.userInput.replace(/\W/g, " ").replace(/_/g, " ").replace(/ +/g, " ");
                 if(filtered !== $scope.userInput){
-                    //FIXME: tag input breaks when accepting alert with "shift + spacebar" combination.
-                    alert("Tags can only contain characters a-z A-Z 0-9!");
-                    $scope.userInput = filtered;
+                    Materialize.toast("Tags can only contain characters a-z A-Z 0-9!", 2000, 'error-toast');
+                    $scope.userInput = filtered.trim();
+                    return;
                 }
                 var tokens = filtered.split(" ");
                 if(tokens.length > 1 && tokens[0].length > 0){ //If a valid tag exists
@@ -37,6 +37,6 @@ angular.module('quoraApp')
 		link: function(scope, element, attrs){
             scope.placeholder = "Add tags to your question! Submit with enter or space!";
 		},
-		template: '<input type="text" name="tagEditor" placeholder="{{placeholder}}" ng-model="userInput" ng-keypress="keyPressed($event)"ng-change="verifyTag()" ng-trim="false">'
+		templateUrl: 'templates/tag-input-field-template.html'
 	}
 });

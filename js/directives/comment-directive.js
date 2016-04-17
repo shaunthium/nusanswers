@@ -6,6 +6,7 @@ angular.module('quoraApp')
 		restrict: 'E',
         scope: true,
         controller : ['$scope', 'questionService', function($scope, questionService){
+            // console.log($scope.comment);
             $scope.$watch(function(){
                 return $scope.currentUser;
             },
@@ -28,6 +29,7 @@ angular.module('quoraApp')
                         questionService.submitCancelUpvoteComment($scope.comment.id, $scope.currentUser.id)
                         .then(
                             function(res){
+                                console.log("Cancel upvote ", res);
                                 if(res.data){
                                     $scope.comment.liked = false;
                                     $scope.comment.upvotes--;
@@ -44,7 +46,7 @@ angular.module('quoraApp')
 
                     }
                     else{
-                        console.log("upvote comment!");
+                        console.log("upvote comment!", $scope.comment.id, " ", $scope.currentUser.id);
                         questionService.submitUpvoteComment($scope.comment.id, $scope.currentUser.id)
                         .then(
                             function(res){

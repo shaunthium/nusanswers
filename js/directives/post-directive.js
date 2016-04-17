@@ -23,6 +23,8 @@ angular.module('quoraApp')
 		restrict: 'E',
 		transclude: true,
         controller: function($http, $scope, $state, $rootScope, $timeout, questionService){
+            var MAXIMUM_TAGS = 5;
+            var MAXIMUM_TAG_LENGTH = 20;
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -53,7 +55,7 @@ angular.module('quoraApp')
                     });
                 }
                 else{
-                    Materialize.toast('Changes not saved.', 2000, 'custom-toast')
+                    Materialize.toast('Changes not saved.', 2000, 'information-toast')
                 }
             }
 
@@ -65,7 +67,7 @@ angular.module('quoraApp')
                         if(res.data){
                             $scope.post.title = $scope.temp.title;
                             $scope.post.content = $scope.temp.content;
-                            Materialize.toast('Changes saved successfully!', 2000, 'custom-toast');
+                            Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
                             $scope.editMode = !$scope.editMode;
                         }
                         else{
@@ -198,6 +200,15 @@ angular.module('quoraApp')
             }
 
             $scope.addTag = function(tag){
+                if($scope.post.tags.length > MAXIMUM_TAGS){
+                    Materialize.toast("Sorry! The maximum number of tags for a post is " + MAXIMUM_TAGS + ".", 2000, 'error-toast');
+                    return;
+                }
+                if(tag.length > MAXIMUM_TAG_LENGTH){
+                    Materialize.toast("Sorry! The maximum tag length is " + MAXIMUM_TAG_LENGTH + " characters.", 2000, 'error-toast');
+                    return;
+                }
+
                 questionService.addTag($scope.post.id, JSON.stringify([tag]))
                 .then(
                     function(res){

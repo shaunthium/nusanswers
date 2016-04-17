@@ -384,7 +384,7 @@ angular.module('quoraApp')
           url: base_url + "server/comment_qns.php",
           method: "POST",
           data: {
-            cmd: "upvote_comment_qns",
+            cmd: "set_upvote_comment",
             user_id: userID,
             comment_id : commentID
           }
@@ -396,7 +396,7 @@ angular.module('quoraApp')
           url: base_url + "server/comment_qns.php",
           method: "POST",
           data: {
-            cmd: "cancel_upvote_comment_qns",
+            cmd: "reset_upvote_comment",
             user_id: userID,
             comment_id : commentID
           }

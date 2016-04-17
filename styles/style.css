@@ -538,8 +538,25 @@ form.main-search-field{
 
 }
 
-.custom-toast{background:#66bb6a; color:white;}
+.custom-toast{
+    background:#66bb6a;
+    color:white;
+}
 
+.error-toast{
+    background:red;
+    color:white;
+}
+
+.success-toast{
+    background:green;
+    color:white
+}
+
+.information-toast{
+    background:blue;
+    color:white;
+}
 
 .card-title{font-size:1.4em !important; line-height:45px !important; }
 .card-title:hover{text-decoration: underline;}
