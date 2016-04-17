@@ -396,7 +396,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		//error_log(json_encode($finalOutput));
+		error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
@@ -477,7 +477,7 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
 				$db->query($query);
 				
-				return true;
+				echo true;
 			}
 			else //have voted before! Proceed to unlike
 			{
@@ -500,7 +500,7 @@
 				$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
 				$db->query($query);
 				
-				return true;
+				echo true;
 			}
 		}
 	}
@@ -913,11 +913,11 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			return false;
+			echo false;
 		else if(!isset($data->answer_id))
-			return false;
+			echo false;
 		else if(!isset($data->content))
-			return false;
+			echo false;
 		
 		/* Here we get the User Info to each question */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
@@ -931,7 +931,7 @@
 		$query = "select * from Answers_Comments where id = $comment_id";
 		$result = $db->query($query);
 		if(mysqli_num_rows($result) == 0) 
-			return false;
+			echo false;
 		
 		$r = mysqli_fetch_assoc($result);
 		$commentsResult = array();
@@ -966,21 +966,21 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			return false;
+			echo false;
 		else if(!isset($data->comment_id))
-			return false;
+			echo false;
 		else if (!isset($data->content))
-			return false;
+			echo false;
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			return false;
+			echo false;
 		
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
 		if($uid != $user_id) //unauthorized
-			return false;
+			echo false;
 			
 		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
 		$db->query($query);
@@ -988,7 +988,7 @@
 		$query = "select * from Answers_Comments where id = $comment_id";
 		$result = $db->query($query);
 		if(mysqli_num_rows($result) == 0) 
-			return false;
+			echo false;
 		
 		$r = mysqli_fetch_assoc($result);
 		$commentsResult = array();
@@ -1041,24 +1041,24 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			return false;
+			echo false;
 		else if(!isset($data->comment_id))
-			return false;
+			echo false;
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			return false;
+			echo false;
 		
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
 		if($uid != $user_id) //unauthorized
-			return false;
+			echo false;
 		
 		$query = "delete from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		
-		return true;
+		echo true;
 	}
 	
 	/*
@@ -1075,7 +1075,7 @@
 		$query = "select * from Answers_Comments where answer_id = $answer_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			return false;
+			echo false;
 		
 		$commentsResult = array();
 		while($r = mysqli_fetch_assoc($res)){ 
@@ -1148,8 +1148,7 @@
 		$result_author = $db->query($query_author);
 		if(mysqli_num_rows($result_author) == 0) //no such user
 		{
-			echo "User not found!";
-			return;
+			echo false;
 		}
 		$author = mysqli_fetch_assoc($result_author);
 		
