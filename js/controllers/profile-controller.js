@@ -8,7 +8,6 @@ angular.module('quoraApp')
   // Pull user's id from state params
   var id = $stateParams.profileId;
 
-
   console.log("in profile ctr");
 
   $scope.profileId = id;
@@ -27,18 +26,18 @@ angular.module('quoraApp')
     $rootScope.loading = false;
   })
 
-  // // Get profile img
-  // $http({
-  //   url: 'http://graph.facebook.com/v2.5/' + id + '/picture?redirect=false&width=9999',
-  //   method: 'GET',
-  //   data: {
-  //     width: '1000'
-  //   }
-  // }).success(function(data) {
-  //   $scope.profileImg = data.data.url;
-  // }).error(function(data) {
-  //   $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-  // });
+  // Get profile img
+  $http({
+    url: 'http://graph.facebook.com/v2.5/' + id + '/picture?redirect=false&width=9999',
+    method: 'GET',
+    data: {
+      width: '1000'
+    }
+  }).success(function(data) {
+    $scope.profileImg = data.data.url;
+  }).error(function(data) {
+    $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+  });
 
 
   $scope.saveChanges = function(){

@@ -7,8 +7,8 @@
 
 					<div style="min-height:100px;"class="card-content">
 						<!-- edit button -->
-				        <a style="padding-right:10px;" class="waves-effect waves-light btn red right">
-				            <span ng-if="!editMode" ng-click="logout()">
+				        <a ng-if="profileId === currentUser.id"style="padding-right:10px;" class="waves-effect waves-light btn red right">
+				            <span ng-click="logout()">
 				                <i class="material-icons">lock_outline</i>
 				                <span ng-if="profileId == currentUser.id" style="position:relative; bottom:5px;">Logout</span>
 				            </span>
@@ -16,7 +16,7 @@
 
 						<div style="float:left; padding:15px; padding-right:25px;">
 					    <label for="file-input">
-					         <img style="width:60px; cursor:pointer; height:60px;" ng-src="{{profileImg}}" alt="" class="circle">
+					         <img style="width:60px; cursor:pointer; height:60px;" ng-src="{{currentUser.profileImg}}" alt="" class="circle">
 					    </label>
 							
 						</div>

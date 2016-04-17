@@ -17,7 +17,7 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-    $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+    $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -67,9 +67,8 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+        $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
-        // $scope.currentUser = { userID : "10209460093644289" };
         // ezfb.login(function(res) {
         //   // console.log(res);
         //   $scope.loginStatus = res;
@@ -83,6 +82,25 @@ angular.module('quoraApp')
         //         // console.log($scope.currentUser);
         //         // $scope.loading = false;
         //         // console.log($scope.currentUser);
+                
+        //             //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
+        //             //**********************************************************************************************
+        //             Get profile img
+        //           $http({
+        //             url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
+        //             method: 'GET',
+        //             data: {
+        //               width: '1000'
+        //             }
+        //           }).success(function(data) {
+        //             $scope.currentUser.profileImg = data.data.url;
+        //           }).error(function(data) {
+        //             $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+        //           });
+
+        //             //*** ADDED STUFF END *****
+        //             //*************************
+
         //       });
         //     });
         //   }

@@ -22,8 +22,6 @@
             </span>
         </a>
 
-
-
         <!-- <br ng-if="post.tags.length > 0 && type !== 'answer'"/> -->
 
         <input ng-model="temp.title" class="animate-fade-in" ng-if="editMode && type==='question'" type="text" name="FirstName"/>
@@ -41,6 +39,7 @@
                 <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p style="line-height:1.7;" ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}<br/>
+                    
                     <br/>
                     <!-- <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;" class="tooltip-left  grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a> -->
                 </p>

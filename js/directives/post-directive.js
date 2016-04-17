@@ -48,7 +48,7 @@ angular.module('quoraApp')
 
                     // TODO: Can't get this to work, we need to render the html tags somehow
                     //post.content = $sce.trustAsHtml(post.content);
-
+                    
                     $http({
                       url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
                       method: 'GET',
