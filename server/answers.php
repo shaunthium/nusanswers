@@ -396,7 +396,7 @@
 		}
 		
 		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
+		//error_log(json_encode($finalOutput));
 		echo json_encode($finalOutput);
 
 	}
@@ -846,11 +846,25 @@
 								$result_author2 = $db->query($query_author2);
 								$author2 = mysqli_fetch_assoc($result_author2);
 								
+								/* Here we determine if current user has liked this comment */
+								$comment_id = $a["id"];
+								$query = "select 1 from  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+								$comment_result = $db->query($query);
+								
+								if(mysqli_num_rows($comment_result) == 0) //Never liked before
+								{
+									$liked = false;
+								}
+								else
+								{
+									$liked = true;
+								}
+		
 								$answersCommentsResult[] = array(
 									'id' => $a["id"],
 									'answerid' => $r["id"],
 									'reported' => false,
-									'liked' => false, //wtf
+									'liked' => $liked, //wtf
 									'likes' => (int)$a["likes"],
 									'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 												'karma' =>$author2['score'],
