@@ -4,23 +4,28 @@
 
         
 
-        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="blue-text" ng-click="toggleEditMode()">
+        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="red-text" ng-click="toggleEditMode()">
             Cancel
         </span>
 
         
         <p class="grey-text">{{post.created_at}}</p>
         <!-- edit button -->
-        <a ng-if="isEditable" style="padding-right:10px;" class="waves-effect waves-light btn blue right">
-            <span ng-if="!editMode" ng-click="toggleEditMode()">
+        <a ng-if="isEditable && !editMode" style="padding-right:10px; margin-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn blue right no-animate">
+            <span ng-if="!editMode" >
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;"></span>
             </span>
-            <span ng-if="editMode" ng-click="saveChanges()">
+        </a>
+
+          <!-- save changes button -->
+        <a ng-if="isEditable && editMode" ng-click="saveChanges()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn blue right no-animate">
+            <span ng-if="editMode" >
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;">Save changes</span>
             </span>
         </a>
+
 
         <!-- <br ng-if="post.tags.length > 0 && type !== 'answer'"/> -->
 
