@@ -22,7 +22,8 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($http, $scope, $state, $rootScope, $timeout, questionService, $sce){
+        controller: ['$http', '$scope', '$state', '$rootScope', '$timeout', 'questionService', 'questionTitleFilter', '$sce',
+                    function($http, $scope, $state, $rootScope, $timeout, questionService, questionTitleFilter, $sce){
             var MAXIMUM_TAGS = 5;
             var MAXIMUM_TAG_LENGTH = 20;
             var canUpvote = true;
@@ -87,6 +88,7 @@ angular.module('quoraApp')
              $('.tooltipped').tooltip({delay: 50});
 
             $scope.toggleEditMode = function(){
+                $scope.userInput = "";
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
@@ -101,31 +103,39 @@ angular.module('quoraApp')
             }
 
             $scope.saveChanges = function(){
+                var error = false;
+                if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
+                    Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
+                    error = true;
+                }
+                if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
+                    Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
+                    error = true;
+                }
+                if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
+                    Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
+                    error = true;
+                }
+                if(error){return;}
 
-              if($scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
-                 Materialize.toast('Please write a proper question', 2000, 'err-toast');
-                 return;
-              }
-
-              $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
-              questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
-              .then(
-                  function(res){
-                      if(res.data){
-                          $scope.post.title = $scope.temp.title;
-                          $scope.post.content = $scope.temp.content;
-                          Materialize.toast('Changes successfully saved!', 2000, 'custom-toast');
-                          $scope.editMode = !$scope.editMode;
-                      }
-                      else{
-                          console.log("Error while editing question!");
-                      }
-                  },
-                  function(err){
-                      console.log("Error while editing question!");
-                  }
-              );
-
+                $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
+                questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+                .then(
+                    function(res){
+                        if(res.data){
+                            $scope.post.title = $scope.temp.title;
+                            $scope.post.content = $scope.temp.content;
+                            Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
+                            $scope.editMode = !$scope.editMode;
+                        }
+                        else{
+                            console.log("Error while editing question!");
+                        }
+                    },
+                    function(err){
+                        console.log("Error while editing question!");
+                    }
+                );
             }
 
 
@@ -343,12 +353,12 @@ angular.module('quoraApp')
                     }
                 );
             }
-        },
+        }],
         link : function(scope, element, attrs){
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
-            
+
             switch(attrs.type){
                 case "feed-item":
                     scope.includeTags = true;

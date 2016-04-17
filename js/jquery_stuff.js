@@ -1,4 +1,4 @@
-/** We need to wrap all the jQuery events inside angular directives for them to 
+/** We need to wrap all the jQuery events inside angular directives for them to
     trigger after our angular code has loaded */
 angular.module('quoraApp')
 
@@ -23,28 +23,18 @@ angular.module('quoraApp')
 	return {
 		restrict:'E',
 		controller: function($scope, $timeout){
-
 			$('html').click(function(){
-				if( $('#search').is(':focus')) {
-					$scope.user_question = "?";
-					$timeout(function(){
-						$('#search').get(0).setSelectionRange(0,0);
-					}, 0)
-					$scope.showOverlay = true;
-				} else {
+				if(!$('#search').is(':focus')){
 					if(!$scope.submitQuestionError){
-						$scope.user_question = "";
 						$scope.showOverlay = false;
-						$scope.showQuestionError = false;
+                        $scope.clearErrorMessage();
 					}
-				}	
-				$scope.$apply(); 
+				}
+				$scope.$apply();
 			});
-
-
 		},
 		link:function(scope, element, attributes){
-			
+
 		}
 	}
 })

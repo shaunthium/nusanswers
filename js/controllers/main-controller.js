@@ -1,5 +1,13 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
+.filter('questionTitle', function(){
+    return function(questionTitle){
+        if(questionTitle){
+            return questionTitle.replace(/[^\w \?\!\"\'\(\)\.]/g, "");
+        }
+        return questionTitle;
+    }
+})
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
@@ -127,6 +135,16 @@ angular.module('quoraApp')
             }
         }, function(err){
 
+        });
+    }
+
+    $scope.getQuestionsSummary = function(){
+        qs.getQuestionsSummary().then(function(res){
+            //XXX: had to manually access the root scope.
+            $rootScope.questionsSummary = res.data;
+            //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
+        }, function(err){
+            console.log("Error when getting questions summary.");
         });
     }
 
