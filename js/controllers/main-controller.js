@@ -9,7 +9,7 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-    $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser"};
+    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -108,8 +108,10 @@ angular.module('quoraApp')
 
     $scope.getPost = function(questionID, userID){
         $scope.loading = true;
+        console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
+            console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;

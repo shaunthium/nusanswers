@@ -6,8 +6,8 @@ angular.module('quoraApp')
 		restrict: 'E',
         controller: function($scope){
             $scope.isAddCommentActive = false;
-            $scope.COMMENTS_MIN_SIZE = 15;
-            $scope.COMMENTS_MAX_SIZE = 30;
+            $scope.COMMENTS_MIN_SIZE = 5;
+            $scope.COMMENTS_MAX_SIZE = 100;
 
             /*
                 XXX: this $watch hack is a solution to the lack of two-way binding seen in the text area
@@ -49,9 +49,12 @@ angular.module('quoraApp')
             }
 
             $scope.acceptComment = function(){
-
-                if(!$scope.commentLongEnough || $scope.commentTooLong){
-                    alert("Comment not valid"); // TODO: Make this feedback cooler
+                if(!$scope.commentLongEnough){
+                    Materialize.toast("The comment does not meet minimum length.", 2000, 'information-toast');
+                    return;
+                }
+                if($scope.commentTooLong){
+                    Materialize.toast("The comment exceeds maximum length.", 2000, 'information-toast');
                     return;
                 }
 
