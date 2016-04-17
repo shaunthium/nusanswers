@@ -90,7 +90,7 @@
 			}
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => $author['score'],
+									'karma' => (int)$author['score'],
 									'userid' => $qns_data['user_id'],
 									'flavour' => 'New User'
 									);
@@ -107,12 +107,14 @@
 				'title'=>$qns_data['title'],
 				'tags'=>$tag_name_array,
 				'author'=> $author_array,
-				'views'=>$qns_data['view_count'],
+				'views'=>(int)$qns_data['view_count'],
 				'desc'=>$qns_data['content'],
-				'upvotes'=>$qns_data['score'],
+				'upvotes'=>(int)$qns_data['score'],
 				'comments'=> $comment_array,
-				'total_answers' => $total_answers['total_answers'],
-				'total_comments'=> count($comment_array)
+				'total_answers' => (int)$total_answers['total_answers'],
+				'total_comments'=> count($comment_array),
+				'created_at'=>$qns_data['created_at'],
+				'updated_at'=>$qns_data['updated_at']
 				/*
 				'id'=>$qns_data['id'],
 				'user_id'=>$qns_data['user_id'],
@@ -120,8 +122,7 @@
 				'content'=>$qns_data['content'],
 				'score'=>$qns_data['score'],
 				'view_count'=>$qns_data['view_count'],
-				'created_at'=>$qns_data['created_at'],
-				'updated_at'=>$qns_data['updated_at'],
+				
 				'author' => $author['first_name'] . " " . $author['last_name'],
 				'author_score' => $author['score'],
 				'total_answers' => $total_answers['total_answers']
@@ -222,9 +223,9 @@
 		
 		$affected = $db->affected_rows;
 		if( $affected > 0 ){
-			echo json_encode(true);
+			echo true;
 		}else{
-			echo json_encode(false);
+			echo false;
 		}	
 	}
 
@@ -290,7 +291,7 @@
 			}
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => $author['score'],
+									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
 									'flavour' => 'New User'
 									);
@@ -306,7 +307,7 @@
 				$comment_author = mysqli_fetch_assoc($result_comment_author);
 
 				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -370,7 +371,7 @@
 				'title'=>$latest['title'],
 				'tags'=>$tag_name_array,
 				'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => $author['score'],
+									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
 									'flavour' => 'New User'
 					),
@@ -453,7 +454,7 @@
 			}
 
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => $author['score'],
+									'karma' => (int)$author['score'],
 									'userid' => $trending['user_id'],
 									'flavour' => 'New User'
 									);
@@ -469,7 +470,7 @@
 				$comment_author = mysqli_fetch_assoc($result_comment_author);
 
 				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -655,8 +656,8 @@
 				'user_id'=>$qns['user_id'],
 				'title'=>$qns['title'],
 				'content'=>$qns['content'],
-				'score'=>$qns['score'],
-				'view_count'=>$qns['view_count'],
+				'score'=>(int)$qns['score'],
+				'view_count'=>(int)$qns['view_count'],
 				'created_at'=>$qns['created_at'],
 				'updated_at'=>$qns['updated_at'],
 				'tags' => $tag_name_array
