@@ -944,7 +944,7 @@
 					'likes' => (int)"0",
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
-								'userid'=>$r["user_id"],
+								'userid'=>$user_id,
 								'flavour'=> $comment_author['flavour']),
 					
 					'body' => $r["content"],
