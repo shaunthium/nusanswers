@@ -103,20 +103,18 @@ angular.module('quoraApp')
             }
 
             $scope.saveChanges = function(){
-                var error = false;
                 if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
-                    error = true;
+                    return;
                 }
                 if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
                     Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
-                    error = true;
+                    return;
                 }
                 if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
                     Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
-                    error = true;
+                    return;
                 }
-                if(error){return;}
 
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
                 questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
