@@ -146,7 +146,7 @@
 					'questionid' => $question_id,
 					'reported' => false,
 					'liked' => $liked,
-					'likes' => $r["likes"],
+					'likes' => (int)$r["likes"],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -194,9 +194,9 @@
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
-				'views'=>$post['view_count'],
+				'views'=>(int)$post['view_count'],
 				'content'=>$post['content'],
-				'upvotes'=>$post['score'],
+				'upvotes'=>(int)$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
@@ -242,9 +242,9 @@
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
-				'views'=>$post['view_count'],
+				'views'=>(int)$post['view_count'],
 				'content'=>$post['content'],
-				'upvotes'=>$post['score'],
+				'upvotes'=>(int)$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
@@ -322,7 +322,7 @@
 							'answerid' => $answers_id,
 							'reported' => false,
 							'liked' => $liked,
-							'likes' => $a["likes"],
+							'likes' => (int)$a["likes"],
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
 										'userid'=>$a["user_id"],
@@ -384,7 +384,7 @@
 					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
 					'content'=>$r['content'],
-					'upvotes'=>$r['score'],
+					'upvotes'=>(int)$r['score'],
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at'],
 					'chosen' => $r['chosen'],
@@ -642,7 +642,7 @@
 	{
 		
 		global $db;
-		
+	
 		if (!isset($data->user_id))
 			echo false;
 		else if (!isset($data->answer_id))
@@ -767,7 +767,7 @@
 						'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 										'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
 						'content'=>$r['content'],
-						'upvotes'=>$r['score'],
+						'upvotes'=>(int)$r['score'],
 						'created_at'=>$r['created_at'],
 						'updated_at'=>$r['updated_at'],
 						'chosen' => $r['chosen'],
@@ -846,12 +846,26 @@
 								$result_author2 = $db->query($query_author2);
 								$author2 = mysqli_fetch_assoc($result_author2);
 								
+								/* Here we determine if current user has liked this comment */
+								$comment_id = $a["id"];
+								$query = "select 1 from  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+								$comment_result = $db->query($query);
+								
+								if(mysqli_num_rows($comment_result) == 0) //Never liked before
+								{
+									$liked = false;
+								}
+								else
+								{
+									$liked = true;
+								}
+		
 								$answersCommentsResult[] = array(
 									'id' => $a["id"],
 									'answerid' => $r["id"],
 									'reported' => false,
-									'liked' => false,
-									'likes' => $a["likes"],
+									'liked' => $liked, //wtf
+									'likes' => (int)$a["likes"],
 									'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 												'karma' =>$author2['score'],
 												'userid'=>$a["user_id"],
@@ -872,7 +886,7 @@
 							'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 											'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
 							'content'=>$r['content'],
-							'upvotes'=>$r['score'],
+							'upvotes'=>(int)$r['score'],
 							'created_at'=>$r['created_at'],
 							'updated_at'=>$r['updated_at'],
 							'chosen' => $r['chosen'],
@@ -927,7 +941,7 @@
 					'answerid' => $answer_id,
 					'reported' => false,
 					'liked' => false,
-					'likes' => "0",
+					'likes' => (int)"0",
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -1003,7 +1017,7 @@
 					'answerid' => $r["user_id"],
 					'reported' => false,
 					'liked' => $liked,
-					'likes' => $r['likes'],
+					'likes' => (int)$r['likes'],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -1100,7 +1114,7 @@
 						'answerid' => $answer_id,
 						'reported' => false,
 						'liked' => $liked,
-						'likes' => $r["likes"],
+						'likes' => (int)$r["likes"],
 						'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 									'karma' =>$comment_author['score'],
 									'userid'=>$r["user_id"],
@@ -1163,7 +1177,7 @@
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
 				'content'=>$answer['content'],
-				'upvotes'=>$answer['score'],
+				'upvotes'=>(int)$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
 				'chosen'=>$answer['chosen'],
@@ -1202,7 +1216,7 @@
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
 				'content'=>$latest['content'],
-				'upvotes'=>$latest['score'],
+				'upvotes'=>(int)$latest['score'],
 				'created_at'=>$latest['created_at'],
 				'updated_at'=>$latest['updated_at'],
 				'chosen'=>$latest['chosen']
