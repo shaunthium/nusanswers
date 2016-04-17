@@ -8,7 +8,7 @@
             Cancel
         </span>
 
-        
+
         <p class="grey-text">{{post.created_at}}</p>
         <!-- edit button -->
         <a ng-if="isEditable && !editMode" style="padding-right:10px; margin-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn blue right no-animate">
@@ -74,8 +74,8 @@
             </div>
 
             <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='answer' || type==='feed-item'" ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.content}}</collapse-text></span>
-                <span ng-switch-default>{{post.content}}</span>
+                <span ng-switch-when="feed-item"><collapse-text max-length="220" ng-bind-html="post.content"></collapse-text></span>
+                <span ng-switch-default ng-bind-html="post.content"></span>
             </span>
         </div>
 

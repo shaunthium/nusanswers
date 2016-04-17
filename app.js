@@ -1,7 +1,7 @@
 /*Main config of the app, handles the different views and should also keep track
 of the history. Each view is attached to its controller*/
 
-angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate'])
+angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate', 'ngSanitize'])
 
 .config(['ezfbProvider', '$stateProvider', '$urlRouterProvider', function(ezfbProvider, $stateProvider, $urlRouterProvider) {
 

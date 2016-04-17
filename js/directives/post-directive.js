@@ -104,7 +104,7 @@ angular.module('quoraApp')
 
             $scope.saveChanges = function(){
 
-                console.log("what");
+              
                 if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     return;

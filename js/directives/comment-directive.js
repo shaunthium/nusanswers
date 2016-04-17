@@ -12,9 +12,13 @@ angular.module('quoraApp')
             },
             function(currentUser){
                 if(currentUser && $scope.comment){
+
+                   // console.log("comment" , $scope.comment)
                     $scope.belongsToUser = $scope.comment.author.userid === currentUser.id;
                 }
             });
+
+
 
             $scope.toggleLike = function(){
                 if(!$scope.currentUser){
@@ -64,21 +68,21 @@ angular.module('quoraApp')
                 }
             }
 
-            $scope.toggleReport = function(){
+            // $scope.toggleReport = function(){
 
-                if(!$scope.currentUser){
-                    $scope.showLogin();
-                    return;
-                }
+            //     if(!$scope.currentUser){
+            //         $scope.showLogin();
+            //         return;
+            //     }
 
-                $scope.comment.reported = !$scope.comment.reported;
-                if($scope.comment.reported){
-                    $scope.reportComment($scope.comment.id);
-                }
-                else{
-                    $scope.cancelReportComment($scope.comment.id);
-                }
-            }
+            //     $scope.comment.reported = !$scope.comment.reported;
+            //     if($scope.comment.reported){
+            //         $scope.reportComment($scope.comment.id);
+            //     }
+            //     else{
+            //         $scope.cancelReportComment($scope.comment.id);
+            //     }
+            // }
         }],
 		link: function(scope, element, attrs){
 

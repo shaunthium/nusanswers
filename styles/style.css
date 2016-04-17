@@ -15,7 +15,6 @@ input:focus {
   box-shadow: 0 1px 0 0 #2196f3 !important;
 }
 
-
 .vote{
   transition: all .1s ease-in;
 }
@@ -458,6 +457,8 @@ form.main-search-field{
 
 }
 
+
+
 #submit-question-mobile{
   display:none;
 }
@@ -594,19 +595,20 @@ div.tag{
 i.comment-icon{
 
   cursor:pointer;
-  visibility: hidden;
-
+  /*visibility: hidden;*/
+  opacity:0.5;
+  transition: 0.2s linear;
 }
 
-i.comment-icon-active{
+/*i.comment-icon-active{
 
   visibility: visible;
 
-}
+}*/
 
 div.comment-icon-wrapper:hover > i{
 
-  visibility: visible;
+  opacity:1;
 
 }
 
