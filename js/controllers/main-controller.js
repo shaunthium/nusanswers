@@ -9,7 +9,7 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+    $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
 
     /*ezfb.getLoginStatus(function (res) {
 
