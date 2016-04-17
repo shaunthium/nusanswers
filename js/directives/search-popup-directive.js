@@ -62,7 +62,7 @@ angular.module('quoraApp')
                 }
                 else{
                     $scope.clearErrorMessage();
-                    if(userInput){
+                    if(userInput !== "?"){
                         $scope.showSuggestions = true;
                     }
                     else{
