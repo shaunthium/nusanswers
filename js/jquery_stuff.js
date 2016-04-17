@@ -38,7 +38,6 @@ angular.module('quoraApp')
 						$scope.showQuestionError = false;
 					}
 				}	
-
 				$scope.$apply(); 
 			});
 

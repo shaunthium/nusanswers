@@ -175,14 +175,18 @@ angular.module('quoraApp')
 
     //FIXME: I AM A PROTOTYPE
     //TODO: BACK-END INTEGRATION
-    function getCommentsFromAnswer(postID){
+    function getCommentsFromAnswer(postID, userID){
+
+        console.log("userID", userID);
+        console.log("Ans id ", postID);
+
         return $http({
           url: base_url + "server/answers.php",
           method: "POST",
           data: {
             cmd: "getcomments",
             user_id: userID,
-            comment_id : commentID
+            answer_id : postID
           }
         });
     }
