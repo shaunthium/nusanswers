@@ -80,23 +80,13 @@ angular.module('quoraApp')
 
 
     //FIXME: currently, search parameters are only updated when the user goes to the home view.
-    questionService.getQuestionsSummary().then(function(res){
-        //XXX: had to manually access the root scope.
-        $rootScope.questionsSummary = res.data;
-        //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
-    }, function(err){
-        console.log("Error when getting questions summary.");
-    });
+    //UPDATE: Search parameters are now also updated when the user lands in the QA view.
+    $scope.getQuestionsSummary();
 
     $(window).scroll(function(){
-        // console.log("scrolling!");
-        // console.log($(window).scrollTop()+  $(window).height());
-        // console.log($(window).height());
-        // console.log($(document).height());
-        // console.log($(window).scrollTop() - ($(document).height() - 3*$(window).height()));
         //FIXME: arbitrarily defined update height
         //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
-        if(($(window).scrollTop() >= $(document).height() - 2*$(window).height()) && $scope.doneUpdatingFeed) {
+        if(($(window).scrollTop() >= 0.7*$(document).height() || $(window).scrollTop() + 2000 >= 0.9*$(document).height()) && $scope.doneUpdatingFeed) {
             // console.log("Update feed!");
             $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, $scope.userID);
         }

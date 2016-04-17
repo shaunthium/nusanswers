@@ -5,31 +5,62 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
         scope: true,
-        controller : function($scope){
-            //TODO: implement current user verifications
-            if($scope.currentUser){
-                $scope.belongsToUser = $scope.comment.author.userid === $scope.currentUser.userID;
-            }
-            else{
-                $scope.belongsToUser = false;
-            }
-            // console.log("belongs to user ", $scope.belongsToUser);
+        controller : ['$scope', 'questionService', function($scope, questionService){
+            // console.log($scope.comment);
+            $scope.$watch(function(){
+                return $scope.currentUser;
+            },
+            function(currentUser){
+                if(currentUser && $scope.comment){
+                    $scope.belongsToUser = $scope.comment.author.userid === currentUser.id;
+                }
+            });
 
             $scope.toggleLike = function(){
-
                 if(!$scope.currentUser){
                     $scope.showLogin();
                     return;
                 }
+                if($scope.comment.liked){
+                    if($scope.type === 'answer'){
 
-                $scope.comment.liked = !$scope.comment.liked;
-                if($scope.comment.liked == true){
-                    $scope.comment.upvotes++;
-                    $scope.upvoteComment($scope.comment.id);
+                    }
+                    else{
+                        questionService.submitCancelUpvoteComment($scope.comment.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                // console.log("Cancel upvote ", res);
+                                if(res.data){
+                                    $scope.comment.liked = false;
+                                    $scope.comment.upvotes--;
+                                }
+                            },
+                            function(err){
+
+                            }
+                        );
+                    }
                 }
                 else{
-                    $scope.comment.upvotes--;
-                    $scope.cancelUpvoteComment($scope.comment.id);
+                    if($scope.type === 'answer'){
+
+                    }
+                    else{
+                        // console.log("upvote comment!", $scope.comment.id, " ", $scope.currentUser.id);
+                        questionService.submitUpvoteComment($scope.comment.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                // console.log(res);
+                                if(res.data){
+                                    $scope.comment.liked = true;
+                                    $scope.comment.upvotes++;
+                                }
+                            },
+                            function(err){
+
+                            }
+                        );
+                    }
                 }
             }
 
@@ -48,7 +79,7 @@ angular.module('quoraApp')
                     $scope.cancelReportComment($scope.comment.id);
                 }
             }
-        },
+        }],
 		link: function(scope, element, attrs){
 
 		},

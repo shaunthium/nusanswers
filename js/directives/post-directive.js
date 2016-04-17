@@ -22,7 +22,10 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($http, $scope, $state, $rootScope, $timeout, questionService){
+        controller: ['$http', '$scope', '$state', '$rootScope', '$timeout', 'questionService', 'questionTitleFilter', '$sce',
+                    function($http, $scope, $state, $rootScope, $timeout, questionService, questionTitleFilter, $sce){
+            var MAXIMUM_TAGS = 5;
+            var MAXIMUM_TAG_LENGTH = 20;
             $scope.editMode = false;
             $scope.includeTags = false;
             $scope.includeTitle = false;
@@ -30,6 +33,45 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
             $scope.editMode = false;
+
+            //This watch is for getting the post in question-answers view.
+            $scope.$watchCollection(function(){
+                return $scope.post;
+            },
+            function(post){
+                if(post){
+                    $scope.answered = post.answered;
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.temp = {title : post.title};
+
+                    // TODO: Can't get this to work, we need to render the html tags somehow
+                    //post.content = $sce.trustAsHtml(post.content);
+
+                    $http({
+                      url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
+                      method: 'GET',
+                      data: {
+                        width: '1000'
+                      }
+                    }).success(function(data) {
+                      $scope.profileImg = data.data.url;
+                    }).error(function(data) {
+                      $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    });
+                }
+            });
+
+            //This watch will make the post editable when the user logs-in in the question-answers view
+            $scope.$watchCollection(function(){
+                return $scope.currentUser;
+            },
+            function(currentUser){
+                if(currentUser && $scope.post){
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                }
+            });
+
+
 
             $scope.toggleFooter = function(){
 
@@ -44,6 +86,7 @@ angular.module('quoraApp')
              $('.tooltipped').tooltip({delay: 50});
 
             $scope.toggleEditMode = function(){
+                $scope.userInput = "";
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
@@ -53,11 +96,26 @@ angular.module('quoraApp')
                     });
                 }
                 else{
-                    Materialize.toast('Changes not saved.', 2000, 'custom-toast')
+                    Materialize.toast('Changes not saved.', 2000, 'information-toast')
                 }
             }
 
             $scope.saveChanges = function(){
+                var error = false;
+                if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
+                    Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
+                    error = true;
+                }
+                if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
+                    Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
+                    error = true;
+                }
+                if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
+                    Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
+                    error = true;
+                }
+                if(error){return;}
+
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
                 questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
                 .then(
@@ -65,35 +123,118 @@ angular.module('quoraApp')
                         if(res.data){
                             $scope.post.title = $scope.temp.title;
                             $scope.post.content = $scope.temp.content;
-                            Materialize.toast('Changes saved successfully!', 2000, 'custom-toast');
+                            Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
                             $scope.editMode = !$scope.editMode;
                         }
                         else{
-                            console.log("Error while editing question!");
+                            // console.log("Error while editing question!");
                         }
                     },
                     function(err){
-                        console.log("Error while editing question!");
+                        // console.log("Error while editing question!");
                     }
                 );
             }
 
 
-            $scope.incrementUpvotes = function(post, inc) {
-
+            $scope.incrementUpvotes = function(inc) {
               if(!$scope.currentUser){
                 $scope.showLogin();
                 return;
               }
-
-              // User should not be able to downvote/upvote multiple times
-              // change loggedinUserId to $scope.facebookuserid or something..
               if(inc == 1){
-                post.upvotes++;
-                questionService.submitUpvotePost(post.id, $scope.currentUser.id, $scope.type);
-              } else {
-                post.upvotes--;
-                questionService.submitDownvotePost(post.id, $scope.currentUser.id, $scope.type);
+                  if($scope.post.upvoted){
+                      questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              // console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes--;
+                                  $scope.post.upvoted = false;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+                  else {
+                      if($scope.post.downvoted){
+                          questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                          .then(
+                              function(res){
+                                  // console.log(res);
+                                  if(res.data){
+                                      $scope.post.upvotes++;
+                                      $scope.post.downvoted = false;
+                                }
+                              },
+                              function(err){
+
+                              }
+                          );
+                      }
+                      questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              // console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes++;
+                                  $scope.post.upvoted = true;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+              }
+              else{
+                  if($scope.post.downvoted){
+                      questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              // console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes++;
+                                  $scope.post.downvoted = false;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
+                  else{
+                      if($scope.post.upvoted){
+                          questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                          .then(
+                              function(res){
+                                  // console.log(res);
+                                  if(res.data){
+                                      $scope.post.upvotes--;
+                                      $scope.post.upvoted = false;
+                                }
+                              },
+                              function(err){
+
+                              }
+                          );
+                      }
+                      questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
+                      .then(
+                          function(res){
+                              // console.log(res);
+                              if(res.data){
+                                  $scope.post.upvotes--;
+                                  $scope.post.downvoted = true;
+                            }
+                          },
+                          function(err){
+
+                          }
+                      );
+                  }
               }
             }
 
@@ -105,16 +246,25 @@ angular.module('quoraApp')
                             $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
                         }
                         else{
-                            console.log("Error in removing tag from question!");
+                            // console.log("Error in removing tag from question!");
                         }
                     },
                     function(err){
-                        console.log("Error while deleting tag from the question!");
+                        // console.log("Error while deleting tag from the question!");
                     }
                 );
             }
 
             $scope.addTag = function(tag){
+                if($scope.post.tags.length > MAXIMUM_TAGS){
+                    Materialize.toast("Sorry! The maximum number of tags for a post is " + MAXIMUM_TAGS + ".", 2000, 'error-toast');
+                    return;
+                }
+                if(tag.length > MAXIMUM_TAG_LENGTH){
+                    Materialize.toast("Sorry! The maximum tag length is " + MAXIMUM_TAG_LENGTH + " characters.", 2000, 'error-toast');
+                    return;
+                }
+
                 questionService.addTag($scope.post.id, JSON.stringify([tag]))
                 .then(
                     function(res){
@@ -122,53 +272,19 @@ angular.module('quoraApp')
                             $scope.post.tags.push(tag);
                         }
                         else{
-                            console.log("Error in adding data to question!");
+                            // console.log("Error in adding data to question!");
                         }
                     },
                     function(err){
-                        console.log("Error while adding tag to the question!");
+                        // console.log("Error while adding tag to the question!");
                     }
                 );
             }
-        },
+        }],
         link : function(scope, element, attrs){
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
-
-            //This watch is for getting the post in question-answers view.
-            scope.$watchCollection(function(){
-                return scope.post;
-            },
-            function(post){
-                if(post){
-                    scope.answered = post.answered;
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                    scope.temp = {title : post.title};
-
-                    $http({
-                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
-                      method: 'GET',
-                      data: {
-                        width: '1000'
-                      }
-                    }).success(function(data) {
-                      scope.profileImg = data.data.url;
-                    }).error(function(data) {
-                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-                    });
-                }
-            });
-
-            //This watch will make the post editable when the user logs-in in the question-answers view
-            scope.$watchCollection(function(){
-                return scope.currentUser;
-            },
-            function(currentUser){
-                if(currentUser && scope.post){
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                }
-            })
 
             switch(attrs.type){
                 case "feed-item":

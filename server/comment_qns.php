@@ -1,7 +1,7 @@
 <?php
 	require_once ('connect.php');
 
-	
+	global $db;
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $data->cmd;
@@ -21,7 +21,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -69,7 +69,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -113,7 +113,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -144,12 +144,106 @@
 		$affected = $db->affected_rows;
 		
 		if( $affected > 0 ){
-			echo json_encode(true);
+			echo true;
 		}else{
-			echo json_encode(false);
+			echo false;
 		}
 
 		//echo $comment_id;
+	}
+
+	/*
+		upvote a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "set_upvote_comment"){
+		global $db;
+
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "INSERT INTO Comments_Liked_By_Users VALUES(".$comment_id. ", ".$user_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
+	}
+
+	/*
+		Unlike a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "reset_upvote_comment"){
+		global $db;
+
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "DELETE FROM Comments_Liked_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id;
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
+	}
+
+	/*
+		Report a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "set_report_comment"){
+		global $db;
+
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "INSERT INTO Comments_Reported_By_Users VALUES(".$comment_id. ", ".$user_id.")";
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
+	}
+
+	/*
+		Unreport a comment in a questions
+		@param: user_id, comment_id
+	*/
+	if($cmd == "reset_report_comment"){
+		global $db;
+
+		$user_id = $db->escape_string($data->user_id);
+		$comment_id = $db->escape_string($data->comment_id);
+
+		$query = "DELETE FROM Comments_Reported_By_Users WHERE user_id=".$user_id. " AND comment_id=".$comment_id;
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
 	}
 
 ?>

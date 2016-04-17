@@ -1,9 +1,17 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
+.filter('questionTitle', function(){
+    return function(questionTitle){
+        if(questionTitle){
+            return questionTitle.replace(/[^\w \?\!\"\'\(\)\.]/g, "");
+        }
+        return questionTitle;
+    }
+})
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    $scope.feedType = 'trending';
+    $scope.feedType = 'latest';
 
     $scope.setFeedType = function(type){
         $scope.feedType = type;
@@ -77,12 +85,15 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                $scope.loading = false;
-                $scope.posts = $scope.posts.concat(returnedData.data);
-                $scope.doneUpdatingFeed = true;
+                // console.log(returnedData);
+                if(returnedData.data){
+                    $scope.loading = false;
+                    $scope.posts = $scope.posts.concat(returnedData.data);
+                    $scope.doneUpdatingFeed = true;
+                }
             },
             function(err){
-                console.log("Error while updating the questions feed!");
+                // console.log("Error while updating the questions feed!");
             });
     }
 
@@ -93,28 +104,35 @@ angular.module('quoraApp')
 
     $scope.getPost = function(questionID, userID){
         $scope.loading = true;
+        // console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            $scope.post = res.data.question;
-            if(!$scope.post){
-                //TODO: remember to set $scope.loading = false when switching to 404 page.
-                console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
-            } else {
-                qs.getAnswersToCurrentPost($scope.post.id)
-                .then(function(res){
-                    //TODO: we will need a "numAnswers" field in the post object in order to get the number of answers if we want to implement infinite scroll on answers as well.
-                    $scope.post.answers = res.data.answers;
-                    if($scope.post.answers.length > 0)
+            // console.log(res);
+            if(res.data){
+                $scope.post = res.data.question;
+                $scope.post.answers = res.data.answers;
+                if($scope.post.answers){
                     $scope.numAnswers = $scope.post.answers.length;
-                    else
-                    $scope.numAnswers = 0;
-                    $scope.loading = false;
-                }, function(err){
-
-                });
+                }
+                $scope.loading = false;
+                // console.log(res);
+            }
+            else{
+                //     //TODO: remember to set $scope.loading = false when switching to 404 page.
+                //     console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
             }
         }, function(err){
 
+        });
+    }
+
+    $scope.getQuestionsSummary = function(){
+        qs.getQuestionsSummary().then(function(res){
+            //XXX: had to manually access the root scope.
+            $rootScope.questionsSummary = res.data;
+            //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
+        }, function(err){
+            console.log("Error when getting questions summary.");
         });
     }
 

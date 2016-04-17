@@ -49,18 +49,31 @@ angular.module('quoraApp')
 
 	return {
 		restrict: 'E',
-        controller : ['$scope', 'searchFilter', function($scope, searchFilter){
+        scope : false,
+        controller : ['$scope', 'searchFilter', 'questionTitleFilter', function($scope, searchFilter, questionTitleFilter){
             $scope.relevantPosts = [];
+
             $scope.$watch(function(){
-                return $scope.user_question;
+                return $scope.userInput;
             },
-            function(newQuestion){
-                if(newQuestion){
-                    $scope.showSuggestions = newQuestion.length > 1;
+            function(userInput){
+                if(userInput !== questionTitleFilter(userInput)){
+                    $scope.displayErrorMessage("Warning: your question contains invalid characters!");
                 }
-                $scope.relevantPosts = searchFilter($scope.questionsSummary, newQuestion).sort(function(a, b){
-                    return b.relevance - a.relevance; //Sort by most relevant first
-                });
+                else{
+                    $scope.clearErrorMessage();
+                    if(userInput !== "?"){
+                        $scope.showSuggestions = true;
+                    }
+                    else{
+                        $scope.showSuggestions = false;
+                    }
+                    if($scope.questionsSummary){
+                        $scope.relevantPosts = searchFilter($scope.questionsSummary, userInput).sort(function(a, b){
+                            return b.relevance - a.relevance; //Sort by most relevant first
+                        });
+                    }
+                }
             });
         }],
 		link: function(scope, element, attrs){
@@ -110,8 +123,7 @@ angular.module('quoraApp')
                         '<div class="yellow lighten-3" style="height:100px; padding:10px;">' +
                             '<div style="text-align:center;" class="v-align">' +
                                 '<span class="v-align">' +
-                                    '<b>This question needs more detail!</b><br/>' +
-                                    'Please provide a full sentence' +
+                                    '{{errorMessage}}' +
                                 '</span>' +
                             '</div>' +
                         '</div>' +

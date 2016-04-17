@@ -22,7 +22,7 @@ angular.module('quoraApp')
             $scope.submit = function(post){
 
                 if($('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html').length < 10){
-                    alert("Your answer is too short!");
+                    Materialize.toast("Your answer is too short!", 2000, 'information-toast');
                     return;
                 }
 
@@ -34,7 +34,7 @@ angular.module('quoraApp')
                     if(!$scope.post.answers){
                         $scope.post.answers = [];
                     }
-                    console.log(res)
+                    // console.log(res)
                     $scope.post.answers.push(res.data[0]);
                     $scope.post.answered = true;
                 }, function(err){

@@ -133,20 +133,72 @@ angular.module('quoraApp')
 
     }
 
-    //TODO: implement back-end integration
     /*FIXME: should we sanitize input before sending it to the server?*/
-    function submitNewComment(postID, commentBody, userID){
+    function submitNewComment(commentBody, userID, postID){
         //This function should add the comment to the post server-side and return a comment object, which will be attached to the post client-side.
-        //TODO: discuss the best way to add/delete comments and answers from posts
-       // return {author: user, body: commentBody, upvotes: 0, liked: false, reported: false, id:id++};
         return $http({
           url: base_url + "server/comment_qns.php",
           method: "POST",
           data: {
             cmd: "new_comment_qns",
+            comment : commentBody,
             user_id: userID,
-            qns_id: postID,
-            comment : commentBody
+            qns_id : postID
+          }
+        });
+    }
+
+    function addCommentToAnswer(commentBody, userID, answerID){
+        return $http({
+          url: base_url + "server/answers.php",
+          method: "POST",
+          data: {
+            cmd: "createcomment",
+            content : commentBody,
+            user_id: userID,
+            answer_id : answerID
+          }
+        });
+    }
+
+    function deleteCommentFromAnswer(commentID, userID){
+        return $http({
+          url: base_url + "server/answers.php",
+          method: "POST",
+          data: {
+            cmd: "deletecomment",
+            user_id: userID,
+            comment_id : commentID
+          }
+        });
+    }
+
+    //FIXME: I AM A PROTOTYPE
+    //TODO: BACK-END INTEGRATION
+    function getCommentsFromAnswer(postID, userID){
+
+        // console.log("userID", userID);
+        // console.log("Ans id ", postID);
+
+        return $http({
+          url: base_url + "server/answers.php",
+          method: "POST",
+          data: {
+            cmd: "getcomments",
+            user_id: userID,
+            answer_id : postID
+          }
+        });
+    }
+
+    function submitDeleteComment(commentID, userID){
+        return $http({
+          url: base_url + "server/comment_qns.php",
+          method: "POST",
+          data: {
+            cmd: "delete_comment_qns",
+            user_id: userID,
+            comment_id : commentID
           }
         });
     }
@@ -180,11 +232,6 @@ angular.module('quoraApp')
     }
 
     //TODO: implement back-end integration
-    function submitDeleteComment(postID, commentID){
-        return true;
-    }
-
-    //TODO: implement back-end integration
     function submitReportComment(postID, commentID, user){
         return false;
     }
@@ -204,64 +251,104 @@ angular.module('quoraApp')
         return false;
     }
 
-    //TODO: implement back-end integration
     function submitUpvotePost(postID, userID, type){
-      if (type != 'answer') {
-        $http({
-           method: "POST",
-           url: base_url + "server/questions.php",
-           data: {
-             cmd: 'set_up_vote_qns',
-             qns_id: postID,
-             user_id: userID
-           }
-         }).then(function(data) {
-            // console.log('Success in upvoting post'); // ?
-         }, function(err){
-            // console.log("Error in upvoting post" , err);
-         });
-      } else {
-        $http({
-          method: 'POST',
-          url: base_url + 'server/answers.php',
-          data: {
-            cmd: 'upvote',
-            answer_id: postID,
-            user_id: userID
-          }
-        }).then(function(data) {
-
-        }, function(err) {
-
-        });
-      }
-
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'set_up_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'upvote',
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
-    //TODO: implement back-end integration
-    function submitCancelUpvotePost(postID, commentID, user){
-        return false;
+    function submitCancelUpvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'reset_up_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'upvote', //FIXME: server-side it's weird to use toggle for answers and "set/reset" for questions...
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
-    //TODO: implement back-end integration
-    function submitDownvotePost(postID, userID){
+    function submitDownvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'set_down_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'downvote',
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
+    }
 
-      return $http({
-         method: "POST",
-         url: base_url + "server/questions.php",
-         data: {
-           cmd: 'set_down_vote_qns',
-           qns_id: postID,
-           user_id: userID
-         }
-       });
-
+    function submitCancelDownvotePost(postID, userID, type){
+        if (type != 'answer') {
+            return $http({
+                method: "POST",
+                url: base_url + "server/questions.php",
+                data: {
+                    cmd: 'reset_down_vote_qns',
+                    qns_id: postID,
+                    user_id: userID
+                }
+            });
+        } else {
+            return $http({
+                method: 'POST',
+                url: base_url + 'server/answers.php',
+                data: {
+                    cmd: 'downvote', //FIXME: server-side it's weird to use toggle for answers and "set/reset" for questions...
+                    answer_id: postID,
+                    user_id: userID
+                }
+            });
+        }
     }
 
     function getCommentsFromQuestion(postID){
-
       // console.log("sending post id ", postID);
-
       return $http({
          method: "POST",
          url: base_url + "server/comment_qns.php",
@@ -272,20 +359,52 @@ angular.module('quoraApp')
        });
     }
 
-    //TODO: implement back-end integration
-    function submitCancelDownvotePost(postID, commentID, user){
-        return false;
+    function upvoteQuestionComment(commentID, userID){
+        return $http({
+           method: "POST",
+           url: base_url + "server/comment_qns.php",
+           data: {
+             cmd: 'set_upvote_comment',
+             comment_id : commentID,
+             user_id : userID
+           }
+         });
     }
 
-    //TODO: implement back-end integration
-    function submitUpvoteComment(postID, commentID, user){
-        // console.log("Upvote!");
-        return false;
+    function cancelUpvoteQuestionComment(commentID, userID){
+        return $http({
+           method: "POST",
+           url: base_url + "server/comment_qns.php",
+           data: {
+             cmd: 'reset_upvote_comment',
+             comment_id : commentID,
+             user_id : userID
+           }
+         });
     }
 
-    //TODO: implement back-end integration
-    function submitCancelUpvoteComment(postID, commentID, user){
-        return false;
+    function submitUpvoteComment(commentID, userID){
+        return $http({
+          url: base_url + "server/comment_qns.php",
+          method: "POST",
+          data: {
+            cmd: "set_upvote_comment",
+            user_id: userID,
+            comment_id : commentID
+          }
+        });
+    }
+
+    function submitCancelUpvoteComment(commentID, userID){
+        return $http({
+          url: base_url + "server/comment_qns.php",
+          method: "POST",
+          data: {
+            cmd: "reset_upvote_comment",
+            user_id: userID,
+            comment_id : commentID
+          }
+        });
     }
 
     //TODO: implement back-end integration
@@ -415,17 +534,19 @@ angular.module('quoraApp')
         submitUpvoteComment         :   submitUpvoteComment,
         submitCancelUpvoteComment   :   submitCancelUpvoteComment,
         submitCancelDownvoteComment :   submitCancelDownvoteComment,
-        submitGetTrendingTags       : submitGetTrendingTags,
-        submitAnswerToPost       : submitAnswerToPost,
-        getPost       : getPost,
-        getCommentsFromQuestion : getCommentsFromQuestion,
+        submitGetTrendingTags       :   submitGetTrendingTags,
+        submitAnswerToPost          :   submitAnswerToPost,
+        getPost                     :   getPost,
+        getCommentsFromQuestion     :   getCommentsFromQuestion,
         getNotifications            :   getNotifications,
-        getAnswersToCurrentPost : getAnswersToCurrentPost,
-        getCurrentUser        : getCurrentUser,
+        getAnswersToCurrentPost     :   getAnswersToCurrentPost,
+        getCurrentUser              :   getCurrentUser,
         getQuestionsSummary         :   getQuestionsSummary,
         addTag                      :   addTag,
         removeTag                   :   removeTag,
-        editQuestion                :   editQuestion
+        editQuestion                :   editQuestion,
+        addCommentToAnswer          :   addCommentToAnswer,
+        getCommentsFromAnswer       :   getCommentsFromAnswer
     }
 
 }]);

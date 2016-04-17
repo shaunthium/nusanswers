@@ -50,6 +50,8 @@
 		$question_user_id = mysqli_fetch_assoc($result);
 		$question_user_id = $question_user_id["user_id"];
 		
+		
+		
 		/* Here we get the User Info to each question */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$question_user_id;
 		$result_author = $db->query($query_author);
@@ -59,7 +61,7 @@
 		if(!isset($data->user_id))
 		{
 			//error_log("IS NOT SET\n");
-			$answered = "false";
+			$answered = false;
 			$voted = "0";
 		}
 		else //if it is set
@@ -68,9 +70,9 @@
 			$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
 			$result_answered = $db->query($query_answered);
 			if(mysqli_num_rows($result_answered) == 0)
-				$answered = "false";
+				$answered = false;
 			else
-				$answered = "true";
+				$answered = true;
 			
 			$query_voted = "Select * from Questions_Voted_By_Users where question_id = $question_id and user_id= $user_id";
 			$result_voted = $db->query($query_voted);
@@ -98,7 +100,7 @@
 		$answers_count = mysqli_fetch_assoc($result_answers_count);
 		
 		/*******************Query Questions Comments table ***************************/
-		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
+		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at, Comments.likes from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
 		$res = $db->query($query);
 		$commentsResult = array();
 		//| comments_id |  users_id|content| created_at| updated_at |
@@ -114,12 +116,37 @@
 				$result_author = $db->query($query_author);
 				$comment_author = mysqli_fetch_assoc($result_author);
 				
+				/* Here we determine if current user has liked this comment */
+				
+				if(!isset($data->user_id))
+				{
+					$liked = false;
+				}
+				else
+				{
+					$comment_id = $r["id"];
+					$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+					$comment_result = $db->query($query);
+					
+					if(mysqli_num_rows($comment_result) == 0) //Never reported before
+					{
+						$liked = false;
+					}
+					else
+					{
+						$liked = true;
+					}
+				}
+				
+				
+				
+				
 				$commentsResult[] = array(
 					'id' => $r["id"],
 					'questionid' => $question_id,
-					'reported' => "false",
-					'liked' => "false",
-					'likes' => "0",
+					'reported' => false,
+					'liked' => $liked,
+					'likes' => (int)$r["likes"],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -142,6 +169,21 @@
 			
 			//$tag_array = explode(",", $post['tags']);
 			
+			if($voted == "1")
+			{
+				$upvote = true;
+				$downvote = false;
+			}
+			else if ($voted == "-1")
+			{
+				$upvote = false;
+				$downvote = true;
+			}
+			else
+			{
+				$upvote = false;
+				$downvote = false;
+			}
 			
 			$questionResult = array(
 
@@ -152,14 +194,15 @@
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
-				'views'=>$post['view_count'],
+				'views'=>(int)$post['view_count'],
 				'content'=>$post['content'],
-				'upvotes'=>$post['score'],
+				'upvotes'=>(int)$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
 				'answered' => $answered,
-				'voted' => $voted
+				'upvoted' => $upvote,
+				'downvoted' =>$downvote
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			
@@ -175,6 +218,21 @@
 			
 			$tag_array = explode(",", $post['tags']);
 			
+			if($voted == "1")
+			{
+				$upvote = true;
+				$downvote = false;
+			}
+			else if ($voted == "-1")
+			{
+				$upvote = false;
+				$downvote = true;
+			}
+			else
+			{
+				$upvote = false;
+				$downvote = false;
+			}
 			$questionResult = array(
 
 				'id'=>$post['id'],
@@ -184,14 +242,15 @@
 								'karma' =>$author['score'],
 								'userid'=>$post['user_id'],
 								'flavour'=> $author['flavour']),
-				'views'=>$post['view_count'],
+				'views'=>(int)$post['view_count'],
 				'content'=>$post['content'],
-				'upvotes'=>$post['score'],
+				'upvotes'=>(int)$post['score'],
 				'created_at'=>$post['created_at'],
 				'updated_at'=>$post['updated_at'],
 				'comments' => $commentsResult,
 				'answered' => $answered,
-				'voted' => $voted
+				'upvoted' => $upvote,
+				'downvoted' =>$downvote
 				//'answers_count' => $answers_count["answers_count"],
 			);
 			//error_log(json_encode($questionResult));
@@ -208,7 +267,7 @@
 		if(!is_bool($res))
 		{
 			while($r = mysqli_fetch_assoc($res)){ 
-				//foreach answer
+				//foreach answer GG
 				
 				/* Here we get the User Info to each answer */
 				$answer_user_id = $r["user_id"];
@@ -219,7 +278,7 @@
 				$answers_id= $r["id"];
 				
 				/* Here we get the comments for each answer */
-				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
+				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
 				
 				
@@ -234,12 +293,36 @@
 						$result_author2 = $db->query($query_author2);
 						$author2 = mysqli_fetch_assoc($result_author2);
 						
+						
+						
+						/* Here we determine if current user has liked this comment */
+						if(!isset($data->user_id))
+						{
+							$liked = false;
+						}
+						else
+						{
+							$comment_id = $a["id"];
+							$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+							$comment_result = $db->query($query);
+							
+							if(mysqli_num_rows($comment_result) == 0) //Never reported before
+							{
+								$liked = false;
+							}
+							else
+							{
+								$liked = true;
+							}
+						}
+						
+						
 						$answersCommentsResult[] = array(
 							'id' => $a["id"],
 							'answerid' => $answers_id,
-							'reported' => "false",
-							'liked' => "false",
-							'likes' => "0",
+							'reported' => false,
+							'liked' => $liked,
+							'likes' => (int)$a["likes"],
 							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
 										'karma' =>$author2['score'],
 										'userid'=>$a["user_id"],
@@ -278,6 +361,22 @@
 						
 				}
 				
+				if($voted == "1")
+				{
+					$upvote = true;
+					$downvote = false;
+				}
+				else if ($voted == "-1")
+				{
+					$upvote = false;
+					$downvote = true;
+				}
+				else
+				{
+					$upvote = false;
+					$downvote = false;
+				}
+			
 				$answersResult[] = array(
 
 					'id'=>$r['id'],
@@ -285,12 +384,13 @@
 					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
 					'content'=>$r['content'],
-					'upvotes'=>$r['score'],
+					'upvotes'=>(int)$r['score'],
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at'],
 					'chosen' => $r['chosen'],
 					'comments' => $answersCommentsResult,
-					'voted' => $voted
+					'upvoted' => $upvote,
+					'downvoted' =>$downvote
 				);
 			}
 		}
@@ -312,21 +412,24 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo "user_id of current user NOT SET!";
+			echo false;
 		else if (!isset($data->answer_id))
-			echo "answer_id not set!";
+			echo false;
 		else{
 			$query = "select user_id from Answers where id = $answer_id";
 			$res = $db->query($query);	
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
 			if($uid != $user_id)
-				echo "Unauthorized!";
+				echo false;
 			else
 			{
+				$query = "delete from Answers_Comments where answer_id = $answer_id";
+				$res = $db->query($query);
+				
 				$query = "delete from Answers where id = $answer_id";
 				$res = $db->query($query);	
-				echo "deleted!";
+				echo true;
 			}
 			
 		}
@@ -338,59 +441,68 @@
 	* @param: user_id -> ID OF THE PERSON VOTING
 	* @param: comment_id
 	*/
-	else if($cmd == "like")
+	else if($cmd == "like" || $cmd == "unlike")
 	{
 		
 		global $db;
 		
-		/* Get current vote info to the Answer */
-		$query = "SELECT 1 FROM  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-		$result = $db->query($query);
-		
-
-		if(mysqli_num_rows($result) == 0) //Never liked before, proceed to like!
+		if (!isset($data->user_id))
+			echo false;
+		else if (!isset($data->comment_id))
+			echo false;
+		else
 		{
-			/* Insert like entry */
-			$query = "Insert Into Answer_Comments_Liked_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Comment */
-			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+			/* Get current vote info to the Answer */
+			$query = "SELECT 1 FROM  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
 			$result = $db->query($query);
-			$comment_user_id = mysqli_fetch_assoc($result);
-			$comment_user_id = $comment_user_id["user_id"];
 			
-			/* Here we upvote the Comments likes by 1 */
-			$query = "UPDATE Answers_Comments SET likes = likes + 1 where id = $comment_id";
-			$db->query($query);
-			
-			/* Here we upvote the User score by 1*/
-			$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
-			$db->query($query);
-			
-		}
-		else //have voted before! Proceed to unlike
-		{
-			
-			/* Remove like entry */
-			$query = "Delete From Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-			$db->query($query);
-			
-			/* Here we downvote the Comments likes by 1 */
-			$query = "UPDATE Answers_Comments SET likes = likes - 1 where id = $comment_id";
-			$db->query($query);
-			
-			/* Here we get the User ID of the user who posted the Comment */
-			$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
-			$result = $db->query($query);
-			$comment_user_id = mysqli_fetch_assoc($result);
-			$comment_user_id = $comment_user_id["user_id"];
-			
-			/* Here we upvote the User score by 1*/
-			$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
-			$db->query($query);
-		}
 
+			if(mysqli_num_rows($result) == 0) //Never liked before, proceed to like!
+			{
+				/* Insert like entry */
+				$query = "Insert Into Answer_Comments_Liked_By_Users (comment_id, user_id) Values($comment_id,$user_id)";
+				$db->query($query);
+				
+				/* Here we get the User ID of the user who posted the Comment */
+				$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+				$result = $db->query($query);
+				$comment_user_id = mysqli_fetch_assoc($result);
+				$comment_user_id = $comment_user_id["user_id"];
+				
+				/* Here we upvote the Comments likes by 1 */
+				$query = "UPDATE Answers_Comments SET likes = likes + 1 where id = $comment_id";
+				$db->query($query);
+				
+				/* Here we upvote the User score by 1*/
+				$query = "UPDATE Users SET score = score + 1 where id = $comment_user_id";
+				$db->query($query);
+				
+				return true;
+			}
+			else //have voted before! Proceed to unlike
+			{
+				
+				/* Remove like entry */
+				$query = "Delete From Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+				$db->query($query);
+				
+				/* Here we downvote the Comments likes by 1 */
+				$query = "UPDATE Answers_Comments SET likes = likes - 1 where id = $comment_id";
+				$db->query($query);
+				
+				/* Here we get the User ID of the user who posted the Comment */
+				$query = "SELECT user_id FROM Answers_Comments where id = $comment_id";
+				$result = $db->query($query);
+				$comment_user_id = mysqli_fetch_assoc($result);
+				$comment_user_id = $comment_user_id["user_id"];
+				
+				/* Here we upvote the User score by 1*/
+				$query = "UPDATE Users SET score = score - 1 where id = $comment_user_id";
+				$db->query($query);
+				
+				return true;
+			}
+		}
 	}
 	
 	/*
@@ -440,7 +552,7 @@
 	* @param: answer_id,
 	* @param: user_id -> ID OF THE PERSON VOTING
 	*/
-	else if($cmd == "upvote")
+	else if($cmd == "upvote" || $cmd == "cancelupvote")
 	{
 		
 		global $db;
@@ -454,7 +566,6 @@
 			/* Get current vote info to the Answer */
 			$query = "SELECT up_vote, down_vote FROM  Answers_Voted_By_Users where answer_id = $answer_id and user_id = $user_id";
 			$result = $db->query($query);
-			
 
 			if(mysqli_num_rows($result) == 0) //Never voted before, proceed to upvote!
 			{
@@ -476,7 +587,7 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "upvoted by user $user_id . Credited(+1): answer_id: $answer_id user_id: $answer_user_id ";
+				echo true;
 			}
 			else //have voted before!
 			{
@@ -516,7 +627,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "upvoted by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+					echo true;
 			}
 		}
 	}
@@ -527,15 +638,15 @@
 	* @param: answer_id,
 	* @param: user_id -> ID OF THE PERSON VOTING
 	*/
-	else if($cmd == "downvote")
+	else if($cmd == "downvote" || $cmd == "canceldownvote")
 	{
 		
 		global $db;
-		
+	
 		if (!isset($data->user_id))
-			echo "user_id of current user NOT SET!";
+			echo false;
 		else if (!isset($data->answer_id))
-			echo "answer_id not set!";
+			echo false;
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -563,7 +674,7 @@
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
 				
-				echo "downvote by user $user_id . Credited(-1): answer_id: $answer_id user_id: $answer_user_id ";
+				echo true;
 			}
 			else //have voted before!
 			{
@@ -603,7 +714,7 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 					
-					echo "downvote by user_id: $user_id . Credited ($score): answer_id: $answer_id user_id: $answer_user_id ";
+					echo true;
 			}
 		}
 	}
@@ -656,7 +767,7 @@
 						'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 										'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
 						'content'=>$r['content'],
-						'upvotes'=>$r['score'],
+						'upvotes'=>(int)$r['score'],
 						'created_at'=>$r['created_at'],
 						'updated_at'=>$r['updated_at'],
 						'chosen' => $r['chosen'],
@@ -668,7 +779,7 @@
 			echo json_encode($answersResult);
 		}
 		else
-			echo "false";
+			echo false;
 		
 		
 	}
@@ -676,93 +787,118 @@
 	/*
 	* Updates an Answer's content
 	*
-	* @param: answer_id, content
+	* @param: answer_id, content, user_id OF CURRENT USER
 	*/
 	else if($cmd == "updateanswer")
 	{
 		global $db;
 		
 		//Check if that answer exists
-		$query = "Select 1 from Answers where id = $answer_id";
+		$query = "Select user_id from Answers where id = $answer_id";
 		$result = $db->query($query);
 		
 		if(mysqli_num_rows($result) == 0) // does not exist!
 		{
-			echo "false";
+			echo false;
 		}
 		else
 		{
-			$query = "update Answers set content = '$content' where id = $answer_id";
-			$db->query($query);
+			//Check if user matches
+			$r = mysqli_fetch_assoc($result);
+			$uid = $r["user_id"];
 			
-			/*******************Query Answers table ***************************/
-		
-			$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where id = $answer_id";
-			$res = $db->query($query);
-			$answersResult = array();
-			//| answers_id | user_id | content| score | created_at| updated_at| chosen
-			$answersResult = array();
-			if(!is_bool($res))
+			if($uid != $user_id)
+				echo false;
+			else
 			{
-				while($r = mysqli_fetch_assoc($res)){ //foreach answ
-					
-					/* Here we get the User Info to each answer */
-					$answer_user_id = $r["user_id"];
-					$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
-					$result_author = $db->query($query_author);
-					$author = mysqli_fetch_assoc($result_author);
-					
-					/* Here we get the comments for each answer */
-					$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
-					$res2 = $db->query($query);
+				$query = "update Answers set content = '$content' where id = $answer_id";
+				$db->query($query);
 				
-					$answersCommentsResult = array();
-					//| comments_id |  users_id|content| created_at| updated_at |
-					if(!is_bool($res2))
-					{
-						while($a = mysqli_fetch_assoc($res2)){
-							$user_id2 = $a["user_id"];
-							/* Here we get the User Info to each comment */
-							$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
-							$result_author2 = $db->query($query_author2);
-							$author2 = mysqli_fetch_assoc($result_author2);
-							
-							$answersCommentsResult[] = array(
-								'id' => $a["id"],
-								'answerid' => $r["id"],
-								'reported' => "false",
-								'liked' => "false",
-								'likes' => "0",
-								'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
-											'karma' =>$author2['score'],
-											'userid'=>$a["user_id"],
-											'flavour'=> $author2['flavour']),
+				/*******************Query Answers table ***************************/
+			
+				$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where id = $answer_id";
+				$res = $db->query($query);
+				$answersResult = array();
+				//| answers_id | user_id | content| score | created_at| updated_at| chosen
+				$answersResult = array();
+				if(!is_bool($res))
+				{
+					while($r = mysqli_fetch_assoc($res)){ //foreach answ
+						
+						/* Here we get the User Info to each answer */
+						$answer_user_id = $r["user_id"];
+						$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
+						$result_author = $db->query($query_author);
+						$author = mysqli_fetch_assoc($result_author);
+						
+						/* Here we get the comments for each answer */
+						$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $r["id"];
+						$res2 = $db->query($query);
+					
+						$answersCommentsResult = array();
+						//| comments_id |  users_id|content| created_at| updated_at |
+						if(!is_bool($res2))
+						{
+							while($a = mysqli_fetch_assoc($res2)){
+								$user_id2 = $a["user_id"];
+								/* Here we get the User Info to each comment */
+								$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
+								$result_author2 = $db->query($query_author2);
+								$author2 = mysqli_fetch_assoc($result_author2);
 								
-								'body' => $a["content"],
-								'created_at'=>$a['created_at'],
-								'updated_at'=>$a['updated_at']
-							);
+								/* Here we determine if current user has liked this comment */
+								$comment_id = $a["id"];
+								$query = "select 1 from  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+								$comment_result = $db->query($query);
+								
+								if(mysqli_num_rows($comment_result) == 0) //Never liked before
+								{
+									$liked = false;
+								}
+								else
+								{
+									$liked = true;
+								}
+		
+								$answersCommentsResult[] = array(
+									'id' => $a["id"],
+									'answerid' => $r["id"],
+									'reported' => false,
+									'liked' => $liked, //wtf
+									'likes' => (int)$a["likes"],
+									'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
+												'karma' =>$author2['score'],
+												'userid'=>$a["user_id"],
+												'flavour'=> $author2['flavour']),
+									
+									'body' => $a["content"],
+									'created_at'=>$a['created_at'],
+									'updated_at'=>$a['updated_at']
+								);
+							}
 						}
-					}
-				
-					$answers_id= $r["id"];
-					$answersResult[] = array(
+					
+						$answers_id= $r["id"];
+						$answersResult[] = array(
 
-						'id'=>$r['id'],
-						'questionid' => $r['question_id'],
-						'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
-										'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
-						'content'=>$r['content'],
-						'upvotes'=>$r['score'],
-						'created_at'=>$r['created_at'],
-						'updated_at'=>$r['updated_at'],
-						'chosen' => $r['chosen'],
-						'comments' => $answersCommentsResult
-					);
+							'id'=>$r['id'],
+							'questionid' => $r['question_id'],
+							'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+											'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
+							'content'=>$r['content'],
+							'upvotes'=>(int)$r['score'],
+							'created_at'=>$r['created_at'],
+							'updated_at'=>$r['updated_at'],
+							'chosen' => $r['chosen'],
+							'comments' => $answersCommentsResult
+						);
+					}
 				}
+				//error_log(json_encode($answersResult));
+				echo json_encode($answersResult);
 			}
-			//error_log(json_encode($answersResult));
-			echo json_encode($answersResult);
+			
+			
 		}
 		
 	}
@@ -775,32 +911,225 @@
 	else if ($cmd == "createcomment")
 	{
 		global $db;
+		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->answer_id))
+			return false;
+		else if(!isset($data->content))
+			return false;
+		
+		/* Here we get the User Info to each question */
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$result_author = $db->query($query_author);
+		$comment_author = mysqli_fetch_assoc($result_author);
+		
 		$query = "insert into Answers_Comments (user_id, answer_id, content) Values ($user_id, $answer_id, '$content')";
 		$db->query($query);
+		
+		$comment_id = $db->insert_id;
+		$query = "select * from Answers_Comments where id = $comment_id";
+		$result = $db->query($query);
+		if(mysqli_num_rows($result) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($result);
+		$commentsResult = array();
+		
+		$commentsResult[] = array(
+					'id' => $r["id"],
+					'answerid' => $answer_id,
+					'reported' => false,
+					'liked' => false,
+					'likes' => (int)"0",
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
+								'userid'=>$r["user_id"],
+								'flavour'=> $comment_author['flavour']),
+					
+					'body' => $r["content"],
+					'created_at'=>$r['created_at'],
+					'updated_at'=>$r['updated_at']
+		);
+		//error_log(json_encode($commentsResult));
+		echo json_encode($commentsResult);
 	}
 	/*
 	* Updates an Answer's COMMENT
 	*
-	* @param: comment_id, content
+	* @param: comment_id,
+	* @param: content
+	* @param user_id OF CURRENT USER;
 	*/
 	else if ($cmd == "updatecomment")
 	{
 		global $db;
+		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->comment_id))
+			return false;
+		else if (!isset($data->content))
+			return false;
+		
+		$query = "select user_id from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($res);
+		$uid = $r["user_id"];
+		if($uid != $user_id) //unauthorized
+			return false;
+			
 		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
 		$db->query($query);
+		
+		$query = "select * from Answers_Comments where id = $comment_id";
+		$result = $db->query($query);
+		if(mysqli_num_rows($result) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($result);
+		$commentsResult = array();
+		
+		/* Here we get the User Info to each comment */
+		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+		$result_author = $db->query($query_author);
+		$comment_author = mysqli_fetch_assoc($result_author);
+		
+		/* Here we determine if current user has liked this comment */
+		$query = "select 1 from  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+		$comment_result = $db->query($query);
+		
+		if(mysqli_num_rows($comment_result) == 0) //Never liked before
+		{
+			$liked = false;
+		}
+		else
+		{
+			$liked = true;
+		}
+		
+						
+		$commentsResult[] = array(
+					'id' => $r["id"],
+					'answerid' => $r["user_id"],
+					'reported' => false,
+					'liked' => $liked,
+					'likes' => (int)$r['likes'],
+					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+								'karma' =>$comment_author['score'],
+								'userid'=>$r["user_id"],
+								'flavour'=> $comment_author['flavour']),
+					
+					'body' => $r["content"],
+					'created_at'=>$r['created_at'],
+					'updated_at'=>$r['updated_at']
+				);
+		//error_log(json_encode($commentsResult));
+		echo json_encode($commentsResult);
 	}
 	/*
 	* Delete's a Comment
 	*
 	* @param: comment_id
+	* @PARAML user_id OF CURRENT USER
 	*/
 	else if ($cmd == "deletecomment")
 	{
 		global $db;
-		//WARNING: Authorization check not implemented!!
+		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->comment_id))
+			return false;
+		
+		$query = "select user_id from Answers_Comments where id = $comment_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0) 
+			return false;
+		
+		$r = mysqli_fetch_assoc($res);
+		$uid = $r["user_id"];
+		if($uid != $user_id) //unauthorized
+			return false;
+		
 		$query = "delete from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
+		
+		return true;
 	}
+	
+	/*
+	* Gets all comments from answers
+	* @param: user_id OF CURRENT USER
+	* @param: answer_id
+	*/
+	else if($cmd == "getcomments")
+	{
+		global $db;
+		
+		
+		
+		$query = "select * from Answers_Comments where answer_id = $answer_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0) 
+			return false;
+		
+		$commentsResult = array();
+		while($r = mysqli_fetch_assoc($res)){ 
+			//foreach comment
+			$user_id2 = $r["user_id"];
+			
+			/* Here we get the User Info to each comment */
+			$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
+			$result_author2 = $db->query($query_author2);
+			$comment_author = mysqli_fetch_assoc($result_author2);
+			
+			/* Here we determine if current user has liked this comment */
+			if(!isset($user_id))
+			{
+				$liked = false;
+			}
+			else
+			{
+				$comment_id = $r["id"];
+				$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+				$comment_result = $db->query($query);
+				
+				if(mysqli_num_rows($comment_result) == 0) //Never reported before
+				{
+					$liked = false;
+				}
+				else
+				{
+					$liked = true;
+				}
+			}
+			
+				
+			$commentsResult[] = array(
+						'id' => $r["id"],
+						'answerid' => $answer_id,
+						'reported' => false,
+						'liked' => $liked,
+						'likes' => (int)$r["likes"],
+						'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+									'karma' =>$comment_author['score'],
+									'userid'=>$r["user_id"],
+									'flavour'=> $comment_author['flavour']),
+						
+						'body' => $r["content"],
+						'created_at'=>$r['created_at'],
+						'updated_at'=>$r['updated_at']
+			);
+		}
+		
+		//error_log(json_encode($commentsResult));
+		echo json_encode($commentsResult);
+	}
+	
 	
 	/*
 	*	Gets the answers posted by a user sorted by latest.
@@ -848,7 +1177,7 @@
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
 				'content'=>$answer['content'],
-				'upvotes'=>$answer['score'],
+				'upvotes'=>(int)$answer['score'],
 				'created_at'=>$answer['created_at'],
 				'updated_at'=>$answer['updated_at'],
 				'chosen'=>$answer['chosen'],
@@ -887,7 +1216,7 @@
 				'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
 									'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
 				'content'=>$latest['content'],
-				'upvotes'=>$latest['score'],
+				'upvotes'=>(int)$latest['score'],
 				'created_at'=>$latest['created_at'],
 				'updated_at'=>$latest['updated_at'],
 				'chosen'=>$latest['chosen']
