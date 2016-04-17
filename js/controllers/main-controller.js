@@ -3,7 +3,7 @@ angular.module('quoraApp')
 .filter('questionTitle', function(){
     return function(questionTitle){
         if(questionTitle){
-            return questionTitle.replace(/[^\w \?\!\"\'\(\)]/g, "");
+            return questionTitle.replace(/[^\w \?\!\"\'\(\)\.]/g, "");
         }
         return questionTitle;
     }
