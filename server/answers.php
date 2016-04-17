@@ -1026,6 +1026,11 @@
 	{
 		global $db;
 		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->comment_id))
+			return false;
+		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
