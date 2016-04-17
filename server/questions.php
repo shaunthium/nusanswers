@@ -418,9 +418,9 @@
 			//$limit_qns = 10;
 			$index = $data->index;
 			$limit = $data->limit;
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC LIMIT " . $index . ", " . $limit;
+			$query = "SELECT * FROM Questions ORDER BY score DESC, updated_at DESC LIMIT " . $index . ", " . $limit;
 		}else{
-			$query = "SELECT * FROM Questions ORDER BY view_count DESC, updated_at DESC";
+			$query = "SELECT * FROM Questions ORDER BY score DESC, updated_at DESC";
 		}
 
 		//$query = "SELECT * FROM Questions ORDER BY view_count DESC";
