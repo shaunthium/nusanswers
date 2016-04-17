@@ -109,8 +109,8 @@
 				'user_id'=>$qns_result['user_id'],
 				'title'=>$qns_result['title'],
 				'content'=>$qns_result['content'],
-				'score'=>$qns_result['score'],
-				'view_count'=>$qns_result['view_count'],
+				'score'=>(int)$qns_result['score'],
+				'view_count'=>(int)$qns_result['view_count'],
 				'created_at'=>$qns_result['created_at'],
 				'updated_at'=>$qns_result['updated_at']
 			);

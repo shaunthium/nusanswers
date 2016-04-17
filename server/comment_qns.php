@@ -21,7 +21,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -69,7 +69,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -113,7 +113,7 @@
 			$comment_author = mysqli_fetch_assoc($result_comment_author);
 			
 			$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => $comment_author['score'],
+									'karma' => (int)$comment_author['score'],
 									'userid' => $comment_author['id'],
 									'flavour' => 'New User'
 									);
@@ -144,9 +144,9 @@
 		$affected = $db->affected_rows;
 		
 		if( $affected > 0 ){
-			echo json_encode(true);
+			echo true;
 		}else{
-			echo json_encode(false);
+			echo false;
 		}
 
 		//echo $comment_id;
