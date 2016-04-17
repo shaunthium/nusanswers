@@ -111,6 +111,9 @@ angular.module('quoraApp')
 
     $scope.resetQuestionsFeed = function(){
         $scope.loading = true;
+        // while($scope.posts.length > 0){
+        //     $scope.posts.pop();
+        // }
         $scope.posts = [];
     }
 

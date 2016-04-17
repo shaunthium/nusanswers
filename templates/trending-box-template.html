@@ -20,12 +20,12 @@
 
 <div class="top-tags collection">
 	<div class="collection-item black-text text-accent-2">
-	    <h5 style="font-size:1.1em;" ng-click="setFeedType('trending')">Top Tags</h5>
+	    <h5 style="font-size:1.1em;">Top Tags</h5>
 	</div>
 
 
 	<div class="collection-item black-text text-accent-2">
-	    <tag style="cursor:pointer;" ng-click="setFeedType('trending'); toggleTagFilter(tag)"  ng-repeat="tag in trendingTags track by $index" is-filter>
+	    <tag style="cursor:pointer;" ng-click="toggleTagFilter(tag)"  ng-repeat="tag in trendingTags track by $index" is-filter>
 	        <span class="grey-text right"></span> <!--TODO: decide what additional info we wish to include, if any -->
 	    </tag>
 	</div>
