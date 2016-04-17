@@ -39,18 +39,28 @@ angular.module('quoraApp')
             );
 
             $scope.toggleShowComments = function(){
+
                 if(!$scope.showComments){
+
+                    $scope.showComments = true;
+
+                    
+
                     if($scope.type === 'answer'){
-                        questionService.getCommentsFromAnswer($scope.post.id)
+                        questionService.getCommentsFromAnswer($scope.post.id, $scope.currentUser.id)
                         .then(
                             function(res){
+
+                                console.log("res from answer comment", res);
+
                                 if(res.data){
-                                    $scope.showComments = true;
                                     $scope.post.comments = res.data;
+                                } else {
+                                    console.log("Answer did not contain any comments");
                                 }
                             },
                             function(err){
-
+                                console.log("Error in getting comments to answer ", err);
                             }
                         )
                     }
@@ -59,12 +69,11 @@ angular.module('quoraApp')
                         .then(
                             function(res){
                                 if(res.data){
-                                    $scope.showComments = true;
                                     $scope.post.comments = res.data;
                                 }
                             },
                             function(err){
-                                // console.log("Error in getting comments", err);
+                                 console.log("Error in getting comments from question ", err);
                             }
                         );
                     }
@@ -105,7 +114,7 @@ angular.module('quoraApp')
                     questionService.submitNewComment(comment, $scope.currentUser.id, $scope.post.id)
                     .then(function(res){
                         if(res.data){
-                            console.log(res);
+                            console.log("res from server", res);
                             if($scope.editing){
                                 //Remove the edited from the post
                                 $scope.deleteComment($scope.editedComment, false);
@@ -118,7 +127,7 @@ angular.module('quoraApp')
                             // console.log("Success post comment", res);
                         }
                     }, function(err){
-                        // console.log("Error in posting comment", err);
+                        console.log("Error in posting comment to answer ", err);
                     });
                 }
             }

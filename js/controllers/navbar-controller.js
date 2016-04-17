@@ -39,8 +39,7 @@ angular.module('quoraApp')
         } //Prevent a null post
 
         //Prevent the question from being too short
-        //FIXME: hard-coded min title length
-        else if(title_string.length < 10){
+        else if(title_string.length < QUESTION_TITLE_MIN_LENGTH){
             $scope.submitQuestionError = true;
             $scope.displayErrorMessage("Error: the question is too short!");
             $timeout(function(){

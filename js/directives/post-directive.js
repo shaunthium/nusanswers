@@ -22,7 +22,8 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: ['$http', '$scope', '$state', '$rootScope', '$timeout', 'questionService', 'questionTitleFilter', function($http, $scope, $state, $rootScope, $timeout, questionService, questionTitleFilter){
+        controller: ['$http', '$scope', '$state', '$rootScope', '$timeout', 'questionService', 'questionTitleFilter', '$sce',
+                    function($http, $scope, $state, $rootScope, $timeout, questionService, questionTitleFilter, $sce){
             var MAXIMUM_TAGS = 5;
             var MAXIMUM_TAG_LENGTH = 20;
             $scope.editMode = false;
@@ -32,6 +33,45 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
             $scope.editMode = false;
+
+            //This watch is for getting the post in question-answers view.
+            $scope.$watchCollection(function(){
+                return $scope.post;
+            },
+            function(post){
+                if(post){
+                    $scope.answered = post.answered;
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.temp = {title : post.title};
+
+                    // TODO: Can't get this to work, we need to render the html tags somehow
+                    //post.content = $sce.trustAsHtml(post.content);
+
+                    // $http({
+                    //   url: 'http://graph.facebook.com/v2.5/' + $scope.post.author.userid + '/picture?redirect=false&width=9999',
+                    //   method: 'GET',
+                    //   data: {
+                    //     width: '1000'
+                    //   }
+                    // }).success(function(data) {
+                    //   $scope.profileImg = data.data.url;
+                    // }).error(function(data) {
+                    //   $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    // });
+                }
+            });
+
+            //This watch will make the post editable when the user logs-in in the question-answers view
+            $scope.$watchCollection(function(){
+                return $scope.currentUser;
+            },
+            function(currentUser){
+                if(currentUser && $scope.post){
+                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                }
+            });
+
+
 
             $scope.toggleFooter = function(){
 
@@ -62,8 +102,7 @@ angular.module('quoraApp')
 
             $scope.saveChanges = function(){
                 var error = false;
-                //FIXME: hard-coded min title length
-                if(!$scope.temp.title || $scope.temp.title.length < 10){
+                if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     error = true;
                 }
@@ -242,39 +281,6 @@ angular.module('quoraApp')
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
 
-            //This watch is for getting the post in question-answers view.
-            scope.$watchCollection(function(){
-                return scope.post;
-            },
-            function(post){
-                if(post){
-                    scope.answered = post.answered;
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                    scope.temp = {title : post.title};
-
-                    $http({
-                      url: 'http://graph.facebook.com/v2.5/' + scope.post.author.userid + '/picture?redirect=false&width=9999',
-                      method: 'GET',
-                      data: {
-                        width: '1000'
-                      }
-                    }).success(function(data) {
-                      scope.profileImg = data.data.url;
-                    }).error(function(data) {
-                      scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
-                    });
-                }
-            });
-
-            //This watch will make the post editable when the user logs-in in the question-answers view
-            scope.$watchCollection(function(){
-                return scope.currentUser;
-            },
-            function(currentUser){
-                if(currentUser && scope.post){
-                    scope.isEditable = scope.type === 'question' && scope.currentUser && scope.currentUser.id === scope.post.author.userid;
-                }
-            })
 
             switch(attrs.type){
                 case "feed-item":

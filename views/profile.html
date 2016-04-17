@@ -37,22 +37,27 @@
 				<hr/>
 				<div class="card">
 					<div class="collection">
-		        <a ng-repeat="question in profileQuestions | limitTo: 4" href="#!" class="collection-item black-text">
-		        	<div style="display:table; width:100%;">
-			        	<div style="display:table-cell;">
-			        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
-                  <p>{{question.title}}</p>
-			        		<div ng-repeat="tag in question.tags"class="tag chip blue lighten-5">
-								    {{tag}}
-								  </div>
-			        	</div>
-			        	<div style="display:table-cell; width:65px; ">
-			        		<span class="right orange-text text-darken-2">{{question.score}}</span>
-			        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
-			        	</div>
-		        	</div>
-		        </a>
-		      </div>
+
+				        <a ng-repeat="question in profileQuestions | limitTo: 4" href="#!" class="collection-item black-text">
+				        	<div style="display:table; width:100%;">
+					        	<div style="display:table-cell;">
+					        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
+		                  			<p>{{question.title}}</p>
+					        		<div ng-repeat="tag in question.tags"class="tag chip blue lighten-5">
+										    {{tag}}
+									</div>
+					        	</div>
+					        	<div style="display:table-cell; width:65px; ">
+					        		<span class="right orange-text text-darken-2">{{question.score}}</span>
+					        		<i style="font-size:1.3em;"class="small material-icons orange-text text-darken-2 right ">grade</i>
+					        	</div>
+				        	</div>
+				        </a>
+				    
+				      <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
+
+			       </div>
+
 				</div>
 			<!-- question card end -->
 			</div>
@@ -62,6 +67,7 @@
 				<h6>Answers</h6>
 				<hr/>
 				<div class="card">
+
 					<div class="collection">
 				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#!" class="collection-item black-text">
 				        	<div style="display:table; width:100%;">
@@ -69,7 +75,7 @@
 					        		<p style="margin-bottom:5px;">{{answer.title}}</p>
 					        		<div ng-repeat="tag in answer.tags"class="tag chip blue lighten-5">
 										    {{tag}}
-										  </div>
+									</div>
 					        	</div>
 					        	<div style="display:table-cell; width:65px;">
 					        		<span class="right orange-text text-darken-2">{{answer.upvotes}}</span>
@@ -78,6 +84,8 @@
 				        	</div>
 				        </a>
 				      </div>
+
+			        <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
 				</div>
 			<!-- end answer card -->
 			</div>

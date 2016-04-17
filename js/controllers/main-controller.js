@@ -11,7 +11,7 @@ angular.module('quoraApp')
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
     $scope.loading = true;
-    $scope.feedType = 'trending';
+    $scope.feedType = 'latest';
 
     $scope.setFeedType = function(type){
         $scope.feedType = type;
