@@ -8,7 +8,7 @@
 <!-- Stuff that appears when user starts typing question -->
 <div style="position:fixed;"ng-if="showOverlay" id="overlay-container"></div>
 
-<search-popup style="position:fixed;" ng-class="{'fake-white' : !user_question, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
+<search-popup style="position:fixed;" ng-class="{'fake-white' : !userInput, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
 
  <!-- Login modal -->
   <div style="max-width:500px;" id="login-modal" class="modal">
@@ -58,14 +58,14 @@
 
       <form class="main-search-field center v-align white" >
         <div id="search-field" class="input-field">
-          <input style="padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
-          <i id="submit-question-mobile" style="line-height:45px;" ng-click="submitQuestion(user_question)" class="material-icons">chat_bubble_outline</i>
+          <input style="padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="userInput" ng-focus="searchfieldFocused()" id="search" type="search"required>
+          <i id="submit-question-mobile" style="line-height:45px;" ng-click="submitQuestion(userInput)" class="material-icons">chat_bubble_outline</i>
         </div>
       </form>
 
       <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
 
-      <a ng-if="showOverlay" ng-class="{'disabled' : !user_question}" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
+      <a ng-if="showOverlay" ng-class="{'disabled' : !userInput}" id="submit-question-button" ng-click="submitQuestion(userInput)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
         <li><a ui-sref="home" >Home</a></li>

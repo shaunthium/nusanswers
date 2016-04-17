@@ -2,6 +2,10 @@
 angular.module('quoraApp')
 .controller('QACtrl', ['$location', '$scope', '$stateParams', '$http', 'questionService', function($location, $scope, $stateParams, $http, qs){
   // console.log("hey id ", $stateParams.questionId);
+  //Get the questions summary if it is not already defined
+  if(!$scope.questionsSummary){
+      $scope.getQuestionsSummary();
+  }
 
   $scope.$watchCollection(function(){
       return $scope.currentUser;

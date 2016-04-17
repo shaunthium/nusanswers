@@ -7,8 +7,7 @@
         + home button
 */
 angular.module('quoraApp')
-.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$location', '$rootScope', function($scope, $timeout, qs, $location, $rootScope){
-    $scope.user_question = "";
+.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$location', '$rootScope', 'questionTitleFilter', function($scope, $timeout, qs, $location, $rootScope, questionTitleFilter){
     $scope.showOverlay = false;
 
     /**
@@ -27,24 +26,32 @@ angular.module('quoraApp')
             $scope.showLogin();
             return;
         }
-
+        else if($scope.showQuestionError){
+            $scope.submitQuestionError = true;
+            $timeout(function(){
+                $scope.submitQuestionError = false;
+            }, 100);
+            return; //Do not allow submission if an error is being shown. No need for additional error messages.
+        }
         // Should never happen now
         else if(!title_string){
             return;
         } //Prevent a null post
 
+        //Prevent the question from being too short
+        //FIXME: hard-coded min title length
         else if(title_string.length < 10){
-
             $scope.submitQuestionError = true;
-            $scope.showQuestionError = true;
-
+            $scope.displayErrorMessage("Error: the question is too short!");
             $timeout(function(){
                 $scope.submitQuestionError = false;
             }, 100);
             return;
         }
 
-        $scope.user_question = "";
+
+
+        $scope.userInput = "";
         $scope.showOverlay = false; //Hide shading box
         //$scope.goToPost($scope.newPost(user_question));
         // console.log("trying to send " , title_string);
@@ -61,9 +68,28 @@ angular.module('quoraApp')
         })
     }
 
+    $scope.displayErrorMessage = function(msg){
+        $scope.showQuestionError = true;
+        $scope.errorMessage = msg;
+    }
+
+    $scope.clearErrorMessage = function(){
+        $scope.showQuestionError = false;
+        $scope.errorMessage = "";
+    }
+
     $scope.toggleOverlay = function(){
       $scope.submitQuestionError = false;
       $('#search').focus();
+    }
+
+    $scope.searchfieldFocused = function(){
+        $scope.userInput = "?";
+        //This timeout moves the mouse cursor before the question mark...
+        $timeout(function(){
+            $('#search').get(0).setSelectionRange(0,0);
+        }, 0);
+        $scope.showOverlay = true;
     }
 
     $timeout(function(){

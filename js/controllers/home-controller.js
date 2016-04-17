@@ -80,13 +80,8 @@ angular.module('quoraApp')
 
 
     //FIXME: currently, search parameters are only updated when the user goes to the home view.
-    questionService.getQuestionsSummary().then(function(res){
-        //XXX: had to manually access the root scope.
-        $rootScope.questionsSummary = res.data;
-        //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
-    }, function(err){
-        console.log("Error when getting questions summary.");
-    });
+    //UPDATE: Search parameters are now also updated when the user lands in the QA view.
+    $scope.getQuestionsSummary();
 
     $(window).scroll(function(){
         //FIXME: arbitrarily defined update height

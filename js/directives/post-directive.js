@@ -22,7 +22,7 @@ angular.module('quoraApp')
 	return {
 		restrict: 'E',
 		transclude: true,
-        controller: function($http, $scope, $state, $rootScope, $timeout, questionService){
+        controller: ['$http', '$scope', '$state', '$rootScope', '$timeout', 'questionService', 'questionTitleFilter', function($http, $scope, $state, $rootScope, $timeout, questionService, questionTitleFilter){
             var MAXIMUM_TAGS = 5;
             var MAXIMUM_TAG_LENGTH = 20;
             $scope.editMode = false;
@@ -46,6 +46,7 @@ angular.module('quoraApp')
              $('.tooltipped').tooltip({delay: 50});
 
             $scope.toggleEditMode = function(){
+                $scope.userInput = "";
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
@@ -60,6 +61,18 @@ angular.module('quoraApp')
             }
 
             $scope.saveChanges = function(){
+                var error = false;
+                //FIXME: hard-coded min title length
+                if(!$scope.temp.title || $scope.temp.title.length < 10){
+                    Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
+                    error = true;
+                }
+                if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
+                    Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
+                    error = true;
+                }
+                if(error){return;}
+
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
                 questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
                 .then(
@@ -224,7 +237,7 @@ angular.module('quoraApp')
                     }
                 );
             }
-        },
+        }],
         link : function(scope, element, attrs){
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
