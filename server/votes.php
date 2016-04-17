@@ -59,6 +59,21 @@
 		$db->query($query);
 	}
 
+	function deleteEntry($qns_id, $user_id){
+		global $db;
+
+		$query = "DELETE FROM Questions_Voted_By_Users WHERE question_id=".$qns_id . " AND user_id=".$user_id;
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
+	}
 	/*
 		Set the up vote 
 		@use by switch statment at the start
@@ -70,6 +85,7 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
+		updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -82,7 +98,8 @@
 		$operator = "-";
 	
 		check_if_user_voted($qns_id, $user_id, $operator);
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
+		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);	
+		updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -95,7 +112,9 @@
 		$operator = "-";
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		deleteEntry($qns_id, $user_id);
+		updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -108,7 +127,9 @@
 		$operator = "+";
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
+		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		deleteEntry($qns_id, $user_id);
+		updateAuthorScore($qns_id, $operator);	
 	}
 
 	/*
@@ -169,6 +190,20 @@
 		
 	}
 
+	//Function update author score
+	
+	function updateAuthorScore($qns_id, $operator){
+		global $db;
+
+		$query_author_id = "SELECT * FROM Questions WHERE id=".$qns_id;
+		$result_author_id = $db->query($query_author_id);
+		$author_id_array = mysqli_fetch_array($result_author_id);
+		$author_id = $author_id_array['user_id'];
+
+		$query_update_score = "UPDATE Users SET score=score".$operator."1 WHERE id=".$author_id;
+		$db->query($query_update_score);
+	}
+	
 
 	if(isset($data->cmd)){
 		$cmd = $data->cmd;
