@@ -113,8 +113,8 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		updateAuthorScore($qns_id, $operator);
 		deleteEntry($qns_id, $user_id);
+		updateAuthorScore($qns_id, $operator);
 		
 	}
 
@@ -129,8 +129,8 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		updateAuthorScore($qns_id, $operator);	
 		deleteEntry($qns_id, $user_id);
+		updateAuthorScore($qns_id, $operator);	
 		
 		
 	}
