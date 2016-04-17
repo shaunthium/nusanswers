@@ -1113,7 +1113,7 @@
 		}
 		
 		//error_log(json_encode($commentsResult));
-		return json_encode($commentsResult);
+		echo json_encode($commentsResult);
 	}
 	
 	
