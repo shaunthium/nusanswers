@@ -59,6 +59,21 @@
 		$db->query($query);
 	}
 
+	function deleteEntry($qns_id, $user_id){
+		global $db;
+
+		$query = "DELETE FROM Questions_Voted_By_Users WHERE question_id=".$qns_id . " AND user_id=".$user_id;
+		$db->query($query);
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
+	}
 	/*
 		Set the up vote 
 		@use by switch statment at the start
@@ -97,7 +112,8 @@
 		$operator = "-";
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);
 	}
 
@@ -111,7 +127,8 @@
 		$operator = "+";
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
-		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
+		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);	
 	}
 
