@@ -70,7 +70,7 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
-		updateAuthorScore($qns_id, $operator);
+		//updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -84,7 +84,7 @@
 	
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);	
-		updateAuthorScore($qns_id, $operator);
+		//updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -98,7 +98,7 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		updateAuthorScore($qns_id, $operator);
+		//updateAuthorScore($qns_id, $operator);
 	}
 
 	/*
@@ -112,7 +112,7 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		updateAuthorScore($qns_id, $operator);	
+		//updateAuthorScore($qns_id, $operator);	
 	}
 
 	/*
@@ -174,16 +174,17 @@
 	}
 
 	//Function update author score
+	/*
 	function updateAuthorScore($qns_id, $operator){
 		$query_author_id = "SELECT * FROM Questions WHERE id=".$qns_id;
 		$result_author_id = $db->query($query_author_id);
-		$author_id_array = mysqli_fetch_assoc($result_author_id);
+		$author_id_array = mysqli_fetch_array($result_author_id);
 		$author_id = $author_id_array['user_id'];
 
 		$query_update_score = "UPDATE Users SET score=score".$operator."1 WHERE id=".$author_id;
 		$db->query($query_update_score);
 	}
-
+	*/
 
 	if(isset($data->cmd)){
 		$cmd = $data->cmd;
