@@ -113,8 +113,9 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);
+		deleteEntry($qns_id, $user_id);
+		
 	}
 
 	/*
@@ -128,8 +129,10 @@
 		
 		check_if_user_voted($qns_id, $user_id, $operator);
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
-		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);	
+		deleteEntry($qns_id, $user_id);
+		
+		
 	}
 
 	/*
@@ -174,14 +177,16 @@
 			$up_vote = $votes["up_vote"];
 			$down_vote = $votes["down_vote"];
 
-			if($up_vote == 0 && $down_vote == 0){
-				update_qns_score($qns_id, $operator);
-			}
+			//if($up_vote == 0 && $down_vote == 0){
+				//update_qns_score($qns_id, $operator);
+			//}
 			if($up_vote == 1 && $operator == "-"){
 				update_qns_score($qns_id, $operator);
 			}
-			if($down_vote == 1 && $operator == "+"){
+			else if($down_vote == 1 && $operator == "+"){
 				update_qns_score($qns_id, $operator);
+			}else{
+				//Do nothing
 			}
 			
 		}else{
