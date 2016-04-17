@@ -278,7 +278,7 @@
 				$answers_id= $r["id"];
 				
 				/* Here we get the comments for each answer */
-				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers-Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
+				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
 				$res2 = $db->query($query);
 				
 				
@@ -898,6 +898,13 @@
 	{
 		global $db;
 		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->answer_id))
+			return false;
+		else if(!isset($data->content))
+			return false;
+		
 		/* Here we get the User Info to each question */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
@@ -920,7 +927,7 @@
 					'answerid' => $answer_id,
 					'reported' => false,
 					'liked' => false,
-					'likes' => $r["likes"],
+					'likes' => "0",
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
 								'userid'=>$r["user_id"],
@@ -929,7 +936,7 @@
 					'body' => $r["content"],
 					'created_at'=>$r['created_at'],
 					'updated_at'=>$r['updated_at']
-				);
+		);
 		//error_log(json_encode($commentsResult));
 		echo json_encode($commentsResult);
 	}
@@ -943,6 +950,13 @@
 	else if ($cmd == "updatecomment")
 	{
 		global $db;
+		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->comment_id))
+			return false;
+		else if (!isset($data->content))
+			return false;
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
@@ -965,17 +979,30 @@
 		$r = mysqli_fetch_assoc($result);
 		$commentsResult = array();
 		
-		/* Here we get the User Info to each question */
+		/* Here we get the User Info to each comment */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
 		$comment_author = mysqli_fetch_assoc($result_author);
 		
+		/* Here we determine if current user has liked this comment */
+		$query = "select 1 from  Answer_Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+		$comment_result = $db->query($query);
 		
+		if(mysqli_num_rows($comment_result) == 0) //Never liked before
+		{
+			$liked = false;
+		}
+		else
+		{
+			$liked = true;
+		}
+		
+						
 		$commentsResult[] = array(
 					'id' => $r["id"],
-					'answerid' => $answer_id,
+					'answerid' => $r["user_id"],
 					'reported' => false,
-					'liked' => false,
+					'liked' => $liked,
 					'likes' => $r['likes'],
 					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
 								'karma' =>$comment_author['score'],
@@ -998,6 +1025,11 @@
 	else if ($cmd == "deletecomment")
 	{
 		global $db;
+		
+		if(!isset($data->user_id))
+			return false;
+		else if(!isset($data->comment_id))
+			return false;
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
