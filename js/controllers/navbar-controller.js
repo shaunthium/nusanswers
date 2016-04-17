@@ -47,6 +47,15 @@ angular.module('quoraApp')
             }, 100);
             return;
         }
+        else if(title_string.charAt(title_string.length - 1) != "?"){
+            $scope.submitQuestionError = true;
+            $scope.displayErrorMessage("Error: the question should end with a question mark!");
+            $timeout(function(){
+                $scope.submitQuestionError = false;
+            }, 100);
+            return;
+        }
+        console.log(title_string.charAt(title_string.length -1));
 
 
 

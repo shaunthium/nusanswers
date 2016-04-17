@@ -110,6 +110,10 @@ angular.module('quoraApp')
                     Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
                     error = true;
                 }
+                if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
+                    Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
+                    error = true;
+                }
                 if(error){return;}
 
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
