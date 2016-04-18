@@ -16,8 +16,8 @@ angular.module('quoraApp')
     $scope.setFeedType = function(type){
         $scope.feedType = type;
     }
-
-    $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+// 10209460093644289
+    $rootScope.currentUser = { id : "12345687878787" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -82,7 +82,7 @@ angular.module('quoraApp')
         //         // console.log($scope.currentUser);
         //         // $scope.loading = false;
         //         // console.log($scope.currentUser);
-                
+
         //             //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
         //             //**********************************************************************************************
         //             Get profile img

@@ -69,8 +69,7 @@
 					        	</div>
 				        	</div>
 				        </a>
-				      <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't asked any questions yet.</p></div>
-
+				      <div style="display:table; width:100%;" class="collection-item black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't asked any questions yet.</p></div>
 			       </div>
 
 				</div>
@@ -82,8 +81,6 @@
 				<h6>Answers</h6>
 				<hr/>
 				<div class="card">
-
-
 					<div class="collection">
 				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#/qa/{{answer.questionid}}" class="collection-item black-text">
 				        	<div style="display:table; width:100%;">
@@ -99,9 +96,8 @@
 					        	</div>
 				        	</div>
 				        </a>
+                        <div style="display:table; width:100%;" class="collection-item black-text" ng-if="profileAnswers.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
 				      </div>
-
-			        <div class="collection-item  black-text" ng-if="profileAnswers.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
 				</div>
 			<!-- end answer card -->
 			</div>
