@@ -560,6 +560,16 @@ angular.module('quoraApp')
         });
     }
 
+    function getAllTags(){
+        return $http({
+            url: base_url + 'server/tags.php',
+            method: 'POST',
+            data: {
+                cmd: 'get_all_tags'
+            }
+        });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -593,7 +603,8 @@ angular.module('quoraApp')
         deleteAnswer                :   deleteAnswer,
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
-        deleteCommentFromAnswer : deleteCommentFromAnswer
+        deleteCommentFromAnswer     :   deleteCommentFromAnswer,
+        getAllTags                  :   getAllTags
     }
 
 }]);

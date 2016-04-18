@@ -9,6 +9,9 @@ angular.module('quoraApp')
         },
         link : function(scope, elems, attrs){
             scope.isFilter = 'isFilter' in attrs;
+            scope.tag = 'value' in attrs ? attrs.value : scope.tag;
+            scope.type = 'type' in attrs ? attrs.type : undefined;
+            console.log("tag type: ", scope.type);
             if(scope.isFilter){
                 scope.activeFilter = false;
                 scope.$on("filterChange", function(event, selectedTag){
