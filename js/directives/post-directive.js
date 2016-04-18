@@ -73,7 +73,9 @@ angular.module('quoraApp')
                 }
             });
 
-
+            $scope.confirmDelete = function(){
+                $('#delete-confirm-box').openModal();
+            }
 
             $scope.toggleFooter = function(){
 
@@ -158,8 +160,12 @@ angular.module('quoraApp')
                 }
             }
 
+
+
             $scope.delete = function(){
-                if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
+
+                //console.log("type", $scope.type);
+                // if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
                     if($scope.type === 'answer'){
                         questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
                         .then(
@@ -193,10 +199,10 @@ angular.module('quoraApp')
                             }
                         );
                     }
-                }
-                else{
-                    Materialize.toast('Delete cancelled!', 2000, 'information-toast');
-                }
+                //}
+                // else{
+                //     Materialize.toast('Delete cancelled!', 2000, 'information-toast');
+                // }
             }
 
 
@@ -410,7 +416,6 @@ angular.module('quoraApp')
         link : function(scope, element, attrs){
             scope.type = attrs.type;
             scope.showFooter = "showFooter" in attrs;
-
 
             switch(attrs.type){
                 case "feed-item":

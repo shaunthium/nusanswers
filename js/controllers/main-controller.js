@@ -16,6 +16,7 @@ angular.module('quoraApp')
     $scope.setFeedType = function(type){
         $scope.feedType = type;
     }
+
     // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     /*ezfb.getLoginStatus(function (res) {
@@ -64,7 +65,7 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
         // ezfb.login(function(res) {
         //   // console.log(res);
@@ -147,7 +148,7 @@ angular.module('quoraApp')
         //console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            //console.log(res);
+            console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;
@@ -157,12 +158,9 @@ angular.module('quoraApp')
                 $scope.loading = false;
                 // console.log(res);
             }
-            else{
-                //     //TODO: remember to set $scope.loading = false when switching to 404 page.
-                //     console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
-            }
         }, function(err){
-
+            $scope.loading = false;
+            $state.go('404');
         });
     }
 
