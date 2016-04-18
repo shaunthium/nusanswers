@@ -1,14 +1,20 @@
 
 <div class="card white">
     <div class="card-content">
-
-
-
-        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="red-text" ng-click="toggleEditMode()">
-            Cancel
-        </span>
-
-
+        
+        <!-- Modal Structure -->
+        <div style="position:fixed;max-width:500px;" id="delete-confirm-box" class="modal">
+            <div class="modal-content">
+              <h4>Delete post</h4>
+              <p>Are you sure you want to <b>delete</b> your post? <br/> This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+              <a ng-click="delete()" class=" red-text modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+              <a class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
+        </div>
+        
+        <!-- confirm box end -->
         <p class="grey-text">{{post.created_at}}</p>
         <!-- edit button -->
         <a ng-if="isEditable && !editMode" style="padding-right:10px; margin-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn blue right no-animate">
@@ -25,7 +31,7 @@
                 <span style="position:relative; bottom:5px;">Save changes</span>
             </span>
         </a>
-        <a ng-if="isEditable && editMode" ng-click="delete()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn red right no-animate">
+        <a ng-if="isEditable && editMode" ng-click="confirmDelete()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn red right no-animate">
             <span ng-if="editMode">
                 <i class="material-icons">delete</i>
                 <span style="position:relative; bottom:5px;">Delete</span>

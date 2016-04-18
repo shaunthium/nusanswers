@@ -140,7 +140,7 @@ angular.module('quoraApp')
         //console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            //console.log(res);
+            console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;
@@ -150,12 +150,9 @@ angular.module('quoraApp')
                 $scope.loading = false;
                 // console.log(res);
             }
-            else{
-                //     //TODO: remember to set $scope.loading = false when switching to 404 page.
-                //     console.log("NO POST IN DB, SHOW 404 NOT FOUND ");
-            }
         }, function(err){
-
+            $scope.loading = false;
+            $state.go('404');
         });
     }
 

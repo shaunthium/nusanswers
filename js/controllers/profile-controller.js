@@ -8,8 +8,6 @@ angular.module('quoraApp')
   // Pull user's id from state params
   var id = $stateParams.profileId;
 
-  // console.log("in profile ctr");
-
   $scope.profileId = id;
   // Get user from id
   var user = $http({
@@ -20,10 +18,13 @@ angular.module('quoraApp')
       user_id: id
     }
   }).then(function(data) {
-
-    // console.log("got data", data);
     $scope.user = data.data;
     $rootScope.loading = false;
+  }, function(err){
+    // Redirect to 404
+    console.log("err", err);
+    $rootScope.loading = false;
+    $state.go('404');
   })
 
   // Get profile img

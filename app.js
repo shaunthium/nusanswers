@@ -25,7 +25,11 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate', 'ngSanitize'])
   		  url: '/profile/:profileId',
   		  templateUrl: '/views/profile.html',
   		  controller: 'ProfileCtrl'
-  		});
+  		})
+
+      .state('404', {
+        templateUrl: '/views/404.html'
+      });
 
 	  $urlRouterProvider.otherwise('home');
 
