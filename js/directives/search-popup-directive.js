@@ -109,7 +109,7 @@ angular.module('quoraApp')
 					'</div>' +
 
 					'<div ng-if="!showSuggestions && !showQuestionError">' +
-						'<div style="height:100px; padding:10px;">' +
+						'<div class="white" style="height:100px; padding:10px;">' +
 							'<div style="text-align:center;" class="v-align">' +
 								'<span class="v-align">' +
 									'<b>What\'s your question?</b><br/>' +
