@@ -56,9 +56,9 @@ angular.module('quoraApp')
                         width: '1000'
                       }
                     }).success(function(data) {
-                      $scope.postProfileImg = data.data.url;
+                      $scope.profileImg = data.data.url;
                     }).error(function(data) {
-                      $scope.postProfileImg = 'http://dummyimage.com/300/09.png/fff';
+                      $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
                     });
                 }
             });
