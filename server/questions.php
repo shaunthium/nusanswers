@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
@@ -15,8 +15,8 @@
 	*/
 	if($cmd == "new_qns"){
 
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -147,8 +147,8 @@
 	*/
 	if($cmd == "edit_qns"){
 
-		if (session_status() == PHP_SESSION_NONE) {
-			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -177,8 +177,8 @@
 	*/
 	if($cmd == "delete_qns"){
 
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -349,7 +349,7 @@
 			//Set True  or false if user had answered the questions
 			
 			if(isset($data->user_id)) {
-				if (session_status() == PHP_SESSION_NONE) {
+				if (!(isset($_SESSION['cs3226']))) {
  					$authenticated = false;
  					$answered = false;
 					$voted_up = false;
@@ -528,7 +528,7 @@
 			
 			if(isset($data->user_id)) {
 
-				if (session_status() == PHP_SESSION_NONE) {
+				if (!(isset($_SESSION['cs3226']))) {
  					$authenticated = false;
  					$answered = false;
 					$voted_up = false;
@@ -618,8 +618,8 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_up_vote_qns"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -636,8 +636,8 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_down_vote_qns"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -654,8 +654,8 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_up_vote_qns"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -672,8 +672,8 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_down_vote_qns"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 
@@ -700,8 +700,8 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			http_response_code(401);
+		if (!(isset($_SESSION['cs3226']))) {
+ 			//http_response_code(401);
  			echo false;
 		}
 		$user_id = $db->escape_string($data->user_id);

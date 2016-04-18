@@ -17,7 +17,8 @@
 	*/
 	if($cmd == "get_votes_notifications"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		global $db;
 
@@ -89,7 +90,8 @@
 	*/
 	if($cmd == "checked_notifications"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$user_id = $db->escape_string($data->user_id);
 		//$notification_id_string = $db->escape_string($data->notification_id_string);
