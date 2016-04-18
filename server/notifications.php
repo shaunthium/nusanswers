@@ -16,6 +16,9 @@
 		@return: list of unread notification
 	*/
 	if($cmd == "get_votes_notifications"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			return false;
+		}
 		global $db;
 
 		$user_id = $db->escape_string($data->user_id);
@@ -85,6 +88,9 @@
 		@param: $notification_id_string => CAN BE MULTIPLE IDs Seperated by COMMA ","
 	*/
 	if($cmd == "checked_notifications"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			return false;
+		}
 		$user_id = $db->escape_string($data->user_id);
 		//$notification_id_string = $db->escape_string($data->notification_id_string);
 		$raw_id_array = $db->escape_string($data->id);
@@ -96,6 +102,14 @@
 			//$sanitised_tag =  $db->escape_string($tag);
 			$query = "UPDATE Votes_Notifications SET checked=true WHERE user_id=". $user_id . " AND id=". $id;
 			$db->query($query);
+		}
+
+		$affected = $db->affected_rows;
+			
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
 		}
 	}
 

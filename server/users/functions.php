@@ -25,17 +25,29 @@
     }
   }
 
-  function authenticate_user($email, $password) {
-    global $db;
-    $query = "SELECT password FROM Users WHERE email='" . $email . "'";
+  // function authenticate_user($email, $password) {
+  //   global $db;
+  //   $query = "SELECT password FROM Users WHERE email='" . $email . "'";
+  //
+  //   $sql_result = $db->query($query);
+  //   $row = mysqli_fetch_row($sql_result);
+  //   if (!is_null($row)) {
+  //     $saved_password = $row[0];
+  //     return password_verify($password, $saved_password);
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-    $sql_result = $db->query($query);
-    $row = mysqli_fetch_row($sql_result);
-    if (!is_null($row)) {
-      $saved_password = $row[0];
-      return password_verify($password, $saved_password);
-    } else {
-      return false;
+  function authenticate_user($id, $token) {
+    global $fb;
+
+    try {
+      // Returns a `Facebook\FacebookResponse` object
+      $response = $fb->get('/me?fields=first_name,last_name,email', $token);
+      session_start();
+    } catch(Exception $e) {
+      return null;
     }
   }
 
@@ -81,12 +93,9 @@
       try {
         // Returns a `Facebook\FacebookResponse` object
         $response = $fb->get('/me?fields=first_name,last_name,email', $token);
-      } catch(Facebook\Exceptions\FacebookResponseException $e) {
-        echo 'Graph returned an error: ' . $e->getMessage();
-        exit;
-      } catch(Facebook\Exceptions\FacebookSDKException $e) {
-        echo 'Facebook SDK returned an error: ' . $e->getMessage();
-        exit;
+        session_start();
+      } catch(Exception $e) {
+        return null;
       }
       $user = $response->getGraphUser();
       $first_name = $user['first_name'];

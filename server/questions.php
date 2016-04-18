@@ -14,6 +14,13 @@
 		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
+
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
+
 		$user_id= $db->escape_string($data->user_id);
 		$title = $db->escape_string($data->title);
 		$content= $db->escape_string($data->content);
@@ -139,6 +146,12 @@
 		@param:	qns_id, title, content
 	*/
 	if($cmd == "edit_qns"){
+
+		if (session_status() == PHP_SESSION_NONE) {
+			http_response_code(401);
+ 			echo false;
+		}
+
 		$qns_id= $db->escape_string($data->qns_id);
 		$title = $db->escape_string($data->title);
 		$content= $db->escape_string($data->content);
@@ -163,6 +176,12 @@
 		@param: qns_id
 	*/
 	if($cmd == "delete_qns"){
+
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
 		$user_id = $db->escape_string($data->user_id);
 		$qns_id= $db->escape_string($data->qns_id);
 
@@ -330,36 +349,46 @@
 			//Set True  or false if user had answered the questions
 			
 			if(isset($data->user_id)) {
-				$global_user_id = $data->user_id;
-		
-				$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-				$result_answered = $db->query($query_answered);
-			
-				$num_answered = mysqli_num_rows($result_answered);
-			
-				if($num_answered == 0){
-					$answered = false;
-				}else{
-					$answered = true;
-				}
-
-				$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-				$result_voted = $db->query($query_voted);
-
-				$voted = mysqli_fetch_assoc($result_voted);
-				$up_vote = $voted['up_vote'];
-				$down_vote = $voted['down_vote'];
-
-				if($up_vote == 1){
-					$voted_up = true;
-				}else{
+				if (session_status() == PHP_SESSION_NONE) {
+ 					$authenticated = false;
+ 					$answered = false;
 					$voted_up = false;
-				}
-
-				if($down_vote == 1){
-					$voted_down = true;
-				}else{
 					$voted_down = false;
+				}else{
+					$authenticated = true;
+				}
+				if($authenticated == true){
+					$global_user_id = $data->user_id;
+			
+					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+					$result_answered = $db->query($query_answered);
+				
+					$num_answered = mysqli_num_rows($result_answered);
+				
+					if($num_answered == 0){
+						$answered = false;
+					}else{
+						$answered = true;
+					}
+
+					$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+					$result_voted = $db->query($query_voted);
+
+					$voted = mysqli_fetch_assoc($result_voted);
+					$up_vote = $voted['up_vote'];
+					$down_vote = $voted['down_vote'];
+
+					if($up_vote == 1){
+						$voted_up = true;
+					}else{
+						$voted_up = false;
+					}
+
+					if($down_vote == 1){
+						$voted_down = true;
+					}else{
+						$voted_down = false;
+					}
 				}
 
 			}else{
@@ -498,36 +527,48 @@
 			//Set True  or false if user had answered the questions
 			
 			if(isset($data->user_id)) {
-				$global_user_id = $data->user_id;
-		
-				$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-				$result_answered = $db->query($query_answered);
-			
-				$num_answered = mysqli_num_rows($result_answered);
-			
-				if($num_answered == 0){
-					$answered = false;
-				}else{
-					$answered = true;
-				}
 
-				$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-				$result_voted = $db->query($query_voted);
-
-				$voted = mysqli_fetch_assoc($result_voted);
-				$up_vote = $voted['up_vote'];
-				$down_vote = $voted['down_vote'];
-
-				if($up_vote == 1){
-					$voted_up = true;
-				}else{
+				if (session_status() == PHP_SESSION_NONE) {
+ 					$authenticated = false;
+ 					$answered = false;
 					$voted_up = false;
+					$voted_down = false;
+				}else{
+					$authenticated = true;
 				}
 
-				if($down_vote == 1){
-					$voted_down = true;
-				}else{
-					$voted_down = false;
+				if($authenticated == true){
+					$global_user_id = $data->user_id;
+			
+					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+					$result_answered = $db->query($query_answered);
+				
+					$num_answered = mysqli_num_rows($result_answered);
+				
+					if($num_answered == 0){
+						$answered = false;
+					}else{
+						$answered = true;
+					}
+
+					$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+					$result_voted = $db->query($query_voted);
+
+					$voted = mysqli_fetch_assoc($result_voted);
+					$up_vote = $voted['up_vote'];
+					$down_vote = $voted['down_vote'];
+
+					if($up_vote == 1){
+						$voted_up = true;
+					}else{
+						$voted_up = false;
+					}
+
+					if($down_vote == 1){
+						$voted_down = true;
+					}else{
+						$voted_down = false;
+					}
 				}
 			}else{
 				$answered = false;
@@ -577,6 +618,11 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_up_vote_qns"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -590,6 +636,11 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_down_vote_qns"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -603,6 +654,11 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_up_vote_qns"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -616,6 +672,11 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_down_vote_qns"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
+
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
 		$table_name = "Questions_Voted_By_Users";
@@ -639,6 +700,10 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
+		if (session_status() == PHP_SESSION_NONE) {
+ 			http_response_code(401);
+ 			echo false;
+		}
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
 		$result = $db->query($query);
