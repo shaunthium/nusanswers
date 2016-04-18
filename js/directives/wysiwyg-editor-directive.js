@@ -31,9 +31,9 @@ angular.module('quoraApp')
                       width: '1000'
                     }
                   }).success(function(data) {
-                    $scope.answerProfileImg = data.data.url;
+                    $scope.editorProfileImg = data.data.url;
                   }).error(function(data) {
-                    $scope.answerProfileImg = 'http://dummyimage.com/300/09.png/fff';
+                    $scope.editorProfileImg = 'http://dummyimage.com/300/09.png/fff';
                   });
                 }
             });
