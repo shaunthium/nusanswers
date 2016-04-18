@@ -69,7 +69,7 @@ angular.module('quoraApp')
             },
             function(currentUser){
                 if(currentUser && $scope.post){
-                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.isEditable = $scope.type !== 'feed-item' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
                 }
             });
 
@@ -92,7 +92,7 @@ angular.module('quoraApp')
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
-                    $('#wysiwyg-editor-questionbody').trumbowyg({
+                    $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
                     });
@@ -103,39 +103,98 @@ angular.module('quoraApp')
             }
 
             $scope.saveChanges = function(){
-
-
-                if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
+                if($scope.type !== 'answer' && (!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH)){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     return;
                 }
-                if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
+                if($scope.type !== 'answer' && ($scope.temp.title !== questionTitleFilter($scope.temp.title))){
                     Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
                     return;
                 }
-                if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
+                if($scope.type !== 'answer' && ($scope.temp.title.charAt($scope.temp.title.length - 1) != "?")){
                     Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
                     return;
                 }
 
-                $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
-                questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
-                .then(
-                    function(res){
-                        if(res.data){
-                            $scope.post.title = $scope.temp.title;
-                            $scope.post.content = $scope.temp.content;
-                            Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
-                            $scope.editMode = !$scope.editMode;
+                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg('html');
+                if($scope.type === 'answer'){
+                    questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                $scope.post.content = $scope.temp.content;
+                                Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
+                                $scope.editMode = !$scope.editMode;
+                            }
+                            else{
+                                console.log("Error while editing question!");
+                            }
+                        },
+                        function(err){
+                            console.log("Error while editing question!");
                         }
-                        else{
-                            // console.log("Error while editing question!");
+                    );
+                }
+                else{
+                    questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                $scope.post.title = $scope.temp.title;
+                                $scope.post.content = $scope.temp.content;
+                                Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
+                                $scope.editMode = !$scope.editMode;
+                            }
+                            else{
+                                console.log("Error while editing question!");
+                            }
+                        },
+                        function(err){
+                            console.log("Error while editing question!");
                         }
-                    },
-                    function(err){
-                        // console.log("Error while editing question!");
+                    );
+                }
+            }
+
+            $scope.delete = function(){
+                if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
+                    if($scope.type === 'answer'){
+                        questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    console.log("Success!");
+                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                    $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
+                                }
+                                else{
+                                    console.log("Error while deleting question!");
+                                }
+                            },
+                            function(err){
+                                Materialize.toast('Server error!', 2000, 'error-toast');
+                            }
+                        );
                     }
-                );
+                    else{
+                        questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    console.log("Success!");
+                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                    $scope.goToHome();
+                                }
+                            },
+                            function(err){
+                                Materialize.toast('Server error!', 2000, 'error-toast');
+                            }
+                        );
+                    }
+                }
+                else{
+                    Materialize.toast('Delete cancelled!', 2000, 'information-toast');
+                }
             }
 
 
@@ -165,7 +224,6 @@ angular.module('quoraApp')
                       questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              // console.log(res);
                               if(res.data){
                                   $scope.post.upvotes--;
                                   $scope.post.upvoted = false;
@@ -186,7 +244,6 @@ angular.module('quoraApp')
                           questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  // console.log(res);
                                   if(res.data){
                                       //$scope.post.upvotes++;
                                       // console.log("upvotes ", $scope.post.upvotes);
@@ -200,7 +257,6 @@ angular.module('quoraApp')
                             questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    // console.log(res);
                                     if(res.data){
 
                                         // console.log("upvotes just before increase 2 ", $scope.post.upvotes);
@@ -222,7 +278,6 @@ angular.module('quoraApp')
                         questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                // console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes++;
                                     $scope.post.upvoted = true;
@@ -244,7 +299,6 @@ angular.module('quoraApp')
                       questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              // console.log(res);
                               if(res.data){
                                   $scope.post.upvotes++;
                                   $scope.post.downvoted = false;
@@ -264,7 +318,6 @@ angular.module('quoraApp')
                           questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  // console.log(res);
                                   if(res.data){
                                       //$scope.post.upvotes--;
                                       $scope.post.upvoted = false;
@@ -277,7 +330,6 @@ angular.module('quoraApp')
                             questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    // console.log(res);
                                     if(res.data){
                                         $scope.post.upvotes-=2;
                                         $scope.post.downvoted = true;
@@ -296,7 +348,6 @@ angular.module('quoraApp')
                         questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                // console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes--;
                                     $scope.post.downvoted = true;

@@ -523,6 +523,53 @@ angular.module('quoraApp')
         });
     }
 
+    function deleteQuestion(questionID, userID){
+        return $http({
+            url: base_url + 'server/questions.php',
+            method: 'POST',
+            data: {
+                cmd: 'delete_qns',
+                qns_id : questionID,
+                user_id : userID
+            }
+        });
+    }
+
+    function editAnswer(answerID, content, userID){
+        return $http({
+            url: base_url + 'server/answers.php',
+            method: 'POST',
+            data: {
+                cmd: 'editanswer',
+                answer_id : answerID,
+                content : content,
+                user_id : userID
+            }
+        });
+    }
+
+    function deleteAnswer(answerID, userID){
+        return $http({
+            url: base_url + 'server/answers.php',
+            method: 'POST',
+            data: {
+                cmd: 'deleteanswer',
+                answer_id : answerID,
+                user_id : userID
+            }
+        });
+    }
+
+    function getAllTags(){
+        return $http({
+            url: base_url + 'server/tags.php',
+            method: 'POST',
+            data: {
+                cmd: 'get_all_tags'
+            }
+        });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -551,9 +598,13 @@ angular.module('quoraApp')
         addTag                      :   addTag,
         removeTag                   :   removeTag,
         editQuestion                :   editQuestion,
+        deleteQuestion              :   deleteQuestion,
+        editAnswer                  :   editAnswer,
+        deleteAnswer                :   deleteAnswer,
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
-        deleteCommentFromAnswer : deleteCommentFromAnswer
+        deleteCommentFromAnswer     :   deleteCommentFromAnswer,
+        getAllTags                  :   getAllTags
     }
 
 }]);

@@ -52,6 +52,21 @@
 		}
 		echo json_encode($tag_array);		
 	}
+
+	/*
+		Get and return all tags
+	*/
+	if($cmd == "get_all_tags"){
+		$query = "SELECT * FROM Tags";
+		$result = $db->query($query);
+		$tag_array = array();
+
+		while ($tag = mysqli_fetch_assoc($result)){
+			$tag_array[] = $tag["content"];
+		}
+
+		echo json_encode($tag_array);		
+	}
 	
 	/*
 		Get and return all tags associated with a question

@@ -87,6 +87,7 @@
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);		
 		updateAuthorScore($qns_id, $operator);
+		voteNotify($qns_id, $user_id, 1);
 	}
 
 	/*
@@ -102,6 +103,7 @@
 		check_if_user_voted($qns_id, $user_id, $operator);
 		set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);	
 		updateAuthorScore($qns_id, $operator);
+		voteNotify($qns_id, $user_id, 0);
 	}
 
 	/*
@@ -216,6 +218,29 @@
 
 	if(isset($data->cmd)){
 		$cmd = $data->cmd;
+	}
+
+	//Insert into votes Notification
+	function voteNotify($qns_id, $voter_id, $vote_type){
+		global $db;
+
+		$query_author_id = "SELECT * FROM Questions WHERE id=".$qns_id;
+		$result_author_id = $db->query($query_author_id);
+		$author_id_array = mysqli_fetch_array($result_author_id);
+		$author_id = $author_id_array['user_id'];
+
+		$query = "INSERT INTO Votes_Notifications(qns_ans_id, author_id, voter_id, type_qns_ans, type_vote) VALUES(".
+					$qns_id.", ".$author_id.", ".$voter_id.", 0,".$vote_type.")";
+		$db->query($query); 
+
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo true;
+		}else{
+			echo false;
+		}
+
 	}
 
 	/*

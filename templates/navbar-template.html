@@ -8,7 +8,7 @@
 <!-- Stuff that appears when user starts typing question -->
 <div style="position:fixed;"ng-if="showOverlay" id="overlay-container"></div>
 
-<search-popup style="position:fixed;" ng-class="{'fake-white' : !userInput, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
+<search-popup style="position:fixed;" ng-class="{'fake-white' : !showSuggestions && !showQuestionError, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
 
  <!-- Login modal -->
   <div style="max-width:500px;" id="login-modal" class="modal">
