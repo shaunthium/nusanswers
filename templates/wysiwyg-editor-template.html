@@ -4,7 +4,7 @@
         <li style="margin-left:5px; min-height:50px; padding-top:5px; padding-bottom:0px;"class="collection-item avatar">
             <img ng-click="goToProfile(currentUser.id)" ng-src="{{editorProfileImg}}" alt="" class="circle" style="cursor:pointer">
             <span ng-click="goToProfile(currentUser.id)" class="title" style="cursor:pointer">{{currentUser.first_name}}</span>
-            <p class="grey-text">{{post.author.flavour}}</p>
+            <p class="grey-text">{{currentUser.flavour}}</p>
            <!--  <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author.score}}</a> -->
         </li>
     </ul>
