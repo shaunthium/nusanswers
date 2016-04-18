@@ -789,7 +789,7 @@
 	*
 	* @param: answer_id, content, user_id OF CURRENT USER
 	*/
-	else if($cmd == "updateanswer")
+	else if($cmd == "editanswer")
 	{
 		global $db;
 		
