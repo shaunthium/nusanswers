@@ -378,7 +378,7 @@
 				'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
-									'flavour' => 'New User'
+									'flavour' => $role//'New User'
 					),
 				'views'=>(int)$latest['view_count'],
 				'content'=>$latest['content'],
