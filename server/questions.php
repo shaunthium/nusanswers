@@ -15,10 +15,10 @@
 	*/
 	if($cmd == "new_qns"){
 
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 
 		$user_id= $db->escape_string($data->user_id);
@@ -129,7 +129,7 @@
 				'content'=>$qns_data['content'],
 				'score'=>$qns_data['score'],
 				'view_count'=>$qns_data['view_count'],
-				
+
 				'author' => $author['first_name'] . " " . $author['last_name'],
 				'author_score' => $author['score'],
 				'total_answers' => $total_answers['total_answers']
@@ -147,10 +147,10 @@
 	*/
 	if($cmd == "edit_qns"){
 
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$title = $db->escape_string($data->title);
@@ -168,7 +168,7 @@
 			echo json_encode(true);
 		}else{
 			echo json_encode(false);
-		}	
+		}
 	}
 
 	/*
@@ -177,10 +177,10 @@
 	*/
 	if($cmd == "delete_qns"){
 
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$user_id = $db->escape_string($data->user_id);
 		$qns_id= $db->escape_string($data->qns_id);
@@ -189,7 +189,7 @@
 		//Delete answers, answers_comments, answer_comments_liked_by_users, answer_comments_reported_by_users
 		$query_ans_id = "SELECT * FROM Answers WHERE question_id=" . $qns_id;
 		$result_ans_id = $db->query($query_ans_id);
-		
+
 		while($ans_id_array = mysqli_fetch_assoc($result_ans_id)){
 			$ans_id = $ans_id_array['id'];
 
@@ -199,19 +199,19 @@
 				$ans_comment = $ans_comment_array['id'];
 				//Delete ans_liked & reported
 				$query_ans_liked = "DELETE FROM Answer_Comments_Liked_By_Users WHERE comment_id=". $ans_comment;
-				$db->query($query_ans_liked); 
+				$db->query($query_ans_liked);
 				$query_ans_reported = "DELETE FROM Answer_Comments_Reported_By_Users WHERE comment_id=". $ans_comment;
-				$db->query($query_ans_reported); 
+				$db->query($query_ans_reported);
 			}
 
 			$query_delete_ans_comment = "DELETE FROM Answers_Comments WHERE answer_id=" . $ans_id;
-			$db->query($query_delete_ans_comment); 
+			$db->query($query_delete_ans_comment);
 
 			$query_delete_ans_voted = "DELETE FROM Answers_Voted_By_Users WHERE answer_id=" . $ans_id;
-			$db->query($query_delete_ans_voted); 
+			$db->query($query_delete_ans_voted);
 		}
 		$query_delete_ans_id = "DELETE FROM Answers WHERE question_id=" . $qns_id;
-		$db->query($query_delete_ans_id); 
+		$db->query($query_delete_ans_id);
 
 		//Delete comments, comments_liked_by_users, comments_reported_by_users
 		$query_comment_id = "SELECT * FROM Comments WHERE question_id=" . $qns_id;
@@ -221,31 +221,31 @@
 			$comment_id = $comment_id_array['id'];
 			//Delete comment_liked & reported
 			$query_comment_liked = "DELETE FROM Comments_Liked_By_Users WHERE comment_id=". $comment_id;
-			$db->query($query_comment_liked); 
+			$db->query($query_comment_liked);
 			$query_comment_reported = "DELETE FROM Comments_Reported_By_Users WHERE comment_id=". $comment_id;
-			$db->query($query_comment_reported); 
+			$db->query($query_comment_reported);
 		}
 		$query_delete_comment_id = "DELETE FROM Comments WHERE question_id=" . $qns_id;
-		$db->query($query_delete_comment_id); 
+		$db->query($query_delete_comment_id);
 
 		//Others
 		$query_qns_tag = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id;
 		$db->query($query_qns_tag);
 		//$query_qns_tag = "DELETE FROM Answers WHERE question_id=" . $qns_id;
 		//$db->query($query_qns_tag);
-		$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;	
+		$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
 		$db->query($query_vote);
 
-		$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id ." AND user_id=". $user_id;	
+		$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id ." AND user_id=". $user_id;
 		$db->query($query_qns);
-	
-		
+
+
 		$affected = $db->affected_rows;
 		if( $affected > 0 ){
 			echo true;
 		}else{
 			echo false;
-		}	
+		}
 	}
 
 	/*
@@ -270,7 +270,7 @@
 	*/
 	if($cmd == "latest_qns"){
 
-		global $db; 
+		global $db;
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
@@ -308,12 +308,12 @@
 				$tag = mysqli_fetch_assoc($result_tag_name);
 				$tag_name_array[]  = $tag["content"];
 			}
-			
+
 			$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
 			$result_role = $db->query($query_role);
 			$role_array = mysqli_fetch_assoc($result_role);
 			$role = $role_array['flavour'];
-			
+
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
@@ -347,24 +347,24 @@
 			}
 
 			//Set True  or false if user had answered the questions
-			
+
 			if(isset($data->user_id)) {
-				if (!(isset($_SESSION['cs3226']))) {
- 					$authenticated = false;
- 					$answered = false;
-					$voted_up = false;
-					$voted_down = false;
-				}else{
+				// if (!(isset($_SESSION['cs3226']))) {
+ 			// 		$authenticated = false;
+ 			// 		$answered = false;
+				// 	$voted_up = false;
+				// 	$voted_down = false;
+				// }else{
 					$authenticated = true;
-				}
+				// }
 				if($authenticated == true){
 					$global_user_id = $data->user_id;
-			
+
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
 					$result_answered = $db->query($query_answered);
-				
+
 					$num_answered = mysqli_num_rows($result_answered);
-				
+
 					if($num_answered == 0){
 						$answered = false;
 					}else{
@@ -396,7 +396,7 @@
 				$voted_up = false;
 				$voted_down = false;
 			}
-			
+
 
 
 			$latest_array[] = array(
@@ -446,7 +446,7 @@
 	if($cmd == "trending_qns"){
 		global $db;
 
-		
+
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
@@ -486,12 +486,12 @@
 				$tag = mysqli_fetch_assoc($result_tag_name);
 				$tag_name_array[]  = $tag["content"];
 			}
-			
+
 			$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
 			$result_role = $db->query($query_role);
 			$role_array = mysqli_fetch_assoc($result_role);
 			$role = $role_array['flavour'];
-	
+
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $trending['user_id'],
@@ -525,26 +525,26 @@
 			}
 
 			//Set True  or false if user had answered the questions
-			
+
 			if(isset($data->user_id)) {
 
-				if (!(isset($_SESSION['cs3226']))) {
- 					$authenticated = false;
- 					$answered = false;
-					$voted_up = false;
-					$voted_down = false;
-				}else{
+				// if (!(isset($_SESSION['cs3226']))) {
+ 			// 		$authenticated = false;
+ 			// 		$answered = false;
+				// 	$voted_up = false;
+				// 	$voted_down = false;
+				// }else{
 					$authenticated = true;
-				}
+				// }
 
 				if($authenticated == true){
 					$global_user_id = $data->user_id;
-			
+
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
 					$result_answered = $db->query($query_answered);
-				
+
 					$num_answered = mysqli_num_rows($result_answered);
-				
+
 					if($num_answered == 0){
 						$answered = false;
 					}else{
@@ -618,10 +618,10 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_up_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -636,10 +636,10 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_down_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -654,10 +654,10 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_up_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -672,10 +672,10 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_down_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -700,10 +700,10 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		// if (!(isset($_SESSION['cs3226']))) {
+ 	// 		//http_response_code(401);
+ 	// 		echo false;
+		// }
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
 		$result = $db->query($query);
@@ -712,7 +712,7 @@
 			//Get the first name and last name of the author from 'users' table
 
 			//Get all tags of a qns
-			
+
 
 			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $qns['id'];
 			$result_tag_id = $db->query($query_tag_id);
