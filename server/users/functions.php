@@ -8,13 +8,19 @@
 
     $sql_result = $db->query($query);
     $row = mysqli_fetch_row($sql_result);
+
     if (!is_null($row)) {
+      $role_query = "SELECT * FROM Role WHERE id=". $row[5];
+      $role_result = $db->query($role_query);
+      $role_row = mysqli_fetch_row($role_result);
+
       $result = array();
       $result["id"] = $row[0];
       $result["first_name"] = $row[1];
       $result["last_name"] = $row[2];
       $result["email"] = $row[3];
-      $result["role"] = $row[5];
+      // $result["role"] = $row[5];
+      $result["flavour"] = $role_row[1];
       $result["score"] = $row[6];
       $result["created_at"] = $row[7];
       $result["updated_at"] = $row[8];
