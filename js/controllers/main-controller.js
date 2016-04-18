@@ -8,7 +8,7 @@ angular.module('quoraApp')
         return questionTitle;
     }
 })
-.controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
+.controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', '$http', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location, $http){
     $scope.posts = [];
     $rootScope.loading = true;
     $scope.feedType = 'latest';
@@ -27,6 +27,17 @@ angular.module('quoraApp')
           $scope.apiMe = res;
           qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
             $rootScope.currentUser = data.data;
+            $http({
+              url: 'http://graph.facebook.com/v2.5/' + $rootScope.currentUser.id + '/picture?redirect=false&width=9999',
+              method: 'GET',
+              data: {
+                width: '1000'
+              }
+            }).success(function(data) {
+              $scope.currentUser.profileImg = data.data.url;
+            }).error(function(data) {
+              $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+            });
             $scope.loading = false;
           });
         });
