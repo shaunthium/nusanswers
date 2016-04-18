@@ -42,334 +42,146 @@
 		global $db;
 		
 		/*check if the Question exists */
-		$query = "select 1 from Questions where id = $question_id";
+		$query = "select * from Questions where id = $question_id";
 		$res = $db->query($query);
-		if(is_bool($res) || mysqli_num_rows($res) == 0)
+		if(is_bool($res))
 		{
 			echo false;
-			return;
 		}
-		
-		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
-		$res = $db->query($query);
-		$havetag = mysqli_fetch_assoc($res);
-		
-		/* Here we get the User ID of the question */
-		$query = "SELECT user_id FROM Questions where id = $question_id";
-		$result = $db->query($query);
-		$question_user_id = mysqli_fetch_assoc($result);
-		$question_user_id = $question_user_id["user_id"];
-		
-		
-		
-		/* Here we get the User Info to each question */
-		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$question_user_id;
-		$result_author = $db->query($query_author);
-		$author = mysqli_fetch_assoc($result_author);
-		
-		/* Here we get if a Question has been answered or voted BY CURRENT USER*/
-		if(!isset($data->user_id))
+		else if(mysqli_num_rows($res) == 0)
 		{
-			//error_log("IS NOT SET\n");
-			$answered = false;
-			$voted = "0";
+			echo false;
 		}
-		else //if it is set
+		else
 		{
-			//error_log("IS SET\n");
-			$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
-			$result_answered = $db->query($query_answered);
-			if(mysqli_num_rows($result_answered) == 0)
-				$answered = false;
-			else
-				$answered = true;
+			$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
+			$res = $db->query($query);
+			$havetag = mysqli_fetch_assoc($res);
 			
-			$query_voted = "Select * from Questions_Voted_By_Users where question_id = $question_id and user_id= $user_id";
-			$result_voted = $db->query($query_voted);
-			if(mysqli_num_rows($result_voted) == 0) //no entry!
-				$voted = "0";
-			else
+			/* Here we get the User ID of the question */
+			$query = "SELECT user_id FROM Questions where id = $question_id";
+			$result = $db->query($query);
+			$question_user_id = mysqli_fetch_assoc($result);
+			$question_user_id = $question_user_id["user_id"];
+			
+			
+			
+			/* Here we get the User Info to each question */
+			$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$question_user_id;
+			$result_author = $db->query($query_author);
+			$author = mysqli_fetch_assoc($result_author);
+			
+			/* Here we get if a Question has been answered or voted BY CURRENT USER*/
+			if(!isset($data->user_id))
 			{
-				$voteInfo = mysqli_fetch_assoc($result_voted);
-				
-				if($voteInfo["up_vote"] == "1")
-					$voted = "1";
-				else if ($voteInfo["down_vote"] == "1")
-					$voted = "-1";
-				else
-					$voted = "0";
+				//error_log("IS NOT SET\n");
+				$answered = false;
+				$voted = "0";
 			}
+			else //if it is set
+			{
+				//error_log("IS SET\n");
+				$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
+				$result_answered = $db->query($query_answered);
+				if(mysqli_num_rows($result_answered) == 0)
+					$answered = false;
+				else
+					$answered = true;
 				
-		}
-		
-		
-		
-		/* Here we get the number of answers to each question */
-		$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
-		$result_answers_count = $db->query($query_answers_count);
-		$answers_count = mysqli_fetch_assoc($result_answers_count);
-		
-		/*******************Query Questions Comments table ***************************/
-		$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at, Comments.likes from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
-		$res = $db->query($query);
-		$commentsResult = array();
-		//| comments_id |  users_id|content| created_at| updated_at |
-		
-		if(!is_bool($res))
-		{
-			while($r = mysqli_fetch_assoc($res)){ 
-				//for each comment
-				$comment_user_id = $r["user_id"];
-				
-				/* Here we get the User Info to each comment */
-				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$comment_user_id;
-				$result_author = $db->query($query_author);
-				$comment_author = mysqli_fetch_assoc($result_author);
-				
-				/* Here we determine if current user has liked this comment */
-				
-				if(!isset($data->user_id))
-				{
-					$liked = false;
-				}
+				$query_voted = "Select * from Questions_Voted_By_Users where question_id = $question_id and user_id= $user_id";
+				$result_voted = $db->query($query_voted);
+				if(mysqli_num_rows($result_voted) == 0) //no entry!
+					$voted = "0";
 				else
 				{
-					$comment_id = $r["id"];
-					$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-					$comment_result = $db->query($query);
+					$voteInfo = mysqli_fetch_assoc($result_voted);
 					
-					if(mysqli_num_rows($comment_result) == 0) //Never reported before
+					if($voteInfo["up_vote"] == "1")
+						$voted = "1";
+					else if ($voteInfo["down_vote"] == "1")
+						$voted = "-1";
+					else
+						$voted = "0";
+				}
+					
+			}
+			
+			
+			
+			/* Here we get the number of answers to each question */
+			$query_answers_count = "SELECT Count(1) as answers_count FROM Answers where question_id = " . $question_id;
+			$result_answers_count = $db->query($query_answers_count);
+			$answers_count = mysqli_fetch_assoc($result_answers_count);
+			
+			/*******************Query Questions Comments table ***************************/
+			$query = "select Comments.id, Users.id as user_id, Comments.content, Comments.created_at, Comments.updated_at, Comments.likes from Comments inner join Users on Users.id = Comments.user_id  where Comments.question_id = ". $question_id;
+			$res = $db->query($query);
+			$commentsResult = array();
+			//| comments_id |  users_id|content| created_at| updated_at |
+			
+			if(!is_bool($res))
+			{
+				while($r = mysqli_fetch_assoc($res)){ 
+					//for each comment
+					$comment_user_id = $r["user_id"];
+					
+					/* Here we get the User Info to each comment */
+					$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$comment_user_id;
+					$result_author = $db->query($query_author);
+					$comment_author = mysqli_fetch_assoc($result_author);
+					
+					/* Here we determine if current user has liked this comment */
+					
+					if(!isset($data->user_id))
 					{
 						$liked = false;
 					}
 					else
 					{
-						$liked = true;
-					}
-				}
-				
-				
-				
-				
-				$commentsResult[] = array(
-					'id' => $r["id"],
-					'questionid' => $question_id,
-					'reported' => false,
-					'liked' => $liked,
-					'likes' => (int)$r["likes"],
-					'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
-								'karma' =>$comment_author['score'],
-								'userid'=>$r["user_id"],
-								'flavour'=> $comment_author['flavour']),
-					
-					'body' => $r["content"],
-					'created_at'=>$r['created_at'],
-					'updated_at'=>$r['updated_at']
-				);
-			}
-		}
-		//error_log(json_encode($commentsResult));
-		if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
-		{
-			/*******************Query Question table ***************************/
-			$query = "select Questions.* from Questions where Questions.id = ". $question_id;
-			$res = $db->query($query);
-			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
-			$post = mysqli_fetch_assoc($res);
-			
-			//$tag_array = explode(",", $post['tags']);
-			
-			if($voted == "1")
-			{
-				$upvote = true;
-				$downvote = false;
-			}
-			else if ($voted == "-1")
-			{
-				$upvote = false;
-				$downvote = true;
-			}
-			else
-			{
-				$upvote = false;
-				$downvote = false;
-			}
-			
-			$questionResult = array(
-
-				'id'=>$post['id'],
-				'title'=>$post['title'],
-				'tags' => array(),
-				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
-								'karma' =>$author['score'],
-								'userid'=>$post['user_id'],
-								'flavour'=> $author['flavour']),
-				'views'=>(int)$post['view_count'],
-				'content'=>$post['content'],
-				'upvotes'=>(int)$post['score'],
-				'created_at'=>$post['created_at'],
-				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult,
-				'answered' => $answered,
-				'upvoted' => $upvote,
-				'downvoted' =>$downvote
-				//'answers_count' => $answers_count["answers_count"],
-			);
-			
-		}
-		else //Has Tags
-		{
-			
-			/*******************Query Question table ***************************/
-			$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
-			$res = $db->query($query);
-			//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
-			$post = mysqli_fetch_assoc($res);
-			
-			$tag_array = explode(",", $post['tags']);
-			
-			if($voted == "1")
-			{
-				$upvote = true;
-				$downvote = false;
-			}
-			else if ($voted == "-1")
-			{
-				$upvote = false;
-				$downvote = true;
-			}
-			else
-			{
-				$upvote = false;
-				$downvote = false;
-			}
-			$questionResult = array(
-
-				'id'=>$post['id'],
-				'title'=>$post['title'],
-				'tags' => $tag_array,
-				'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
-								'karma' =>$author['score'],
-								'userid'=>$post['user_id'],
-								'flavour'=> $author['flavour']),
-				'views'=>(int)$post['view_count'],
-				'content'=>$post['content'],
-				'upvotes'=>(int)$post['score'],
-				'created_at'=>$post['created_at'],
-				'updated_at'=>$post['updated_at'],
-				'comments' => $commentsResult,
-				'answered' => $answered,
-				'upvoted' => $upvote,
-				'downvoted' =>$downvote
-				//'answers_count' => $answers_count["answers_count"],
-			);
-			//error_log(json_encode($questionResult));
-			
-			
-		}
-		
-		/*******************Query Answers table ***************************/
-		
-		$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
-		$res = $db->query($query);
-		$answersResult = array();
-		//| answers_id | user_id | content| score | created_at| updated_at| chosen
-		if(!is_bool($res))
-		{
-			while($r = mysqli_fetch_assoc($res)){ 
-				//foreach answer GG
-				
-				/* Here we get the User Info to each answer */
-				$answer_user_id = $r["user_id"];
-				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
-				$result_author = $db->query($query_author);
-				$author = mysqli_fetch_assoc($result_author);
-				
-				$answers_id= $r["id"];
-				
-				/* Here we get the comments for each answer */
-				$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
-				$res2 = $db->query($query);
-				
-				
-				 $answersCommentsResult = array();
-				//| comments_id |  users_id|content| created_at| updated_at |
-				if(!is_bool($res2))
-				{
-					while($a = mysqli_fetch_assoc($res2)){
-						$user_id2 = $a["user_id"];
-						/* Here we get the User Info to each comment */
-						$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
-						$result_author2 = $db->query($query_author2);
-						$author2 = mysqli_fetch_assoc($result_author2);
+						$comment_id = $r["id"];
+						$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+						$comment_result = $db->query($query);
 						
-						
-						
-						/* Here we determine if current user has liked this comment */
-						if(!isset($data->user_id))
+						if(mysqli_num_rows($comment_result) == 0) //Never reported before
 						{
 							$liked = false;
 						}
 						else
 						{
-							$comment_id = $a["id"];
-							$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
-							$comment_result = $db->query($query);
-							
-							if(mysqli_num_rows($comment_result) == 0) //Never reported before
-							{
-								$liked = false;
-							}
-							else
-							{
-								$liked = true;
-							}
+							$liked = true;
 						}
-						
-						
-						$answersCommentsResult[] = array(
-							'id' => $a["id"],
-							'answerid' => $answers_id,
-							'reported' => false,
-							'liked' => $liked,
-							'likes' => (int)$a["likes"],
-							'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
-										'karma' =>$author2['score'],
-										'userid'=>$a["user_id"],
-										'flavour'=> $author2['flavour']),
-							
-							'body' => $a["content"],
-							'created_at'=>$a['created_at'],
-							'updated_at'=>$a['updated_at']
-						);
 					}
-				}
-				
-				/* Here we get if a Question has been answered or voted BY CURRENT USER*/
-				if(!isset($data->user_id))
-				{
-					$voted = "0";
-				}
-				else //if it is set
-				{
 					
-					$query_voted = "Select * from Answers_Voted_By_Users where answer_id = $answers_id and user_id= $user_id";
-					$result_voted = $db->query($query_voted);
-					if(mysqli_num_rows($result_voted) == 0) //no entry!
-						$voted = "0";
-					else
-					{
-						$voteInfo = mysqli_fetch_assoc($result_voted);
+					
+					
+					
+					$commentsResult[] = array(
+						'id' => $r["id"],
+						'questionid' => $question_id,
+						'reported' => false,
+						'liked' => $liked,
+						'likes' => (int)$r["likes"],
+						'author' => array('name' =>$comment_author['first_name'] . " " . $comment_author['last_name'],
+									'karma' =>$comment_author['score'],
+									'userid'=>$r["user_id"],
+									'flavour'=> $comment_author['flavour']),
 						
-						if($voteInfo["up_vote"] == "1")
-							$voted = "1";
-						else if ($voteInfo["down_vote"] == "1")
-							$voted = "-1";
-						else
-							$voted = "0";
-					}
-						
+						'body' => $r["content"],
+						'created_at'=>$r['created_at'],
+						'updated_at'=>$r['updated_at']
+					);
 				}
+			}
+			//error_log(json_encode($commentsResult));
+			if(empty($havetag["tag"]) || $havetag["tag"] == null) //No Tags Found
+			{
+				/*******************Query Question table ***************************/
+				$query = "select Questions.* from Questions where Questions.id = ". $question_id;
+				$res = $db->query($query);
+				//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
+				$post = mysqli_fetch_assoc($res);
+				
+				//$tag_array = explode(",", $post['tags']);
 				
 				if($voted == "1")
 				{
@@ -386,28 +198,223 @@
 					$upvote = false;
 					$downvote = false;
 				}
-			
-				$answersResult[] = array(
+				
+				$questionResult = array(
 
-					'id'=>$r['id'],
-					'questionid' => $question_id,
-					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
-									'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
-					'content'=>$r['content'],
-					'upvotes'=>(int)$r['score'],
-					'created_at'=>$r['created_at'],
-					'updated_at'=>$r['updated_at'],
-					'chosen' => $r['chosen'],
-					'comments' => $answersCommentsResult,
+					'id'=>$post['id'],
+					'title'=>$post['title'],
+					'tags' => array(),
+					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
+									'karma' =>$author['score'],
+									'userid'=>$post['user_id'],
+									'flavour'=> $author['flavour']),
+					'views'=>(int)$post['view_count'],
+					'content'=>$post['content'],
+					'upvotes'=>(int)$post['score'],
+					'created_at'=>$post['created_at'],
+					'updated_at'=>$post['updated_at'],
+					'comments' => $commentsResult,
+					'answered' => $answered,
 					'upvoted' => $upvote,
 					'downvoted' =>$downvote
+					//'answers_count' => $answers_count["answers_count"],
 				);
+				
 			}
+			else //Has Tags
+			{
+				
+				/*******************Query Question table ***************************/
+				$query = "select Questions.*, group_concat(Tags.content) as tags from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id inner join Tags on Questions_Tags.tag_id = Tags.id where Questions.id = " . $question_id . " group by Questions.id;";
+				$res = $db->query($query);
+				//| question_id | user_id | title| content| score | view_count | created_at| updated_at| tags|
+				$post = mysqli_fetch_assoc($res);
+				
+				$tag_array = explode(",", $post['tags']);
+				
+				if($voted == "1")
+				{
+					$upvote = true;
+					$downvote = false;
+				}
+				else if ($voted == "-1")
+				{
+					$upvote = false;
+					$downvote = true;
+				}
+				else
+				{
+					$upvote = false;
+					$downvote = false;
+				}
+				$questionResult = array(
+
+					'id'=>$post['id'],
+					'title'=>$post['title'],
+					'tags' => $tag_array,
+					'author' => array('name' =>$author['first_name'] . " " . $author['last_name'],
+									'karma' =>$author['score'],
+									'userid'=>$post['user_id'],
+									'flavour'=> $author['flavour']),
+					'views'=>(int)$post['view_count'],
+					'content'=>$post['content'],
+					'upvotes'=>(int)$post['score'],
+					'created_at'=>$post['created_at'],
+					'updated_at'=>$post['updated_at'],
+					'comments' => $commentsResult,
+					'answered' => $answered,
+					'upvoted' => $upvote,
+					'downvoted' =>$downvote
+					//'answers_count' => $answers_count["answers_count"],
+				);
+				//error_log(json_encode($questionResult));
+				
+				
+			}
+			
+			/*******************Query Answers table ***************************/
+			
+			$query = "select Answers.id , Answers.question_id, Answers.user_id, Answers.content, Answers.score, Answers.created_at, Answers.updated_at, Answers.chosen from Answers where question_id = ". $question_id;
+			$res = $db->query($query);
+			$answersResult = array();
+			//| answers_id | user_id | content| score | created_at| updated_at| chosen
+			if(!is_bool($res))
+			{
+				while($r = mysqli_fetch_assoc($res)){ 
+					//foreach answer GG
+					
+					/* Here we get the User Info to each answer */
+					$answer_user_id = $r["user_id"];
+					$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$answer_user_id;
+					$result_author = $db->query($query_author);
+					$author = mysqli_fetch_assoc($result_author);
+					
+					$answers_id= $r["id"];
+					
+					/* Here we get the comments for each answer */
+					$query = "select Answers_Comments.id, Users.id as user_id, Answers_Comments.content, Answers_Comments.created_at, Answers_Comments.updated_at, Answers_Comments.likes from Answers_Comments inner join Users on Users.id = Answers_Comments.user_id  where Answers_Comments.answer_id = ". $answers_id;
+					$res2 = $db->query($query);
+					
+					
+					 $answersCommentsResult = array();
+					//| comments_id |  users_id|content| created_at| updated_at |
+					if(!is_bool($res2))
+					{
+						while($a = mysqli_fetch_assoc($res2)){
+							$user_id2 = $a["user_id"];
+							/* Here we get the User Info to each comment */
+							$query_author2 =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id2;
+							$result_author2 = $db->query($query_author2);
+							$author2 = mysqli_fetch_assoc($result_author2);
+							
+							
+							
+							/* Here we determine if current user has liked this comment */
+							if(!isset($data->user_id))
+							{
+								$liked = false;
+							}
+							else
+							{
+								$comment_id = $a["id"];
+								$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
+								$comment_result = $db->query($query);
+								
+								if(mysqli_num_rows($comment_result) == 0) //Never reported before
+								{
+									$liked = false;
+								}
+								else
+								{
+									$liked = true;
+								}
+							}
+							
+							
+							$answersCommentsResult[] = array(
+								'id' => $a["id"],
+								'answerid' => $answers_id,
+								'reported' => false,
+								'liked' => $liked,
+								'likes' => (int)$a["likes"],
+								'author' => array('name' =>$author2['first_name'] . " " . $author2['last_name'],
+											'karma' =>$author2['score'],
+											'userid'=>$a["user_id"],
+											'flavour'=> $author2['flavour']),
+								
+								'body' => $a["content"],
+								'created_at'=>$a['created_at'],
+								'updated_at'=>$a['updated_at']
+							);
+						}
+					}
+					
+					/* Here we get if a Question has been answered or voted BY CURRENT USER*/
+					if(!isset($data->user_id))
+					{
+						$voted = "0";
+					}
+					else //if it is set
+					{
+						
+						$query_voted = "Select * from Answers_Voted_By_Users where answer_id = $answers_id and user_id= $user_id";
+						$result_voted = $db->query($query_voted);
+						if(mysqli_num_rows($result_voted) == 0) //no entry!
+							$voted = "0";
+						else
+						{
+							$voteInfo = mysqli_fetch_assoc($result_voted);
+							
+							if($voteInfo["up_vote"] == "1")
+								$voted = "1";
+							else if ($voteInfo["down_vote"] == "1")
+								$voted = "-1";
+							else
+								$voted = "0";
+						}
+							
+					}
+					
+					if($voted == "1")
+					{
+						$upvote = true;
+						$downvote = false;
+					}
+					else if ($voted == "-1")
+					{
+						$upvote = false;
+						$downvote = true;
+					}
+					else
+					{
+						$upvote = false;
+						$downvote = false;
+					}
+				
+					$answersResult[] = array(
+
+						'id'=>$r['id'],
+						'questionid' => $question_id,
+						'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+										'karma'=> $author['score'], 'userid'=>$r['user_id'], 'flavour'=>$author['flavour']),
+						'content'=>$r['content'],
+						'upvotes'=>(int)$r['score'],
+						'created_at'=>$r['created_at'],
+						'updated_at'=>$r['updated_at'],
+						'chosen' => $r['chosen'],
+						'comments' => $answersCommentsResult,
+						'upvoted' => $upvote,
+						'downvoted' =>$downvote
+					);
+				}
+			}
+			
+			$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
+			error_log(json_encode($finalOutput));
+			echo json_encode($finalOutput);
 		}
 		
-		$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-		error_log(json_encode($finalOutput));
-		echo json_encode($finalOutput);
+		
 
 	}
 	
