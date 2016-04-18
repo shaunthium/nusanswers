@@ -1,4 +1,4 @@
-<?php require(dirname(__FILE__).'../vendor/autoload.php');
+<?php require_once __DIR__ . '/../vendor/autoload.php';
   $pusher = new Pusher('31e6c9656b4e9173d7e9', '0739564b5ee1eafa2da3', '198789');
 	require_once('connect.php');
 	require_once('tags.php');
