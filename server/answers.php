@@ -3,7 +3,7 @@
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
-	// if(isset($_POST["question_id"]))
+	
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
   }
@@ -925,7 +925,7 @@
 		else if(!isset($data->content))
 			echo false;
 		
-		/* Here we get the User Info to each question */
+		/* Here we get the User Info to each comment */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
 		$comment_author = mysqli_fetch_assoc($result_author);
