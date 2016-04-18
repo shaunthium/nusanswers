@@ -46,11 +46,13 @@
 		$res = $db->query($query);
 		if(is_bool($res))
 		{
-			echo false;
+			http_response_code(404);
+			echo "No question found";
 		}
 		else if(mysqli_num_rows($res) == 0)
 		{
-			echo false;
+			http_response_code(404);
+			echo "No question found";
 		}
 		else
 		{
@@ -429,16 +431,27 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+		}
 		else if (!isset($data->answer_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Answer id not set";
+		}
+			
 		else{
 			$query = "select user_id from Answers where id = $answer_id";
 			$res = $db->query($query);	
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
 			if($uid != $user_id)
-				echo false;
+			{
+				http_response_code(401);
+				echo "Not authorized";
+			}
+				
 			else
 			{
 				$query = "delete from Answers_Comments where answer_id = $answer_id";
@@ -464,9 +477,16 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+		}
+			
 		else if (!isset($data->comment_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Comment id not set";
+		}
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -575,9 +595,19 @@
 		global $db;
 		
 		if (!isset($data->user_id))
-			echo "user_id of current user NOT SET!";
+		{
+			http_response_code(400);
+			echo "User id not set";
+			return;
+		}
+			
 		else if (!isset($data->answer_id))
-			echo "answer_id not set!";
+		{
+			http_response_code(400);
+			echo "Answer id not set!";
+			return;
+		}
+			
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -661,9 +691,19 @@
 		global $db;
 	
 		if (!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+			return;
+		}
+			
 		else if (!isset($data->answer_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Answer id not set";
+			return;
+		}
+			
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -796,7 +836,11 @@
 			echo json_encode($answersResult);
 		}
 		else
-			echo false;
+		{
+			http_response_code(400);
+			echo "Answered before";
+		}
+			
 		
 		
 	}
@@ -816,7 +860,8 @@
 		
 		if(mysqli_num_rows($result) == 0) // does not exist!
 		{
-			echo false;
+			http_response_code(404);
+			echo "Answer does not exists";
 		}
 		else
 		{
@@ -825,7 +870,12 @@
 			$uid = $r["user_id"];
 			
 			if($uid != $user_id)
-				echo false;
+			{
+				http_response_code(401);
+				echo "Unauthorized";
+				return;
+			}
+				
 			else
 			{
 				$query = "update Answers set content = '$content' where id = $answer_id";
@@ -914,7 +964,8 @@
 				}
 				else
 				{
-						echo false;
+						http_response_code(404);
+						echo "Answer missing";
 				}
 				
 			}
@@ -934,11 +985,23 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+		}
+			
 		else if(!isset($data->answer_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Answer id not set";
+		}
+			
 		else if(!isset($data->content))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Content not set";
+		}
+			
 		
 		/* Here we get the User Info to each comment */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
@@ -951,8 +1014,13 @@
 		$comment_id = $db->insert_id;
 		$query = "select * from Answers_Comments where id = $comment_id";
 		$result = $db->query($query);
-		if(mysqli_num_rows($result) == 0) 
-			echo false;
+		if(mysqli_num_rows($result) == 0)
+		{
+			http_response_code(404);
+			echo "Answer not found";
+			return;
+		}
+			
 		
 		$r = mysqli_fetch_assoc($result);
 		$commentsResult = array();
@@ -987,21 +1055,46 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+			return;
+		}
+			
 		else if(!isset($data->comment_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Comment id not set";
+			return;
+		}
+			
 		else if (!isset($data->content))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Content not set";
+			return;
+		}
+			
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			echo false;
+		{
+			http_response_code(400);
+			echo "Comment not found";
+			return;
+		}
+			
 		
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
 		if($uid != $user_id) //unauthorized
-			echo false;
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
+			
 			
 		$query = "update Answers_Comments set content = '$content' where id = $comment_id";
 		$db->query($query);
@@ -1009,7 +1102,12 @@
 		$query = "select * from Answers_Comments where id = $comment_id";
 		$result = $db->query($query);
 		if(mysqli_num_rows($result) == 0) 
-			echo false;
+		{
+			http_response_code(404);
+			echo "Comment not found";
+			return;
+		}
+			
 		
 		$r = mysqli_fetch_assoc($result);
 		$commentsResult = array();
@@ -1062,20 +1160,37 @@
 		global $db;
 		
 		if(!isset($data->user_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "User id not set";
+			return;
+		}
 		else if(!isset($data->comment_id))
-			echo false;
+		{
+			http_response_code(400);
+			echo "Comment id not set";
+			return;
+		}
+			
 		
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			echo false;
+		{
+			http_response_code(404);
+			echo "Comment not found";
+			return;
+		}
+			
 		
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
 		if($uid != $user_id) //unauthorized
-			echo false;
-		
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 		$query = "delete from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
 		
@@ -1096,7 +1211,12 @@
 		$query = "select * from Answers_Comments where answer_id = $answer_id";
 		$res = $db->query($query);
 		if(mysqli_num_rows($res) == 0) 
-			echo false;
+		{
+			http_response_code(404);
+			echo "Answer not found";
+			return;
+		}
+			
 		
 		$commentsResult = array();
 		while($r = mysqli_fetch_assoc($res)){ 
@@ -1169,7 +1289,9 @@
 		$result_author = $db->query($query_author);
 		if(mysqli_num_rows($result_author) == 0) //no such user
 		{
-			echo false;
+			http_response_code(404);
+			echo "User not found";
+			return;
 		}
 		$author = mysqli_fetch_assoc($result_author);
 		
