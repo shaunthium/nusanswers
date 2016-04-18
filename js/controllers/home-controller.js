@@ -56,6 +56,7 @@ angular.module('quoraApp')
         $scope.feedIndex = 0;
         $scope.resetQuestionsFeed();
         if(currentUser){
+            $scope.userID = currentUser.id;
             $scope.updateQuestionsFeed($scope.feedType, ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate, currentUser.id); //Infinite scroll feed
         }
         else{
