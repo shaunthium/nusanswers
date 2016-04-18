@@ -69,7 +69,7 @@ angular.module('quoraApp')
             },
             function(currentUser){
                 if(currentUser && $scope.post){
-                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.isEditable = $scope.type !== 'feed-item' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
                 }
             });
 
@@ -92,7 +92,7 @@ angular.module('quoraApp')
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
-                    $('#wysiwyg-editor-questionbody').trumbowyg({
+                    $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
                     });
@@ -120,7 +120,23 @@ angular.module('quoraApp')
 
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
                 if($scope.type === 'answer'){
-
+                    questionService.editAnswer($scope.post.id, $scope.temp.title, $scope.temp.content)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                $scope.post.title = $scope.temp.title;
+                                $scope.post.content = $scope.temp.content;
+                                Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
+                                $scope.editMode = !$scope.editMode;
+                            }
+                            else{
+                                console.log("Error while editing question!");
+                            }
+                        },
+                        function(err){
+                            console.log("Error while editing question!");
+                        }
+                    );
                 }
                 else{
                     questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
@@ -147,7 +163,20 @@ angular.module('quoraApp')
                 if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
                     console.log("Delete!");
                     if($scope.type === 'answer'){
-
+                        questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                console.log(res);
+                                if(res.data){
+                                    console.log("Success!");
+                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                    $scope.goToHome();
+                                }
+                            },
+                            function(err){
+                                Materialize.toast('Server error!', 2000, 'error-toast');
+                            }
+                        );
                     }
                     else{
                         questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)

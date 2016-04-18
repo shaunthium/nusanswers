@@ -74,17 +74,17 @@
  -->
         <div ng-show="post.content || editMode" style="margin-top:10px; margin-bottom:15px;width:100%;">
 
-            <div class="animate-fade-in" ng-show="type === 'question' && editMode" class="row">
-               <div id="wysiwyg-editor-questionbody" class="wysiwyg-editor">{{post.content}}</div>
+            <div class="animate-fade-in" ng-show="type !== 'feed-item' && editMode" class="row">
+               <div id="{{'wysiwyg-editor-' + type + 'body'}}" class="wysiwyg-editor">{{post.content}}</div>
             </div>
 
-            <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='answer' || type==='feed-item'" ng-switch="type">
+            <span class="animate-fade-in" ng-if="(!editMode && (type==='question' || type==='answer')) || type==='feed-item'" ng-switch="type">
                 <span ng-switch-when="feed-item"><collapse-text max-length="220" ng-bind-html="post.content"></collapse-text></span>
                 <span ng-switch-default ng-bind-html="post.content"></span>
             </span>
         </div>
 
-        <tag-input-field ng-if="editMode"></tag-input-field>
+        <tag-input-field ng-if="editMode && type==='question'"></tag-input-field>
         <tag ng-repeat="tag in post.tags"></tag>
 
     </div>

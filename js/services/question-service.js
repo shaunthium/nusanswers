@@ -531,7 +531,32 @@ angular.module('quoraApp')
                 cmd: 'delete_qns',
                 qns_id : questionID,
                 user_id : userID
-           }
+            }
+        });
+    }
+
+    function editAnswer(answerID, title, content){
+        return $http({
+            url: base_url + 'server/answers.php',
+            method: 'POST',
+            data: {
+                cmd: 'editanswer',
+                ans_id : answerID,
+                title : title,
+                content : content
+            }
+        });
+    }
+
+    function deleteAnswer(answerID, userID){
+        return $http({
+            url: base_url + 'server/answers.php',
+            method: 'POST',
+            data: {
+                cmd: 'deleteanswer',
+                ans_id : answerID,
+                user_id : userID
+            }
         });
     }
 
@@ -564,6 +589,8 @@ angular.module('quoraApp')
         removeTag                   :   removeTag,
         editQuestion                :   editQuestion,
         deleteQuestion              :   deleteQuestion,
+        editAnswer                  :   editAnswer,
+        deleteAnswer                :   deleteAnswer,
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
         deleteCommentFromAnswer : deleteCommentFromAnswer
