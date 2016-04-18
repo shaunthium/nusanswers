@@ -43,6 +43,7 @@
         $new_user = create_user($user_id, $token);
         echo json_encode($new_user);
       } else {
+        authenticate_user($user_id, $token);
         echo json_encode($result);
       }
     }
