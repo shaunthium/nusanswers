@@ -2,27 +2,32 @@
 <div class="card white">
     <div class="card-content">
 
-        <tag ng-repeat="tag in post.tags"></tag>
+        
 
-        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="blue-text" ng-click="toggleEditMode()">
+        <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="red-text" ng-click="toggleEditMode()">
             Cancel
         </span>
+
+
+        <p class="grey-text">{{post.created_at}}</p>
         <!-- edit button -->
-        <a ng-if="isEditable" style="padding-right:10px;" class="waves-effect waves-light btn blue right">
-            <span ng-if="!editMode" ng-click="toggleEditMode()">
+        <a ng-if="isEditable && !editMode" style="padding-right:10px; margin-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn blue right no-animate">
+            <span ng-if="!editMode" >
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;"></span>
             </span>
-            <span ng-if="editMode" ng-click="saveChanges()">
+        </a>
+
+          <!-- save changes button -->
+        <a ng-if="isEditable && editMode" ng-click="saveChanges()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn blue right no-animate">
+            <span ng-if="editMode" >
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;">Save changes</span>
             </span>
         </a>
 
-        <tag-input-field ng-if="editMode"></tag-input-field>
 
-        <!-- <br ng-if="type !== 'answer' || post.tags.length > 2"> -->
-        <br ng-if="post.tags.length > 0 && type !== 'answer'"/>
+        <!-- <br ng-if="post.tags.length > 0 && type !== 'answer'"/> -->
 
         <input ng-model="temp.title" class="animate-fade-in" ng-if="editMode && type==='question'" type="text" name="FirstName"/>
 
@@ -33,40 +38,49 @@
                 {{post.title}}</span>
         </span>
 
-        <ul style="border:0;"class="collection">
+        <ul style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <!-- TODO: replace dummy image with proper image -->
                 <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
-                <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}</p>
-                <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;margin-right:-15px;" class="tooltip-left secondary-content grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a>
+                <p style="line-height:1.7;" ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}<br/>
+                    
+                    <br/>
+                    <!-- <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;" class="tooltip-left  grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a> -->
+                </p>
+                <!--<a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;margin-right:-15px;" class="tooltip-left secondary-content grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a>-->
+
+                <div style="margin-top:-7px;"class="secondary-content">
+                    <i ng-click="incrementUpvotes(1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons grey-text vote upvote" ng-class="{upvoteSelected: post.upvoted}">thumb_up</i>
+                    <p class="grey-text"style="font-weight:bold;padding-left:8px; text-align:center;padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
+                    <i ng-click="incrementUpvotes(-1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons grey-text vote downvote" ng-class="{downvoteSelected: post.downvoted}">thumb_down</i>
+
+                </div>
+
             </li>
         </ul>
 
-
-
         <!-- Behave as a table cell for the height to adjust to same as the text column -->
-        <div style="display:table-cell; vertical-align:middle; text-align:left;">
+ <!--        <div style="display:table-cell; vertical-align:middle; text-align:left;">
             <i ng-click="incrementUpvotes(1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons grey-text vote upvote" ng-class="{upvoteSelected: post.upvoted}">thumb_up</i>
             <p class="grey-text"style="font-weight:bold;padding-left:8px; text-align:center;padding-top:8px; padding-bottom:8px;">{{post.upvotes}}</p>
             <i ng-click="incrementUpvotes(-1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons grey-text vote downvote" ng-class="{downvoteSelected: post.downvoted}">thumb_down</i>
         </div>
-
-
-
-        <div style="padding-left:25px; display:table-cell; width:100%;">
+ -->
+        <div ng-show="post.content || editMode" style="margin-top:10px; margin-bottom:15px;width:100%;">
 
             <div class="animate-fade-in" ng-show="type === 'question' && editMode" class="row">
-               <!--  <textarea ng-model="post.content" style="margin-bottom:0px; margin-left:10px;width:95%; " id="textarea1" class="materialize-textarea">{{post.content}}</textarea> -->
                <div id="wysiwyg-editor-questionbody" class="wysiwyg-editor">{{post.content}}</div>
-
             </div>
 
             <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='answer' || type==='feed-item'" ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.content}}</collapse-text></span>
-                <span ng-switch-default>{{post.content}}</span>
+                <span ng-switch-when="feed-item"><collapse-text max-length="220" ng-bind-html="post.content"></collapse-text></span>
+                <span ng-switch-default ng-bind-html="post.content"></span>
             </span>
         </div>
+
+        <tag-input-field ng-if="editMode"></tag-input-field>
+        <tag ng-repeat="tag in post.tags"></tag>
 
     </div>
 

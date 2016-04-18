@@ -10,14 +10,15 @@ angular.module('quoraApp')
 })
 .controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
     $scope.posts = [];
-    $scope.loading = true;
+    $rootScope.loading = true;
     $scope.feedType = 'latest';
 
     $scope.setFeedType = function(type){
         $scope.feedType = type;
     }
 
-    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser"};
+
+    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
@@ -68,13 +69,26 @@ angular.module('quoraApp')
               $scope.apiMe = res;
               qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
                 $rootScope.currentUser = data.data;
+                $http({
+                  url: 'http://graph.facebook.com/v2.5/' + $rootScope.currentUser.id + '/picture?redirect=false&width=9999',
+                  method: 'GET',
+                  data: {
+                    width: '1000'
+                  }
+                }).success(function(data) {
+                  $scope.currentUser.profileImg = data.data.url;
+                }).error(function(data) {
+                  $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                });
                 // console.log($scope.currentUser);
-                // $scope.loading = false;
+                $scope.loading = false;
                 // console.log($scope.currentUser);
               });
             });
           }
         }, {scope: 'public_profile,email'});
+
+        // $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
         $('#login-modal').closeModal();
         Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
@@ -85,7 +99,7 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                // console.log(returnedData);
+                //console.log(returnedData);
                 if(returnedData.data){
                     $scope.loading = false;
                     $scope.posts = $scope.posts.concat(returnedData.data);
@@ -99,15 +113,18 @@ angular.module('quoraApp')
 
     $scope.resetQuestionsFeed = function(){
         $scope.loading = true;
+        // while($scope.posts.length > 0){
+        //     $scope.posts.pop();
+        // }
         $scope.posts = [];
     }
 
     $scope.getPost = function(questionID, userID){
         $scope.loading = true;
-        // console.log(questionID, " ", userID);
+        //console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            // console.log(res);
+            //console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;

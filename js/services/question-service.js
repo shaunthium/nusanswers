@@ -135,6 +135,7 @@ angular.module('quoraApp')
 
     /*FIXME: should we sanitize input before sending it to the server?*/
     function submitNewComment(commentBody, userID, postID){
+
         //This function should add the comment to the post server-side and return a comment object, which will be attached to the post client-side.
         return $http({
           url: base_url + "server/comment_qns.php",
@@ -149,6 +150,11 @@ angular.module('quoraApp')
     }
 
     function addCommentToAnswer(commentBody, userID, answerID){
+
+        console.log("user_id" + userID);
+        console.log("content " + answerID)
+        console.log("content " + commentBody)
+
         return $http({
           url: base_url + "server/answers.php",
           method: "POST",
@@ -546,7 +552,8 @@ angular.module('quoraApp')
         removeTag                   :   removeTag,
         editQuestion                :   editQuestion,
         addCommentToAnswer          :   addCommentToAnswer,
-        getCommentsFromAnswer       :   getCommentsFromAnswer
+        getCommentsFromAnswer       :   getCommentsFromAnswer,
+        deleteCommentFromAnswer : deleteCommentFromAnswer
     }
 
 }]);

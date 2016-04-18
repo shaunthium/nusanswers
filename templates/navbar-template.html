@@ -36,15 +36,20 @@
 
         <li class="no-animate"ng-if="currentUser">
             <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
-              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span ng-if="currentUser" >{{currentUser.first_name}}</span>
+              
+             
+
+             <img style="width:30px; position:relative; top:15px; right:10px;"ng-src="{{currentUser.profileImg}}" class="left responsive-img circle">
+              <span ng-if="currentUser" >  {{currentUser.first_name}}</span>
+              
+                <!-- <img style="width:35px; display:inline-block; line-height:300px;margin-top:-20px;"ng-if="currentUser" ng-src="{{currentUser.profileImg}}" alt="" class="circle"> -->
             </a>
         </li>
 
         <li class="no-animate" ng-if="!currentUser">
             <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">
-              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span ng-if="!currentUser">Login</span>
+              <i  style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span >Login</span>
             </a>
         </li>
 

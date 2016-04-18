@@ -37,7 +37,7 @@ angular.module('quoraApp')
         return $scope.posts;
     },
     function(newPosts){
-        $scope.filteredPosts = filterByTags(newPosts, $scope.tags);
+        $scope.filteredPosts = filterByTags(newPosts, $scope.activeTags);
     });
 
     //Watch for changes in activeTags, coming from the trending-box
@@ -85,6 +85,7 @@ angular.module('quoraApp')
 
     $(window).scroll(function(){
         //FIXME: arbitrarily defined update height
+        //FIXME: cannot scroll when there are no posts in view. How to get new posts while filtering by tags?
         //FIXME: BUG IDENTIFIED: window height and document scrollTop are not always properly calculated. Especially as the number of posts increases.
         if(($(window).scrollTop() >= 0.7*$(document).height() || $(window).scrollTop() + 2000 >= 0.9*$(document).height()) && $scope.doneUpdatingFeed) {
             // console.log("Update feed!");

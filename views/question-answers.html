@@ -5,14 +5,15 @@
                 <post type="question">
                     <comments-section parent="post"></comments-section>
                     <!-- fixed footer -->
-                    <div ng-if="post.author.userid != currentUser.id"class="card-action">
+                    
+                    <div ng-if="post.author.userid !== currentUser.id"class="card-action">
                         <span ng-switch="answered">
                             <span ng-switch-when="true">
                                 <!-- TODO: clicking on "Answered" in question-answers view scrolls down to your answer -->
                                 <a style="opacity:0.8;background:#4caf50 !important; color:white !important;" ng-click="goToPost(post)" class="disabled btn green">
                                         <i class="material-icons">check</i>
                                         <span style="position:relative; bottom:5px;">Answered</span>
-                                    </a>
+                                </a>
                             </span>
                             <span ng-switch-default>
                                 <a ng-class="{'disabled' : showFooter}" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
@@ -37,9 +38,29 @@
 
             <div class="col s12" ng-repeat="post in post.answers">
                 <post type="answer">
-                    <comments-section parent="post"></comments-section>
+                   <!--  <comments-section parent="post"></comments-section> -->
                 </post>
             </div>
+
+            <div style="padding-top:30px;" class="col s12 center" ng-if="post.answers.length === 0 && post.author.userid !== currentUser.id">
+                <i style="opacity:0.8;"class="material-icons large">edit</i>
+                <p style="font-size:1.3em;">Nobody has answered this question yet</p>
+               <!--  <a ng-hide="showFooter" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
+                    <i class="material-icons"></i>
+                    <span style="position:relative; bottom:5px;">Be the first</span>
+                </a> -->
+                <a ng-hide="showFooter" ng-click="toggleFooter()" class="waves-effect waves-light btn-large blue">Be the first</a>
+            </div>
+
+            <div style="padding-top:30px;" class="col s12 center" ng-if="post.answers.length === 0 && post.author.userid === currentUser.id">
+                <i style="opacity:0.8;"class="material-icons large">visibility</i>
+                <p style="font-size:1.3em;">Nobody has answered your question yet..<br/>Edit and add more details for a quicker response! </p>
+               <!--  <a ng-hide="showFooter" ng-click="toggleFooter()"class="waves-effect waves-light btn blue ">
+                    <i class="material-icons"></i>
+                    <span style="position:relative; bottom:5px;">Be the first</span>
+                </a> -->
+            </div>
+
             <!-- row end -->
         </div>
         <!-- section end -->

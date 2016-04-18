@@ -41,7 +41,7 @@ angular.module('quoraApp')
         //Prevent the question from being too short
         else if(title_string.length < QUESTION_TITLE_MIN_LENGTH){
             $scope.submitQuestionError = true;
-            $scope.displayErrorMessage("Error: the question is too short!");
+            $scope.displayErrorMessage("The question is too short!");
             $timeout(function(){
                 $scope.submitQuestionError = false;
             }, 100);
@@ -49,7 +49,7 @@ angular.module('quoraApp')
         }
         else if(title_string.charAt(title_string.length - 1) != "?"){
             $scope.submitQuestionError = true;
-            $scope.displayErrorMessage("Error: the question should end with a question mark!");
+            $scope.displayErrorMessage("The question should end with a question mark!");
             $timeout(function(){
                 $scope.submitQuestionError = false;
             }, 100);

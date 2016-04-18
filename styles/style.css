@@ -15,18 +15,27 @@ input:focus {
   box-shadow: 0 1px 0 0 #2196f3 !important;
 }
 
-
 .vote{
-  transition: all .2s ease-in;
+  transition: all .1s ease-in;
 }
 
-.upvote:hover, .upvoteSelected{
+/*.upvote:hover{
     color:#4caf50 !important;
 }
 
-.downvote:hover, .downvoteSelected{
+.downvote:hover{
+  color:#d32f2f !important;
+}*/
+
+ .upvoteSelected{
+    color:#4caf50 !important;
+}
+
+.downvoteSelected{
   color:#d32f2f !important;
 }
+
+
 
 [ui-view].ng-enter, [ui-view].ng-leave {
   position: absolute;
@@ -458,6 +467,8 @@ form.main-search-field{
 
 }
 
+
+
 #submit-question-mobile{
   display:none;
 }
@@ -567,7 +578,7 @@ form.main-search-field{
     color:white;
 }
 
-.card-title{font-size:1.4em !important; line-height:45px !important; }
+.card-title{font-size:1.5em !important; font-weight:400 !important;line-height:45px !important; }
 .no-underline{text-decoration: none !important;  }
 .card-title:hover{text-decoration: underline;}
 
@@ -594,19 +605,20 @@ div.tag{
 i.comment-icon{
 
   cursor:pointer;
-  visibility: hidden;
-
+  /*visibility: hidden;*/
+  opacity:0.5;
+  transition: 0.2s linear;
 }
 
-i.comment-icon-active{
+/*i.comment-icon-active{
 
   visibility: visible;
 
-}
+}*/
 
 div.comment-icon-wrapper:hover > i{
 
-  visibility: visible;
+  opacity:1;
 
 }
 
