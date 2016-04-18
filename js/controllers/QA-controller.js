@@ -17,6 +17,18 @@ angular.module('quoraApp')
         else{
             $scope.getPost($stateParams.questionId);
         }
-    })
+    });
 
+    qs.getAllTags()
+    .then(
+        function(res){
+            console.log("Got tags!", res);
+            if(res.data){
+                $scope.allTags = res.data;
+            }
+        },
+        function(err){
+            console.log("Error while retrieving tag list from the server.");
+        }
+    );
 }]);

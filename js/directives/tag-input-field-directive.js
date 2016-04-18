@@ -1,11 +1,37 @@
 'use strict'
 angular.module('quoraApp')
-
 .directive('tagInputField', function($window){
 	return {
 		restrict: 'E',
         scope: true,
         controller : function($scope){
+            $scope.suggestedTags = [];
+            $scope.$watch(function(){
+                return $scope.userInput;
+            },
+            function(userInput){
+                $scope.suggestedTags = [];
+                if(userInput && $scope.allTags){
+                    $scope.allTags.forEach(function(tag){
+                        var relevance = 0;
+                        //If the tag contains userInput
+                        if(~tag.toUpperCase().indexOf(userInput.toUpperCase())){
+                            if(tag.toUpperCase() === userInput.toUpperCase()){
+                                relevance += 10;
+                            }
+                            $scope.suggestedTags.push({tag:tag, relevance:relevance + userInput.length});
+                        }
+                    });
+                    $scope.suggestedTags = $scope.suggestedTags.sort(function(a, b){
+                        return b.relevance - a.relevance; //Sort by most relevant first
+                    });
+                }
+            });
+
+            $scope.clearUserInput = function(){
+                $scope.userInput = "";
+            }
+
             //XXX: this function breaks when adding dual characters, such as '^' + 'n' in the English International Keyboard.
             $scope.verifyTag = function(){
                 //Filter out any character that is not a-z A-Z 0-9 and remove continuous spaces
