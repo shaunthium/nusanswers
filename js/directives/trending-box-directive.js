@@ -24,7 +24,11 @@ angular.module('quoraApp')
             }
         },
         link : function(scope, elems, attrs){
-
+            //XXX: Resize the floating trending box on window resize and on DOM load.
+            $(function(){$("#trendingBox").width($("#trendingBoxContainer").width());});
+            $(window).on('resize', function(){
+                $("#trendingBox").width($("#trendingBoxContainer").width());
+            });
         },
         templateUrl:"templates/trending-box-template.html"
     }
