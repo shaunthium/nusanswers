@@ -4,6 +4,7 @@
   $data = json_decode($request_data);
   $cmd = $data->cmd;
 	
+
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
   }
@@ -43,9 +44,12 @@
 		/*check if the Question exists */
 		$query = "select 1 from Questions where id = $question_id";
 		$res = $db->query($query);
-		if(mysqli_num_rows($res) == 0)
-			return false;
-			
+		if(is_bool($res) || mysqli_num_rows($res) == 0)
+		{
+			echo false;
+			return;
+		}
+		
 		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
 		$res = $db->query($query);
 		$havetag = mysqli_fetch_assoc($res);
@@ -899,9 +903,13 @@
 							'comments' => $answersCommentsResult
 						);
 					}
+					echo json_encode($answersResult);
 				}
-				//error_log(json_encode($answersResult));
-				echo json_encode($answersResult);
+				else
+				{
+						echo false;
+				}
+				
 			}
 			
 			
