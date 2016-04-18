@@ -268,7 +268,7 @@
 		while ($latest = mysqli_fetch_assoc($result)){
 			//Get the first name and last name of the author from 'users' table
 			$user_id = $latest['user_id'];
-			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT * FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
 
@@ -289,11 +289,16 @@
 				$tag = mysqli_fetch_assoc($result_tag_name);
 				$tag_name_array[]  = $tag["content"];
 			}
-
+			
+			$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
+			$result_role = $db->query($query_role);
+			$role_array = mysqli_fetch_assoc($result_role);
+			$role = $role_array['flavour'];
+			
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
-									'flavour' => 'New User'
+									'flavour' => $role//'New User'
 									);
 
 			//Get all comment of a question including the author from 'comment' table
@@ -373,7 +378,7 @@
 				'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $latest['user_id'],
-									'flavour' => 'New User'
+									'flavour' => $role//'New User'
 					),
 				'views'=>(int)$latest['view_count'],
 				'content'=>$latest['content'],
@@ -429,7 +434,7 @@
 		while ($trending = mysqli_fetch_assoc($result)){
 			//Get the first name and last name of the author from 'users' table
 			$user_id = $trending['user_id'];
-			$query_author =  "SELECT first_name, last_name, score FROM Users WHERE id=".$user_id;
+			$query_author =  "SELECT * FROM Users WHERE id=".$user_id;
 			$result_author = $db->query($query_author);
 			$author = mysqli_fetch_assoc($result_author);
 
@@ -452,11 +457,16 @@
 				$tag = mysqli_fetch_assoc($result_tag_name);
 				$tag_name_array[]  = $tag["content"];
 			}
-
+			
+			$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
+			$result_role = $db->query($query_role);
+			$role_array = mysqli_fetch_assoc($result_role);
+			$role = $role_array['flavour'];
+	
 			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
 									'karma' => (int)$author['score'],
 									'userid' => $trending['user_id'],
-									'flavour' => 'New User'
+									'flavour' => $role//'New User'
 									);
 
 			//Get all comment of a question including the author from 'comment' table

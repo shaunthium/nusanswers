@@ -58,7 +58,7 @@
 				        	<div style="display:table; width:100%;">
 					        	<div style="display:table-cell;">
 					        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
-		                  			<p>{{question.title}}</p>
+		                  			<p style="margin-bottom:5px;">{{question.title}}</p>
 					        		<div ng-repeat="tag in question.tags"class="tag chip blue lighten-5">
 										    {{tag}}
 									</div>
@@ -69,7 +69,6 @@
 					        	</div>
 				        	</div>
 				        </a>
-
 				      <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't asked any questions yet.</p></div>
 
 			       </div>
