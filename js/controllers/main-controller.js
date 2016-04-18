@@ -140,7 +140,7 @@ angular.module('quoraApp')
         //console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            console.log(res);
+            // console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;

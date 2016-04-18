@@ -129,11 +129,11 @@ angular.module('quoraApp')
                                 $scope.editMode = !$scope.editMode;
                             }
                             else{
-                                console.log("Error while editing question!");
+                                // console.log("Error while editing question!");
                             }
                         },
                         function(err){
-                            console.log("Error while editing question!");
+                            // console.log("Error while editing question!");
                         }
                     );
                 }
@@ -148,11 +148,11 @@ angular.module('quoraApp')
                                 $scope.editMode = !$scope.editMode;
                             }
                             else{
-                                console.log("Error while editing question!");
+                                // console.log("Error while editing question!");
                             }
                         },
                         function(err){
-                            console.log("Error while editing question!");
+                            // console.log("Error while editing question!");
                         }
                     );
                 }
@@ -169,12 +169,12 @@ angular.module('quoraApp')
                         .then(
                             function(res){
                                 if(res.data){
-                                    console.log("Success!");
+                                    // console.log("Success!");
                                     Materialize.toast('Post deleted!', 2000, 'success-toast');
                                     $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
                                 }
                                 else{
-                                    console.log("Error while deleting question!");
+                                    // console.log("Error while deleting question!");
                                 }
                             },
                             function(err){
@@ -187,7 +187,7 @@ angular.module('quoraApp')
                         .then(
                             function(res){
                                 if(res.data){
-                                    console.log("Success!");
+                                    // console.log("Success!");
                                     Materialize.toast('Post deleted!', 2000, 'success-toast');
                                     $scope.goToHome();
                                 }

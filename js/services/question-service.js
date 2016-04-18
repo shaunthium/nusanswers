@@ -435,8 +435,8 @@ angular.module('quoraApp')
     /* WARNING: userID is undefined here if user is NOT logged in */
     function getPost(postID, userID){
 
-      console.log("question_id", postID);
-      console.log("user_id", userID);
+      // console.log("question_id", postID);
+      // console.log("user_id", userID);
 
 
       // return $http({

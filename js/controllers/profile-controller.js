@@ -22,7 +22,7 @@ angular.module('quoraApp')
     $rootScope.loading = false;
   }, function(err){
     // Redirect to 404
-    console.log("err", err);
+    // console.log("err", err);
     $rootScope.loading = false;
     $state.go('404');
   })

@@ -22,13 +22,13 @@ angular.module('quoraApp')
     qs.getAllTags()
     .then(
         function(res){
-            console.log("Got tags!", res);
+            // console.log("Got tags!", res);
             if(res.data){
                 $scope.allTags = res.data;
             }
         },
         function(err){
-            console.log("Error while retrieving tag list from the server.");
+            // console.log("Error while retrieving tag list from the server.");
         }
     );
 }]);
