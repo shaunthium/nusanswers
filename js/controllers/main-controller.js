@@ -107,13 +107,13 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                console.log(returnedData);
+                // console.log(returnedData);
                 if(returnedData.data){
                     returnedData.data.forEach(function(newPost){
                         for(var i = 0; i < $scope.posts.length; i++){
                             //Do not add repeated posts!
                             if($scope.posts[i].id === newPost.id){
-                                console.log("found repeated post! ", newPost.id);
+                                // console.log("found repeated post! ", newPost.id);
                                 return;
                             }
                         }
@@ -167,7 +167,7 @@ angular.module('quoraApp')
             $rootScope.questionsSummary = res.data;
             //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
         }, function(err){
-            console.log("Error when getting questions summary.");
+            // console.log("Error when getting questions summary.");
         });
     }
 

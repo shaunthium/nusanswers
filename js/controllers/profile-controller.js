@@ -8,7 +8,7 @@ angular.module('quoraApp')
   // Pull user's id from state params
   var id = $stateParams.profileId;
 
-  console.log("in profile ctr");
+  // console.log("in profile ctr");
 
   $scope.profileId = id;
   // Get user from id
@@ -21,7 +21,7 @@ angular.module('quoraApp')
     }
   }).then(function(data) {
 
-    console.log("got data", data);
+    // console.log("got data", data);
     $scope.user = data.data;
     $rootScope.loading = false;
   })
@@ -51,7 +51,7 @@ angular.module('quoraApp')
           Materialize.toast('Error: content contains invalid characters!', 2000, 'error-toast');
           error = true;
       }
- 
+
       if(error){return;}
 
       $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
@@ -77,7 +77,7 @@ angular.module('quoraApp')
   }
 
   $scope.toggleEditMode = function(){
-      console.log("HE")
+      // console.log("HE")
 
       $scope.userInput = "";
       $scope.editMode = !$scope.editMode;

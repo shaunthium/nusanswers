@@ -91,7 +91,7 @@ angular.module('quoraApp')
             //Editing a comment is a two-step process: the previous comment is deleted and the new comment is added.
             $scope.addComment = function(comment){
                 if($scope.type === 'answer'){
-                    console.log("ans ", $scope.post)
+                    // console.log("ans ", $scope.post)
                     questionService.addCommentToAnswer(comment, $scope.currentUser.id, $scope.post.id)
                         .then(function(res){
                             // console.log("Add comment to answer", res);
@@ -166,7 +166,7 @@ angular.module('quoraApp')
                                 }
                             },
                             function(err){
-                                console.log("Error in deleting comment from answer", err);
+                                // console.log("Error in deleting comment from answer", err);
                             }
                         );
                     }
@@ -175,13 +175,13 @@ angular.module('quoraApp')
                         .then(
                             function(res){
                                 if(res.data){
-                                    console.log("data ", res.data);
+                                    // console.log("data ", res.data);
                                     $scope.removeComment(comment);
                                     $scope.tempComments = null;
                                 }
                             },
                             function(err){
-                                console.log("ERror in deleting comment from question", err);
+                                // console.log("ERror in deleting comment from question", err);
                             }
                         );
                     }

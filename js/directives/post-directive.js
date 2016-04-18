@@ -147,7 +147,7 @@ angular.module('quoraApp')
               }
 
               if(!canUpvote){
-                console.log("cannot upvote yet")
+                // console.log("cannot upvote yet")
                 return;
               }
 
@@ -160,7 +160,7 @@ angular.module('quoraApp')
               if(inc == 1){
                   if($scope.post.upvoted){ // If post was already upvoted
 
-                      console.log("Cancel upvote");
+                      // console.log("Cancel upvote");
 
                       questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
@@ -172,16 +172,16 @@ angular.module('quoraApp')
                             }
                           },
                           function(err){
-                            console.log("Error in cancelling upvote ", err);
+                            // console.log("Error in cancelling upvote ", err);
                           }
                       );
                   }
                   else { // If post was downvoted, cancel and perform upvote
                       if($scope.post.downvoted){
 
-                          console.log("Was downvoted => cancel downvote and perform upvote");
+                          // console.log("Was downvoted => cancel downvote and perform upvote");
 
-                          console.log("upvotes before making async calls ", $scope.post.upvotes);
+                          // console.log("upvotes before making async calls ", $scope.post.upvotes);
 
                           questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
@@ -189,47 +189,47 @@ angular.module('quoraApp')
                                   // console.log(res);
                                   if(res.data){
                                       //$scope.post.upvotes++;
-                                      console.log("upvotes ", $scope.post.upvotes);
+                                      // console.log("upvotes ", $scope.post.upvotes);
                                       $scope.post.downvoted = false;
                                 }
                               },
                               function(err){
-                                console.log("Error in cancelling downvote" , err);
+                                // console.log("Error in cancelling downvote" , err);
                               }
                           ).then(function(){
                             questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    console.log(res);
+                                    // console.log(res);
                                     if(res.data){
 
-                                        console.log("upvotes just before increase 2 ", $scope.post.upvotes);
+                                        // console.log("upvotes just before increase 2 ", $scope.post.upvotes);
                                         $scope.post.upvotes+=2;
-                                        console.log("upvotes after increase 2", $scope.post.upvotes);
+                                        // console.log("upvotes after increase 2", $scope.post.upvotes);
                                         $scope.post.upvoted = true;
 
                                   }
                                 },
                                 function(err){
-                                  console.log("Error in submitting upvote" , err);
+                                  // console.log("Error in submitting upvote" , err);
                                 }
                             );
                           });
                       } else { // Was not downvoted
 
-                        console.log("Submit simple upvote...");
+                        // console.log("Submit simple upvote...");
 
                         questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                console.log(res);
+                                // console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes++;
                                     $scope.post.upvoted = true;
                               }
                             },
                             function(err){
-                              console.log("Error in submitting upvote" , err);
+                              // console.log("Error in submitting upvote" , err);
                             }
                         );
                       }
@@ -239,7 +239,7 @@ angular.module('quoraApp')
 
                   if($scope.post.downvoted){ // If post was downvoted, cancel downvote
 
-                      console.log("Cancel downvote ...");
+                      // console.log("Cancel downvote ...");
 
                       questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
@@ -251,14 +251,14 @@ angular.module('quoraApp')
                             }
                           },
                           function(err){
-                              console.log("Error in cancelling downvote post", err);
+                              // console.log("Error in cancelling downvote post", err);
                           }
                       );
                   }
                   else{ // Else if post was upvoted, cancel and then downvote
 
 
-                      console.log("Cancel upvote => downvote ");
+                      // console.log("Cancel upvote => downvote ");
 
                       if($scope.post.upvoted){
                           questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
@@ -271,13 +271,13 @@ angular.module('quoraApp')
                                 }
                               },
                               function(err){
-                                console.log("Error in submitting cancelupvote post", err);
+                                // console.log("Error in submitting cancelupvote post", err);
                               }
                           ).then(function(){
                             questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    console.log(res);
+                                    // console.log(res);
                                     if(res.data){
                                         $scope.post.upvotes-=2;
                                         $scope.post.downvoted = true;
@@ -285,25 +285,25 @@ angular.module('quoraApp')
                                 },
                                 function(err){
 
-                                  console.log("Error in submitting downvote post", err);
+                                  // console.log("Error in submitting downvote post", err);
                                 }
                             );
                           })
                       } else { // Just downvote
 
-                        console.log("Just downvote ");
+                        // console.log("Just downvote ");
 
                         questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                console.log(res);
+                                // console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes--;
                                     $scope.post.downvoted = true;
                               }
                             },
                             function(err){
-                              console.log("Error in submitting downvote post", err);
+                              // console.log("Error in submitting downvote post", err);
                             }
                         );
                       }

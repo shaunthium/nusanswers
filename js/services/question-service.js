@@ -151,9 +151,9 @@ angular.module('quoraApp')
 
     function addCommentToAnswer(commentBody, userID, answerID){
 
-        console.log("user_id" + userID);
-        console.log("content " + answerID)
-        console.log("content " + commentBody)
+        // console.log("user_id" + userID);
+        // console.log("content " + answerID)
+        // console.log("content " + commentBody)
 
         return $http({
           url: base_url + "server/answers.php",
