@@ -105,26 +105,25 @@ angular.module('quoraApp')
             $scope.saveChanges = function(){
 
 
-                if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
+                if($scope.type !== 'answer' && (!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH)){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     return;
                 }
-                if($scope.temp.title !== questionTitleFilter($scope.temp.title)){
+                if($scope.type !== 'answer' && ($scope.temp.title !== questionTitleFilter($scope.temp.title))){
                     Materialize.toast('Error: question title contains invalid characters!', 2000, 'error-toast');
                     return;
                 }
-                if($scope.temp.title.charAt($scope.temp.title.length - 1) != "?"){
+                if($scope.type !== 'answer' && ($scope.temp.title.charAt($scope.temp.title.length - 1) != "?")){
                     Materialize.toast('Error: a question should end with a question mark!', 2000, 'error-toast');
                     return;
                 }
 
-                $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
+                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg('html');
                 if($scope.type === 'answer'){
-                    questionService.editAnswer($scope.post.id, $scope.temp.title, $scope.temp.content)
+                    questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
                     .then(
                         function(res){
                             if(res.data){
-                                $scope.post.title = $scope.temp.title;
                                 $scope.post.content = $scope.temp.content;
                                 Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
                                 $scope.editMode = !$scope.editMode;
@@ -161,16 +160,17 @@ angular.module('quoraApp')
 
             $scope.delete = function(){
                 if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
-                    console.log("Delete!");
                     if($scope.type === 'answer'){
                         questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
                         .then(
                             function(res){
-                                console.log(res);
                                 if(res.data){
                                     console.log("Success!");
                                     Materialize.toast('Post deleted!', 2000, 'success-toast');
-                                    $scope.goToHome();
+                                    $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
+                                }
+                                else{
+                                    console.log("Error while deleting question!");
                                 }
                             },
                             function(err){
@@ -182,7 +182,6 @@ angular.module('quoraApp')
                         questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
                         .then(
                             function(res){
-                                console.log(res);
                                 if(res.data){
                                     console.log("Success!");
                                     Materialize.toast('Post deleted!', 2000, 'success-toast');
@@ -227,7 +226,6 @@ angular.module('quoraApp')
                       questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              console.log(res);
                               if(res.data){
                                   $scope.post.upvotes--;
                                   $scope.post.upvoted = false;
@@ -248,7 +246,6 @@ angular.module('quoraApp')
                           questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  console.log(res);
                                   if(res.data){
                                       //$scope.post.upvotes++;
                                       console.log("upvotes ", $scope.post.upvotes);
@@ -262,7 +259,6 @@ angular.module('quoraApp')
                             questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    console.log(res);
                                     if(res.data){
 
                                         console.log("upvotes just before increase 2 ", $scope.post.upvotes);
@@ -284,7 +280,6 @@ angular.module('quoraApp')
                         questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes++;
                                     $scope.post.upvoted = true;
@@ -306,7 +301,6 @@ angular.module('quoraApp')
                       questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              console.log(res);
                               if(res.data){
                                   $scope.post.upvotes++;
                                   $scope.post.downvoted = false;
@@ -326,7 +320,6 @@ angular.module('quoraApp')
                           questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  console.log(res);
                                   if(res.data){
                                       //$scope.post.upvotes--;
                                       $scope.post.upvoted = false;
@@ -339,7 +332,6 @@ angular.module('quoraApp')
                             questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                             .then(
                                 function(res){
-                                    console.log(res);
                                     if(res.data){
                                         $scope.post.upvotes-=2;
                                         $scope.post.downvoted = true;
@@ -358,7 +350,6 @@ angular.module('quoraApp')
                         questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
-                                console.log(res);
                                 if(res.data){
                                     $scope.post.upvotes--;
                                     $scope.post.downvoted = true;

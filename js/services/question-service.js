@@ -535,15 +535,15 @@ angular.module('quoraApp')
         });
     }
 
-    function editAnswer(answerID, title, content){
+    function editAnswer(answerID, content, userID){
         return $http({
             url: base_url + 'server/answers.php',
             method: 'POST',
             data: {
                 cmd: 'editanswer',
-                ans_id : answerID,
-                title : title,
-                content : content
+                answer_id : answerID,
+                content : content,
+                user_id : userID
             }
         });
     }
@@ -554,8 +554,18 @@ angular.module('quoraApp')
             method: 'POST',
             data: {
                 cmd: 'deleteanswer',
-                ans_id : answerID,
+                answer_id : answerID,
                 user_id : userID
+            }
+        });
+    }
+
+    function getAllTags(){
+        return $http({
+            url: base_url + 'server/tags.php',
+            method: 'POST',
+            data: {
+                cmd: 'get_all_tags'
             }
         });
     }
@@ -593,7 +603,8 @@ angular.module('quoraApp')
         deleteAnswer                :   deleteAnswer,
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
-        deleteCommentFromAnswer : deleteCommentFromAnswer
+        deleteCommentFromAnswer     :   deleteCommentFromAnswer,
+        getAllTags                  :   getAllTags
     }
 
 }]);

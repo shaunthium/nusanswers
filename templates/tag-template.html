@@ -1,8 +1,13 @@
 <div ng-if="tag !== ''" class='tag chip yellow {{activeFilter ? "lighten-2" : "lighten-4"}}' ng-click="onClick()">
     {{tag}}
-    <!--WARNING: all materialize CSS icons "close" onclick -->
-    <span ng-show="editMode" ng-click="removeTag(tag)">
-        <i style="margin-top:-5px;"class="material-icons">close</i> <!--FIXME: the icon displays wrongly -->
+    <span ng-switch="type">
+        <span ng-switch-when="suggestion" ng-click="addTag(tag); clearUserInput()">
+            <i style="margin-top:-5px;"class="material-icons">check</i>
+        </span>
+        <!--WARNING: all materialize CSS icons "close" onclick -->
+        <span ng-switch-default ng-show="editMode" ng-click="removeTag(tag)">
+            <i style="margin-top:-5px;"class="material-icons">close</i>
+        </span>
     </span>
     <!-- In case we want a checkbox -->
     <!-- <i ng-show="activeFilter" class="material-icons" style="pointer-events:none">check</i> -->

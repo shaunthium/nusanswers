@@ -38,9 +38,13 @@
 
         <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='feed-item' || type==='answer'" ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
-                {{post.title}}</span>
+                {{post.title}}
+            </span>
             <span ng-switch-when="false" ng-if="includeTitle" class="card-title no-underline">
-                {{post.title}}</span>
+                {{post.title}}
+            </span>
+            <!--Align the edit and delete buttons in answers-->
+            <br ng-switch-when="false" ng-if="!includeTitle && isEditable" class="card-title no-underline">
         </span>
 
         <ul style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">

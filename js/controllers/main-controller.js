@@ -41,6 +41,7 @@ angular.module('quoraApp')
     });*/
 
 
+
     $scope.goToHome = function(){
         $location.path('/home/');
     }
