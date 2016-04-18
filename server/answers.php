@@ -1,12 +1,12 @@
-<?php
+<?php session_start();
    require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
-	
-	if (session_status() == PHP_SESSION_NONE) {
-		$authenticated = false;
-	}
+	 if (!(isset($_SESSION['cs3266']))) {
+       // print_r(error_log('hi again'), true);
+       $authenticated = false;
+     }
 	else
 	{
 		$authenticated = true;		
