@@ -4,6 +4,13 @@
   $data = json_decode($request_data);
   $cmd = $data->cmd;
 	
+	if (session_status() == PHP_SESSION_NONE) {
+		$authenticated = true;
+	}
+	else
+	{
+		$authenticated = false;		
+	}
 
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
@@ -82,6 +89,13 @@
 			}
 			else //if it is set
 			{
+				if($authenticated == false)
+				{
+					http_response_code(401);
+					echo "Unauthorized";
+					return;
+				}
+		
 				//error_log("IS SET\n");
 				$query_answered = "Select 1 from Answers where question_id = $question_id and user_id= $user_id";
 				$result_answered = $db->query($query_answered);
@@ -140,6 +154,12 @@
 					}
 					else
 					{
+						if($authenticated == false)
+						{
+							http_response_code(401);
+							echo "Unauthorized";
+							return;
+						}
 						$comment_id = $r["id"];
 						$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
 						$comment_result = $db->query($query);
@@ -318,6 +338,12 @@
 							}
 							else
 							{
+								if($authenticated == false)
+								{
+									http_response_code(401);
+									echo "Unauthorized";
+									return;
+								}
 								$comment_id = $a["id"];
 								$query = "select 1 from  Comments_Liked_By_Users where comment_id = $comment_id and user_id = $user_id";
 								$comment_result = $db->query($query);
@@ -358,6 +384,12 @@
 					}
 					else //if it is set
 					{
+						if($authenticated == false)
+						{
+							http_response_code(401);
+							echo "Unauthorized";
+							return;
+						}
 						
 						$query_voted = "Select * from Answers_Voted_By_Users where answer_id = $answers_id and user_id= $user_id";
 						$result_voted = $db->query($query_voted);
@@ -440,7 +472,11 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-			
+		else if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+		}
 		else{
 			$query = "select user_id from Answers where id = $answer_id";
 			$res = $db->query($query);	
@@ -607,7 +643,11 @@
 			echo "Answer id not set!";
 			return;
 		}
-			
+		else if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+		}
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -703,7 +743,11 @@
 			echo "Answer id not set";
 			return;
 		}
-			
+		else if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+		}
 		else
 		{
 			/* Get current vote info to the Answer */
@@ -787,6 +831,12 @@
 	{
 		global $db;
 		
+		if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 		//Check if user has answered before
 		$query = "Select 1 from Answers where question_id = $question_id and user_id = $user_id";
 		$result = $db->query($query);
@@ -853,6 +903,13 @@
 	else if($cmd == "editanswer")
 	{
 		global $db;
+		
+		if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 		
 		//Check if that answer exists
 		$query = "Select user_id from Answers where id = $answer_id";
