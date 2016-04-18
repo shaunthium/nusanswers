@@ -3,7 +3,7 @@
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
-	 if (!(isset($_SESSION['cs3266']))) {
+	 if (!(isset($_SESSION['cs3226']))) {
        // print_r(error_log('hi again'), true);
        $authenticated = false;
      }
