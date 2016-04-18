@@ -22,7 +22,8 @@ angular.module('quoraApp')
                 return $scope.currentUser;
             },
             function(currentUser){
-                if(currentUser && $scope.post){
+                // console.log(currentUser);
+                if(currentUser){
                   $http({
                     url: 'http://graph.facebook.com/v2.5/' + currentUser.id + '/picture?redirect=false&width=9999',
                     method: 'GET',
@@ -30,9 +31,9 @@ angular.module('quoraApp')
                       width: '1000'
                     }
                   }).success(function(data) {
-                    $scope.profileImg = data.data.url;
+                    $scope.answerProfileImg = data.data.url;
                   }).error(function(data) {
-                    $scope.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                    $scope.answerProfileImg = 'http://dummyimage.com/300/09.png/fff';
                   });
                 }
             });
