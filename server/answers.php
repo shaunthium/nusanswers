@@ -5,11 +5,11 @@
   $cmd = $data->cmd;
 	
 	if (session_status() == PHP_SESSION_NONE) {
-		$authenticated = true;
+		$authenticated = false;
 	}
 	else
 	{
-		$authenticated = false;		
+		$authenticated = true;		
 	}
 
   if (isset($data->question_id)) {
