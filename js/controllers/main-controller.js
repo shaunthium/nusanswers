@@ -40,16 +40,13 @@ angular.module('quoraApp')
       }
     });*/
 
-    /*TODO: back-end integration
-        "post" should actually be "postID". The post, with its associated
-        comments and answers, must be retrieved from the server and passed as a
-        state parameter.
-    */
+
+    $scope.goToHome = function(){
+        $location.path('/home/');
+    }
+
     $scope.goToPost = function(post){
-        //$state.go('qa', {'currPost' : post});
         $location.path('/qa/' + post.id);
-        // console.log("going to post", post);
-       // $location.path('qa').search({id: post.id});
     }
 
     //TODO: implement goToProfile function

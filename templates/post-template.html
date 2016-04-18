@@ -2,7 +2,7 @@
 <div class="card white">
     <div class="card-content">
 
-        
+
 
         <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="red-text" ng-click="toggleEditMode()">
             Cancel
@@ -20,12 +20,17 @@
 
           <!-- save changes button -->
         <a ng-if="isEditable && editMode" ng-click="saveChanges()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn blue right no-animate">
-            <span ng-if="editMode" >
+            <span ng-if="editMode">
                 <i class="material-icons">edit</i>
                 <span style="position:relative; bottom:5px;">Save changes</span>
             </span>
         </a>
-
+        <a ng-if="isEditable && editMode" ng-click="delete()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn red right no-animate">
+            <span ng-if="editMode">
+                <i class="material-icons">delete</i>
+                <span style="position:relative; bottom:5px;">Delete</span>
+            </span>
+        </a>
 
         <!-- <br ng-if="post.tags.length > 0 && type !== 'answer'"/> -->
 
@@ -44,7 +49,7 @@
                 <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p style="line-height:1.7;" ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}<br/>
-                    
+
                     <br/>
                     <!-- <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;" class="tooltip-left  grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a> -->
                 </p>

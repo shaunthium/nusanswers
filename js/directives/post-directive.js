@@ -104,7 +104,7 @@ angular.module('quoraApp')
 
             $scope.saveChanges = function(){
 
-              
+
                 if(!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     return;
@@ -119,23 +119,56 @@ angular.module('quoraApp')
                 }
 
                 $scope.temp.content = $('#wysiwyg-editor-questionbody').trumbowyg('html');
-                questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
-                .then(
-                    function(res){
-                        if(res.data){
-                            $scope.post.title = $scope.temp.title;
-                            $scope.post.content = $scope.temp.content;
-                            Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
-                            $scope.editMode = !$scope.editMode;
-                        }
-                        else{
+                if($scope.type === 'answer'){
+
+                }
+                else{
+                    questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                $scope.post.title = $scope.temp.title;
+                                $scope.post.content = $scope.temp.content;
+                                Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
+                                $scope.editMode = !$scope.editMode;
+                            }
+                            else{
+                                console.log("Error while editing question!");
+                            }
+                        },
+                        function(err){
                             console.log("Error while editing question!");
                         }
-                    },
-                    function(err){
-                        console.log("Error while editing question!");
+                    );
+                }
+            }
+
+            $scope.delete = function(){
+                if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
+                    console.log("Delete!");
+                    if($scope.type === 'answer'){
+
                     }
-                );
+                    else{
+                        questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
+                        .then(
+                            function(res){
+                                console.log(res);
+                                if(res.data){
+                                    console.log("Success!");
+                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                    $scope.goToHome();
+                                }
+                            },
+                            function(err){
+                                Materialize.toast('Server error!', 2000, 'error-toast');
+                            }
+                        );
+                    }
+                }
+                else{
+                    Materialize.toast('Delete cancelled!', 2000, 'information-toast');
+                }
             }
 
 
@@ -150,7 +183,7 @@ angular.module('quoraApp')
                 console.log("cannot upvote yet")
                 return;
               }
-                
+
               canUpvote = false;
               $timeout(function(){
                 canUpvote = true;

@@ -523,6 +523,18 @@ angular.module('quoraApp')
         });
     }
 
+    function deleteQuestion(questionID, userID){
+        return $http({
+            url: base_url + 'server/questions.php',
+            method: 'POST',
+            data: {
+                cmd: 'delete_qns',
+                qns_id : questionID,
+                user_id : userID
+           }
+        });
+    }
+
     return {
         getQuestions                :   getQuestions,
         cancelCall                  :   cancelCall,
@@ -551,6 +563,7 @@ angular.module('quoraApp')
         addTag                      :   addTag,
         removeTag                   :   removeTag,
         editQuestion                :   editQuestion,
+        deleteQuestion              :   deleteQuestion,
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
         deleteCommentFromAnswer : deleteCommentFromAnswer
