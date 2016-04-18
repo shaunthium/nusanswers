@@ -18,7 +18,7 @@
 					    <label for="file-input">
 					         <img style="width:60px; cursor:pointer; height:60px;" ng-src="{{profileImg}}" alt="" class="circle">
 					    </label>
-							
+
 						</div>
 						<span class="card-title">{{user.first_name}} {{user.last_name}}</span>
 						<br/>
@@ -26,7 +26,7 @@
 						<span style="font-size:1.1em;line-height:20px;font-size:1.1em;"class="grey-text">New User</span>
 			            <!-- <p style="font-size:0.9em; line-height:25px;">Bacon ipsum dolor amet capicola meatball sausage pork chop chuck, prosciutto strip steak shoulder tail meatloaf. Turducken jerky leberkas, kielbasa porchetta pork pork loin swine. Boudin pork chop hamburger pork belly shoulder. Chuck hamburger jerky ham bresaola. Ball tip kielbasa salami short loin meatloaf tri-tip turkey bacon pastrami. Jowl sirloin tail shoulder jerky chuck, shankle pork pork chop tongue porchetta meatloaf.</p> -->
 
-			          
+
 
 			            <hr/>
 			            <!-- involved tags -->
@@ -58,7 +58,7 @@
 				        	<div style="display:table; width:100%;">
 					        	<div style="display:table-cell;">
 					        		<!-- <p>I am a very long question ... Very very very very very very long ..... Super long .. actually what's our max length here?</p> -->
-		                  			<p>{{question.title}}</p>
+		                  			<p style="margin-bottom:5px;">{{question.title}}</p>
 					        		<div ng-repeat="tag in question.tags"class="tag chip blue lighten-5">
 										    {{tag}}
 									</div>
@@ -69,9 +69,7 @@
 					        	</div>
 				        	</div>
 				        </a>
-				    
-				      <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
-
+				      <div style="display:table; width:100%;" class="collection-item black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't asked any questions yet.</p></div>
 			       </div>
 
 				</div>
@@ -83,8 +81,6 @@
 				<h6>Answers</h6>
 				<hr/>
 				<div class="card">
-
-
 					<div class="collection">
 				        <a ng-repeat="answer in profileAnswers | limitTo: 4" href="#/qa/{{answer.questionid}}" class="collection-item black-text">
 				        	<div style="display:table; width:100%;">
@@ -100,9 +96,8 @@
 					        	</div>
 				        	</div>
 				        </a>
+                        <div style="display:table; width:100%;" class="collection-item black-text" ng-if="profileAnswers.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
 				      </div>
-
-			        <div class="collection-item  black-text" ng-if="profileQuestions.length === 0"><p>{{user.first_name}} hasn't answered any questions yet.</p></div>
 				</div>
 			<!-- end answer card -->
 			</div>

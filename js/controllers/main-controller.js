@@ -17,7 +17,6 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-
     // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     ezfb.getLoginStatus(function (res) {
@@ -99,8 +98,6 @@ angular.module('quoraApp')
           }
         }, {scope: 'public_profile,email'});
 
-        // $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
-
         $('#login-modal').closeModal();
         Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
     }
@@ -110,11 +107,21 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                //console.log(returnedData);
+                console.log(returnedData);
                 if(returnedData.data){
-                    $scope.loading = false;
-                    $scope.posts = $scope.posts.concat(returnedData.data);
+                    returnedData.data.forEach(function(newPost){
+                        for(var i = 0; i < $scope.posts.length; i++){
+                            //Do not add repeated posts!
+                            if($scope.posts[i].id === newPost.id){
+                                console.log("found repeated post! ", newPost.id);
+                                return;
+                            }
+                        }
+                        $scope.posts.push(newPost);
+                    });
+                    // $scope.posts = $scope.posts.concat(returnedData.data);
                     $scope.doneUpdatingFeed = true;
+                    $scope.loading = false;
                 }
             },
             function(err){
