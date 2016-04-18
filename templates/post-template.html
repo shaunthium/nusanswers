@@ -2,7 +2,7 @@
 <div class="card white">
     <div class="card-content">
 
-        
+
 
         <span ng-if="editMode" style="padding-right:10px; cursor:pointer;" class="red-text" ng-click="toggleEditMode()">
             Cancel
@@ -41,10 +41,10 @@
         <ul style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <!-- TODO: replace dummy image with proper image -->
-                <img ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
+                <img ng-click="goToProfile(post.author.userid)" ng-src="{{postProfileImg}}" alt="" class="circle" style="cursor:pointer">
                 <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
                 <p style="line-height:1.7;" ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}<br/>
-                    
+
                     <br/>
                     <!-- <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;" class="tooltip-left  grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a> -->
                 </p>
