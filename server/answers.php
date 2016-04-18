@@ -40,6 +40,12 @@
 	{
 		global $db;
 		
+		/*check if the Question exists */
+		$query = "select 1 from Questions where id = $question_id";
+		$res = $db->query($query);
+		if(mysqli_num_rows($res) == 0)
+			return false;
+			
 		$query = "select 1 as tag from Questions inner join Questions_Tags on Questions.id = Questions_Tags.question_id where Questions.id = " . $question_id;
 		$res = $db->query($query);
 		$havetag = mysqli_fetch_assoc($res);
