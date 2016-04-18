@@ -52,6 +52,7 @@
       // Returns a `Facebook\FacebookResponse` object
       $response = $fb->get('/me?fields=first_name,last_name,email', $token);
       session_start();
+      $_SESSION["cs3226"] = "cs3226";
     } catch(Exception $e) {
       return null;
     }
@@ -100,6 +101,7 @@
         // Returns a `Facebook\FacebookResponse` object
         $response = $fb->get('/me?fields=first_name,last_name,email', $token);
         session_start();
+        $_SESSION["cs3226"] = "cs3226";
       } catch(Exception $e) {
         return null;
       }
