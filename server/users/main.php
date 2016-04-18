@@ -37,9 +37,9 @@
     } else if ($cmd == 'create') {
       $user_id = $data['user_id'];
       $result = get_user($user_id);
+      $token = $data['token'];
       if (!$result) {
         // Create user
-        $token = $data['token'];
         $new_user = create_user($user_id, $token);
         echo json_encode($new_user);
       } else {
