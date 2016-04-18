@@ -16,7 +16,8 @@
 	if($cmd == "new_qns"){
 
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 
@@ -147,7 +148,8 @@
 	if($cmd == "edit_qns"){
 
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+			http_response_code(401);
+ 			echo false;
 		}
 
 		$qns_id= $db->escape_string($data->qns_id);
@@ -176,7 +178,8 @@
 	if($cmd == "delete_qns"){
 
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 		$user_id = $db->escape_string($data->user_id);
@@ -616,7 +619,8 @@
 	*/
 	if($cmd == "set_up_vote_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 		$qns_id= $db->escape_string($data->qns_id);
@@ -633,7 +637,8 @@
 	*/
 	if($cmd == "set_down_vote_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 		$qns_id= $db->escape_string($data->qns_id);
@@ -650,7 +655,8 @@
 	*/
 	if($cmd == "reset_up_vote_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 		$qns_id= $db->escape_string($data->qns_id);
@@ -667,7 +673,8 @@
 	*/
 	if($cmd == "reset_down_vote_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 
 		$qns_id= $db->escape_string($data->qns_id);
@@ -694,7 +701,8 @@
 	*/
 	if($cmd == "get_all_qns_of_user"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";

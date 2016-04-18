@@ -9,7 +9,8 @@
 
 	if($cmd == "get_all_comments_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$qns_id = $data->qns_id;
 
@@ -46,7 +47,8 @@
 
 	if($cmd == "new_comment_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$user_id = $db->escape_string($data->user_id);
 		$qns_id = $db->escape_string($data->qns_id);
@@ -99,7 +101,8 @@
 
 	if($cmd == "edit_comment_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$user_id = $db->escape_string($data->user_id);
 		$qns_id =  $db->escape_string($data->qns_id);
@@ -146,7 +149,8 @@
 
 	if($cmd == "delete_comment_qns"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		$comment_id = $db->escape_string($data->comment_id);
 		$user_id = $db->escape_string($data->user_id);
@@ -170,7 +174,8 @@
 	*/
 	if($cmd == "set_upvote_comment"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		global $db;
 
@@ -196,7 +201,8 @@
 	*/
 	if($cmd == "reset_upvote_comment"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		global $db;
 
@@ -222,7 +228,8 @@
 	*/
 	if($cmd == "set_report_comment"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		global $db;
 
@@ -249,7 +256,8 @@
 	*/
 	if($cmd == "reset_report_comment"){
 		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
+ 			http_response_code(401);
+ 			echo false;
 		}
 		global $db;
 
