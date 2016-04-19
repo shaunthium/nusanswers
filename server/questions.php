@@ -595,7 +595,15 @@
 			global $db;
 
 
-			$query = "SELECT * FROM Questions ORDER BY id DESC";
+			// $query = "SELECT * FROM Questions ORDER BY id DESC";
+      if(isset($data->index) && isset($data->limit) ){
+        //$limit_qns = 10;
+        $index = $db->escape_string($data->index);
+        $limit = $db->escape_string($data->limit);
+        $query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
+      }else{
+        $query = "SELECT * FROM Questions ORDER BY id DESC";
+      }
 
 
 			//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
