@@ -132,6 +132,13 @@ angular.module('quoraApp')
                 }
 
                 $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
+                var lengthCheck = $scope.temp.content.split("<p>");
+                //XXX: arbitrarily defined maximum number of line breaks.
+                if(lengthCheck.length > 10){
+                    Materialize.toast("Error: this question has a suspiciously high number of line breaks...");
+                    return;
+                }
+
 
                 if($scope.type === 'answer'){
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
@@ -450,11 +457,21 @@ angular.module('quoraApp')
                     scope.includeVotes = true;
                     scope.includeBody = true;
                     break;
-                case "admin-view":
+            }
+
+            //If admin view was requested, override previous specifications
+            switch(attrs.view){
+                case "admin":
+                    scope.includeTags = false;
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
-                    scope.includeEditTitle = true;
+                    scope.includeAuthorFlavor = false;
+                    scope.showFooter = false;
+                    scope.includeProfileImage = false;
                     scope.includeTagInputField = true;
+                    scope.includeVotes = false;
+                    scope.includeBody = false;
+                    scope.includeEditTitle = true;
                     break;
             }
         },
