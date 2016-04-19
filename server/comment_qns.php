@@ -7,7 +7,7 @@
   	$cmd = $db->escape_string($data->cmd);
   
   	if(isset($_SESSION['admin'])){
-  		$admin = $_SESSION['admin'];
+  		//$admin = $_SESSION['admin'];
   		$admin = "admin";
   	}else{
   		$admin = "notAdmin";
