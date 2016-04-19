@@ -1,10 +1,10 @@
 <?php session_start();
     require_once ('connect.php');
-    global $db;
 
+    global $db;
     $request_data = file_get_contents("php://input");
-  	$data = json_decode($request_data);
-  	$cmd = $db->escape_string($data->cmd);
+    $data = json_decode($request_data);
+    $cmd = $db->escape_string($data->cmd);
 
   	if($cmd == "admin_login"){
         global $db;
@@ -27,7 +27,7 @@
   			    http_response_code(200);
   			    echo intval(true);
   		  }else{
-            unset($_SESSION['admin'])
+            unset($_SESSION['admin']);
   			    http_response_code(401);
   			    echo intval(false);
   		  }
