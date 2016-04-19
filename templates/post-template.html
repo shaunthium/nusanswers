@@ -1,9 +1,9 @@
 
 <div class="card white">
     <div class="card-content">
-        
+
         <!-- Modal Structure -->
-        <div style="position:fixed;max-width:500px;" id="delete-confirm-box" class="modal">
+        <div style="position:fixed;max-width:500px;" id="{{'delete-confirm-box-' + post.type + '-' + post.id}}" class="modal">
             <div class="modal-content">
               <h4>Delete post</h4>
               <p>Are you sure you want to <b>delete</b> your post? <br/> This action cannot be undone.</p>
@@ -14,7 +14,7 @@
             </div>
         </div>
         <!-- END CONFIRM -->
-        
+
         <!-- confirm box end -->
         <p class="grey-text">{{post.created_at}}</p>
         <!-- edit button -->
@@ -47,10 +47,10 @@
 
         <span class="animate-fade-in" ng-if="(!editMode && type==='question') || type==='feed-item' || type==='answer'" ng-switch="linkToQuestionPage">
             <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
-                {{post.title}} 
+                {{post.title}}
             </span>
             <span ng-switch-when="false" ng-if="includeTitle" class="card-title no-underline">
-                {{post.title}} 
+                {{post.title}}
             </span>
             <!--Align the edit and delete buttons in answers-->
             <br ng-switch-when="false" ng-if="!includeTitle && isEditable" class="card-title no-underline">

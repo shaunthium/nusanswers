@@ -74,7 +74,7 @@ angular.module('quoraApp')
             });
 
             $scope.confirmDelete = function(){
-                $('#delete-confirm-box').openModal();
+                $('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id).openModal();
             }
 
             $scope.toggleFooter = function(){
