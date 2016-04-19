@@ -138,7 +138,6 @@ angular.module('quoraApp')
                     return;
                 }
                 //XXX: arbitrarily defined maximum number of characters.
-		console.log("length ", $scope.temp.content.length, $scope.temp.content);
                 if($scope.temp.content.length > 5000){
                     Materialize.toast("Error: maximum length exceeded by " + ($scope.temp.content.length - 5000) + " characters.", 2000, 'error-toast');
                     return;
