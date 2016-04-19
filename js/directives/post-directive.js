@@ -49,7 +49,7 @@ angular.module('quoraApp')
                 if(post){
                     $scope.answered = post.answered;
                     if($scope.currentUser){
-                        $scope.isEditable = $scope.currentUser.isAdmin || ($scope.type === 'question' && $scope.currentUser.id === $scope.post.author.userid);
+                        $scope.isEditable = $scope.currentUser.isAdmin || ($scope.type !== 'feed-item' && $scope.currentUser.id === $scope.post.author.userid);
                     }
                     else{
                         $scope.isEditable = false;
@@ -130,6 +130,7 @@ angular.module('quoraApp')
                 }
 
                 $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
+
                 if($scope.type === 'answer'){
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
                     .then(

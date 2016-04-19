@@ -66,6 +66,8 @@ angular.module('quoraApp')
     $scope.makeFacebookLogin = function(){
 
         $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+        $('#login-modal').closeModal();
+        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
 
         // ezfb.login(function(res) {
         //   // console.log(res);
@@ -77,6 +79,8 @@ angular.module('quoraApp')
         //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
         //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
         //         $scope.currentUser = data.data;
+                // $('#login-modal').closeModal();
+                // Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
         //         // console.log($scope.currentUser);
         //         // $scope.loading = false;
         //         // console.log($scope.currentUser);
@@ -103,9 +107,6 @@ angular.module('quoraApp')
         //     });
         //   }
         // }, {scope: 'public_profile,email'});
-
-        $('#login-modal').closeModal();
-        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
     }
 
     //TODO: get currentUser from database by logging in.
