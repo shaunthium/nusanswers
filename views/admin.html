@@ -1,43 +1,52 @@
 <div class="container">
-	
 
-	<div ng-show="showAdminLogin" style="text-align:center; height:400px; ">
+	<div class="row">
 
-		<div style="display:inline-block;"class="card v-align" style="width:300px;line-height:300px;">
+		<div ng-show="!currentUser.isAdmin" style="text-align:center; height:400px; ">
+			<div style="display:inline-block;"class="card v-align" style="width:300px;line-height:300px;">
+				<div class="card-content center">
+					<div class="animate-fade-in" ng-if="showAdminLogin">
+						
+						<h4>Admin Login</h4>
 
-			<div class="card-content center">
-			<div class="animate-fade-in" ng-if="showAdminLogin">
-				
-					<h4>Admin Login</h4>
-				
-				
 						<input placeholder="Admin" id="admin_name" type="text" class="validate">		
 						<input placeholder="Password" id="admin_pw" type="password" class="validate">
 		
 						<a ng-click="loginAdmin()" class="waves-effect waves-light btn blue">Login</a>
-		
 				
-
+					</div>
+				</div>
 			</div>
-
-			</div>
-
-		</div>
-
-	</div>
+		</div>	
 		
-
-	<div ng-if="!showAdminLogin && !hasLoadedAdminPosts" class="row">
-		<div class="col s6 offset-s3 center">
-			<p style="font-size:1.5em;">Welcome admin, fetching your admin view ...</p>
+		<div ng-if="currentUser.isAdmin" class="row">
+			<div class="col s6 offset-s3 center">
+				<p style="font-size:1.5em;">Welcome admin</p>
+				<p ng-if="!hasLoadedAdminPosts" style="line-height:0;font-size:1.2em;">Fetching your admin view ...</p>
+				<p ng-if="hasLoadedAdminPosts" style="line-height:0;font-size:1.2em;">Ready! Let's clean up!</p>
+			</div>
 		</div>
-	</div>
 
+		<div ng-if="currentUser.isAdmin" class="col s12 center" style="width:100%;text-align:center; margin-top:-5px;">
+			<div style="display:inline-block;">
+				<a ng-click="showQuestions = true" class="waves-effect waves-light btn blue no-animate">
+		            Questions
+		        </a>
+		        <a style="margin-left:10px;"ng-click="showQuestions = false" class="waves-effect waves-light btn blue right no-animate">
+		            Answers
+		        </a>
+	        </div>
+        </div>
 
-	<div ng-if="!showAdminLogin" class="row">
-		<div class="col s12">
-			<post view="admin" type="question" ng-repeat="post in posts" class="animate-fade-in"></post>
+        <br/>
+
+		<div style="margin-top:50px;"ng-if="showQuestions = true && currentUser.isAdmin" class="row">
+			<div class="col s12">
+				<post view="admin" type="question" ng-repeat="post in posts" class="animate-fade-in"></post>
+			</div>
 		</div>
+
+
 	</div>
 
 </div>

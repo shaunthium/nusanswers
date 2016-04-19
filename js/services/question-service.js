@@ -515,6 +515,17 @@ angular.module('quoraApp')
         });
     }
 
+    function getAllAnswers(){
+
+        return $http({
+            url: base_url + 'server/answers.php',
+            method: 'POST',
+            data: {
+                cmd: 'getallanswers'
+            }
+        });
+    }
+
     function getAllTags(){
         return $http({
             url: base_url + 'server/tags.php',
@@ -560,7 +571,8 @@ angular.module('quoraApp')
         getCommentsFromAnswer       :   getCommentsFromAnswer,
         deleteCommentFromAnswer     :   deleteCommentFromAnswer,
         getAllTags                  :   getAllTags,
-        loginAdmin                  : loginAdmin
+        loginAdmin                  : loginAdmin,
+        getAllAnswers               : getAllAnswers
     }
 
 }]);
