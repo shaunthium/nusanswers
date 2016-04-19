@@ -1,8 +1,8 @@
-<div ng-if="tag !== ''" class='tag chip yellow {{activeFilter ? "lighten-2" : "lighten-4"}}' ng-click="onClick()">
+<div ng-if="tag !== ''" ng-class="{'grey' : type === 'suggestion'}" class='tag chip yellow {{activeFilter ? "lighten-2" : "lighten-4"}}' ng-click="onClick()">
     {{tag}}
     <span ng-switch="type">
         <span ng-switch-when="suggestion" ng-click="addTag(tag); clearUserInput()">
-            <i style="margin-top:-5px;"class="material-icons">check</i>
+            <i style="margin-top:-5px;" style="background:grey;"class="material-icons">check</i>
         </span>
         <!--WARNING: all materialize CSS icons "close" onclick -->
         <span ng-switch-default ng-show="editMode" ng-click="removeTag(tag)">

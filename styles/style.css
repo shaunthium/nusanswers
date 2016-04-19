@@ -592,6 +592,11 @@ div.tag{
 
 }
 
+.override-grey{
+  background:#c0c0c0 !important;
+  color: green !important;
+
+}
 .image-upload > input
 {
     display: none;
