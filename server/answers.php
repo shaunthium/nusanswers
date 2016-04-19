@@ -2,7 +2,7 @@
    require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
-  $cmd = $data->cmd;
+  $cmd = $db->escape_string($data->cmd);
   if (!(isset($_SESSION['id']))) {
     $authenticated = false;
   } else {
@@ -19,6 +19,14 @@
     }
   }
 
+	if(isset($_SESSION['admin']){
+		$admin = true;
+	}
+	else
+	{
+		$admin = false;
+	}
+
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
   }
@@ -31,6 +39,7 @@
   if (isset($data->content)) {
     $content = $db->escape_string($data->content);
   }
+
   if (isset($data->comment_id)) {
     $comment_id = $db->escape_string($data->comment_id);
   }
@@ -489,7 +498,7 @@
 			$res = $db->query($query);
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
-			if($uid != $user_id)
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Not authorized";
@@ -681,6 +690,10 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
 
+				/* Here we send an upvote notification */
+				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 1, 0)";
+				$db->query($query);
+
 				echo true;
 			}
 			else //have voted before!
@@ -688,7 +701,7 @@
 
 				$votes = mysqli_fetch_assoc($result);
 
-				if($votes["down_vote"] == "1")
+				if($votes["down_vote"] == "1") //from downvote to upvote
 				{
 
 					$score = 2;
@@ -696,6 +709,9 @@
 					/* Update upvote entry */
 					$query = "Update Answers_Voted_By_Users Set up_vote = 1, down_vote = 0 where answer_id = $answer_id and user_id = $user_id";
 					$db->query($query);
+
+
+
 				}
 				else //up_vote == 1
 				{
@@ -720,6 +736,19 @@
 					/* Here we upvote the User score */
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
+
+					if($score == 2)
+					{
+						/* Here we update downvote notification to upvote */
+						$query = "Update Votes_Notifications Set checked = 0, type_vote = 1 where type_qns_ans = 1 voter_id = $user_id and author_id = $answer_user_id and  qns_ans_id = $answer_id";
+						$db->query($query);
+					}
+					else
+					{
+						/* Here we delete upvote notification*/
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$db->query($query);
+					}
 
 					echo true;
 			}
@@ -782,6 +811,10 @@
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
 
+				/* Here we send an downvote notification */
+				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 0, 0)";
+				$db->query($query);
+
 				echo true;
 			}
 			else //have voted before!
@@ -822,6 +855,18 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 
+					if($score == -2)
+					{
+						/* Here we update upvote notification to downvote */
+						$query = "Update Votes_Notifications Set checked = 0, type_vote = 0 where type_qns_ans = 1 voter_id = $user_id and author_id = $answer_user_id and  qns_ans_id = $answer_id";
+						$db->query($query);
+					}
+					else
+					{
+						/* Here we delete downvote notification*/
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$db->query($query);
+					}
 					echo true;
 			}
 		}
@@ -933,7 +978,7 @@
 			$r = mysqli_fetch_assoc($result);
 			$uid = $r["user_id"];
 
-			if($uid != $user_id)
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Unauthorized";
@@ -1165,7 +1210,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id) //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1269,7 +1314,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id) //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1459,5 +1504,79 @@
 		echo json_encode($latest_array);
 	}
 
+	else if ($cmd == "getallanswers")
+	{
+		if($admin == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 
+		$query = "select * from Answers";
+		$result = $db->query($query);
+
+		$answers_array = array();
+		if(mysqli_num_rows($res) != 0)
+		{
+			while ($answer = mysqli_fetch_assoc($result)){
+
+				$user_id = $answer['user_id'];
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
+
+				$answers_array[] = array(
+					'id'=>$answer['id'],
+					'questionid'=>$answer['question_id'],
+					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+										'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+					'content'=>$answer['content'],
+					'upvotes'=>(int)$answer['score'],
+					'created_at'=>$answer['created_at'],
+					'updated_at'=>$answer['updated_at'],
+					'chosen'=>$answer['chosen']
+				);
+			}
+		}
+
+		echo json_encode($answers_array);
+	}
+	else if ($cmd == "getallcomments")
+	{
+		if($admin == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
+
+		$query = "select * from Answers_Comments";
+		$result = $db->query($query);
+
+		$comments_array = array();
+		if(mysqli_num_rows($res) != 0)
+		{
+			while ($comment = mysqli_fetch_assoc($result)){
+
+				$user_id = $comment['user_id'];
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
+
+				$comments_array[] = array(
+					'id'=>$comment['id'],
+					'answerid'=>$comment['answer_id'],
+					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+										'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+					'content'=>$comment['content'],
+					'likes'=>(int)$comment['score'],
+					'created_at'=>$comment['created_at'],
+					'updated_at'=>$comment['updated_at'],
+				);
+			}
+		}
+
+		echo json_encode($comments_array);
+	}
 ?>
