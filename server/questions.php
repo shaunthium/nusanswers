@@ -96,9 +96,9 @@
 				// 	$voted_up = false;
 				// 	$voted_down = false;
 				// }else{
-					$authenticated = true;
+					//$authenticated = true;
 				// }
-				if($authenticated == true){
+				//if($authenticated == true){
 					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -130,7 +130,7 @@
 					}else{
 						$voted_down = false;
 					}
-				}
+				//}
 
 			}else{
 				$answered = false;
@@ -430,7 +430,7 @@
 			$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
 			$db->query($query_vote);
 
-			$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id //." AND user_id=". $user_id;
+			$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id; //." AND user_id=". $user_id;
 			$db->query($query_qns);
 
 
@@ -531,173 +531,339 @@
 	*/
 	if($cmd == "latest_qns"){
 
-		global $db;
+		if($admin == "admin"){
+			global $db;
 
-		if(isset($data->index) && isset($data->limit) ){
-			//$limit_qns = 10;
-			$index = $db->escape_string($data->index);
-			$limit = $db->escape_string($data->limit);
-			$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
-		}else{
+		
 			$query = "SELECT * FROM Questions ORDER BY id DESC";
-		}
+			
 
-		//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
-		$result = $db->query($query);
-		$latest_array = array();
-		while ($latest = mysqli_fetch_assoc($result)){
-			//Get the first name and last name of the author from 'users' table
-			$user_id = $latest['user_id'];
-			$query_author =  "SELECT * FROM Users WHERE id=".$user_id;
-			$result_author = $db->query($query_author);
-			$author = mysqli_fetch_assoc($result_author);
+			//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
+			$result = $db->query($query);
+			$latest_array = array();
+			while ($latest = mysqli_fetch_assoc($result)){
+				//Get the first name and last name of the author from 'users' table
+				//$user_id = $latest['user_id'];
+				$query_author =  "SELECT * FROM Users";// WHERE id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
 
-			//Get total number of answers to each questions from 'answers' table
-			$question_id = $latest['id'];
-			$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id=".$question_id;
-			$result_total_answers = $db->query($query_total_answers);
-			$total_answers = mysqli_fetch_assoc($result_total_answers);
+				//Get total number of answers to each questions from 'answers' table
+				$question_id = $latest['id'];
+				$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id=".$question_id;
+				$result_total_answers = $db->query($query_total_answers);
+				$total_answers = mysqli_fetch_assoc($result_total_answers);
 
-			//Get all tags of a question from 'questions_tags' & 'tags' table
-			$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
-			$result_tag_id = $db->query($query_tag_id);
+				//Get all tags of a question from 'questions_tags' & 'tags' table
+				$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
+				$result_tag_id = $db->query($query_tag_id);
 
-			$tag_name_array = array();
-			while ($row = mysqli_fetch_assoc($result_tag_id)){
-				$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
-				$result_tag_name = $db->query($query_tag_name);
-				$tag = mysqli_fetch_assoc($result_tag_name);
-				$tag_name_array[]  = $tag["content"];
-			}
-
-			$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
-			$result_role = $db->query($query_role);
-			$role_array = mysqli_fetch_assoc($result_role);
-			$role = $role_array['flavour'];
-
-			$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => (int)$author['score'],
-									'userid' => $latest['user_id'],
-									'flavour' => $role//'New User'
-									);
-
-			//Get all comment of a question including the author from 'comment' table
-			$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
-			$result_comment = $db->query($query_comment);
-
-			$comment_array = array();
-			while ($comment = mysqli_fetch_assoc($result_comment)){
-				$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
-				$result_comment_author = $db->query($query_comment_author);
-				$comment_author = mysqli_fetch_assoc($result_comment_author);
-
-				$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
-									'karma' => (int)$comment_author['score'],
-									'userid' => $comment_author['id'],
-									'flavour' => 'New User'
-									);
-
-				$comment_array[]  = array(
-						'author' => $comment_author_array,
-						'body' => $comment['content'],
-						'upvotes' => 0,
-						'liked' => false,
-						'reported' => false,
-						'id' => $comment['id']
-					);
-			}
-
-			//Set True  or false if user had answered the questions
-
-			if(isset($data->user_id)) {
-				// if (!(isset($_SESSION['cs3226']))) {
- 			// 		$authenticated = false;
- 			// 		$answered = false;
-				// 	$voted_up = false;
-				// 	$voted_down = false;
-				// }else{
-					$authenticated = true;
-				// }
-				if($authenticated == true){
-					$global_user_id = $db->escape_string($data->user_id);
-
-					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-					$result_answered = $db->query($query_answered);
-
-					$num_answered = mysqli_num_rows($result_answered);
-
-					if($num_answered == 0){
-						$answered = false;
-					}else{
-						$answered = true;
-					}
-
-					$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
-					$result_voted = $db->query($query_voted);
-
-					$voted = mysqli_fetch_assoc($result_voted);
-					$up_vote = $voted['up_vote'];
-					$down_vote = $voted['down_vote'];
-
-					if($up_vote == 1){
-						$voted_up = true;
-					}else{
-						$voted_up = false;
-					}
-
-					if($down_vote == 1){
-						$voted_down = true;
-					}else{
-						$voted_down = false;
-					}
+				$tag_name_array = array();
+				while ($row = mysqli_fetch_assoc($result_tag_id)){
+					$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+					$result_tag_name = $db->query($query_tag_name);
+					$tag = mysqli_fetch_assoc($result_tag_name);
+					$tag_name_array[]  = $tag["content"];
 				}
 
+				$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
+				$result_role = $db->query($query_role);
+				$role_array = mysqli_fetch_assoc($result_role);
+				$role = $role_array['flavour'];
+
+				$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
+										'karma' => (int)$author['score'],
+										'userid' => $latest['user_id'],
+										'flavour' => $role//'New User'
+										);
+
+				//Get all comment of a question including the author from 'comment' table
+				$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
+				$result_comment = $db->query($query_comment);
+
+				$comment_array = array();
+				while ($comment = mysqli_fetch_assoc($result_comment)){
+					$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
+					$result_comment_author = $db->query($query_comment_author);
+					$comment_author = mysqli_fetch_assoc($result_comment_author);
+
+					$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
+										'karma' => (int)$comment_author['score'],
+										'userid' => $comment_author['id'],
+										'flavour' => 'New User'
+										);
+
+					$comment_array[]  = array(
+							'author' => $comment_author_array,
+							'body' => $comment['content'],
+							'upvotes' => 0,
+							'liked' => false,
+							'reported' => false,
+							'id' => $comment['id']
+						);
+				}
+
+				//Set True  or false if user had answered the questions
+
+				if(isset($data->user_id)) {
+					// if (!(isset($_SESSION['cs3226']))) {
+	 			// 		$authenticated = false;
+	 			// 		$answered = false;
+					// 	$voted_up = false;
+					// 	$voted_down = false;
+					// }else{
+						//$authenticated = true;
+					// }
+					//if($authenticated == true){
+						$global_user_id = $db->escape_string($data->user_id);
+
+						$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+						$result_answered = $db->query($query_answered);
+
+						$num_answered = mysqli_num_rows($result_answered);
+
+						if($num_answered == 0){
+							$answered = false;
+						}else{
+							$answered = true;
+						}
+
+						$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+						$result_voted = $db->query($query_voted);
+
+						$voted = mysqli_fetch_assoc($result_voted);
+						$up_vote = $voted['up_vote'];
+						$down_vote = $voted['down_vote'];
+
+						if($up_vote == 1){
+							$voted_up = true;
+						}else{
+							$voted_up = false;
+						}
+
+						if($down_vote == 1){
+							$voted_down = true;
+						}else{
+							$voted_down = false;
+						}
+					//}
+
+				}else{
+					$answered = false;
+					$voted_up = false;
+					$voted_down = false;
+				}
+
+
+
+				$latest_array[] = array(
+
+					'id'=>$latest['id'],
+					'title'=>$latest['title'],
+					'tags'=>$tag_name_array,
+					'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
+										'karma' => (int)$author['score'],
+										'userid' => $latest['user_id'],
+										'flavour' => $role//'New User'
+						),
+					'views'=>(int)$latest['view_count'],
+					'content'=>$latest['content'],
+					'upvotes'=>(int)$latest['score'],
+					'comments'=> $comment_array,
+					'total_answers' => (int)$total_answers['total_answers'],
+					'total_comments'=> count($comment_array),
+					'answered' => $answered,
+					'upvoted' => $voted_up,
+					'downvoted' => $voted_down,
+					'created_at'=>$latest['created_at'],
+					'updated_at'=>$latest['updated_at']
+
+					/*
+					'id'=>$latest['id'],
+					'user_id'=>$latest['user_id'],
+					'title'=>$latest['title'],
+					'content'=>$latest['content'],
+					'score'=>$latest['score'],
+					'view_count'=>$latest['view_count'],
+					'created_at'=>$latest['created_at'],
+					'updated_at'=>$latest['updated_at'],
+					'author' => $author['first_name'] . " " . $author['last_name'],
+					'author_score' => $author['score'],
+					'total_answers' => $total_answers['total_answers']
+					*/
+				);
+			}
+			echo json_encode($latest_array);
+		}else{
+
+			global $db;
+
+			if(isset($data->index) && isset($data->limit) ){
+				//$limit_qns = 10;
+				$index = $db->escape_string($data->index);
+				$limit = $db->escape_string($data->limit);
+				$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
 			}else{
-				$answered = false;
-				$voted_up = false;
-				$voted_down = false;
+				$query = "SELECT * FROM Questions ORDER BY id DESC";
 			}
 
+			//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
+			$result = $db->query($query);
+			$latest_array = array();
+			while ($latest = mysqli_fetch_assoc($result)){
+				//Get the first name and last name of the author from 'users' table
+				$user_id = $latest['user_id'];
+				$query_author =  "SELECT * FROM Users WHERE id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
+
+				//Get total number of answers to each questions from 'answers' table
+				$question_id = $latest['id'];
+				$query_total_answers = "SELECT COUNT(question_id) as total_answers FROM Answers WHERE question_id=".$question_id;
+				$result_total_answers = $db->query($query_total_answers);
+				$total_answers = mysqli_fetch_assoc($result_total_answers);
+
+				//Get all tags of a question from 'questions_tags' & 'tags' table
+				$query_tag_id = "SELECT tag_id FROM Questions_Tags WHERE question_id=" . $question_id;
+				$result_tag_id = $db->query($query_tag_id);
+
+				$tag_name_array = array();
+				while ($row = mysqli_fetch_assoc($result_tag_id)){
+					$query_tag_name = "SELECT content FROM Tags WHERE id=" . $row['tag_id'];
+					$result_tag_name = $db->query($query_tag_name);
+					$tag = mysqli_fetch_assoc($result_tag_name);
+					$tag_name_array[]  = $tag["content"];
+				}
+
+				$query_role = "SELECT * FROM Role WHERE id=". $author['role'];
+				$result_role = $db->query($query_role);
+				$role_array = mysqli_fetch_assoc($result_role);
+				$role = $role_array['flavour'];
+
+				$author_array = array('name'=> $author['first_name'] . " " . $author['last_name'],
+										'karma' => (int)$author['score'],
+										'userid' => $latest['user_id'],
+										'flavour' => $role//'New User'
+										);
+
+				//Get all comment of a question including the author from 'comment' table
+				$query_comment = "SELECT * FROM Comments WHERE question_id=" . $question_id;
+				$result_comment = $db->query($query_comment);
+
+				$comment_array = array();
+				while ($comment = mysqli_fetch_assoc($result_comment)){
+					$query_comment_author = "SELECT * FROM Users WHERE id=" . $comment['user_id'];
+					$result_comment_author = $db->query($query_comment_author);
+					$comment_author = mysqli_fetch_assoc($result_comment_author);
+
+					$comment_author_array = array('name'=> $comment_author['first_name'] . " " . $comment_author['last_name'],
+										'karma' => (int)$comment_author['score'],
+										'userid' => $comment_author['id'],
+										'flavour' => 'New User'
+										);
+
+					$comment_array[]  = array(
+							'author' => $comment_author_array,
+							'body' => $comment['content'],
+							'upvotes' => 0,
+							'liked' => false,
+							'reported' => false,
+							'id' => $comment['id']
+						);
+				}
+
+				//Set True  or false if user had answered the questions
+
+				if(isset($data->user_id)) {
+					// if (!(isset($_SESSION['cs3226']))) {
+	 			// 		$authenticated = false;
+	 			// 		$answered = false;
+					// 	$voted_up = false;
+					// 	$voted_down = false;
+					// }else{
+						//$authenticated = true;
+					// }
+					//if($authenticated == true){
+						$global_user_id = $db->escape_string($data->user_id);
+
+						$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+						$result_answered = $db->query($query_answered);
+
+						$num_answered = mysqli_num_rows($result_answered);
+
+						if($num_answered == 0){
+							$answered = false;
+						}else{
+							$answered = true;
+						}
+
+						$query_voted = "SELECT * FROM Questions_Voted_By_Users WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
+						$result_voted = $db->query($query_voted);
+
+						$voted = mysqli_fetch_assoc($result_voted);
+						$up_vote = $voted['up_vote'];
+						$down_vote = $voted['down_vote'];
+
+						if($up_vote == 1){
+							$voted_up = true;
+						}else{
+							$voted_up = false;
+						}
+
+						if($down_vote == 1){
+							$voted_down = true;
+						}else{
+							$voted_down = false;
+						}
+					//}
+
+				}else{
+					$answered = false;
+					$voted_up = false;
+					$voted_down = false;
+				}
 
 
-			$latest_array[] = array(
 
-				'id'=>$latest['id'],
-				'title'=>$latest['title'],
-				'tags'=>$tag_name_array,
-				'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
-									'karma' => (int)$author['score'],
-									'userid' => $latest['user_id'],
-									'flavour' => $role//'New User'
-					),
-				'views'=>(int)$latest['view_count'],
-				'content'=>$latest['content'],
-				'upvotes'=>(int)$latest['score'],
-				'comments'=> $comment_array,
-				'total_answers' => (int)$total_answers['total_answers'],
-				'total_comments'=> count($comment_array),
-				'answered' => $answered,
-				'upvoted' => $voted_up,
-				'downvoted' => $voted_down,
-				'created_at'=>$latest['created_at'],
-				'updated_at'=>$latest['updated_at']
+				$latest_array[] = array(
 
-				/*
-				'id'=>$latest['id'],
-				'user_id'=>$latest['user_id'],
-				'title'=>$latest['title'],
-				'content'=>$latest['content'],
-				'score'=>$latest['score'],
-				'view_count'=>$latest['view_count'],
-				'created_at'=>$latest['created_at'],
-				'updated_at'=>$latest['updated_at'],
-				'author' => $author['first_name'] . " " . $author['last_name'],
-				'author_score' => $author['score'],
-				'total_answers' => $total_answers['total_answers']
-				*/
-			);
+					'id'=>$latest['id'],
+					'title'=>$latest['title'],
+					'tags'=>$tag_name_array,
+					'author'=> array('name'=> $author['first_name'] . " " . $author['last_name'],
+										'karma' => (int)$author['score'],
+										'userid' => $latest['user_id'],
+										'flavour' => $role//'New User'
+						),
+					'views'=>(int)$latest['view_count'],
+					'content'=>$latest['content'],
+					'upvotes'=>(int)$latest['score'],
+					'comments'=> $comment_array,
+					'total_answers' => (int)$total_answers['total_answers'],
+					'total_comments'=> count($comment_array),
+					'answered' => $answered,
+					'upvoted' => $voted_up,
+					'downvoted' => $voted_down,
+					'created_at'=>$latest['created_at'],
+					'updated_at'=>$latest['updated_at']
+
+					/*
+					'id'=>$latest['id'],
+					'user_id'=>$latest['user_id'],
+					'title'=>$latest['title'],
+					'content'=>$latest['content'],
+					'score'=>$latest['score'],
+					'view_count'=>$latest['view_count'],
+					'created_at'=>$latest['created_at'],
+					'updated_at'=>$latest['updated_at'],
+					'author' => $author['first_name'] . " " . $author['last_name'],
+					'author_score' => $author['score'],
+					'total_answers' => $total_answers['total_answers']
+					*/
+				);
+			}
+			echo json_encode($latest_array);
 		}
-		echo json_encode($latest_array);
 	}
 
 	/*
@@ -795,10 +961,10 @@
 				// 	$voted_up = false;
 				// 	$voted_down = false;
 				// }else{
-					$authenticated = true;
+					//$authenticated = true;
 				// }
 
-				if($authenticated == true){
+				//if($authenticated == true){
 					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -830,7 +996,7 @@
 					}else{
 						$voted_down = false;
 					}
-				}
+				//}
 			}else{
 				$answered = false;
 				$voted_up = false;
