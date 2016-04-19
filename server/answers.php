@@ -98,7 +98,7 @@
 			}
 			else //if it is set
 			{
-				if($authenticated == false && $admin == false)
+				if($authenticated == false)
 				{
 					http_response_code(401);
 					echo "Unauthorized";
@@ -163,7 +163,7 @@
 					}
 					else
 					{
-						if($authenticated == false && $admin == false)
+						if($authenticated == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -347,7 +347,7 @@
 							}
 							else
 							{
-								if($authenticated == false && $admin == false)
+								if($authenticated == false)
 								{
 									http_response_code(401);
 									echo "Unauthorized";
@@ -393,7 +393,7 @@
 					}
 					else //if it is set
 					{
-						if($authenticated == false && $admin == false)
+						if($authenticated == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -481,7 +481,7 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -652,7 +652,7 @@
 			echo "Answer id not set!";
 			return;
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -772,7 +772,7 @@
 			echo "Answer id not set";
 			return;
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -876,7 +876,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin == false)
+		if($authenticated == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -949,7 +949,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin == false)
+		if($authenticated == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
