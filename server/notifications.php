@@ -35,44 +35,46 @@
 		
 		while($notification = mysqli_fetch_assoc($result)){
 
-			//If type is a question
-			if($notification['type_qns_ans'] == 0){
-				$query_qns_voter = "SELECT * FROM Users WHERE id=" . $notification['voter_id'];
-				$result_qns_voter =  $db->query($query_qns_voter);
-				$qns_voter_name = mysqli_fetch_assoc($result_qns_voter);
+			if($notification['voter_id'] != $user_id){
+				//If type is a question
+				if($notification['type_qns_ans'] == 0){
+					$query_qns_voter = "SELECT * FROM Users WHERE id=" . $notification['voter_id'];
+					$result_qns_voter =  $db->query($query_qns_voter);
+					$qns_voter_name = mysqli_fetch_assoc($result_qns_voter);
 
-				$query_qns_title = "SELECT * FROM Questions WHERE id=" . $notification['qns_ans_id'];
-				$result_qns_title =  $db->query($query_qns_title);
-				$qns_title = mysqli_fetch_assoc($result_qns_title);
+					$query_qns_title = "SELECT * FROM Questions WHERE id=" . $notification['qns_ans_id'];
+					$result_qns_title =  $db->query($query_qns_title);
+					$qns_title = mysqli_fetch_assoc($result_qns_title);
 
-				$notifications_array[] = array(
-					'id' => $notification['id'],
-					'voter' => $qns_voter_name['first_name']. " " . $qns_voter_name['last_name'],
-					'title_content' => $qns_title['title'],
-					'type_qns_ans' => $notification['type_qns_ans'],
-					'type_vote' => $$notification['type_vote'],
-					'checked' => $notification['checked']
-				);
-			}
+					$notifications_array[] = array(
+						'id' => $notification['id'],
+						'voter' => $qns_voter_name['first_name']. " " . $qns_voter_name['last_name'],
+						'title_content' => $qns_title['title'],
+						'type_qns_ans' => $notification['type_qns_ans'],
+						'type_vote' => $$notification['type_vote'],
+						'checked' => $notification['checked']
+					);
+				}
 
-			//If type is an answer
-			if($notification['type_qns_ans'] == 1){
-				$query_ans_voter = "SELECT * FROM Users WHERE id=" . $notification['voter_id'];
-				$result_ans_voter =  $db->query($query_ans_voter);
-				$ans_voter_name = mysqli_fetch_assoc($result_ans_voter);
+				//If type is an answer
+				if($notification['type_qns_ans'] == 1){
+					$query_ans_voter = "SELECT * FROM Users WHERE id=" . $notification['voter_id'];
+					$result_ans_voter =  $db->query($query_ans_voter);
+					$ans_voter_name = mysqli_fetch_assoc($result_ans_voter);
 
-				$query_ans_content = "SELECT * FROM Answers WHERE id=" . $notification['qns_ans_id'];
-				$result_ans_content =  $db->query($query_ans_content);
-				$ans_content = mysqli_fetch_assoc($result_ans_content);
+					$query_ans_content = "SELECT * FROM Answers WHERE id=" . $notification['qns_ans_id'];
+					$result_ans_content =  $db->query($query_ans_content);
+					$ans_content = mysqli_fetch_assoc($result_ans_content);
 
-				$notifications_array[] = array(
-					'id' => $notification['id'],
-					'voter' => $ans_voter_name['first_name']. " " . $ans_voter_name['last_name'],
-					'title_content' => $ans_content['content'],
-					'type_qns_ans' => $notification['type_qns_ans'],
-					'type_vote' => $$notification['type_vote'],
-					'checked' => $notification['checked']
-				);
+					$notifications_array[] = array(
+						'id' => $notification['id'],
+						'voter' => $ans_voter_name['first_name']. " " . $ans_voter_name['last_name'],
+						'title_content' => $ans_content['content'],
+						'type_qns_ans' => $notification['type_qns_ans'],
+						'type_vote' => $$notification['type_vote'],
+						'checked' => $notification['checked']
+					);
+				}
 			}
 		}
 		

@@ -28,6 +28,7 @@
   			http_response_code(200);
   			echo intval(true);
   		}else{
+        unset($_SESSION['admin'])
   			http_response_code(401);
   			echo intval(false);
   		}

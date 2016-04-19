@@ -120,6 +120,7 @@
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
 		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);
+		deleteNotify($qns_id, $voter_id);
 		
 	}
 
@@ -137,6 +138,7 @@
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
 		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);	
+		deleteNotify($qns_id, $voter_id);
 		
 		
 	}
@@ -215,11 +217,6 @@
 		$db->query($query_update_score);
 	}
 	
-
-	if(isset($data->cmd)){
-		$cmd = $data->cmd;
-	}
-
 	//Insert into votes Notification
 	function voteNotify($qns_id, $voter_id, $vote_type){
 		global $db;
@@ -232,17 +229,46 @@
 		$query = "INSERT INTO Votes_Notifications(qns_ans_id, author_id, voter_id, type_qns_ans, type_vote) VALUES(".
 					$qns_id.", ".$author_id.", ".$voter_id.", 0,".$vote_type.")";
 		$db->query($query); 
-
+		/*
 		$affected = $db->affected_rows;
 		
 		if( $affected > 0 ){
-			echo true;
+			echo intval(true);
 		}else{
-			echo false;
+			echo intval(false);
 		}
-
+		*/
 	}
 
+	//Delete votes Notification
+	function deleteNotify($qns_id, $voter_id){
+		global $db;
+
+		$query_author_id = "SELECT * FROM Questions WHERE id=".$qns_id;
+		$result_author_id = $db->query($query_author_id);
+		$author_id_array = mysqli_fetch_array($result_author_id);
+		$author_id = $author_id_array['user_id'];
+
+		$query = "DELETE FROM Votes_Notifications WHERE qns_ans_id=".$qns_id. " AND author_id=". $author_id.
+						" AND voter_id=" . $voter_id;
+					
+		$db->query($query); 
+		/*
+		$affected = $db->affected_rows;
+		
+		if( $affected > 0 ){
+			echo intval(true);
+		}else{
+			echo intval(false);
+		}
+		*/
+	}
+
+	if(isset($data->cmd)){
+		$cmd = $data->cmd;
+	}
+
+	
 	/*
 		Return the total number of up_votes given to a question
 		@param:	qns_id
