@@ -85,7 +85,6 @@ angular.module('quoraApp')
             });
 
             $scope.confirmDelete = function(){
-                console.log('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id);
                 $('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id).openModal();
             }
 
@@ -174,49 +173,40 @@ angular.module('quoraApp')
 
 
             $scope.delete = function(){
-
-                //console.log("type", $scope.type);
-                // if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
-                    console.log("TYPE ", $scope.type);
-
-                    if($scope.type === 'answer'){
-
-                        questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
-                        .then(
-                            function(res){
-                                if(res.data){
-                                    console.log("Success!");
-                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
-                                    $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
-                                }
-                                else{
-                                    console.log("Error while deleting answer!");
-                                }
-                            },
-                            function(err){
-                                Materialize.toast('Server error!', 2000, 'error-toast');
+                if($scope.type === 'answer'){
+                    questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
                             }
-                        );
-                    }
-                    else{
-                        questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
-                        .then(
-                            function(res){
-                                if(res.data){
-                                    console.log("Success!");
-                                    Materialize.toast('Post deleted!', 2000, 'success-toast');
-                                    $scope.goToHome();
-                                }
-                            },
-                            function(err){
-                                Materialize.toast('Server error!', 2000, 'error-toast');
+                            else{
+                                Materialize.toast('Could not delete answer!', 2000, 'error-toast');
                             }
-                        );
-                    }
-                //}
-                // else{
-                //     Materialize.toast('Delete cancelled!', 2000, 'information-toast');
-                // }
+                        },
+                        function(err){
+                            Materialize.toast('Server error!', 2000, 'error-toast');
+                        }
+                    );
+                }
+                else{
+                    questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
+                    .then(
+                        function(res){
+                            if(res.data){
+                                Materialize.toast('Post deleted!', 2000, 'success-toast');
+                                $scope.goToHome();
+                            }
+                            else{
+                                Materialize.toast('Could not delete question!', 2000, 'error-toast');
+                            }
+                        },
+                        function(err){
+                            Materialize.toast('Server error!', 2000, 'error-toast');
+                        }
+                    );
+                }
             }
 
 
@@ -240,9 +230,6 @@ angular.module('quoraApp')
               // If upvoted
               if(inc == 1){
                   if($scope.post.upvoted){ // If post was already upvoted
-
-                      console.log("Cancel upvote");
-
                       questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
@@ -258,17 +245,11 @@ angular.module('quoraApp')
                   }
                   else { // If post was downvoted, cancel and perform upvote
                       if($scope.post.downvoted){
-
-                          console.log("Was downvoted => cancel downvote and perform upvote");
-
-                          console.log("upvotes before making async calls ", $scope.post.upvotes);
-
                           questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
                                   if(res.data){
                                       //$scope.post.upvotes++;
-                                      console.log("upvotes ", $scope.post.upvotes);
                                       $scope.post.downvoted = false;
                                 }
                               },
@@ -280,12 +261,8 @@ angular.module('quoraApp')
                             .then(
                                 function(res){
                                     if(res.data){
-
-                                        console.log("upvotes just before increase 2 ", $scope.post.upvotes);
                                         $scope.post.upvotes+=2;
-                                        console.log("upvotes after increase 2", $scope.post.upvotes);
                                         $scope.post.upvoted = true;
-
                                   }
                                 },
                                 function(err){
@@ -294,8 +271,6 @@ angular.module('quoraApp')
                             );
                           });
                       } else { // Was not downvoted
-
-                        console.log("Submit simple upvote...");
 
                         questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
@@ -315,9 +290,6 @@ angular.module('quoraApp')
               else{
 
                   if($scope.post.downvoted){ // If post was downvoted, cancel downvote
-
-                      console.log("Cancel downvote ...");
-
                       questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
@@ -332,10 +304,6 @@ angular.module('quoraApp')
                       );
                   }
                   else{ // Else if post was upvoted, cancel and then downvote
-
-
-                      console.log("Cancel upvote => downvote ");
-
                       if($scope.post.upvoted){
                           questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
@@ -364,9 +332,6 @@ angular.module('quoraApp')
                             );
                           })
                       } else { // Just downvote
-
-                        console.log("Just downvote ");
-
                         questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
@@ -392,11 +357,11 @@ angular.module('quoraApp')
                             $scope.post.tags = $scope.post.tags.filter(function(el){return el !== tag;});
                         }
                         else{
-                            console.log("Error in removing tag from question!");
+                            Materialize.toast('Could not remove tag from question!', 2000, 'error-toast');
                         }
                     },
                     function(err){
-                        console.log("Error while deleting tag from the question!");
+                        Materialize.toast('Could not remove tag from question!', 2000, 'error-toast');
                     }
                 );
             }
@@ -418,11 +383,11 @@ angular.module('quoraApp')
                             $scope.post.tags.push(tag);
                         }
                         else{
-                            console.log("Error in adding data to question!");
+                            Materialize.toast('Could not add tag to question!', 2000, 'error-toast');
                         }
                     },
                     function(err){
-                        console.log("Error while adding tag to the question!");
+                        Materialize.toast('Could not add tag to question!', 2000, 'error-toast');
                     }
                 );
             }
