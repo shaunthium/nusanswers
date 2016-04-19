@@ -24,7 +24,6 @@
             <i class="material-icons">edit</i>
             <span style="position:relative; bottom:5px;"></span>
         </a>
-
           <!-- save changes button -->
         <a ng-if="isEditable && editMode" ng-click="saveChanges()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn blue right no-animate">
             <i class="material-icons">edit</i>
@@ -55,7 +54,7 @@
         <!--Align the edit and delete buttons in answers-->
         <br ng-if="!includeTitle && isEditable" class="card-title no-underline">
 
-        <ul ng-if="type !== 'admin-view'" style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">
+        <ul ng-if="!collapseAuthor" style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">
             <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
                 <!-- TODO: replace dummy image with proper image -->
                 <img ng-if="includeProfileImage" ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
@@ -74,7 +73,7 @@
                 </div>
             </li>
         </ul>
-        <span ng-if="type === 'admin-view'" ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+        <span ng-if="collapseAuthor" ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
 
         <!-- Behave as a table cell for the height to adjust to same as the text column -->
  <!--        <div style="display:table-cell; vertical-align:middle; text-align:left;">

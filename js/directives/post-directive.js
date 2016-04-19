@@ -39,6 +39,7 @@ angular.module('quoraApp')
             $scope.includeVotes = false;
             $scope.includeBody = false;
             $scope.includeEditTitle = false;
+            $scope.collapseAuthor = false;
 
 
             //This watch is for getting the post in question-answers view.
@@ -79,7 +80,7 @@ angular.module('quoraApp')
             },
             function(currentUser){
                 if(currentUser && $scope.post){
-                    $scope.isEditable = $scope.type !== 'feed-item' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    $scope.isEditable = currentUser.isAdmin || ($scope.type !== 'feed-item' && currentUser.id === $scope.post.author.userid);
                 }
             });
 
@@ -477,6 +478,7 @@ angular.module('quoraApp')
                     scope.includeVotes = false;
                     scope.includeBody = false;
                     scope.includeEditTitle = true;
+                    scope.collapseAuthor = true;
                     break;
             }
         },
