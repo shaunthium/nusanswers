@@ -1,24 +1,36 @@
 <?php session_start();
    require_once ('connect.php'); //contains login constants
+    require_once('admin.php');
+
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $db->escape_string($data->cmd);
-	//  if (!(isset($_SESSION['cs3226']))) {
-  //      // print_r(error_log('hi again'), true);
-  //      $authenticated = false;
-  //    }
-	// else
-	// {
-		$authenticated = true;
-	// }
+  if (!(isset($_SESSION['id']))) {
+    $authenticated = false;
+  } else {
+    $session_id = $_SESSION['id'];
+    if (isset($data->user_id)) {
+      $temp = $data->user_id;
+      if ($temp != $session_id) {
+        $authenticated = false;
+      } else {
+        $authenticated = true;
+      }
+    } else {
+      $authenticated = false;
+    }
+  }
 
 	if(isset($_SESSION['admin'])){
-  		$admin = $_SESSION['admin'];
-  		$admin = "admin";
-  	}else{
-  		$admin = "notAdmin";
-  	}
-	
+		$admin = true;
+    error_log("\nSession of answers is " .session_id());
+	}
+	else
+	{
+    error_log("\nSession is not found in answers.php !!!!");
+		$admin = false;
+	}
+
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
   }
@@ -31,7 +43,7 @@
   if (isset($data->content)) {
     $content = $db->escape_string($data->content);
   }
-  
+
   if (isset($data->comment_id)) {
     $comment_id = $db->escape_string($data->comment_id);
   }
@@ -97,7 +109,7 @@
 			}
 			else //if it is set
 			{
-				if($authenticated == false && $admin != "admin")
+				if($authenticated == false && $admin == false)
 				{
 					http_response_code(401);
 					echo "Unauthorized";
@@ -162,7 +174,7 @@
 					}
 					else
 					{
-						if($authenticated == false && $admin != "admin")
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -346,7 +358,7 @@
 							}
 							else
 							{
-								if($authenticated == false && $admin != "admin")
+								if($authenticated == false && $admin == false)
 								{
 									http_response_code(401);
 									echo "Unauthorized";
@@ -392,7 +404,7 @@
 					}
 					else //if it is set
 					{
-						if($authenticated == false && $admin != "admin")
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -452,7 +464,7 @@
 			}
 
 			$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-			error_log(json_encode($finalOutput));
+			//error_log(json_encode($finalOutput));
 			echo json_encode($finalOutput);
 		}
 
@@ -480,7 +492,7 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-		else if($authenticated == false && $admin != "admin")
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -490,7 +502,7 @@
 			$res = $db->query($query);
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
-			if($uid != $user_id && $admin != "admin")
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Not authorized";
@@ -651,7 +663,7 @@
 			echo "Answer id not set!";
 			return;
 		}
-		else if($authenticated == false && $admin != "admin")
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -685,7 +697,7 @@
 				/* Here we send an upvote notification */
 				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 1, 0)";
 				$db->query($query);
-				
+
 				echo true;
 			}
 			else //have voted before!
@@ -701,9 +713,9 @@
 					/* Update upvote entry */
 					$query = "Update Answers_Voted_By_Users Set up_vote = 1, down_vote = 0 where answer_id = $answer_id and user_id = $user_id";
 					$db->query($query);
-					
-					
-					
+
+
+
 				}
 				else //up_vote == 1
 				{
@@ -741,7 +753,7 @@
 						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
 						$db->query($query);
 					}
-					
+
 					echo true;
 			}
 		}
@@ -771,7 +783,7 @@
 			echo "Answer id not set";
 			return;
 		}
-		else if($authenticated == false && $admin != "admin")
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -802,11 +814,11 @@
 				/* Here we downvote the User score */
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
-				
+
 				/* Here we send an downvote notification */
 				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 0, 0)";
 				$db->query($query);
-				
+
 				echo true;
 			}
 			else //have voted before!
@@ -875,7 +887,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin != "admin")
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -948,7 +960,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin != "admin")
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -970,7 +982,7 @@
 			$r = mysqli_fetch_assoc($result);
 			$uid = $r["user_id"];
 
-			if($uid != $user_id && $admin != "admin")
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Unauthorized";
@@ -1103,6 +1115,13 @@
 			echo "Content not set";
 		}
 
+    if($authenticated == false && $admin == false)
+    {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+    }
+
 
 		/* Here we get the User Info to each comment */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
@@ -1176,6 +1195,12 @@
 			return;
 		}
 
+    if($authenticated == false && $admin == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
@@ -1189,7 +1214,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id && $admin != "admin") //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1273,6 +1298,13 @@
 			return;
 		}
 
+    if($authenticated == false && $admin == false)
+    {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+    }
+
 
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
@@ -1286,7 +1318,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id && $admin != "admin") //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1384,7 +1416,6 @@
 	{
 		global $db;
 
-
 		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
 		$result_author = $db->query($query_author);
@@ -1468,19 +1499,19 @@
 		//error_log(json_encode($latest_array));
 		echo json_encode($latest_array);
 	}
-	
+
 	else if ($cmd == "getallanswers")
 	{
-		if($admin != "admin")
+		if($admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
 			return;
 		}
-		
+
 		$query = "select * from Answers";
 		$result = $db->query($query);
-		
+
 		$answers_array = array();
 		if(mysqli_num_rows($res) != 0)
 		{
@@ -1504,21 +1535,21 @@
 				);
 			}
 		}
-		
+
 		echo json_encode($answers_array);
 	}
 	else if ($cmd == "getallcomments")
 	{
-		if($admin != "admin")
+		if($admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
 			return;
 		}
-		
+
 		$query = "select * from Answers_Comments";
 		$result = $db->query($query);
-		
+
 		$comments_array = array();
 		if(mysqli_num_rows($res) != 0)
 		{
@@ -1541,7 +1572,7 @@
 				);
 			}
 		}
-		
+
 		echo json_encode($comments_array);
 	}
 ?>
