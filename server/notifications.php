@@ -1,4 +1,4 @@
-<?php
+<?php 
 	require_once ('connect.php');
 
 	
@@ -16,9 +16,7 @@
 		@return: list of unread notification
 	*/
 	if($cmd == "get_votes_notifications"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
-		}
+		
 		global $db;
 
 		$user_id = $db->escape_string($data->user_id);
@@ -88,9 +86,7 @@
 		@param: $notification_id_string => CAN BE MULTIPLE IDs Seperated by COMMA ","
 	*/
 	if($cmd == "checked_notifications"){
-		if (session_status() == PHP_SESSION_NONE) {
- 			return false;
-		}
+		
 		$user_id = $db->escape_string($data->user_id);
 		//$notification_id_string = $db->escape_string($data->notification_id_string);
 		$raw_id_array = $db->escape_string($data->id);
