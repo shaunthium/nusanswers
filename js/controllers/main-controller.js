@@ -17,7 +17,7 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-    $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     /*ezfb.getLoginStatus(function (res) {
 
@@ -67,42 +67,42 @@ angular.module('quoraApp')
 
         $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
-        ezfb.login(function(res) {
-          // console.log(res);
-          $scope.loginStatus = res;
-          if (res.status == 'connected') {
-            ezfb.api('/me',function (res) {
-              $scope.apiMe = res;
-              // console.log($scope.apiMe);
-              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-              qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-                $scope.currentUser = data.data;
-                // console.log($scope.currentUser);
-                // $scope.loading = false;
-                // console.log($scope.currentUser);
-
-                    //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
-                    //**********************************************************************************************
-                    Get profile img
-                  $http({
-                    url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
-                    method: 'GET',
-                    data: {
-                      width: '1000'
-                    }
-                  }).success(function(data) {
-                    $scope.currentUser.profileImg = data.data.url;
-                  }).error(function(data) {
-                    $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
-                  });
-
-                    //*** ADDED STUFF END *****
-                    //*************************
-
-              });
-            });
-          }
-        }, {scope: 'public_profile,email'});
+        // ezfb.login(function(res) {
+        //   // console.log(res);
+        //   $scope.loginStatus = res;
+        //   if (res.status == 'connected') {
+        //     ezfb.api('/me',function (res) {
+        //       $scope.apiMe = res;
+        //       // console.log($scope.apiMe);
+        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //         $scope.currentUser = data.data;
+        //         // console.log($scope.currentUser);
+        //         // $scope.loading = false;
+        //         // console.log($scope.currentUser);
+        //
+        //             //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
+        //             //**********************************************************************************************
+        //             // Get profile img
+        //           $http({
+        //             url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
+        //             method: 'GET',
+        //             data: {
+        //               width: '1000'
+        //             }
+        //           }).success(function(data) {
+        //             $scope.currentUser.profileImg = data.data.url;
+        //           }).error(function(data) {
+        //             $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+        //           });
+        //
+        //             //*** ADDED STUFF END *****
+        //             //*************************
+        //
+        //       });
+        //     });
+        //   }
+        // }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
         Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')

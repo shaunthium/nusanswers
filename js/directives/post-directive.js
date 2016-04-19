@@ -47,7 +47,6 @@ angular.module('quoraApp')
             },
             function(post){
                 if(post){
-                    $scope.currentUser.isAdmin = true;
                     $scope.answered = post.answered;
                     if($scope.currentUser){
                         $scope.isEditable = $scope.currentUser.isAdmin || ($scope.type === 'question' && $scope.currentUser.id === $scope.post.author.userid);

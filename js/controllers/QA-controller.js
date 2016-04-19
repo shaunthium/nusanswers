@@ -22,7 +22,6 @@ angular.module('quoraApp')
     qs.getAllTags()
     .then(
         function(res){
-            console.log("Got tags!", res);
             if(res.data){
                 $scope.allTags = res.data;
             }

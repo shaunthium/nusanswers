@@ -35,7 +35,6 @@ angular.module('quoraApp')
                         if(!$scope.post.answers){
                             $scope.post.answers = [];
                         }
-                        console.log(res)
                         $scope.post.answers.push(res.data[0]);
                         $scope.post.answered = true;
                         $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
