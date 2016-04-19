@@ -7,6 +7,8 @@
   	$cmd = $data->cmd;
 
   	if($cmd == "admin_login"){
+  		global $db;
+
   		$username = $db->escape_string($data->username);
   		$password = $db->escape_string($data->password);
 
@@ -15,9 +17,11 @@
   		$row = mysqli_fetch_assoc($result);
 
   		if($row['COUNT(*)'] > 0){
-  			echo true;
+  			http_response_code(200);
+  			echo intval(true);
   		}else{
-  			echo false;
+  			http_response_code(401);
+  			echo intval(false);
   		}
   	}
 
@@ -33,6 +37,7 @@
 		if( $affected > 0 ){
 			echo true;
 		}else{
+			http_response_code(401);
 			echo false;
 		}
   	}
