@@ -34,6 +34,11 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
             $scope.editMode = false;
+            $scope.includeProfileImage = false;
+            $scope.includeTagInputField = false;
+            $scope.includeVotes = false;
+            $scope.includeBody = false;
+            $scope.includeEditTitle = false;
 
 
             //This watch is for getting the post in question-answers view.
@@ -42,8 +47,14 @@ angular.module('quoraApp')
             },
             function(post){
                 if(post){
+                    $scope.currentUser.isAdmin = true;
                     $scope.answered = post.answered;
-                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    if($scope.currentUser){
+                        $scope.isEditable = $scope.currentUser.isAdmin || ($scope.type === 'question' && $scope.currentUser.id === $scope.post.author.userid);
+                    }
+                    else{
+                        $scope.isEditable = false;
+                    }
                     $scope.temp = {title : post.title};
 
                     // TODO: Can't get this to work, we need to render the html tags somehow
@@ -74,7 +85,8 @@ angular.module('quoraApp')
             });
 
             $scope.confirmDelete = function(){
-                $('#delete-confirm-box').openModal();
+                console.log('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id);
+                $('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id).openModal();
             }
 
             $scope.toggleFooter = function(){
@@ -94,7 +106,7 @@ angular.module('quoraApp')
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
-                    $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg({
+                    $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
                     });
@@ -119,7 +131,7 @@ angular.module('quoraApp')
                     return;
                 }
 
-                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg('html');
+                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
                 if($scope.type === 'answer'){
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
                     .then(
@@ -165,7 +177,7 @@ angular.module('quoraApp')
 
                 //console.log("type", $scope.type);
                 // if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
-                    console.log("TYPE ", $scope.type)
+                    console.log("TYPE ", $scope.type);
 
                     if($scope.type === 'answer'){
 
@@ -425,14 +437,32 @@ angular.module('quoraApp')
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
                     break;
                 case "question":
                     scope.includeTags = true;
                     scope.includeTitle = true;
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeTagInputField = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
+                    scope.includeTagInputField = true;
+                    scope.includeEditTitle = true;
                     break;
                 case "answer":
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
+                    break;
+                case "admin-view":
+                    scope.includeTitle = true;
+                    scope.linkToQuestionPage = true;
+                    scope.includeEditTitle = true;
+                    scope.includeTagInputField = true;
                     break;
             }
         },

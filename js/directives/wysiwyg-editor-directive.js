@@ -26,25 +26,30 @@ angular.module('quoraApp')
                     return;
                 }
 
-                Materialize.toast('Question answered! :)', 2000, 'custom-toast')
                 questionService.submitAnswerToPost(post.id, $scope.currentUser.id, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'))
                 .then(function(res){
-                    // console.log("Successfully answered question", res.data);
-                    $scope.post.total_answers++;
-                    if(!$scope.post.answers){
-                        $scope.post.answers = [];
+                    if(res.data.length > 0){
+                        Materialize.toast('Question answered! :)', 2000, 'custom-toast');
+                        // console.log("Successfully answered question", res.data);
+                        $scope.post.total_answers++;
+                        if(!$scope.post.answers){
+                            $scope.post.answers = [];
+                        }
+                        console.log(res)
+                        $scope.post.answers.push(res.data[0]);
+                        $scope.post.answered = true;
+                        $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
                     }
-                    console.log(res)
-                    $scope.post.answers.push(res.data[0]);
-                    $scope.post.answered = true;
+                    else{
+                        $scope.toggleFooter();//Re-open the footer in case of an error
+                        Materialize.toast("There was a problem submitting your answer to the server!", 2000, 'error-toast');
+                    }
                 }, function(err){
                     // console.log("Error in answering question", err);
                 });
+                $scope.toggleFooter(); //Close the footer to give the impression of speed.
                 // submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
                 //clean up
-                $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
-
-                $scope.toggleFooter();
             }
 
             $scope.toggleTextEditor = function(editorId){
