@@ -65,9 +65,9 @@ angular.module('quoraApp')
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
 
-        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
-        $('#login-modal').closeModal();
-        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
+        // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+        // $('#login-modal').closeModal();
+        // Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
 
         // ezfb.login(function(res) {
         //   // console.log(res);
@@ -114,7 +114,6 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                // console.log(returnedData);
                 if(returnedData.data){
                     returnedData.data.forEach(function(newPost){
                         for(var i = 0; i < $scope.posts.length; i++){

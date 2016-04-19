@@ -1,11 +1,8 @@
 angular.module('quoraApp')
 .controller('AdminCtrl', ['$stateParams','ezfb', '$scope', '$rootScope', '$http', '$state', 'questionService', '$timeout', function($stateParams, ezfb, $scope, $rootScope, $http, $state, qs, $timeout){
-
     $scope.feedIndex = 0;
-    $scope.questionsPerUpdate = 15;
+    $scope.questionsPerUpdate = 10;
     $scope.showAdminLogin = true;
-    $rootScope.loading = false;
-    $scope.hasLoadedAdminPosts = false;
     var failedLogin = false;
 
     $scope.resetQuestionsFeed();
@@ -13,6 +10,7 @@ angular.module('quoraApp')
     //FIXME: currently, search parameters are only updated when the user goes to the home view.
     //UPDATE: Search parameters are now also updated when the user lands in the QA view.
     $scope.getQuestionsSummary();
+    $scope.updateQuestionsFeed("latest", ($scope.feedIndex++)*$scope.questionsPerUpdate, $scope.questionsPerUpdate);
 
     $(window).scroll(function(){
         //FIXME: arbitrarily defined update height
@@ -32,7 +30,6 @@ angular.module('quoraApp')
         qs.loginAdmin(admin_name, admin_pw)
         .success(
             function(res){
-                console.log("successfulle logged in", res);
                 //$scope.showAdminLogin = false;
                 $rootScope.currentUser = {};
                 $rootScope.currentUser.id = 1;

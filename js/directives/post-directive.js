@@ -428,7 +428,7 @@ angular.module('quoraApp')
             }
 
             $scope.addTag = function(tag){
-                if($scope.post.tags.length > MAXIMUM_TAGS){
+                if($scope.post.tags.length >= MAXIMUM_TAGS){
                     Materialize.toast("Sorry! The maximum number of tags for a post is " + MAXIMUM_TAGS + ".", 2000, 'error-toast');
                     return;
                 }
