@@ -22,7 +22,7 @@
     $user_id = $db->escape_string($data->user_id);
   }
   if (isset($data->content)) {
-    $content = $data->content;
+    $content = $db->escape_string($data->content);
   }
   
   if (isset($data->comment_id)) {
