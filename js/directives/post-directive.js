@@ -74,6 +74,7 @@ angular.module('quoraApp')
             });
 
             $scope.confirmDelete = function(){
+                console.log('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id);
                 $('#delete-confirm-box-'+$scope.type+"-"+$scope.post.id).openModal();
             }
 
@@ -94,7 +95,7 @@ angular.module('quoraApp')
                 $scope.editMode = !$scope.editMode;
                 if($scope.editMode){
                     $scope.temp.title = $scope.post.title;
-                    $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg({
+                    $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
                     });
@@ -119,7 +120,7 @@ angular.module('quoraApp')
                     return;
                 }
 
-                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + 'body').trumbowyg('html');
+                $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
                 if($scope.type === 'answer'){
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
                     .then(
@@ -165,7 +166,7 @@ angular.module('quoraApp')
 
                 //console.log("type", $scope.type);
                 // if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
-                    console.log("TYPE ", $scope.type)
+                    console.log("TYPE ", $scope.type);
 
                     if($scope.type === 'answer'){
 

@@ -3,7 +3,7 @@
     <div class="card-content">
 
         <!-- Modal Structure -->
-        <div style="position:fixed;max-width:500px;" id="{{'delete-confirm-box-' + post.type + '-' + post.id}}" class="modal">
+        <div style="position:fixed;max-width:500px;" id="{{'delete-confirm-box-' + type + '-' + post.id}}" class="modal">
             <div class="modal-content">
               <h4>Delete post</h4>
               <p>Are you sure you want to <b>delete</b> your post? <br/> This action cannot be undone.</p>
@@ -13,6 +13,7 @@
               <a class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
             </div>
         </div>
+
         <!-- END CONFIRM -->
 
         <!-- confirm box end -->
@@ -32,8 +33,6 @@
                 <span style="position:relative; bottom:5px;">Save changes</span>
             </span>
         </a>
-
-
         <a ng-if="isEditable && editMode" ng-click="confirmDelete()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn red right no-animate">
             <span ng-if="editMode">
                 <i class="material-icons">delete</i>
@@ -88,7 +87,7 @@
         <div ng-show="post.content || editMode" style="margin-top:10px; margin-bottom:15px;width:100%;">
 
             <div class="animate-fade-in" ng-show="type !== 'feed-item' && editMode" class="row">
-               <div id="{{'wysiwyg-editor-' + type + 'body'}}" class="wysiwyg-editor">{{post.content}}</div>
+               <div id="{{'wysiwyg-editor-' + type + '-body-' + post.id}}" class="wysiwyg-editor">{{post.content}}</div>
             </div>
 
             <span class="animate-fade-in" ng-if="(!editMode && (type==='question' || type==='answer')) || type==='feed-item'" ng-switch="type">
