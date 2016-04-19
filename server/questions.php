@@ -9,6 +9,7 @@
 
   	if(isset($_SESSION['admin'])){
   		$admin = $_SESSION['admin'];
+  		$admin = "admin";
   	}else{
   		$admin = "notAdmin";
   	}
