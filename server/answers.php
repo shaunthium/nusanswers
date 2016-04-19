@@ -1066,6 +1066,13 @@
 			echo "Content not set";
 		}
 
+    if($authenticated == false)
+    {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+    }
+
 
 		/* Here we get the User Info to each comment */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
@@ -1139,6 +1146,12 @@
 			return;
 		}
 
+    if($authenticated == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
 
 		$query = "select user_id from Answers_Comments where id = $comment_id";
 		$res = $db->query($query);
@@ -1235,6 +1248,13 @@
 			echo "Comment id not set";
 			return;
 		}
+
+    if($authenticated == false)
+    {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+    }
 
 
 		$query = "select user_id from Answers_Comments where id = $comment_id";
@@ -1347,6 +1367,13 @@
 	{
 		global $db;
 
+
+    if($authenticated == false)
+    {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+    }
 
 		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
