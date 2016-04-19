@@ -104,7 +104,6 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                // console.log(returnedData);
                 if(returnedData.data){
                     returnedData.data.forEach(function(newPost){
                         for(var i = 0; i < $scope.posts.length; i++){
