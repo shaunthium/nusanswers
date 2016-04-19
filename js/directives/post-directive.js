@@ -132,12 +132,17 @@ angular.module('quoraApp')
                 }
 
                 $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
-                var lengthCheck = $scope.temp.content.split("<p>");
                 //XXX: arbitrarily defined maximum number of line breaks.
-                if(lengthCheck.length > 10){
-                    Materialize.toast("Error: this question has a suspiciously high number of line breaks...");
+                if($scope.temp.content.split("<p>").length > 10){
+                    Materialize.toast("Error: this question has too many lines...", 2000, 'error-toast');
                     return;
                 }
+                //XXX: arbitrarily defined maximum number of characters.
+                if($scope.temp.content.length > 5000){
+                    Materialize.toast("Error: maximum length exceeded by " + $scope.temp.content.length - 5000 + " characters.", 2000, 'error-toast');
+                    return;
+                }
+
 
 
                 if($scope.type === 'answer'){
