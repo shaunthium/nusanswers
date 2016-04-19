@@ -77,6 +77,8 @@ angular.module('quoraApp')
               $scope.apiMe = res;
               qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
                 $rootScope.currentUser = data.data;
+                $('#login-modal').closeModal();
+                Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
                 $http({
                   url: 'http://graph.facebook.com/v2.5/' + $rootScope.currentUser.id + '/picture?redirect=false&width=9999',
                   method: 'GET',
@@ -95,9 +97,6 @@ angular.module('quoraApp')
             });
           }
         }, {scope: 'public_profile,email'});
-
-        $('#login-modal').closeModal();
-        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
     }
 
     //TODO: get currentUser from database by logging in.
