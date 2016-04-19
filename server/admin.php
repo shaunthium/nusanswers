@@ -24,6 +24,7 @@
       $row = mysqli_fetch_assoc($result);
 
   		if($row['password'] == $hash){
+        $_SESSION['admin'] = "admin";
   			http_response_code(200);
   			echo intval(true);
   		}else{
