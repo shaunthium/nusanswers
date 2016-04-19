@@ -202,7 +202,12 @@ angular.module('quoraApp')
                         function(res){
                             if(res.data){
                                 Materialize.toast('Post deleted!', 2000, 'success-toast');
-                                $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
+                                if($scope.view  !== 'admin'){
+                                    $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
+                                }
+                                else{
+                                    //TODO: remove the answer from the post.answers array instead of reloading everything
+                                }
                             }
                             else{
                                 Materialize.toast('Server error!', 2000, 'error-toast');
@@ -220,7 +225,16 @@ angular.module('quoraApp')
                             console.log("success in deleting question", res);
                             if(res.data){
                                 Materialize.toast('Post deleted!', 2000, 'success-toast');
-                                $scope.goToHome();
+                                if($scope.view !== 'admin'){
+                                    $scope.goToHome();
+                                }
+                                else{
+                                    for(var i = 0; i < $scope.posts.length; i++){
+                                        if($scope.posts[i].id === $scope.post.id){
+                                            $scope.posts.splice(i, 1); //Remove this one post.
+                                        }
+                                    }
+                                }
                             }
                             else{
                                 Materialize.toast('Server error!', 2000, 'error-toast');
