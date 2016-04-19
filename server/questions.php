@@ -437,9 +437,9 @@
 
 			$affected = $db->affected_rows;
 			if( $affected > 0 ){
-				echo true;
+				echo intval(true);
 			}else{
-				echo false;
+				echo intval(false);
 			}
 
 		}else{
@@ -503,9 +503,9 @@
 
 			$affected = $db->affected_rows;
 			if( $affected > 0 ){
-				echo true;
+				echo intval(true);
 			}else{
-				echo false;
+				echo intval(false);
 			}
 		}
 	}
