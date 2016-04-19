@@ -21,9 +21,10 @@
   if (isset($data->user_id)) {
     $user_id = $db->escape_string($data->user_id);
   }
-  if (isset($data->content)) {
-    $content = $db->escape_string($data->content);
-  }
+  //if (isset($data->content)) {
+    //$content = $db->escape_string($data->content);
+  //}
+  $content = $db->escape_string($data->content);
   if (isset($data->comment_id)) {
     $comment_id = $db->escape_string($data->comment_id);
   }
