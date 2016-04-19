@@ -12,13 +12,12 @@
 		$authenticated = true;
 	// }
 
-	if(isset($_SESSION['admin']){
-		$admin = true;
-	}
-	else
-	{
-		$admin = false;
-	}
+	if(isset($_SESSION['admin'])){
+  		$admin = $_SESSION['admin'];
+  		$admin = "admin";
+  	}else{
+  		$admin = "notAdmin";
+  	}
 	
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
@@ -98,7 +97,7 @@
 			}
 			else //if it is set
 			{
-				if($authenticated == false && $admin == false)
+				if($authenticated == false && $admin != "admin")
 				{
 					http_response_code(401);
 					echo "Unauthorized";
@@ -163,7 +162,7 @@
 					}
 					else
 					{
-						if($authenticated == false && $admin == false)
+						if($authenticated == false && $admin != "admin")
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -347,7 +346,7 @@
 							}
 							else
 							{
-								if($authenticated == false && $admin == false)
+								if($authenticated == false && $admin != "admin")
 								{
 									http_response_code(401);
 									echo "Unauthorized";
@@ -393,7 +392,7 @@
 					}
 					else //if it is set
 					{
-						if($authenticated == false && $admin == false)
+						if($authenticated == false && $admin != "admin")
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -481,7 +480,7 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false && $admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -491,7 +490,7 @@
 			$res = $db->query($query);
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
-			if($uid != $user_id && $admin == false)
+			if($uid != $user_id && $admin != "admin")
 			{
 				http_response_code(401);
 				echo "Not authorized";
@@ -652,7 +651,7 @@
 			echo "Answer id not set!";
 			return;
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false && $admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -772,7 +771,7 @@
 			echo "Answer id not set";
 			return;
 		}
-		else if($authenticated == false && $admin == false)
+		else if($authenticated == false && $admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -876,7 +875,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin == false)
+		if($authenticated == false && $admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -949,7 +948,7 @@
 	{
 		global $db;
 
-		if($authenticated == false && $admin == false)
+		if($authenticated == false && $admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -971,7 +970,7 @@
 			$r = mysqli_fetch_assoc($result);
 			$uid = $r["user_id"];
 
-			if($uid != $user_id && $admin == false)
+			if($uid != $user_id && $admin != "admin")
 			{
 				http_response_code(401);
 				echo "Unauthorized";
@@ -1190,7 +1189,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id && $admin == false) //unauthorized
+		if($uid != $user_id && $admin != "admin") //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1287,7 +1286,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id && $admin == false) //unauthorized
+		if($uid != $user_id && $admin != "admin") //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1472,7 +1471,7 @@
 	
 	else if ($cmd == "getallanswers")
 	{
-		if($admin == false)
+		if($admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1510,7 +1509,7 @@
 	}
 	else if ($cmd == "getallcomments")
 	{
-		if($admin == false)
+		if($admin != "admin")
 		{
 			http_response_code(401);
 			echo "Unauthorized";
