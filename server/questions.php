@@ -8,7 +8,7 @@
   	$data = json_decode($request_data);
   	$cmd = $db->escape_string($data->cmd);
 
-  	if(!empty($_SESSION['admin'])){
+  	if(isset($_SESSION['admin'])){
   		//$admin = $_SESSION['admin'];
   		$admin = "admin";
   	}else{
