@@ -12,6 +12,14 @@
 		$authenticated = true;
 	// }
 
+	if(isset($_SESSION['admin']){
+		$admin = true;
+	}
+	else
+	{
+		$admin = false;
+	}
+	
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);
   }
@@ -90,7 +98,7 @@
 			}
 			else //if it is set
 			{
-				if($authenticated == false)
+				if($authenticated == false && $admin == false)
 				{
 					http_response_code(401);
 					echo "Unauthorized";
@@ -155,7 +163,7 @@
 					}
 					else
 					{
-						if($authenticated == false)
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -339,7 +347,7 @@
 							}
 							else
 							{
-								if($authenticated == false)
+								if($authenticated == false && $admin == false)
 								{
 									http_response_code(401);
 									echo "Unauthorized";
@@ -385,7 +393,7 @@
 					}
 					else //if it is set
 					{
-						if($authenticated == false)
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -473,7 +481,7 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -483,7 +491,7 @@
 			$res = $db->query($query);
 			$fetch_user_id = mysqli_fetch_assoc($res);
 			$uid = $fetch_user_id["user_id"];
-			if($uid != $user_id)
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Not authorized";
@@ -644,7 +652,7 @@
 			echo "Answer id not set!";
 			return;
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -764,7 +772,7 @@
 			echo "Answer id not set";
 			return;
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -868,7 +876,7 @@
 	{
 		global $db;
 
-		if($authenticated == false)
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -941,7 +949,7 @@
 	{
 		global $db;
 
-		if($authenticated == false)
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -963,7 +971,7 @@
 			$r = mysqli_fetch_assoc($result);
 			$uid = $r["user_id"];
 
-			if($uid != $user_id)
+			if($uid != $user_id && $admin == false)
 			{
 				http_response_code(401);
 				echo "Unauthorized";
@@ -1182,7 +1190,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id) //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1279,7 +1287,7 @@
 
 		$r = mysqli_fetch_assoc($res);
 		$uid = $r["user_id"];
-		if($uid != $user_id) //unauthorized
+		if($uid != $user_id && $admin == false) //unauthorized
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1461,6 +1469,80 @@
 		//error_log(json_encode($latest_array));
 		echo json_encode($latest_array);
 	}
+	
+	else if ($cmd == "getallanswers")
+	{
+		if($admin == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
+		
+		$query = "select * from Answers";
+		$result = $db->query($query);
+		
+		$answers_array = array();
+		if(mysqli_num_rows($res) != 0)
+		{
+			while ($answer = mysqli_fetch_assoc($result)){
 
+				$user_id = $answer['user_id'];
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
 
+				$answers_array[] = array(
+					'id'=>$answer['id'],
+					'questionid'=>$answer['question_id'],
+					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+										'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+					'content'=>$answer['content'],
+					'upvotes'=>(int)$answer['score'],
+					'created_at'=>$answer['created_at'],
+					'updated_at'=>$answer['updated_at'],
+					'chosen'=>$answer['chosen']
+				);
+			}
+		}
+		
+		echo json_encode($answers_array);
+	}
+	else if ($cmd == "getallcomments")
+	{
+		if($admin == false)
+		{
+			http_response_code(401);
+			echo "Unauthorized";
+			return;
+		}
+		
+		$query = "select * from Answers_Comments";
+		$result = $db->query($query);
+		
+		$comments_array = array();
+		if(mysqli_num_rows($res) != 0)
+		{
+			while ($comment = mysqli_fetch_assoc($result)){
+
+				$user_id = $comment['user_id'];
+				$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
+				$result_author = $db->query($query_author);
+				$author = mysqli_fetch_assoc($result_author);
+
+				$comments_array[] = array(
+					'id'=>$comment['id'],
+					'answerid'=>$comment['answer_id'],
+					'author' => array('name'=>$author['first_name'] . " " . $author['last_name'],
+										'karma'=> $author['score'], 'userid'=>$user_id, 'flavour'=>$author['flavour']),
+					'content'=>$comment['content'],
+					'likes'=>(int)$comment['score'],
+					'created_at'=>$comment['created_at'],
+					'updated_at'=>$comment['updated_at'],
+				);
+			}
+		}
+		
+		echo json_encode($comments_array);
+	}
 ?>
