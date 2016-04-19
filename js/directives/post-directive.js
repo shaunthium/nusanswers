@@ -132,6 +132,13 @@ angular.module('quoraApp')
                 }
 
                 $scope.temp.content = $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html');
+                var lengthCheck = $scope.temp.content.split("<p>");
+                //XXX: arbitrarily defined maximum number of line breaks.
+                if(lengthCheck.length > 10){
+                    Materialize.toast("Error: this question has a suspiciously high number of line breaks...");
+                    return;
+                }
+
 
                 if($scope.type === 'answer'){
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
