@@ -19,7 +19,7 @@
     }
   }
 
-	if(isset($_SESSION['admin']){
+	if(isset($_SESSION['admin'])){
 		$admin = true;
 	}
 	else
