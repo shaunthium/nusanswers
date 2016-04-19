@@ -4,7 +4,7 @@
 	global $db;
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
-  	$cmd = $data->cmd;
+  	$cmd = $db->escape_string($data->cmd);
   
 
 	if($cmd == "get_all_comments_qns"){

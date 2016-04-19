@@ -6,7 +6,7 @@
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
-  	$cmd = $data->cmd;
+  	$cmd = $db->escape_string($data->cmd);
 
   	if($cmd == "admin_login"){
   		global $db;
@@ -28,6 +28,7 @@
   			http_response_code(200);
   			echo intval(true);
   		}else{
+        unset($_SESSION['admin'])
   			http_response_code(401);
   			echo intval(false);
   		}
