@@ -86,7 +86,7 @@
         <div ng-show="post.content || editMode" style="margin-top:10px; margin-bottom:15px;width:100%;">
 
             <div class="animate-fade-in" ng-show="type !== 'feed-item' && editMode" class="row">
-               <div id="{{'wysiwyg-editor-' + type + '-body-' + post.id}}" class="wysiwyg-editor">{{post.content}}</div>
+               <div id="{{'wysiwyg-editor-' + type + '-body-' + post.id}}" class="wysiwyg-editor" placeholder="Add a description to your question!"></div>
             </div>
 
             <span class="animate-fade-in" ng-if="!editMode && includeBody" ng-switch="type">

@@ -108,6 +108,8 @@ angular.module('quoraApp')
                         fullscreenable: false,
                         btns:['bold', 'italic']
                     });
+
+                    $('#wysiwyg-editor-' + $scope.type + '-body-' + $scope.post.id).trumbowyg('html', $scope.post.content);
                 }
                 else{
                     Materialize.toast('Changes not saved.', 2000, 'information-toast')
@@ -135,17 +137,20 @@ angular.module('quoraApp')
                     questionService.editAnswer($scope.post.id, $scope.temp.content, $scope.currentUser.id)
                     .then(
                         function(res){
+                            console.log("Edited answer!", res);
                             if(res.data){
                                 $scope.post.content = $scope.temp.content;
                                 Materialize.toast('Changes saved successfully!', 2000, 'success-toast');
                                 $scope.editMode = !$scope.editMode;
                             }
                             else{
-                                console.log("Error while editing question!");
+                                Materialize.toast('Could not save changes!', 2000, 'error-toast');
+                                // console.log("Error while editing question!");
                             }
                         },
                         function(err){
-                            console.log("Error while editing question!");
+                            Materialize.toast('Could not save changes!', 2000, 'error-toast');
+                            // console.log("Error while editing question!");
                         }
                     );
                 }
@@ -160,11 +165,11 @@ angular.module('quoraApp')
                                 $scope.editMode = !$scope.editMode;
                             }
                             else{
-                                console.log("Error while editing question!");
+                                // console.log("Error while editing question!");
                             }
                         },
                         function(err){
-                            console.log("Error while editing question!");
+                            // console.log("Error while editing question!");
                         }
                     );
                 }
@@ -182,7 +187,7 @@ angular.module('quoraApp')
                                 $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
                             }
                             else{
-                                Materialize.toast('Could not delete answer!', 2000, 'error-toast');
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                         },
                         function(err){
@@ -199,7 +204,7 @@ angular.module('quoraApp')
                                 $scope.goToHome();
                             }
                             else{
-                                Materialize.toast('Could not delete question!', 2000, 'error-toast');
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                         },
                         function(err){
@@ -218,7 +223,7 @@ angular.module('quoraApp')
               }
 
               if(!canUpvote){
-                console.log("cannot upvote yet")
+                // console.log("cannot upvote yet")
                 return;
               }
 
@@ -233,13 +238,16 @@ angular.module('quoraApp')
                       questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              if(res.data){
-                                  $scope.post.upvotes--;
-                                  $scope.post.upvoted = false;
+                            if(res.data){
+                              $scope.post.upvotes--;
+                              $scope.post.upvoted = false;
+                            }
+                            else{
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                           },
                           function(err){
-                            console.log("Error in cancelling upvote ", err);
+                              Materialize.toast('Server error!', 2000, 'error-toast');
                           }
                       );
                   }
@@ -248,13 +256,16 @@ angular.module('quoraApp')
                           questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  if(res.data){
-                                      //$scope.post.upvotes++;
-                                      $scope.post.downvoted = false;
+                                if(res.data){
+                                  //$scope.post.upvotes++;
+                                  $scope.post.downvoted = false;
+                                }
+                                else{
+                                    Materialize.toast('Server error!', 2000, 'error-toast');
                                 }
                               },
                               function(err){
-                                console.log("Error in cancelling downvote" , err);
+                                // console.log("Error in cancelling downvote" , err);
                               }
                           ).then(function(){
                             questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
@@ -263,25 +274,30 @@ angular.module('quoraApp')
                                     if(res.data){
                                         $scope.post.upvotes+=2;
                                         $scope.post.upvoted = true;
-                                  }
+                                    }
+                                    else{
+                                        Materialize.toast('Server error!', 2000, 'error-toast');
+                                    }
                                 },
                                 function(err){
-                                  console.log("Error in submitting upvote" , err);
+                                  // console.log("Error in submitting upvote" , err);
                                 }
                             );
                           });
                       } else { // Was not downvoted
-
                         questionService.submitUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                         .then(
                             function(res){
                                 if(res.data){
                                     $scope.post.upvotes++;
                                     $scope.post.upvoted = true;
-                              }
+                                }
+                                else {
+                                    Materialize.toast('Server error!', 2000, 'error-toast');
+                                }
                             },
                             function(err){
-                              console.log("Error in submitting upvote" , err);
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                         );
                       }
@@ -293,13 +309,16 @@ angular.module('quoraApp')
                       questionService.submitCancelDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                       .then(
                           function(res){
-                              if(res.data){
-                                  $scope.post.upvotes++;
-                                  $scope.post.downvoted = false;
+                            if(res.data){
+                              $scope.post.upvotes++;
+                              $scope.post.downvoted = false;
+                            }
+                            else{
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                           },
                           function(err){
-                              console.log("Error in cancelling downvote post", err);
+                              Materialize.toast('Server error!', 2000, 'error-toast');
                           }
                       );
                   }
@@ -308,13 +327,16 @@ angular.module('quoraApp')
                           questionService.submitCancelUpvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
                           .then(
                               function(res){
-                                  if(res.data){
-                                      //$scope.post.upvotes--;
-                                      $scope.post.upvoted = false;
+                                if(res.data){
+                                  //$scope.post.upvotes--;
+                                  $scope.post.upvoted = false;
+                                }
+                                else{
+                                    Materialize.toast('Server error!', 2000, 'error-toast');
                                 }
                               },
                               function(err){
-                                console.log("Error in submitting cancelupvote post", err);
+                                  Materialize.toast('Server error!', 2000, 'error-toast');
                               }
                           ).then(function(){
                             questionService.submitDownvotePost($scope.post.id, $scope.currentUser.id, $scope.type)
@@ -323,11 +345,13 @@ angular.module('quoraApp')
                                     if(res.data){
                                         $scope.post.upvotes-=2;
                                         $scope.post.downvoted = true;
-                                  }
+                                    }
+                                    else{
+                                        Materialize.toast('Server error!', 2000, 'error-toast');
+                                    }
                                 },
                                 function(err){
-
-                                  console.log("Error in submitting downvote post", err);
+                                    Materialize.toast('Server error!', 2000, 'error-toast');
                                 }
                             );
                           })
@@ -338,10 +362,13 @@ angular.module('quoraApp')
                                 if(res.data){
                                     $scope.post.upvotes--;
                                     $scope.post.downvoted = true;
-                              }
+                                }
+                                else{
+                                    Materialize.toast('Server error!', 2000, 'error-toast');
+                                }
                             },
                             function(err){
-                              console.log("Error in submitting downvote post", err);
+                                Materialize.toast('Server error!', 2000, 'error-toast');
                             }
                         );
                       }
