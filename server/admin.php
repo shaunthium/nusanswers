@@ -28,6 +28,7 @@
   			    echo intval(true);
   		  }else{
             session_unset(); 
+            session_destroy();
             //unset($_SESSION['admin']);
   			    http_response_code(401);
   			    echo intval(false);

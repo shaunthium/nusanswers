@@ -3,6 +3,8 @@
     session_start();
   }
    require_once ('connect.php'); //contains login constants
+    require_once('admin.php');
+
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $db->escape_string($data->cmd);
@@ -24,9 +26,11 @@
 
 	if(isset($_SESSION['admin'])){
 		$admin = true;
+    error_log("\nSession of answers is " .session_id());
 	}
 	else
 	{
+    error_log("\nSession is not found in answers.php !!!!");
 		$admin = false;
 	}
 
@@ -108,7 +112,7 @@
 			}
 			else //if it is set
 			{
-				if($authenticated == false)
+				if($authenticated == false && $admin == false)
 				{
 					http_response_code(401);
 					echo "Unauthorized";
@@ -173,7 +177,7 @@
 					}
 					else
 					{
-						if($authenticated == false)
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -357,7 +361,7 @@
 							}
 							else
 							{
-								if($authenticated == false)
+								if($authenticated == false && $admin == false)
 								{
 									http_response_code(401);
 									echo "Unauthorized";
@@ -403,7 +407,7 @@
 					}
 					else //if it is set
 					{
-						if($authenticated == false)
+						if($authenticated == false && $admin == false)
 						{
 							http_response_code(401);
 							echo "Unauthorized";
@@ -463,7 +467,7 @@
 			}
 
 			$finalOutput = array("question"=>$questionResult,"answers"=>$answersResult);
-			error_log(json_encode($finalOutput));
+			//error_log(json_encode($finalOutput));
 			echo json_encode($finalOutput);
 		}
 
@@ -491,7 +495,7 @@
 			http_response_code(400);
 			echo "Answer id not set";
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -662,7 +666,7 @@
 			echo "Answer id not set!";
 			return;
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -782,7 +786,7 @@
 			echo "Answer id not set";
 			return;
 		}
-		else if($authenticated == false)
+		else if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -886,7 +890,7 @@
 	{
 		global $db;
 
-		if($authenticated == false)
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -959,7 +963,7 @@
 	{
 		global $db;
 
-		if($authenticated == false)
+		if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1114,7 +1118,7 @@
 			echo "Content not set";
 		}
 
-    if($authenticated == false)
+    if($authenticated == false && $admin == false)
     {
       http_response_code(401);
       echo "Unauthorized";
@@ -1194,7 +1198,7 @@
 			return;
 		}
 
-    if($authenticated == false)
+    if($authenticated == false && $admin == false)
 		{
 			http_response_code(401);
 			echo "Unauthorized";
@@ -1297,7 +1301,7 @@
 			return;
 		}
 
-    if($authenticated == false)
+    if($authenticated == false && $admin == false)
     {
       http_response_code(401);
       echo "Unauthorized";
@@ -1414,14 +1418,6 @@
 	else if ($cmd == "profileanswers")
 	{
 		global $db;
-
-
-    // if($authenticated == false)
-    // {
-    //   http_response_code(401);
-    //   echo "Unauthorized";
-    //   return;
-    // }
 
 		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;

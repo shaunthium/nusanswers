@@ -26,7 +26,11 @@ angular.module('quoraApp')
         });
     };
 })
-.controller('HomeCtrl', [ '$scope', '$rootScope', '$stateParams', 'byTagsFilter', 'questionService', function($scope, $rootScope, $stateParams, filterByTags, questionService){
+.controller('HomeCtrl', [ '$scope', '$rootScope', '$stateParams', 'byTagsFilter', 'questionService', '$state', function($scope, $rootScope, $stateParams, filterByTags, questionService, $state){
+    
+    if($rootScope.currentUser && $rootScope.currentUser.isAdmin)
+        $state.go('admin');
+
     $scope.feedIndex = 0;
     $scope.questionsPerUpdate = 10;
     $scope.activeTags = [];

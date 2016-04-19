@@ -1,5 +1,6 @@
 <?php session_start();
 	require_once ('connect.php');
+	require_once('admin.php');
 
 	global $db;
 	$request_data = file_get_contents("php://input");
@@ -7,7 +8,7 @@
   	$cmd = $db->escape_string($data->cmd);
   
   	if(isset($_SESSION['admin'])){
-  		$admin = $_SESSION['admin'];
+  		//$admin = $_SESSION['admin'];
   		$admin = "admin";
   	}else{
   		$admin = "notAdmin";
@@ -195,7 +196,7 @@
 			$comment_id = $db->escape_string($data->comment_id);
 			//$user_id = $db->escape_string($data->user_id);
 			
-			$query = "DELETE FROM Comments WHERE id=".$comment_id//. " AND user_id=". $user_id;
+			$query = "DELETE FROM Comments WHERE id=".$comment_id;//. " AND user_id=". $user_id;
 			$result = $db->query($query);
 			$affected = $db->affected_rows;
 			

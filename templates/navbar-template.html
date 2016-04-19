@@ -34,7 +34,18 @@
 
       <ul class="right hide-on-med-and-down">
 
-        <li class="no-animate"ng-if="currentUser">
+        <!-- ADMIN, NO LINK QUICK FIX -->
+        <li class="no-animate" ng-if="currentUser && currentUser.isAdmin">
+            <a style="font-size:0.9em;"class="white-text" >
+            
+             <img style="width:30px; position:relative; top:15px; right:10px;"class="left responsive-img circle">
+              <span ng-if="currentUser" > {{currentUser.first_name}} (Godmode)</span>
+                <!-- <img style="width:35px; display:inline-block; line-height:300px;margin-top:-20px;"ng-if="currentUser" ng-src="{{currentUser.profileImg}}" alt="" class="circle"> -->
+            </a>
+        </li>
+
+
+        <li class="no-animate" ng-if="currentUser && !currentUser.isAdmin">
             <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
               
              
@@ -82,6 +93,7 @@
             </a> -->
             <a ng-href="{{'#/profile/'+ currentUser.id}}">{{currentUser.first_name}}</a>
         </li>
+
 
         <li class="no-animate" ng-if="!currentUser">
             <!-- <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">

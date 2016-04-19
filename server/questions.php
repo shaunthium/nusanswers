@@ -5,13 +5,14 @@
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
+	require_once('admin.php');
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $db->escape_string($data->cmd);
 
   	if(isset($_SESSION['admin'])){
-  		$admin = $_SESSION['admin'];
+  		//$admin = $_SESSION['admin'];
   		$admin = "admin";
   	}else{
   		$admin = "notAdmin";
@@ -494,9 +495,9 @@
 
 			$affected = $db->affected_rows;
 			if( $affected > 0 ){
-				echo true;
+				echo intval(true);
 			}else{
-				echo false;
+				echo intval(false);
 			}
 
 		}else{
@@ -560,9 +561,9 @@
 
 			$affected = $db->affected_rows;
 			if( $affected > 0 ){
-				echo true;
+				echo intval(true);
 			}else{
-				echo false;
+				echo intval(false);
 			}
 		}
 	}

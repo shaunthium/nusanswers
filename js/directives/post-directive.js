@@ -171,6 +171,9 @@ angular.module('quoraApp')
                     questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content, $scope.currentUser.id)
                     .then(
                         function(res){
+
+                            console.log("res from EDIT", res);
+
                             if(res.data){
                                 $scope.post.title = $scope.temp.title;
                                 $scope.post.content = $scope.temp.content;
@@ -183,6 +186,8 @@ angular.module('quoraApp')
                         },
                         function(err){
                             // console.log("Error while editing question!");
+
+                            console.log("err from EDIT", err);
                         }
                     );
                 }
@@ -212,6 +217,7 @@ angular.module('quoraApp')
                     questionService.deleteQuestion($scope.post.id, $scope.currentUser.id)
                     .then(
                         function(res){
+                            console.log("success in deleting question", res);
                             if(res.data){
                                 Materialize.toast('Post deleted!', 2000, 'success-toast');
                                 $scope.goToHome();
@@ -221,6 +227,7 @@ angular.module('quoraApp')
                             }
                         },
                         function(err){
+                            console.log("Error in deleting question", err);
                             Materialize.toast('Server error!', 2000, 'error-toast');
                         }
                     );
