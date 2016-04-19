@@ -47,11 +47,9 @@ angular.module('quoraApp')
 
 
                     if($scope.type === 'answer'){
-                        questionService.getCommentsFromAnswer($scope.post.id, $scope.currentUser.id)
+                        questionService.getCommentsFromAnswer($scope.post.id, $scope.currentUser ? $scope.currentUser.id : undefined)
                         .then(
                             function(res){
-
-                                console.log("res from answer comment", res);
 
                                 if(res.data){
                                     $scope.post.comments = res.data;
@@ -92,13 +90,12 @@ angular.module('quoraApp')
             $scope.addComment = function(comment){
                 if($scope.type === 'answer'){
                     console.log("ans ", $scope.post)
-                    questionService.addCommentToAnswer(comment, $scope.currentUser.id, $scope.post.id)
+                    questionService.addCommentToAnswer(comment, $scope.currentUser ? $scope.currentUser.id : undefined, $scope.post.id)
                         .then(function(res){
                             console.log("Add comment to answer", res);
                             if(res.data){
                                 if($scope.editing){
                                     //Remove the edited from the post
-
                                     $scope.deleteComment($scope.editedComment, false);
                                     $scope.editedComment = null;
                                     $scope.editing = false;
@@ -113,7 +110,7 @@ angular.module('quoraApp')
                         });
                 }
                 else{
-                    questionService.submitNewComment(comment, $scope.currentUser.id, $scope.post.id)
+                    questionService.submitNewComment(comment, $scope.currentUser ? $scope.currentUser.id : undefined, $scope.post.id)
                     .then(function(res){
                         if(res.data){
                             console.log("res from server", res);
@@ -156,15 +153,10 @@ angular.module('quoraApp')
             //Delete a comment from the server
             $scope.deleteComment = function(comment, requireConfirmation){
                 //TODO: implement fancier confirmation.
-
-                console.log("TRYING TO DELETE COMMENT ", $scope.type);
-
                 if(!requireConfirmation || confirm("Are you sure you want to delete this comment?")){
 
-                    console.log("OK ", $scope.type);
-
                     if($scope.type === 'answer'){
-                        questionService.deleteCommentFromAnswer(comment.id, $scope.currentUser.id)
+                        questionService.deleteCommentFromAnswer(comment.id, $scope.currentUser ? $scope.currentUser.id : undefined)
                         .then(
                             function(res){
                                 if(res.data){
@@ -178,11 +170,10 @@ angular.module('quoraApp')
                         );
                     }
                     else{
-                        questionService.submitDeleteComment(comment.id, $scope.currentUser.id)
+                        questionService.submitDeleteComment(comment.id, $scope.currentUser ? $scope.currentUser.id : undefined)
                         .then(
                             function(res){
                                 if(res.data){
-                                    console.log("data ", res.data);
                                     $scope.removeComment(comment);
                                     $scope.tempComments = null;
                                 }
