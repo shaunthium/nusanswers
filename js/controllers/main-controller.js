@@ -67,42 +67,42 @@ angular.module('quoraApp')
 
         $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
-        // ezfb.login(function(res) {
-        //   // console.log(res);
-        //   $scope.loginStatus = res;
-        //   if (res.status == 'connected') {
-        //     ezfb.api('/me',function (res) {
-        //       $scope.apiMe = res;
-        //       // console.log($scope.apiMe);
-        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
-        //         $scope.currentUser = data.data;
-        //         // console.log($scope.currentUser);
-        //         // $scope.loading = false;
-        //         // console.log($scope.currentUser);
+        ezfb.login(function(res) {
+          // console.log(res);
+          $scope.loginStatus = res;
+          if (res.status == 'connected') {
+            ezfb.api('/me',function (res) {
+              $scope.apiMe = res;
+              // console.log($scope.apiMe);
+              // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+              qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+                $scope.currentUser = data.data;
+                // console.log($scope.currentUser);
+                // $scope.loading = false;
+                // console.log($scope.currentUser);
 
-        //             //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
-        //             //**********************************************************************************************
-        //             Get profile img
-        //           $http({
-        //             url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
-        //             method: 'GET',
-        //             data: {
-        //               width: '1000'
-        //             }
-        //           }).success(function(data) {
-        //             $scope.currentUser.profileImg = data.data.url;
-        //           }).error(function(data) {
-        //             $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
-        //           });
+                    //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
+                    //**********************************************************************************************
+                    Get profile img
+                  $http({
+                    url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
+                    method: 'GET',
+                    data: {
+                      width: '1000'
+                    }
+                  }).success(function(data) {
+                    $scope.currentUser.profileImg = data.data.url;
+                  }).error(function(data) {
+                    $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+                  });
 
-        //             //*** ADDED STUFF END *****
-        //             //*************************
+                    //*** ADDED STUFF END *****
+                    //*************************
 
-        //       });
-        //     });
-        //   }
-        // }, {scope: 'public_profile,email'});
+              });
+            });
+          }
+        }, {scope: 'public_profile,email'});
 
         $('#login-modal').closeModal();
         Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
@@ -113,13 +113,13 @@ angular.module('quoraApp')
         $scope.doneUpdatingFeed = false;
         qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
             function (returnedData) {
-                console.log(returnedData);
+                // console.log(returnedData);
                 if(returnedData.data){
                     returnedData.data.forEach(function(newPost){
                         for(var i = 0; i < $scope.posts.length; i++){
                             //Do not add repeated posts!
                             if($scope.posts[i].id === newPost.id){
-                                console.log("found repeated post! ", newPost.id);
+                                // console.log("found repeated post! ", newPost.id);
                                 return;
                             }
                         }
@@ -148,7 +148,7 @@ angular.module('quoraApp')
         //console.log(questionID, " ", userID);
         qs.getPost(questionID, userID)
         .then(function(res){
-            console.log(res);
+            // console.log(res);
             if(res.data){
                 $scope.post = res.data.question;
                 $scope.post.answers = res.data.answers;
