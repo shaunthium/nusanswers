@@ -14,7 +14,6 @@
 		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
-
 		if (!(isset($_SESSION['cs3226']))) {
  			//http_response_code(401);
       http_response_code(401);

@@ -1,0 +1,42 @@
+<div class="container">
+	
+
+	<div class="animate-fade-in" ng-if="showAdminLogin">
+		<div style="margin-top:100px;"class="row col s6 offset-s3 center">
+			<h4>Admin Login</h4>
+		</div>
+		<div class="row">
+			<div class="col s6 offset-s3">
+				<input placeholder="Admin" id="admin_name" type="text" class="validate">
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s6 offset-s3">
+				<input placeholder="Password" id="admin_pw" type="password" class="validate">
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col s6 offset-s3 center">
+				<a ng-click="loginAdmin()" class="waves-effect waves-light btn blue">Login</a>
+			</div>
+		</div>
+
+	</div>
+
+	<div ng-if="!showAdminLogin" class="row">
+		<div class="col s6 offset-s3 center">
+			<p> Welcome admin</p>
+		</div>
+	</div>
+
+
+	<!-- NG REPEAT ADMIN POST FEED
+	<div class="">
+
+	</div>
+	-->
+
+
+</div>

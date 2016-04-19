@@ -17,7 +17,7 @@ angular.module('quoraApp')
         $scope.feedType = type;
     }
 
-    // $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
 
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;

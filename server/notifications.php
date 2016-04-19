@@ -1,4 +1,4 @@
-<?php session_start();
+<?php 
 	require_once ('connect.php');
 
 	
@@ -16,10 +16,7 @@
 		@return: list of unread notification
 	*/
 	if($cmd == "get_votes_notifications"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		
 		global $db;
 
 		$user_id = $db->escape_string($data->user_id);
@@ -89,10 +86,7 @@
 		@param: $notification_id_string => CAN BE MULTIPLE IDs Seperated by COMMA ","
 	*/
 	if($cmd == "checked_notifications"){
-		if (!(isset($_SESSION['cs3226']))) {
- 			//http_response_code(401);
- 			echo false;
-		}
+		
 		$user_id = $db->escape_string($data->user_id);
 		//$notification_id_string = $db->escape_string($data->notification_id_string);
 		$raw_id_array = $db->escape_string($data->id);

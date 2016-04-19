@@ -434,11 +434,6 @@ angular.module('quoraApp')
 
     /* WARNING: userID is undefined here if user is NOT logged in */
     function getPost(postID, userID){
-
-      // console.log("question_id", postID);
-      // console.log("user_id", userID);
-
-
       // return $http({
       //   url: base_url + "server/questions.php",
       //   method: 'POST',
@@ -555,6 +550,22 @@ angular.module('quoraApp')
         });
     }
 
+    function loginAdmin(adminName, adminPW){
+
+        console.log("username", adminName);
+        console.log("password", adminPW);
+
+        return $http({
+          url: base_url + 'server/admin.php',
+          method: 'POST',
+          data: {
+            cmd : 'admin_login',
+            username : adminName,
+            password: adminPW
+          }
+        });
+    }
+
     function deleteAnswer(answerID, userID){
         return $http({
             url: base_url + 'server/answers.php',
@@ -611,7 +622,8 @@ angular.module('quoraApp')
         addCommentToAnswer          :   addCommentToAnswer,
         getCommentsFromAnswer       :   getCommentsFromAnswer,
         deleteCommentFromAnswer     :   deleteCommentFromAnswer,
-        getAllTags                  :   getAllTags
+        getAllTags                  :   getAllTags,
+        loginAdmin                  : loginAdmin
     }
 
 }]);

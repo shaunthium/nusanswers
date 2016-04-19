@@ -27,6 +27,12 @@ angular.module('quoraApp', ['ezfb', 'ui.router', 'ngAnimate', 'ngSanitize'])
   		  controller: 'ProfileCtrl'
   		})
 
+      .state('admin', {
+        url: '/admin',
+        templateUrl: '/views/admin.html',
+        controller: 'AdminCtrl'
+      })
+
       .state('404', {
         templateUrl: '/views/404.html'
       });
