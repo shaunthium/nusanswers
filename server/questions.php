@@ -1,4 +1,7 @@
-<?php session_start();
+<?php
+  if (!(isset($SESSION))) {
+    session_start();
+  }
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');

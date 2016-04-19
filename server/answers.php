@@ -1,4 +1,7 @@
-<?php session_start();
+<?php
+  if (!(isset($SESSION))) {
+    session_start();
+  }
    require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
