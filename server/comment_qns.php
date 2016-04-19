@@ -195,7 +195,7 @@
 			$comment_id = $db->escape_string($data->comment_id);
 			//$user_id = $db->escape_string($data->user_id);
 			
-			$query = "DELETE FROM Comments WHERE id=".$comment_id//. " AND user_id=". $user_id;
+			$query = "DELETE FROM Comments WHERE id=".$comment_id;//. " AND user_id=". $user_id;
 			$result = $db->query($query);
 			$affected = $db->affected_rows;
 			
