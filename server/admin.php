@@ -7,6 +7,8 @@
   	$cmd = $data->cmd;
 
   	if($cmd == "admin_login"){
+  		global $db;
+
   		$username = $db->escape_string($data->username);
   		$password = $db->escape_string($data->password);
 
@@ -15,9 +17,9 @@
   		$row = mysqli_fetch_assoc($result);
 
   		if($row['COUNT(*)'] > 0){
-  			echo true;
+  			echo intval(true);
   		}else{
-  			echo false;
+  			echo intval(false);
   		}
   	}
 
