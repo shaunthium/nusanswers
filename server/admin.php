@@ -1,4 +1,6 @@
-<?php
+<?php session_start();
+
+  if
 	require_once ('connect.php');
 	global $db;
 
@@ -12,11 +14,17 @@
   		$username = $db->escape_string($data->username);
   		$password = $db->escape_string($data->password);
 
-  		$query = "SELECT COUNT(*) FROM Admin WHERE username='".$username."' AND password='".$password."'";
-  		$result = $db->query($query);
-  		$row = mysqli_fetch_assoc($result);
+      //$cost = 10;
+      $salt = "dsgdskjgbkg34weir894r83&0r3t-234-02";
+      //$salt = sprintf("$2a$%02d$", $cost) . $salt;
+      $hash = crypt($password, $salt);
 
-  		if($row['COUNT(*)'] > 0){
+  		$query = "SELECT password FROM Admin WHERE username='".$username."'";
+      $result = $db->query($query);
+      $row = mysqli_fetch_assoc($result);
+
+  		if($row['password'] == $hash){
+        $_SESSION['admin'] = "admin";
   			http_response_code(200);
   			echo intval(true);
   		}else{
@@ -29,17 +37,23 @@
   		$username = $db->escape_string($data->username);
   		$password = $db->escape_string($data->password);
 
-  		$query = "INSERT INTO Admin(username, password) VALUES('".$username."', '".$password."')";
+      //$cost = 10;
+      $salt = "dsgdskjgbkg34weir894r83&0r3t-234-02";
+      //$salt = sprintf("$2a$%02d$", $cost) . $salt;
+      $hash = crypt($password, $salt);
+
+  		$query = "INSERT INTO Admin(username, password) VALUES('".$username."', '".$hash."')";
   		$db->query($query);
 
   		$affected = $db->affected_rows;
 
-		if( $affected > 0 ){
-			echo true;
-		}else{
-			http_response_code(401);
-			echo false;
-		}
+		  if( $affected > 0 ){
+        http_response_code(200);
+			   echo intval(true);
+		  }else{
+			   http_response_code(401);
+			   echo intval(true);
+		  }
   	}
 
 ?>
