@@ -96,9 +96,9 @@
 				// 	$voted_up = false;
 				// 	$voted_down = false;
 				// }else{
-					$authenticated = true;
+					//$authenticated = true;
 				// }
-				if($authenticated == true){
+				//if($authenticated == true){
 					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -130,7 +130,7 @@
 					}else{
 						$voted_down = false;
 					}
-				}
+				//}
 
 			}else{
 				$answered = false;
@@ -612,9 +612,9 @@
 					// 	$voted_up = false;
 					// 	$voted_down = false;
 					// }else{
-						$authenticated = true;
+						//$authenticated = true;
 					// }
-					if($authenticated == true){
+					//if($authenticated == true){
 						$global_user_id = $db->escape_string($data->user_id);
 
 						$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -646,7 +646,7 @@
 						}else{
 							$voted_down = false;
 						}
-					}
+					//}
 
 				}else{
 					$answered = false;
@@ -781,9 +781,9 @@
 					// 	$voted_up = false;
 					// 	$voted_down = false;
 					// }else{
-						$authenticated = true;
+						//$authenticated = true;
 					// }
-					if($authenticated == true){
+					//if($authenticated == true){
 						$global_user_id = $db->escape_string($data->user_id);
 
 						$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -815,7 +815,7 @@
 						}else{
 							$voted_down = false;
 						}
-					}
+					//}
 
 				}else{
 					$answered = false;
@@ -961,10 +961,10 @@
 				// 	$voted_up = false;
 				// 	$voted_down = false;
 				// }else{
-					$authenticated = true;
+					//$authenticated = true;
 				// }
 
-				if($authenticated == true){
+				//if($authenticated == true){
 					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
@@ -996,7 +996,7 @@
 					}else{
 						$voted_down = false;
 					}
-				}
+				//}
 			}else{
 				$answered = false;
 				$voted_up = false;
