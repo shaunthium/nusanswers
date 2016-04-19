@@ -2,6 +2,7 @@
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
+	require_once('admin.php');
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);

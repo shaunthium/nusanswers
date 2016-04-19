@@ -1,5 +1,6 @@
 <?php session_start();
 	require_once ('connect.php');
+	require_once('admin.php');
 
 	global $db;
 	$request_data = file_get_contents("php://input");
