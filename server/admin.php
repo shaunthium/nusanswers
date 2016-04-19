@@ -11,6 +11,7 @@
   	if($cmd == "admin_login"){
   		global $db;
 
+      $user_id = $db->escape_string($data->user_id);
   		$username = $db->escape_string($data->username);
   		$password = $db->escape_string($data->password);
 
@@ -19,14 +20,16 @@
       //$salt = sprintf("$2a$%02d$", $cost) . $salt;
       $hash = crypt($password, $salt);
 
-  		$query = "SELECT password FROM Admin WHERE username='".$username."'";
+  		$query = "SELECT * FROM Admin WHERE username='".$username."'";
       $result = $db->query($query);
       $row = mysqli_fetch_assoc($result);
 
   		if($row['password'] == $hash){
-        $_SESSION['admin'] = "admin";
-  			http_response_code(200);
-  			echo intval(true);
+        if($row['admin_id'] == $user_id){
+             $_SESSION['admin'] = "admin";
+  			     http_response_code(200);
+  			     echo intval(true);
+        }
   		}else{
         unset($_SESSION['admin'])
   			http_response_code(401);

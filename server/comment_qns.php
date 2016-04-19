@@ -9,7 +9,7 @@
 
 	if($cmd == "get_all_comments_qns"){
 		
-		$qns_id = $data->qns_id;
+		$qns_id = $db->escape_string($data->qns_id);
 
 		$query = "SELECT * FROM Comments WHERE question_id=".$qns_id;
 		$result = $db->query($query);

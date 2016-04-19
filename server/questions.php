@@ -254,7 +254,7 @@
 		@return:	Information of a question in JSON format
 	*/
 	if($cmd == "get_qns_info"){
-		$qns_id= $data->qns_id;
+		$qns_id= $db->escape_string($data->qns_id);
 		$query = "SELECT * FROM Questions WHERE id=" . $qns_id;
 		$result = $db->query($query);
 		$info_array = array();
@@ -274,8 +274,8 @@
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
-			$index = $data->index;
-			$limit = $data->limit;
+			$index = $db->escape_string($data->index);
+			$limit = $db->escape_string($data->limit);
 			$query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY id DESC";
@@ -358,7 +358,7 @@
 					$authenticated = true;
 				// }
 				if($authenticated == true){
-					$global_user_id = $data->user_id;
+					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
 					$result_answered = $db->query($query_answered);
@@ -450,8 +450,8 @@
 
 		if(isset($data->index) && isset($data->limit) ){
 			//$limit_qns = 10;
-			$index = $data->index;
-			$limit = $data->limit;
+			$index = $db->escape_string($data->index);
+			$limit = $db->escape_string($data->limit);
 			$query = "SELECT * FROM Questions ORDER BY score DESC, updated_at DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Questions ORDER BY score DESC, updated_at DESC";
@@ -538,7 +538,7 @@
 				// }
 
 				if($authenticated == true){
-					$global_user_id = $data->user_id;
+					$global_user_id = $db->escape_string($data->user_id);
 
 					$query_answered = "SELECT * FROM Answers WHERE user_id=". $global_user_id . " AND question_id=" . $question_id;
 					$result_answered = $db->query($query_answered);
@@ -752,8 +752,8 @@
 	Update 'score' of user using 'id'
 	*/
 	if($cmd == "update_score"){
-		$id= $data->id;
-		$score = $data->score;
+		$id= $db->escape_string($data->id);
+		$score = $db->escape_string($data->score);
 		$query = "UPDATE Questions SET score=". $score . " WHERE id=" . $id;
 		if($db->query($query)){
 			echo "Score Updated";
@@ -767,8 +767,8 @@
 	Update 'view_count' of user using 'id'
 	*/
 	if($cmd == "update_view"){
-		$id= $data->id;
-		$view_count = $data->view_count;
+		$id= $db->escape_string($data->id);
+		$view_count = $db->escape_string($data->view_count);
 		$query = "UPDATE Questions SET view_count=". $view_count . " WHERE id=" . $id;
 		if($db->query($query)){
 			echo "View_Count Updated";
