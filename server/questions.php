@@ -430,7 +430,7 @@
 			$query_vote = "DELETE FROM Questions_Voted_By_Users WHERE question_id=" . $qns_id;
 			$db->query($query_vote);
 
-			$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id //." AND user_id=". $user_id;
+			$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id; //." AND user_id=". $user_id;
 			$db->query($query_qns);
 
 
