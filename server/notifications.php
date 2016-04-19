@@ -22,8 +22,9 @@
 		$user_id = $db->escape_string($data->user_id);
 		
 		if(isset($data->index) && isset($data->limit)){
-			$limit = $data->limit;
-			$index = $data->index;
+			$limit = $db->escape_string($data->limit);
+			$index = $db->escape_string($data->index);
+			
 			$query = "SELECT * FROM Votes_Notifications  WHERE author_id=".$user_id. " ORDER BY checked, id DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC";

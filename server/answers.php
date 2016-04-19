@@ -2,7 +2,7 @@
    require_once ('connect.php'); //contains login constants
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
-  $cmd = $data->cmd;
+  $cmd = $db->escape_string($data->cmd);
 	//  if (!(isset($_SESSION['cs3226']))) {
   //      // print_r(error_log('hi again'), true);
   //      $authenticated = false;
@@ -674,6 +674,10 @@
 				$query = "UPDATE Users SET score = score + 1 where id = $answer_user_id";
 				$db->query($query);
 
+				/* Here we send an upvote notification */
+				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 1, 0)";
+				$db->query($query);
+				
 				echo true;
 			}
 			else //have voted before!
@@ -681,7 +685,7 @@
 
 				$votes = mysqli_fetch_assoc($result);
 
-				if($votes["down_vote"] == "1")
+				if($votes["down_vote"] == "1") //from downvote to upvote
 				{
 
 					$score = 2;
@@ -689,6 +693,9 @@
 					/* Update upvote entry */
 					$query = "Update Answers_Voted_By_Users Set up_vote = 1, down_vote = 0 where answer_id = $answer_id and user_id = $user_id";
 					$db->query($query);
+					
+					
+					
 				}
 				else //up_vote == 1
 				{
@@ -714,6 +721,19 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 
+					if($score == 2)
+					{
+						/* Here we update downvote notification to upvote */
+						$query = "Update Votes_Notifications Set checked = 0, type_vote = 1 where type_qns_ans = 1 voter_id = $user_id and author_id = $answer_user_id and  qns_ans_id = $answer_id";
+						$db->query($query);
+					}
+					else
+					{
+						/* Here we delete upvote notification*/
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$db->query($query);
+					}
+					
 					echo true;
 			}
 		}
@@ -774,7 +794,11 @@
 				/* Here we downvote the User score */
 				$query = "UPDATE Users SET score = score - 1 where id = $answer_user_id";
 				$db->query($query);
-
+				
+				/* Here we send an downvote notification */
+				$query = "Insert into Votes_Notifications (qns_ans_id, author_id, voter_id, type_qns_ans, type_vote, checked) Values ($answer_id, $answer_user_id, $user_id, 1, 0, 0)";
+				$db->query($query);
+				
 				echo true;
 			}
 			else //have voted before!
@@ -815,6 +839,18 @@
 					$query = "UPDATE Users SET score = score + $score where id = $answer_user_id";
 					$db->query($query);
 
+					if($score == -2)
+					{
+						/* Here we update upvote notification to downvote */
+						$query = "Update Votes_Notifications Set checked = 0, type_vote = 0 where type_qns_ans = 1 voter_id = $user_id and author_id = $answer_user_id and  qns_ans_id = $answer_id";
+						$db->query($query);
+					}
+					else
+					{
+						/* Here we delete downvote notification*/
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$db->query($query);
+					}
 					echo true;
 			}
 		}
