@@ -106,7 +106,6 @@ angular.module('quoraApp')
 
             $scope.saveChanges = function(){
 
-
                 if($scope.type !== 'answer' && (!$scope.temp.title || $scope.temp.title.length < QUESTION_TITLE_MIN_LENGTH)){
                     Materialize.toast('Error: question title is too short!', 2000, 'error-toast');
                     return;
@@ -166,7 +165,10 @@ angular.module('quoraApp')
 
                 //console.log("type", $scope.type);
                 // if(prompt("This action cannot be undone. Type 'DELETE MY POST' and press OK to confirm deletion.") === "DELETE MY POST"){
+                    console.log("TYPE ", $scope.type)
+
                     if($scope.type === 'answer'){
+
                         questionService.deleteAnswer($scope.post.id, $scope.currentUser.id)
                         .then(
                             function(res){
@@ -176,7 +178,7 @@ angular.module('quoraApp')
                                     $state.reload(); //FIXME: maybe remove the answer from the post.answers array instead of reloading everything
                                 }
                                 else{
-                                    console.log("Error while deleting question!");
+                                    console.log("Error while deleting answer!");
                                 }
                             },
                             function(err){

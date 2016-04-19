@@ -98,6 +98,7 @@ angular.module('quoraApp')
                             if(res.data){
                                 if($scope.editing){
                                     //Remove the edited from the post
+
                                     $scope.deleteComment($scope.editedComment, false);
                                     $scope.editedComment = null;
                                     $scope.editing = false;
@@ -155,7 +156,13 @@ angular.module('quoraApp')
             //Delete a comment from the server
             $scope.deleteComment = function(comment, requireConfirmation){
                 //TODO: implement fancier confirmation.
-                if(requireConfirmation && confirm("Are you sure you want to delete this comment?")){
+
+                console.log("TRYING TO DELETE COMMENT ", $scope.type);
+
+                if(!requireConfirmation || confirm("Are you sure you want to delete this comment?")){
+
+                    console.log("OK ", $scope.type);
+
                     if($scope.type === 'answer'){
                         questionService.deleteCommentFromAnswer(comment.id, $scope.currentUser.id)
                         .then(
