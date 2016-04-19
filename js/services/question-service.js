@@ -553,8 +553,8 @@ angular.module('quoraApp')
 
     function loginAdmin(adminName, adminPW){
 
-        console.log("username", adminName);
-        console.log("password", adminPW);
+        // console.log("username", adminName);
+        // console.log("password", adminPW);
 
         return $http({
           url: base_url + 'server/admin.php',

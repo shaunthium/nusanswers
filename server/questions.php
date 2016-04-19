@@ -852,25 +852,25 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
-		if (!(isset($_SESSION['id']))) {
-      http_response_code(401);
-      echo "Unauthorized";
-      return;
-		} else {
-      if (isset($data->user_id)) {
-        $temp = $data->user_id;
-        $session_id = $_SESSION['id'];
-        if ($temp != $session_id) {
-          http_response_code(401);
-          echo "Unauthorized";
-     			return;
-        }
-      } else {
-        http_response_code(401);
-        echo "Unauthorized";
-   			return;
-      }
-    }
+		// if (!(isset($_SESSION['id']))) {
+    //   http_response_code(401);
+    //   echo "Unauthorized";
+    //   return;
+		// } else {
+    //   if (isset($data->user_id)) {
+    //     $temp = $data->user_id;
+    //     $session_id = $_SESSION['id'];
+    //     if ($temp != $session_id) {
+    //       http_response_code(401);
+    //       echo "Unauthorized";
+    //  			return;
+    //     }
+    //   } else {
+    //     http_response_code(401);
+    //     echo "Unauthorized";
+   // 			return;
+    //   }
+    // }
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
 		$result = $db->query($query);

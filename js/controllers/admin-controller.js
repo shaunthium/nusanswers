@@ -22,10 +22,10 @@ angular.module('quoraApp')
         )
         .catch(
             function(res){
-                 console.log("res", res);
+                //  console.log("res", res);
              }
          );
-        
+
         document.getElementById("admin_name").value = "";
         document.getElementById("admin_pw").value = "";
 

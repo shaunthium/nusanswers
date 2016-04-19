@@ -1368,12 +1368,12 @@
 		global $db;
 
 
-    if($authenticated == false)
-    {
-      http_response_code(401);
-      echo "Unauthorized";
-      return;
-    }
+    // if($authenticated == false)
+    // {
+    //   http_response_code(401);
+    //   echo "Unauthorized";
+    //   return;
+    // }
 
 		/* Here we get the User Info of profile page */
 		$query_author =  "SELECT first_name, last_name, score, Role.flavour FROM Users inner join Role on Users.role = Role.id WHERE Users.id=".$user_id;
