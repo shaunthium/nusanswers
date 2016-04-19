@@ -3,14 +3,21 @@
   $request_data = file_get_contents("php://input");
   $data = json_decode($request_data);
   $cmd = $data->cmd;
-	 if (!(isset($_SESSION['cs3226']))) {
-       // print_r(error_log('hi again'), true);
-       $authenticated = false;
-     }
-	else
-	{
-		$authenticated = true;
-	}
+  if (!(isset($_SESSION['id']))) {
+    $authenticated = false;
+  } else {
+    $session_id = $_SESSION['id'];
+    if (isset($data->user_id)) {
+      $temp = $data->user_id;
+      if ($temp != $session_id) {
+        $authenticated = false;
+      } else {
+        $authenticated = true;
+      }
+    } else {
+      $authenticated = false;
+    }
+  }
 
   if (isset($data->question_id)) {
     $question_id = $db->escape_string($data->question_id);

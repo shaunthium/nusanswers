@@ -14,12 +14,26 @@
 		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
  			//http_response_code(401);
       http_response_code(401);
       echo "Unauthorized";
  			return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 
 		$user_id= $db->escape_string($data->user_id);
@@ -148,11 +162,27 @@
 	*/
 	if($cmd == "edit_qns"){
 
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          // print_r(error_log('hi'), true);
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        print_r(error_log('hi'), true);
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$title = $db->escape_string($data->title);
@@ -179,11 +209,25 @@
 	*/
 	if($cmd == "delete_qns"){
 
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$user_id = $db->escape_string($data->user_id);
 		$qns_id= $db->escape_string($data->qns_id);
@@ -352,14 +396,46 @@
 			//Set True  or false if user had answered the questions
 
 			if(isset($data->user_id)) {
-				if (!(isset($_SESSION['cs3226']))) {
+				if (!(isset($_SESSION['id']))) {
  					$authenticated = false;
  					$answered = false;
 					$voted_up = false;
 					$voted_down = false;
-				}else{
-					$authenticated = true;
-				}
+				} else if (isset($data->user_id)) {
+          $temp = $data->user_id;
+          $session_id = $_SESSION['id'];
+          if ($temp != $session_id) {
+            $authenticated = false;
+            $answered = false;
+            $voted_up = false;
+            $voted_down = false;
+          } else {
+            $authenticated = true;
+          }
+        } else {
+          $authenticated = false;
+ 					$answered = false;
+					$voted_up = false;
+					$voted_down = false;
+        }
+        //   if (isset($data->user_id)) {
+        //     $temp = $data->user_id;
+        //     $session_id = $_SESSION['id'];
+        //     if ($temp != $session_id) {
+        //       $authenticated = false;
+     	// 				$answered = false;
+    		// 			$voted_up = false;
+    		// 			$voted_down = false;
+        //     }
+        //   } else {
+        //     $authenticated = false;
+   		// 			$answered = false;
+  			// 		$voted_up = false;
+  			// 		$voted_down = false;
+        //   }
+        // } else{
+				// 	$authenticated = true;
+				// }
 				if($authenticated == true){
 					$global_user_id = $data->user_id;
 
@@ -530,15 +606,28 @@
 			//Set True  or false if user had answered the questions
 
 			if(isset($data->user_id)) {
-
-				if (!(isset($_SESSION['cs3226']))) {
+        if (!(isset($_SESSION['id']))) {
  					$authenticated = false;
  					$answered = false;
 					$voted_up = false;
 					$voted_down = false;
-				}else{
-					$authenticated = true;
-				}
+				} else if (isset($data->user_id)) {
+          $temp = $data->user_id;
+          $session_id = $_SESSION['id'];
+          if ($temp != $session_id) {
+            $authenticated = false;
+            $answered = false;
+            $voted_up = false;
+            $voted_down = false;
+          } else {
+            $authenticated = true;
+          }
+        } else {
+          $authenticated = false;
+ 					$answered = false;
+					$voted_up = false;
+					$voted_down = false;
+        }
 
 				if($authenticated == true){
 					$global_user_id = $data->user_id;
@@ -621,11 +710,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_up_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -640,11 +743,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_down_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -659,11 +776,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_up_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -678,11 +809,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_down_vote_qns"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -707,11 +852,25 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
-		if (!(isset($_SESSION['cs3226']))) {
+		if (!(isset($_SESSION['id']))) {
       http_response_code(401);
       echo "Unauthorized";
       return;
-		}
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
 		$result = $db->query($query);

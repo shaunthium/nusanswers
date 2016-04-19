@@ -512,7 +512,7 @@ angular.module('quoraApp')
         });
     }
 
-    function editQuestion(questionID, title, content){
+    function editQuestion(questionID, title, content, userID){
         return $http({
             url: base_url + 'server/questions.php',
             method: 'POST',
@@ -520,7 +520,8 @@ angular.module('quoraApp')
                 cmd: 'edit_qns',
                 qns_id : questionID,
                 title : title,
-                content : content
+                content : content,
+                user_id : userID
            }
         });
     }
