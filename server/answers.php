@@ -1,5 +1,5 @@
 <?php
-  if (!(isset($SESSION))) {
+  if (!(isset($_SESSION))) {
     session_start();
   }
    require_once ('connect.php'); //contains login constants
@@ -26,11 +26,9 @@
 
 	if(isset($_SESSION['admin'])){
 		$admin = true;
-    error_log("\nSession of answers is " .session_id());
 	}
 	else
 	{
-    error_log("\nSession is not found in answers.php !!!!");
 		$admin = false;
 	}
 

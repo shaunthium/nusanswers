@@ -1,4 +1,7 @@
-<?php session_start();
+<?php
+    if (!(isset($_SESSION))) {
+      session_start();
+    }
     require_once ('connect.php');
 
     global $db;
@@ -27,7 +30,7 @@
   			    http_response_code(200);
   			    echo intval(true);
   		  }else{
-            session_unset(); 
+            session_unset();
             session_destroy();
             //unset($_SESSION['admin']);
   			    http_response_code(401);

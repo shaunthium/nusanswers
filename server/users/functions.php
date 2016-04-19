@@ -51,7 +51,7 @@
     try {
       // Returns a `Facebook\FacebookResponse` object
       $response = $fb->get('/me?fields=first_name,last_name,email', $token);
-      if (!(isset($SESSION))) {
+      if (!(isset($_SESSION))) {
         session_start();
       }
       $_SESSION["id"] = $id;
@@ -102,7 +102,7 @@
       try {
         // Returns a `Facebook\FacebookResponse` object
         $response = $fb->get('/me?fields=first_name,last_name,email', $token);
-        if (!(isset($SESSION))) {
+        if (!(isset($_SESSION))) {
           session_start();
         }
         $_SESSION["id"] = $id;

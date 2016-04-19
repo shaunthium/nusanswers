@@ -1,5 +1,5 @@
 <?php
-  if (!(isset($SESSION))) {
+  if (!(isset($_SESSION))) {
     session_start();
   }
 	require_once('connect.php');
@@ -340,27 +340,6 @@
 	*/
 	if($cmd == "edit_qns"){
 
-		if (!(isset($_SESSION['id']))) {
-      http_response_code(401);
-      echo "Unauthorized";
-      return;
-		} else {
-      if (isset($data->user_id)) {
-        $temp = $data->user_id;
-        $session_id = $_SESSION['id'];
-        if ($temp != $session_id) {
-          // print_r(error_log('hi'), true);
-          http_response_code(401);
-          echo "Unauthorized";
-     			return;
-        }
-      } else {
-        print_r(error_log('hi'), true);
-        http_response_code(401);
-        echo "Unauthorized";
-   			return;
-      }
-    }
 		// if (!(isset($_SESSION['cs3226']))) {
  	// 		//http_response_code(401);
  	// 		echo false;
@@ -385,6 +364,27 @@
 			}
 		}
 		else{
+
+      		if (!(isset($_SESSION['id']))) {
+            http_response_code(401);
+            echo "Unauthorized";
+            return;
+      		} else {
+            if (isset($data->user_id)) {
+              $temp = $data->user_id;
+              $session_id = $_SESSION['id'];
+              if ($temp != $session_id) {
+                // print_r(error_log('hi'), true);
+                http_response_code(401);
+                echo "Unauthorized";
+           			return;
+              }
+            } else {
+              http_response_code(401);
+              echo "Unauthorized";
+         			return;
+            }
+          }
 			$qns_id= $db->escape_string($data->qns_id);
 			$title = $db->escape_string($data->title);
 			$content= $db->escape_string($data->content);
@@ -411,25 +411,6 @@
 	*/
 	if($cmd == "delete_qns"){
 
-		if (!(isset($_SESSION['id']))) {
-      http_response_code(401);
-      echo "Unauthorized";
-      return;
-		} else {
-      if (isset($data->user_id)) {
-        $temp = $data->user_id;
-        $session_id = $_SESSION['id'];
-        if ($temp != $session_id) {
-          http_response_code(401);
-          echo "Unauthorized";
-     			return;
-        }
-      } else {
-        http_response_code(401);
-        echo "Unauthorized";
-   			return;
-      }
-    }
 		// if (!(isset($_SESSION['cs3226']))) {
  	// 		//http_response_code(401);
  	// 		echo false;
@@ -501,6 +482,26 @@
 			}
 
 		}else{
+
+  		if (!(isset($_SESSION['id']))) {
+        http_response_code(401);
+        echo "Unauthorized";
+        return;
+  		} else {
+        if (isset($data->user_id)) {
+          $temp = $data->user_id;
+          $session_id = $_SESSION['id'];
+          if ($temp != $session_id) {
+            http_response_code(401);
+            echo "Unauthorized";
+       			return;
+          }
+        } else {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      }
 			$user_id = $db->escape_string($data->user_id);
 			$qns_id= $db->escape_string($data->qns_id);
 
