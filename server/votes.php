@@ -4,7 +4,7 @@
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
-  	$cmd = $data->cmd;
+  	$cmd = $db->escape_string($data->cmd);
   	
 	/*
 		Option to select set or reset up vote or down vote
@@ -265,7 +265,7 @@
 	}
 
 	if(isset($data->cmd)){
-		$cmd = $data->cmd;
+		$cmd = $db->escape_string($data->cmd);
 	}
 
 	
