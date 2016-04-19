@@ -450,11 +450,21 @@ angular.module('quoraApp')
                     scope.includeVotes = true;
                     scope.includeBody = true;
                     break;
-                case "admin-view":
+            }
+
+            //If admin view was requested, override previous specifications
+            switch(attrs.view){
+                case "admin":
+                    scope.includeTags = false;
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
-                    scope.includeEditTitle = true;
+                    scope.includeAuthorFlavor = false;
+                    scope.showFooter = false;
+                    scope.includeProfileImage = false;
                     scope.includeTagInputField = true;
+                    scope.includeVotes = false;
+                    scope.includeBody = false;
+                    scope.includeEditTitle = true;
                     break;
             }
         },
