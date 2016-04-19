@@ -150,7 +150,7 @@ angular.module('quoraApp')
                     );
                 }
                 else{
-                    questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content)
+                    questionService.editQuestion($scope.post.id, $scope.temp.title, $scope.temp.content, $scope.currentUser.id)
                     .then(
                         function(res){
                             if(res.data){
