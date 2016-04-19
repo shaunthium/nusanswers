@@ -34,6 +34,11 @@ angular.module('quoraApp')
             $scope.includeAuthorFlavor = false;
             $scope.showFooter = false;
             $scope.editMode = false;
+            $scope.includeProfileImage = false;
+            $scope.includeTagInputField = false;
+            $scope.includeVotes = false;
+            $scope.includeBody = false;
+            $scope.includeEditTitle = false;
 
 
             //This watch is for getting the post in question-answers view.
@@ -42,8 +47,14 @@ angular.module('quoraApp')
             },
             function(post){
                 if(post){
+                    $scope.currentUser.isAdmin = true;
                     $scope.answered = post.answered;
-                    $scope.isEditable = $scope.type === 'question' && $scope.currentUser && $scope.currentUser.id === $scope.post.author.userid;
+                    if($scope.currentUser){
+                        $scope.isEditable = $scope.currentUser.isAdmin || ($scope.type === 'question' && $scope.currentUser.id === $scope.post.author.userid);
+                    }
+                    else{
+                        $scope.isEditable = false;
+                    }
                     $scope.temp = {title : post.title};
 
                     // TODO: Can't get this to work, we need to render the html tags somehow
@@ -426,14 +437,32 @@ angular.module('quoraApp')
                     scope.includeTitle = true;
                     scope.linkToQuestionPage = true;
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
                     break;
                 case "question":
                     scope.includeTags = true;
                     scope.includeTitle = true;
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeTagInputField = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
+                    scope.includeTagInputField = true;
+                    scope.includeEditTitle = true;
                     break;
                 case "answer":
                     scope.includeAuthorFlavor = true;
+                    scope.includeProfileImage = true;
+                    scope.includeVotes = true;
+                    scope.includeBody = true;
+                    break;
+                case "admin-view":
+                    scope.includeTitle = true;
+                    scope.linkToQuestionPage = true;
+                    scope.includeEditTitle = true;
+                    scope.includeTagInputField = true;
                     break;
             }
         },
