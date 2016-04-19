@@ -3,7 +3,7 @@
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
-  	$cmd = $data->cmd;
+  	$cmd = $db->escape_string($data->cmd);
 
 	/*
 		Insert new tag to 'Tags' table
@@ -52,6 +52,21 @@
 		}
 		echo json_encode($tag_array);		
 	}
+
+	/*
+		Get and return all tags
+	*/
+	if($cmd == "get_all_tags"){
+		$query = "SELECT * FROM Tags";
+		$result = $db->query($query);
+		$tag_array = array();
+
+		while ($tag = mysqli_fetch_assoc($result)){
+			$tag_array[] = $tag["content"];
+		}
+
+		echo json_encode($tag_array);		
+	}
 	
 	/*
 		Get and return all tags associated with a question
@@ -79,8 +94,9 @@
 		@param: tag_string
 	*/
 	if($cmd == "get_all_qns_of_tags"){
-		$tag_string = $db->escape_string($data->tag_string);
-		$tag_array = explode(",", $tag_string);
+		//$tag_string = $db->escape_string($data->tag_string);
+		//$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);
 
 		$tag_id_array = array();
 		foreach($tag_array as $tag){
@@ -108,8 +124,8 @@
 				'user_id'=>$qns_result['user_id'],
 				'title'=>$qns_result['title'],
 				'content'=>$qns_result['content'],
-				'score'=>$qns_result['score'],
-				'view_count'=>$qns_result['view_count'],
+				'score'=>(int)$qns_result['score'],
+				'view_count'=>(int)$qns_result['view_count'],
 				'created_at'=>$qns_result['created_at'],
 				'updated_at'=>$qns_result['updated_at']
 			);
@@ -123,9 +139,10 @@
 		@param: tag_string
 	*/
 	if($cmd == "add_tag"){
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
 		
-		$tag_array = explode(",", $tag_string);
+		//$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);
 		add_tag($tag_array);
 	}	
 
@@ -135,12 +152,18 @@
 	*/
 	if($cmd == "tag_qns"){
 		$qns_id = $db->escape_string($data->qns_id);
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
 		
-		$tag_array = explode(",", $tag_string);
+		$tag_array = json_decode($data->tag_string);//explode(",", $tag_string);
 		add_tag($tag_array);
 		
 		tag_qns($qns_id, $tag_array);
+
+		if(count($tag_array) > 0){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
+		}
 	}
 
 	/*
@@ -151,11 +174,15 @@
 		global $db;
 
 		$qns_id = $db->escape_string($data->qns_id);
-		$tag_string =  $db->escape_string($data->tag_string);
+		//$tag_string =  $db->escape_string($data->tag_string);
+		$tag_array = json_decode($data->tag_string);
+
+		$affected=0;
 		
-		
-		if(!empty($tag_string)){
-			$tag_array = explode(",", $tag_string);
+		if(!empty($tag_array)){
+		//if(!empty($tag_string)){
+			//$tag_array = explode(",", $tag_string);
+
 			$tag_id_array = array();
 			$i=0;
 			foreach($tag_array as $tag){
@@ -168,8 +195,15 @@
 			foreach($tag_id_array as $tag_id){
 				$query = "DELETE FROM Questions_Tags WHERE question_id=" . $qns_id . " AND tag_id=" . $tag_id;
 				$db->query($query);
+				$affected += $db->affected_rows;
 			}
 			
+		}
+
+		if( $affected > 0 ){
+			echo json_encode(true);
+		}else{
+			echo json_encode(false);
 		}		
 	}
 	

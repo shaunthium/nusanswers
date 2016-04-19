@@ -1,35 +1,101 @@
+
 <div class="card white">
     <div class="card-content">
 
-        <tag ng-repeat="tag in post.tags"></tag>
-        <br>
-        <span ng-switch="linkToQuestionPage">
-            <span ng-switch-when="true" ng-if="includeTitle" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">{{post.title}}</span>
-            <span ng-switch-when="false" ng-if="includeTitle" class="card-title">{{post.title}}</span>
-        </span>
-
-        <ul style="border:0;"class="collection">
-            <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
-                <img ng-click="goToProfile(post.author.userid)" src="http://dummyimage.com/300/09.png/fff" alt="" class="circle" style="cursor:pointer">
-                <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author}}</span>
-                <p ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavor}}</p>
-                <a class="secondary-content orange-text text-accent-2"><i class="material-icons orange-text text-accent-2">grade</i>{{post.author_score}}</a>
-            </li>
-        </ul>
-
-        <!-- Behave as a table cell for the height to adjust to same as the text column -->
-        <div style="display:table-cell; vertical-align:middle; text-align:left;width:40px;">
-            <i ng-click="incrementUpvotes(post, 1);" style="font-size:1.4em;cursor:pointer;margin-left:2px;" class="material-icons red-text text-darken-2">thumb_up</i>
-            <p style="padding-left:8px; padding-top:4px; padding-bottom:4px;">{{post.score}}</p>
-            <i ng-click="incrementUpvotes(post, -1);" style="font-size:1.4em;margin-left:2px;cursor:pointer;" class="material-icons red-text text-darken-2">thumb_down</i>
+        <!-- Modal Structure -->
+        <div style="position:fixed;max-width:500px;" id="{{'delete-confirm-box-' + type + '-' + post.id}}" class="modal">
+            <div class="modal-content">
+              <h4>Delete post</h4>
+              <p>Are you sure you want to <b>delete</b> your post? <br/> This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+              <a ng-click="delete()" class=" red-text modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+              <a class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            </div>
         </div>
 
-        <p style="display:table-cell;">
-            <span ng-switch="type">
-                <span ng-switch-when="feed-item"><collapse-text max-length="220">{{post.content}}</collapse-text></span>
-                <span ng-switch-default>{{post.content}}</span>
+        <!-- END CONFIRM -->
+
+        <!-- confirm box end -->
+        <p class="grey-text">{{post.created_at}}</p>
+
+        <!-- BEGIN BUTTONS FOR EDIT AND DELETE -->
+        <a ng-if="isEditable && !editMode" style="padding-right:10px; margin-right:10px;" ng-click="toggleEditMode()" class="waves-effect waves-light btn blue right no-animate">
+            <i class="material-icons">edit</i>
+            <span style="position:relative; bottom:5px;"></span>
+        </a>
+          <!-- save changes button -->
+        <a ng-if="isEditable && editMode" ng-click="saveChanges()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn blue right no-animate">
+            <i class="material-icons">edit</i>
+            <span style="position:relative; bottom:5px;">Save changes</span>
+        </a>
+        <a ng-if="isEditable && editMode" ng-click="confirmDelete()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn red right no-animate">
+            <i class="material-icons">delete</i>
+            <span style="position:relative; bottom:5px;">Delete</span>
+        </a>
+        <a ng-if="isEditable && editMode" ng-click="toggleEditMode()" style="padding-right:10px; margin-right:10px;" class="waves-effect waves-light btn green right no-animate">
+            <i class="material-icons">cancel</i>
+            <span style="position:relative; bottom:5px;">Cancel</span>
+        </a>
+        <!-- END BUTTONS FOR EDIT AND DELETE -->
+
+        <!-- <br ng-if="post.tags.length > 0 && type !== 'answer'"/> -->
+
+        <input ng-model="temp.title" class="animate-fade-in" ng-if="editMode && includeEditTitle" type="text" name="FirstName"/>
+
+        <span class="animate-fade-in" ng-if="!editMode && includeTitle" ng-switch="linkToQuestionPage">
+            <span ng-switch-when="true" ng-click="goToPost(post)" class="card-title" style="cursor:pointer;">
+                {{post.title}}
             </span>
-        </p>
+            <span ng-switch-when="false" class="card-title no-underline">
+                {{post.title}}
+            </span>
+        </span>
+        <!--Align the edit and delete buttons in answers-->
+        <br ng-if="!includeTitle && isEditable" class="card-title no-underline">
+
+        <ul ng-if="!collapseAuthor" style="border:0; margin-bottom:0px; padding-bottom:0px;"class="collection">
+            <li style="margin-left:-15px;min-height:55px;margin-top:-10px;"class="collection-item avatar">
+                <!-- TODO: replace dummy image with proper image -->
+                <img ng-if="includeProfileImage" ng-click="goToProfile(post.author.userid)" ng-src="{{profileImg}}" alt="" class="circle" style="cursor:pointer">
+                <span ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+                <p style="line-height:1.7;" ng-if="includeAuthorFlavor" class="grey-text">{{post.author.flavour}}<br/>
+
+                    <br/>
+                    <!-- <a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;" class="tooltip-left  grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a> -->
+                </p>
+                <!--<a data-tooltip="This users karma" style="cursor:pointer; font-weight:bold;margin-right:-15px;" class="tooltip-left secondary-content grey-text lighten-4"><i class="material-icons yellow-text lighten-4">grade</i>{{post.author.karma}}</a>-->
+
+                <div ng-if="includeVotes" style="margin-top:-7px;"class="secondary-content">
+                    <i ng-click="incrementUpvotes(1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons grey-text vote upvote" ng-class="{upvoteSelected: post.upvoted}">thumb_up</i>
+                    <p class="grey-text"style="font-weight:bold;padding-left:8px; text-align:center;padding-top:4px; padding-bottom:4px;">{{post.upvotes}}</p>
+                    <i ng-click="incrementUpvotes(-1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons grey-text vote downvote" ng-class="{downvoteSelected: post.downvoted}">thumb_down</i>
+                </div>
+            </li>
+        </ul>
+        <span ng-if="collapseAuthor" ng-click="goToProfile(post.author.userid)" class="title" style="cursor:pointer">{{post.author.name}}</span>
+
+        <!-- Behave as a table cell for the height to adjust to same as the text column -->
+ <!--        <div style="display:table-cell; vertical-align:middle; text-align:left;">
+            <i ng-click="incrementUpvotes(1);" style="font-size:1.4em;cursor:pointer;margin-left:10px;" class="material-icons grey-text vote upvote" ng-class="{upvoteSelected: post.upvoted}">thumb_up</i>
+            <p class="grey-text"style="font-weight:bold;padding-left:8px; text-align:center;padding-top:8px; padding-bottom:8px;">{{post.upvotes}}</p>
+            <i ng-click="incrementUpvotes(-1);" style="font-size:1.4em;margin-left:10px;cursor:pointer;" class="material-icons grey-text vote downvote" ng-class="{downvoteSelected: post.downvoted}">thumb_down</i>
+        </div>
+ -->
+        <div ng-show="post.content || editMode" style="margin-top:10px; margin-bottom:15px;width:100%;">
+
+            <div class="animate-fade-in" ng-show="type !== 'feed-item' && editMode" class="row">
+               <div id="{{'wysiwyg-editor-' + type + '-body-' + post.id}}" class="wysiwyg-editor" placeholder="Add a description to your question!"></div>
+            </div>
+
+            <span class="animate-fade-in" ng-if="!editMode && includeBody" ng-switch="type">
+                <span ng-switch-when="feed-item"><collapse-text max-length="220" ng-bind-html="post.content"></collapse-text></span>
+                <span ng-switch-default ng-bind-html="post.content"></span>
+            </span>
+        </div>
+
+        <tag-input-field ng-if="editMode && includeTagInputField"></tag-input-field>
+        <tag ng-repeat="tag in post.tags"></tag>
 
     </div>
 

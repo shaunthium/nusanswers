@@ -1,5 +1,5 @@
 <div ng-click="toggleShowComments()" class="card-action" style="cursor:pointer">
-    <a>Comments</a>
+    <a style="font-size:0.9em;">{{post.comments.length}} Comments</a>
 </div>
 <span ng-show="showComments">
     <div ng-if="noComments" style="padding-top:10px;" class="card-action">No comments to show.</div>

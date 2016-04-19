@@ -4,34 +4,82 @@ angular.module('quoraApp')
     return {
         restrict: 'E',
         transclude: false,
-        controller: function($scope){
+        controller: ['$scope', 'questionService', function($scope, questionService){
             $scope.showComments = false;
             $scope.moreCommentsShown = false;
             $scope.noComments = true;
 
+            // A bit ugly
             $scope.$watchCollection(
-                function(){
-                    //XXX: beware! does tight coupling occur between the comments section and a post?
-                    return $scope.post.comments;
-                },
-                function(newComments){
-                    if(newComments){
-                        $scope.lessComments = newComments.slice(0,2);
-                        $scope.moreComments = newComments.slice(2);
-                        $scope.hasMoreComments = $scope.moreComments.length > 0;
-                        $scope.noComments = false;
-                    }
+              function(){
+                  return $scope.post;
+              },
+              function(post){
+                if(post){
+                  $scope.$watchCollection(
+                    function(){
+                      //XXX: beware! does tight coupling occur between the comments section and a post?
+                      return $scope.post.comments;
+                    },
+                    function(newComments){
+                      if(newComments){
+                          $scope.lessComments = newComments.slice(0,2);
+                          $scope.moreComments = newComments.slice(2);
+                          $scope.hasMoreComments = $scope.moreComments.length > 0;
+                          $scope.noComments = false;
+                      }
 
-                    if(!newComments || newComments.length === 0){
-                        $scope.noComments = true;
+                      if(!newComments || newComments.length === 0){
+                          $scope.noComments = true;
+                      }
                     }
-                }
+                  );
+                };
+              }
             );
 
             $scope.toggleShowComments = function(){
-                $scope.showComments = !$scope.showComments;
-                $scope.cancelEdit();
 
+                if(!$scope.showComments){
+
+                    $scope.showComments = true;
+
+
+
+                    if($scope.type === 'answer'){
+                        questionService.getCommentsFromAnswer($scope.post.id, $scope.currentUser ? $scope.currentUser.id : undefined)
+                        .then(
+                            function(res){
+
+                                if(res.data){
+                                    $scope.post.comments = res.data;
+                                } else {
+                                    console.log("Answer did not contain any comments");
+                                }
+                            },
+                            function(err){
+                                console.log("Error in getting comments to answer ", err);
+                            }
+                        )
+                    }
+                    else{
+                        questionService.getCommentsFromQuestion($scope.post.id)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.post.comments = res.data;
+                                }
+                            },
+                            function(err){
+                                 console.log("Error in getting comments from question ", err);
+                            }
+                        );
+                    }
+                }
+                else{
+                    $scope.cancelEdit();
+                    $scope.showComments = false;
+                }
             }
 
             $scope.showMoreComments = function(){
@@ -40,13 +88,47 @@ angular.module('quoraApp')
 
             //Editing a comment is a two-step process: the previous comment is deleted and the new comment is added.
             $scope.addComment = function(comment){
-                if($scope.editing){
-                    //Remove the edited from the post
-                    $scope.deleteComment($scope.editedComment, false);
-                    $scope.editedComment = null;
-                    $scope.editing = false;
+                if($scope.type === 'answer'){
+                    console.log("ans ", $scope.post)
+                    questionService.addCommentToAnswer(comment, $scope.currentUser ? $scope.currentUser.id : undefined, $scope.post.id)
+                        .then(function(res){
+                            console.log("Add comment to answer", res);
+                            if(res.data){
+                                if($scope.editing){
+                                    //Remove the edited from the post
+                                    $scope.deleteComment($scope.editedComment, false);
+                                    $scope.editedComment = null;
+                                    $scope.editing = false;
+                                }
+                                //TODO: fix server response indexing. Get rid of unneccessary array.
+                                // add comment to scope
+                                $scope.post.comments.push(res.data[0]);
+                                // console.log("Success post comment", res);
+                            }
+                        }, function(err){
+                            // console.log("Error in posting comment", err);
+                        });
                 }
-                $scope.post.comments.push($scope.$parent.newComment($scope.post.id, comment));
+                else{
+                    questionService.submitNewComment(comment, $scope.currentUser ? $scope.currentUser.id : undefined, $scope.post.id)
+                    .then(function(res){
+                        if(res.data){
+                            console.log("res from server", res);
+                            if($scope.editing){
+                                //Remove the edited from the post
+                                $scope.deleteComment($scope.editedComment, false);
+                                $scope.editedComment = null;
+                                $scope.editing = false;
+                            }
+                            //TODO: fix server response indexing. Get rid of unneccessary array.
+                            // add comment to scope
+                            $scope.post.comments.push(res.data[0]);
+                            // console.log("Success post comment", res);
+                        }
+                    }, function(err){
+                        console.log("Error in posting comment to answer ", err);
+                    });
+                }
             }
 
             //Enter edition mode and temporarily remove the comment from the front-end's post's comments.
@@ -71,11 +153,36 @@ angular.module('quoraApp')
             //Delete a comment from the server
             $scope.deleteComment = function(comment, requireConfirmation){
                 //TODO: implement fancier confirmation.
-                if(requireConfirmation && confirm("Are you sure you want to delete this comment?")){
-                    //FIXME: rename deleteComment either here or in the main controller so that there are no confusions
-                    $scope.removeComment(comment);
-                    $scope.tempComments = null;
-                    $scope.$parent.deleteComment($scope.post, comment.id);
+                if(!requireConfirmation || confirm("Are you sure you want to delete this comment?")){
+
+                    if($scope.type === 'answer'){
+                        questionService.deleteCommentFromAnswer(comment.id, $scope.currentUser ? $scope.currentUser.id : undefined)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.removeComment(comment);
+                                    $scope.tempComments = null;
+                                }
+                            },
+                            function(err){
+                                console.log("Error in deleting comment from answer", err);
+                            }
+                        );
+                    }
+                    else{
+                        questionService.submitDeleteComment(comment.id, $scope.currentUser ? $scope.currentUser.id : undefined)
+                        .then(
+                            function(res){
+                                if(res.data){
+                                    $scope.removeComment(comment);
+                                    $scope.tempComments = null;
+                                }
+                            },
+                            function(err){
+                                console.log("ERror in deleting comment from question", err);
+                            }
+                        );
+                    }
                 }
             }
 
@@ -90,7 +197,7 @@ angular.module('quoraApp')
                     $scope.post.comments = $scope.tempComments;
                 }
             }
-        },
+        }],
         templateUrl: 'templates/comments-section-template.html'
     }
 });

@@ -4,13 +4,13 @@ angular.module('quoraApp')
     return {
         restrict : 'E',
         scope : true,
-        controller : function($scope){
+        controller : function($scope, questionService){
             $scope.$watch(function(){
                 return $scope.showFooter;
             },
             function(showFooter){
                 if(showFooter){
-                    console.log("Show footer! " + $scope.editorId);
+                    // console.log("Show footer! " + $scope.editorId);
                     $('#wysiwyg-editor-' + $scope.editorId).trumbowyg({
                         fullscreenable: false,
                         btns:['bold', 'italic']
@@ -18,59 +18,38 @@ angular.module('quoraApp')
                 }
             });
 
-            var submitAnswerToServer = function(post, dangerousHTML){
-              var answersURL = "/server/answers.php";
-              var questionID = post.id;
-              $http({
-                method: 'POST',
-                url: answersURL,
-                data: {
-                  cmd: "createanswer",
-                  user_id: loggedInUserID,
-                  question_id: questionID,
-                  content: dangerousHTML
-                },
-                dataType: 'json'
-              }).success(function() {
-                console.log('hahaha');
-              });
-              // console.log('hi');
-              // var userID;
-              // FB.getLoginStatus(function(resp) {
-              //   if (resp.status == 'connected') {
-              //     FB.api('/me', function(response) {
-              //       userID = response.id;
-              //       console.log('userID is:');
-              //       console.log(userID);
-              //       var answersURL = "/server/answers.php";
-              //       var questionID = post.id;
-              //       $http({
-              //         method: 'POST',
-              //         url: answersURL,
-              //         data: {
-              //           cmd: "createanswer",
-              //           user_id: userID,
-              //           question_id: questionID,
-              //           content: dangerousHTML
-              //         },
-              //         dataType: 'json'
-              //       }).success(function() {
-              //         console.log('hahaha');
-              //       });
-              //     });
-              //   }
-              // });
-              // // var userID = 1;
-              // console.log("sending ...", dangerousHTML);
-            }
+            // TODO: Here goes user on submit click
+            $scope.submit = function(post){
 
-           // TODO: Here goes user on submit click
-           $scope.submit = function(post){
-               submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
-               //clean up
-               $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
-               $scope.toggleFooter();
-           }
+                if($('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html').length < 10){
+                    Materialize.toast("Your answer is too short!", 2000, 'information-toast');
+                    return;
+                }
+
+                questionService.submitAnswerToPost(post.id, $scope.currentUser.id, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'))
+                .then(function(res){
+                    if(res.data.length > 0){
+                        Materialize.toast('Question answered! :)', 2000, 'custom-toast');
+                        // console.log("Successfully answered question", res.data);
+                        $scope.post.total_answers++;
+                        if(!$scope.post.answers){
+                            $scope.post.answers = [];
+                        }
+                        $scope.post.answers.push(res.data[0]);
+                        $scope.post.answered = true;
+                        $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('empty');
+                    }
+                    else{
+                        $scope.toggleFooter();//Re-open the footer in case of an error
+                        Materialize.toast("There was a problem submitting your answer to the server!", 2000, 'error-toast');
+                    }
+                }, function(err){
+                    // console.log("Error in answering question", err);
+                });
+                $scope.toggleFooter(); //Close the footer to give the impression of speed.
+                // submitAnswerToServer(post, $('#wysiwyg-editor-' + $scope.editorId).trumbowyg('html'));
+                //clean up
+            }
 
             $scope.toggleTextEditor = function(editorId){
                 $scope.toggleFooter();

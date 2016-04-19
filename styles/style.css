@@ -1,11 +1,41 @@
-/* Have to set height explicity on ui-view 
+/* Have to set height explicity on ui-view
 to prevent collapsing during animation*/
 /*.well[ui-view]{
- height: 65px; 
+ height: 65px;
 }*/
 /*.ui-view-container {
   position: relative;
 }*/
+
+
+input:focus {
+  border-bottom: 1px solid #2196f3 !important;
+  -webkit-box-shadow: 0 1px 0 0 #2196f3 !important;
+  -moz-box-shadow: 0 1px 0 0 #2196f3 !important;
+  box-shadow: 0 1px 0 0 #2196f3 !important;
+}
+
+.vote{
+  transition: all .1s ease-in;
+}
+
+/*.upvote:hover{
+    color:#4caf50 !important;
+}
+
+.downvote:hover{
+  color:#d32f2f !important;
+}*/
+
+ .upvoteSelected{
+    color:#4caf50 !important;
+}
+
+.downvoteSelected{
+  color:#d32f2f !important;
+}
+
+
 
 [ui-view].ng-enter, [ui-view].ng-leave {
   position: absolute;
@@ -33,7 +63,7 @@ to prevent collapsing during animation*/
 
 [ui-view].ng-leave {
   opacity: 1;
-  /*padding-left: 0px;*/  
+  /*padding-left: 0px;*/
   -webkit-transform:translate3d(0, 0, 0);
   -moz-transform:translate3d(0, 0, 0);
   transform:translate3d(0, 0, 0);
@@ -47,27 +77,294 @@ to prevent collapsing during animation*/
   transform:translate3d(100px, 0, 0);
 }
 
-
-
-.animate-search-popup.ng-enter,
-.animate-search-popup.ng-leave {
-  -webkit-transition:all linear 0.2s;
-  transition:all linear 0.2s;
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.tooltip {
+  position: relative;
+  cursor: pointer;
 }
 
-.animate-search-popup.ng-leave.ng-leave-active,
-
-.animate-search-popup.ng-enter {
-  opacity:0;
-  top:100px;
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition:
+      opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    -moz-transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform:    translate3d(0, 0, 0);
+  transform:         translate3d(0, 0, 0);
+  pointer-events: none;
 }
 
-.animate-search-popup.ng-leave,
-
-.animate-search-popup.ng-enter.ng-enter-active {
-  opacity:1;
-  top:80px;
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
 }
+
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 1000;
+  padding: 8px;
+  width: 160px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Directions */
+
+
+/**
+ * Tooltip Styles
+ */
+
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition:
+      opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    -moz-transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform:    translate3d(0, 0, 0);
+  transform:         translate3d(0, 0, 0);
+  pointer-events: none;
+}
+
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 1000;
+  padding: 8px;
+  width:130px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 14px;
+  font-weight:200;
+  line-height: 1.2;
+}
+
+/* Directions */
+
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after,
+.tooltip-top:before,
+.tooltip-top:after {
+  bottom: 100%;
+  left: 50%;
+}
+
+[data-tooltip]:before,
+.tooltip:before,
+.tooltip-top:before {
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #000;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
+}
+
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.tooltip:after,
+.tooltip-top:after {
+  margin-left: -80px;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.tooltip-top:hover:before,
+.tooltip-top:hover:after,
+.tooltip-top:focus:before,
+.tooltip-top:focus:after {
+  -webkit-transform: translateY(-12px);
+  -moz-transform:    translateY(-12px);
+  transform:         translateY(-12px);
+}
+
+/* Left */
+.tooltip-left:before,
+.tooltip-left:after {
+  right: 100%;
+  bottom: 50%;
+  left: auto;
+}
+
+.tooltip-left:before {
+  margin-left: 0;
+  margin-right: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-left-color: #000;
+  border-left-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.tooltip-left:hover:before,
+.tooltip-left:hover:after,
+.tooltip-left:focus:before,
+.tooltip-left:focus:after {
+  -webkit-transform: translateX(-12px);
+  -moz-transform:    translateX(-12px);
+  transform:         translateX(-12px);
+}
+
+/* Bottom */
+.tooltip-bottom:before,
+.tooltip-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+
+.tooltip-bottom:before {
+  margin-top: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #000;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.tooltip-bottom:hover:before,
+.tooltip-bottom:hover:after,
+.tooltip-bottom:focus:before,
+.tooltip-bottom:focus:after {
+  -webkit-transform: translateY(12px);
+  -moz-transform:    translateY(12px);
+  transform:         translateY(12px);
+}
+
+/* Right */
+.tooltip-right:before,
+.tooltip-right:after {
+  bottom: 50%;
+  left: 100%;
+}
+
+.tooltip-right:before {
+  margin-bottom: 0;
+  margin-left: -12px;
+  border-top-color: transparent;
+  border-right-color: #000;
+  border-right-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.tooltip-right:hover:before,
+.tooltip-right:hover:after,
+.tooltip-right:focus:before,
+.tooltip-right:focus:after {
+  -webkit-transform: translateX(12px);
+  -moz-transform:    translateX(12px);
+  transform:         translateX(12px);
+}
+
+/* Move directional arrows down a bit for left/right tooltips */
+.tooltip-left:before,
+.tooltip-right:before {
+  top: 3px;
+}
+
+/* Vertically center tooltip content for left/right tooltips */
+.tooltip-left:after,
+.tooltip-right:after {
+  margin-left: 0;
+  margin-bottom: -16px;
+}
+
 
 .animate-fade-in.ng-move,
 .animate-fade-in.ng-enter,
@@ -95,7 +392,13 @@ to prevent collapsing during animation*/
   position:fixed;
   z-index:999;
 }
- 
+
+input[type="text"] {
+    -webkit-box-sizing: border-box; // Safari/Chrome, other WebKit
+    -moz-box-sizing: border-box;    // Firefox, other Gecko
+    box-sizing: border-box;         // Opera/IE 8+
+}
+
 #overlay-container{
   position:absolute;
   background:rgba(0,0,0,0.7);
@@ -107,15 +410,15 @@ to prevent collapsing during animation*/
 
 #overlay-container.ng-enter, #overlay-container.ng-leave-active{
   opacity:0;
-  
+
 }
 #overlay-container.ng-enter-active{
   opacity:1;
 }
 
-html,body{ 
+html,body{
   background:#EEEEEE;
-  height:100%;
+  /*height:100%;*/
 }
 
 html{
@@ -130,9 +433,9 @@ div.logo-container{
 
   padding:2px;
   background:white;
-  cursor:pointer; 
-  font-size:1.3em; 
-  color:white; 
+  cursor:pointer;
+  font-size:1.3em;
+  color:white;
   float:left;
   border-radius:2px;
 }
@@ -142,9 +445,9 @@ div.logo-container{
 }
 
 div.nus-logo{
-  position:fixed; 
-  left:20px; 
-  top:16px; 
+  position:fixed;
+  left:20px;
+  top:16px;
   z-index:1000;
   cursor:pointer !important;
 }
@@ -157,12 +460,14 @@ nav{
 form.main-search-field{
 
   border-radius:2px;
-  height:40px; 
+  height:40px;
   width:450px;
   /*width:90%;*/
   float:left;
 
 }
+
+
 
 #submit-question-mobile{
   display:none;
@@ -187,7 +492,7 @@ form.main-search-field{
   /*form.main-search-field{
     margin-left:50px;
   }*/
-  
+
 }
 
 @media (max-width:1100px){
@@ -199,7 +504,7 @@ form.main-search-field{
   /*form.main-search-field{
     margin-left:50px;
   }*/
-  
+
 }
 
 
@@ -208,7 +513,7 @@ form.main-search-field{
   form.main-search-field, search-popup{
     width:270px !important;
   }
-  
+
 }
 
 @media (max-width: 750px){
@@ -224,7 +529,7 @@ form.main-search-field{
   textarea.comment-input-area{
 
     width:300px !important;
-    
+
   }
 
 }
@@ -253,19 +558,45 @@ form.main-search-field{
 
 }
 
+.custom-toast{
+    background:#66bb6a;
+    color:white;
+}
 
-.card-title{font-size:1.4em !important; line-height:45px !important; }
+.error-toast{
+    background:#d32f2f;
+    color:white;
+}
+
+.success-toast{
+    background:#66bb6a;
+    color:white
+}
+
+.information-toast{
+    background:#2196f3;
+    color:white;
+}
+
+.card-title{font-size:1.5em !important; font-weight:400 !important;line-height:45px !important; }
+.no-underline{text-decoration: none !important;  }
+.card-title:hover{text-decoration: underline;}
 
 div.tag{
 
-  font-size:0.8em; 
-  height:20px; 
+  font-size:0.8em;
+  height:20px;
   line-height:20px;
   border-radius:3px;
   margin-left:0px;
 
 }
 
+.override-grey{
+  background:#c0c0c0 !important;
+  color: green !important;
+
+}
 .image-upload > input
 {
     display: none;
@@ -278,20 +609,21 @@ div.tag{
 
 i.comment-icon{
 
-  cursor:pointer; 
-  visibility: hidden;
-
+  cursor:pointer;
+  /*visibility: hidden;*/
+  opacity:0.5;
+  transition: 0.2s linear;
 }
 
-i.comment-icon-active{
+/*i.comment-icon-active{
 
   visibility: visible;
 
-}
+}*/
 
 div.comment-icon-wrapper:hover > i{
 
-  visibility: visible;
+  opacity:1;
 
 }
 
@@ -299,7 +631,7 @@ textarea.comment-input-area{
 
   padding:10px;
   resize:vertical;
-  width:400px; 
+  width:400px;
   height:100px;
 
 }
@@ -346,17 +678,53 @@ div.suggestion-box-info{
 
 }
 
-
 /* Need media queries for these  */
 
 search-popup{
   position:absolute;
   background:white;
   width:450px;
-  z-index:999;  
+  z-index:999;
   border-radius:2px;
   top:80px;
-  transition: all 0.1s;
+  transition: all 0.2s;
+}
+
+search-popup.ng-enter, search-popup.ng-leave-active{
+  top:100px;
+  opacity:0;
+}
+
+search-popup.ng-enter-active{
+  top:80px;
+  opacity:1;
+}
+/*
+.animate-search-popup.ng-enter,
+.animate-search-popup.ng-leave {
+  -webkit-transition:all linear 0.2s;
+  transition:all linear 0.2s;
+}*/
+/*
+.animate-search-popup.ng-leave.ng-leave-active,
+.animate-search-popup.ng-enter {
+  opacity:0;
+  top:100px;
+}
+
+.animate-search-popup.ng-leave,
+
+.animate-search-popup.ng-enter.ng-enter-active {
+  opacity:1;
+  top:80px;
+}*/
+
+#overlay-container.ng-enter, #overlay-container.ng-leave-active{
+  opacity:0;
+
+}
+#overlay-container.ng-enter-active{
+  opacity:1;
 }
 
 search-popup:after {
@@ -376,6 +744,10 @@ search-popup:after {
 
 search-popup.fake-white:after{
   border-bottom-color: white !important;
+}
+
+search-popup.fake-yellow:after{
+  border-bottom-color: #fff59d !important;
 }
 
 
@@ -443,7 +815,7 @@ search-popup.fake-white:after{
   margin: 3px 10px;
 }
 
-.btn-fb-login .title { 
+.btn-fb-login .title {
   font-size: 0.8125em;
   color: #fff;
   line-height: 28px;
@@ -453,6 +825,3 @@ search-popup.fake-white:after{
   box-shadow: -1px 0 0 rgba(255, 255, 255, 0.1);*/
   border-left: 1px solid rgba(0, 0, 0, 0.3);
 }
-
-
-

@@ -1,5 +1,6 @@
 <?php
   require_once('../connect.php');
+  require_once('../../fb.php');
 
   function get_user($user_id) {
     global $db;
@@ -24,17 +25,29 @@
     }
   }
 
-  function authenticate_user($email, $password) {
-    global $db;
-    $query = "SELECT password FROM Users WHERE email='" . $email . "'";
+  // function authenticate_user($email, $password) {
+  //   global $db;
+  //   $query = "SELECT password FROM Users WHERE email='" . $email . "'";
+  //
+  //   $sql_result = $db->query($query);
+  //   $row = mysqli_fetch_row($sql_result);
+  //   if (!is_null($row)) {
+  //     $saved_password = $row[0];
+  //     return password_verify($password, $saved_password);
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-    $sql_result = $db->query($query);
-    $row = mysqli_fetch_row($sql_result);
-    if (!is_null($row)) {
-      $saved_password = $row[0];
-      return password_verify($password, $saved_password);
-    } else {
-      return false;
+  function authenticate_user($id, $token) {
+    global $fb;
+
+    try {
+      // Returns a `Facebook\FacebookResponse` object
+      $response = $fb->get('/me?fields=first_name,last_name,email', $token);
+      session_start();
+    } catch(Exception $e) {
+      return null;
     }
   }
 
@@ -70,6 +83,38 @@
       while (($user_details = mysqli_fetch_assoc($sql_result)) != null) {
         $result[] = $user_details;
       }
+      return $result;
+    }
+
+    function create_user($id, $token) {
+      global $db;
+      global $fb;
+
+      try {
+        // Returns a `Facebook\FacebookResponse` object
+        $response = $fb->get('/me?fields=first_name,last_name,email', $token);
+        session_start();
+      } catch(Exception $e) {
+        return null;
+      }
+      $user = $response->getGraphUser();
+      $first_name = $user['first_name'];
+      $last_name = $user['last_name'];
+      $email = $user['email'];
+
+      $query = "INSERT INTO Users (id, first_name, last_name, email, role, score)
+                VALUES (" . intval($id) . ", '$first_name', '$last_name',
+                '$email', 0, 0)";
+      $db->query($query);
+
+      $result = array();
+      $result['id'] = $id;
+      $result['first_name'] = $first_name;
+      $result['last_name'] = $last_name;
+      $result['email'] = $email;
+      $result['role'] = 0;
+      $result['score'] = 0;
+
       return $result;
     }
  ?>

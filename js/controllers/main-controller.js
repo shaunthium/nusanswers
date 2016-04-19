@@ -1,118 +1,180 @@
 /*This is the uppermost controller.*/
 angular.module('quoraApp')
-.controller('MainCtrl', [ '$scope', 'questionService', '$rootScope', '$state', '$timeout', function($scope, qs, $rootScope, $state, $timeout){
+.filter('questionTitle', function(){
+    return function(questionTitle){
+        if(questionTitle){
+            return questionTitle.replace(/[^\w \?\!\"\'\(\)\.]/g, "");
+        }
+        return questionTitle;
+    }
+})
+.controller('MainCtrl', ['ezfb', '$scope', 'questionService', '$rootScope', '$state', '$timeout', '$location', function(ezfb, $scope, qs, $rootScope, $state, $timeout, $location){
+    $scope.posts = [];
+    $rootScope.loading = true;
+    $scope.feedType = 'latest';
 
-    $scope.loading = true;
+    $scope.setFeedType = function(type){
+        $scope.feedType = type;
+    }
 
-    // SET ME TO FALSE AFTER ASYNC DATA HAS LOADED, THIS IS HARDCODED!
-    $timeout(function(){
+    // $rootScope.currentUser = { id : "1" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+
+    /*ezfb.getLoginStatus(function (res) {
+
+      $scope.loginStatus = res;
+      // console.log($scope.loginStatus);
+      if (res.status == 'connected') {
+        ezfb.api('/me',function (res) {
+          $scope.apiMe = res;
+          // console.log($scope.apiMe);
+          qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+          // qs.getCurrentUser(500, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+            // console.log(data);
+            $scope.currentUser = data.data;
+            $scope.loading = false;
+            // console.log($scope.currentUser);
+          });
+        });
+      } else {
+        $scope.currentUser = null;
         $scope.loading = false;
-    }, 1500)
+      }
+    });*/
 
-    /*TODO: back-end integration
-        "post" should actually be "postID". The post, with its associated
-        comments and answers, must be retrieved from the server and passed as a
-        state parameter.
-    */
+
+
+    $scope.goToHome = function(){
+        $location.path('/home/');
+    }
+
     $scope.goToPost = function(post){
-        $state.go('qa', {'currPost' : post});
+        $location.path('/qa/' + post.id);
     }
 
     //TODO: implement goToProfile function
     $scope.goToProfile = function(post){
         //FIXME: this is just a simple placeholder to demonstrate functionality
-        $state.go('profile', {'author' : post.author});
-    }
-
-    $scope.newPost = function(title){
-        return qs.submitNewPost(title, $scope.currentUser);
-    }
-
-    /*
-        postID: identifies the post. FIXME: what does the server need to identify the post?
-        body: body of the comment
-    */
-    $scope.newComment = function(postID, body){
-        //FIXME: should we send the entire user object? the userid? the name?
-        return qs.submitNewComment(postID, body, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.deleteComment = function(postID, commentID){
-        return qs.submitDeleteComment(postID, commentID);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.reportComment = function(postID, commentID){
-        return qs.submitReportComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelReportComment = function(postID, commentID){
-        return qs.submitCancelReportComment(postID, commentID, $scope.currentUser);
-    }
-
-    $scope.reportPost = function(postID){
-        return qs.submitReportPost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelReportPost = function(postID){
-        return qs.submitCancelReportPost(postID, $scope.currentUser);
-    }
-
-    $scope.upvotePost = function(postID){
-        return qs.submitUpvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelUpvotePost = function(postID){
-        return qs.submitCancelUpvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.downvotePost = function(postID){
-        return qs.submitDownvotePost(postID, $scope.currentUser);
-    }
-
-    $scope.cancelDownvotePost = function(postID){
-        return qs.submitCancelDownvotePost(postID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.upvoteComment = function(postID, commentID){
-        return qs.submitUpvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelUpvoteComment = function(postID, commentID){
-        return qs.submitCancelUpvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.downvoteComment = function(postID, commentID){
-        return qs.submitDownvoteComment(postID, commentID, $scope.currentUser);
-    }
-
-    //FIXME: HOW DO WE IDENTIFY COMMENTS WITHIN ANSWERS?
-    $scope.cancelDownvoteComment = function(postID, commentID){
-        return qs.submitCancelDownvoteComment(postID, commentID, $scope.currentUser);
+        // $state.go('profile', {'author' : post.author});
+        $location.path('/profile/' + post);
     }
 
     $scope.showLogin = function(){
-        $('#login-modal').openModal();
-        //
+      $('#login-modal').openModal();
     }
 
     // Do your magic here shaun
     $scope.makeFacebookLogin = function(){
-        $scope.currentUser = {name : "root", karma : 9999, userid : 0, flavor: "Administrator", profileImg : 'http://dummyimage.com/300/09.png/fff'};
+
+        $rootScope.currentUser = { id : "10209460093644289" , first_name : "DummyUser", profileImg : 'http://dummyimage.com/300/09.png/fff'};
         $('#login-modal').closeModal();
+        Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
+
+        // ezfb.login(function(res) {
+        //   // console.log(res);
+        //   $scope.loginStatus = res;
+        //   if (res.status == 'connected') {
+        //     ezfb.api('/me',function (res) {
+        //       $scope.apiMe = res;
+        //       // console.log($scope.apiMe);
+        //       // qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //       qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
+        //         $scope.currentUser = data.data;
+                // $('#login-modal').closeModal();
+                // Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
+        //         // console.log($scope.currentUser);
+        //         // $scope.loading = false;
+        //         // console.log($scope.currentUser);
+        //
+        //             //*** OBS ADDED THIS *** NEED PROFILE IMAGE TO CURRENT LOGGEDIN USER, HAVENT TESTED WARNING ***/
+        //             //**********************************************************************************************
+        //             // Get profile img
+        //           $http({
+        //             url: 'http://graph.facebook.com/v2.5/' + $scope.currentUser.id + '/picture?redirect=false&width=9999',
+        //             method: 'GET',
+        //             data: {
+        //               width: '1000'
+        //             }
+        //           }).success(function(data) {
+        //             $scope.currentUser.profileImg = data.data.url;
+        //           }).error(function(data) {
+        //             $scope.currentUser.profileImg = 'http://dummyimage.com/300/09.png/fff';
+        //           });
+        //
+        //             //*** ADDED STUFF END *****
+        //             //*************************
+        //
+        //       });
+        //     });
+        //   }
+        // }, {scope: 'public_profile,email'});
     }
 
     //TODO: get currentUser from database by logging in.
-    
-    qs.getQuestions().then(function (returnedData) {
-      console.log(returnedData);
-      $scope.posts = returnedData.data;
-    });
+    $scope.updateQuestionsFeed = function(feedType, startIndex, requestedQuestions, userID){
+        $scope.doneUpdatingFeed = false;
+        qs.getQuestions(feedType, startIndex, requestedQuestions, userID).then(
+            function (returnedData) {
+                // console.log(returnedData);
+                if(returnedData.data){
+                    returnedData.data.forEach(function(newPost){
+                        for(var i = 0; i < $scope.posts.length; i++){
+                            //Do not add repeated posts!
+                            if($scope.posts[i].id === newPost.id){
+                                // console.log("found repeated post! ", newPost.id);
+                                return;
+                            }
+                        }
+                        $scope.posts.push(newPost);
+                    });
+                    // $scope.posts = $scope.posts.concat(returnedData.data);
+                    $scope.doneUpdatingFeed = true;
+                    $scope.loading = false;
+                }
+            },
+            function(err){
+                console.log("Error while updating the questions feed!");
+            });
+    }
+
+    $scope.resetQuestionsFeed = function(){
+        $scope.loading = true;
+        // while($scope.posts.length > 0){
+        //     $scope.posts.pop();
+        // }
+        $scope.posts = [];
+    }
+
+    $scope.getPost = function(questionID, userID){
+        $scope.loading = true;
+        //console.log(questionID, " ", userID);
+        qs.getPost(questionID, userID)
+        .then(function(res){
+            // console.log(res);
+            if(res.data){
+                $scope.post = res.data.question;
+                $scope.post.answers = res.data.answers;
+                if($scope.post.answers){
+                    $scope.numAnswers = $scope.post.answers.length;
+                }
+                $scope.loading = false;
+                // console.log(res);
+            }
+        }, function(err){
+            $scope.loading = false;
+            $state.go('404');
+        });
+    }
+
+    $scope.getQuestionsSummary = function(){
+        qs.getQuestionsSummary().then(function(res){
+            //XXX: had to manually access the root scope.
+            $rootScope.questionsSummary = res.data;
+            //TODO: set $scope.loading to be false only after both "posts" and the "questions summary" have been loaded!
+        }, function(err){
+            console.log("Error when getting questions summary.");
+        });
+    }
+
     $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
       $scope.trendingTags = data.data;

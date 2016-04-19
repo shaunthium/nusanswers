@@ -6,22 +6,21 @@
 </ul>
 
 <!-- Stuff that appears when user starts typing question -->
-<div ng-if="showOverlay" id="overlay-container"></div>
+<div style="position:fixed;"ng-if="showOverlay" id="overlay-container"></div>
 
-<search-popup ng-class="{'fake-white' : !user_question}"class="animate-search-popup" ng-if="showOverlay"></search-popup>
-
+<search-popup style="position:fixed;" ng-class="{'fake-white' : !showSuggestions && !showQuestionError, 'fake-yellow' : showQuestionError}" ng-if="showOverlay"></search-popup>
 
  <!-- Login modal -->
   <div style="max-width:500px;" id="login-modal" class="modal">
     <div class="modal-content">
-      <p style="font-size:1.1em;" class="center">For now we only support facebook login</p>
-      <div ng-click="makeFacebookLogin()" style="margin:0 auto;width:200px;"class="btn-fb-login">
+      <p style="font-size:1.1em;" class="center">Help us keep spammers away! <br> Login with Facebook to participate in the discussion!</p>
+      <div ng-click="makeFacebookLogin()" style="margin:0 auto;width:150px;"class="btn-fb-login">
         <span class="icon icon-fb"></span>
-        <span class="title">Login with Facebook</span>
+        <span class="title">Facebook Login!</span>
       </div>
     </div>
     <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+      <a class=" modal-action modal-close waves-effect waves-blue btn-flat">Close</a>
     </div>
   </div>
 <!-- this navbar is a mess, grid system does not seem
@@ -35,41 +34,75 @@
 
       <ul class="right hide-on-med-and-down">
 
-        <li class="no-animate"ng-if="currentUser">
-            <a style="font-size:0.9em;"class="white-text" href="#/profile">
-              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span >{{currentUser.name}}</span>
+        <!-- ADMIN, NO LINK QUICK FIX -->
+        <li class="no-animate" ng-if="currentUser && currentUser.isAdmin">
+            <a style="font-size:0.9em;"class="white-text" >
+            
+             <img style="width:30px; position:relative; top:15px; right:10px;"class="left responsive-img circle">
+              <span ng-if="currentUser" > {{currentUser.first_name}} (Godmode)</span>
+                <!-- <img style="width:35px; display:inline-block; line-height:300px;margin-top:-20px;"ng-if="currentUser" ng-src="{{currentUser.profileImg}}" alt="" class="circle"> -->
+            </a>
+        </li>
+
+
+        <li class="no-animate" ng-if="currentUser && !currentUser.isAdmin">
+            <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
+              
+             
+
+             <img style="width:30px; position:relative; top:15px; right:10px;"ng-src="{{currentUser.profileImg}}" class="left responsive-img circle">
+              <span ng-if="currentUser" >  {{currentUser.first_name}}</span>
+              
+                <!-- <img style="width:35px; display:inline-block; line-height:300px;margin-top:-20px;"ng-if="currentUser" ng-src="{{currentUser.profileImg}}" alt="" class="circle"> -->
             </a>
         </li>
 
         <li class="no-animate" ng-if="!currentUser">
             <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">
-              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
-              <span ng-if="!currentUser">Login</span>
+              <i  style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span >Login</span>
             </a>
         </li>
 
-        <li><a style="font-size:0.9em;" class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">
+        <!-- <li><a style="font-size:0.9em;" class="dropdown-button white-text" href="#!" data-activates="dropdown" data-beloworigin="true">
           <i style="line-height:60px;font-size:1.6em;margin-right:5px;" class="material-icons left">view_list</i>
           Notifications
           <i style="margin-left:2px;"class="mdi-navigation-arrow-drop-down right"></i>
           </a>
-        </li>
+        </li> -->
       </ul>
 
       <form class="main-search-field center v-align white" >
         <div id="search-field" class="input-field">
-          <input style="padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="user_question" id="search" type="search"required>
-          <i id="submit-question-mobile" style="line-height:45px;" ng-click="submitQuestion(user_question)" class="material-icons">chat_bubble_outline</i>
+          <input style="border-bottom:none !important; box-shadow:none !important;padding-left:15px;line-height:30px;" placeholder="Ask or Search" ng-model="userInput" ng-focus="searchfieldFocused()" id="search" type="search"required>
+          <i id="submit-question-mobile" style="line-height:45px;" ng-click="submitQuestion(userInput)" class="material-icons">chat_bubble_outline</i>
         </div>
       </form>
 
       <a ng-if="!showOverlay" id="ask-question-button" ng-click="toggleOverlay()" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn grey lighten-4 black-text v-align no-animate">Ask question</a>
-      <a ng-if="showOverlay" id="submit-question-button" ng-click="submitQuestion(user_question)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
+
+      <a ng-if="showOverlay" ng-class="{'disabled' : !userInput}" id="submit-question-button" ng-click="submitQuestion(userInput)" style="height:40px; margin-left:5px;line-height:42px;"class="waves-effect waves-light btn blue white-text v-align no-animate">Submit</a>
 
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="#/home">Home</a></li>
-        <li><a href="#/profile">Profile</a></li>
+        <li><a ui-sref="home" >Home</a></li>
+        <!-- <li><a ng-href="{{'#/profile/'+ currentUser.id}}">Profile</a></li> -->
+        <li ng-if="currentUser">
+            <!-- <a style="font-size:0.9em;"class="white-text" ng-href="{{'#/profile/'+ currentUser.id}}">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span ng-if="currentUser" >{{currentUser.first_name}}</span>
+            </a> -->
+            <a ng-href="{{'#/profile/'+ currentUser.id}}">{{currentUser.first_name}}</a>
+        </li>
+
+
+        <li class="no-animate" ng-if="!currentUser">
+            <!-- <a ng-click="showLogin()" ng-if="!currentUser" style="font-size:0.9em;"class="white-text">
+              <i style="line-height:62px;font-size:1.6em;margin-right:5px;" class="material-icons left">person_pin</i>
+              <span ng-if="!currentUser">Login</span>
+            </a> -->
+            <a ng-click="showLogin()">Login</a>
+        </li>
+
         <!-- this one needs more work
         <li>
           <a class="dropdown-button" href="#!" data-activates="dropdown" data-beloworigin="true">Notifications<i class="mdi-navigation-arrow-drop-down right"></i></a>
