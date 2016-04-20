@@ -1,8 +1,10 @@
 <?php session_start();
+	require_once('admin.php');
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
-	require_once('admin.php');
+	
+	//echo "aqns session: " . session_id();
 
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
