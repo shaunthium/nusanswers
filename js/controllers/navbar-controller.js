@@ -7,8 +7,34 @@
         + home button
 */
 angular.module('quoraApp')
-.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$location', '$rootScope', 'questionTitleFilter', function($scope, $timeout, qs, $location, $rootScope, questionTitleFilter){
+.controller('NavCtrl', ['$scope', '$timeout', 'questionService', '$location', '$rootScope', 'questionTitleFilter', '$http', function($scope, $timeout, qs, $location, $rootScope, questionTitleFilter, $http){
     $scope.showOverlay = false;
+
+    $scope.markNotifications = function() {
+      $http({
+        url: 'server/notifications.php',
+        method: 'POST',
+        data: {
+          cmd: 'check_all_notifications',
+          user_id: $scope.currentUser.id
+        }
+      }).then(function() {
+        // console.log('checked all');
+      });
+    }
+
+    $scope.markSingleNotification = function(id) {
+      $http({
+        url: 'server/notifications.php',
+        method: 'POST',
+        data: {
+          cmd: 'check_single_notification',
+          user_id: $scope.currentUser.id,
+          id: id
+        }
+      }).then(function() {
+      });
+    }
 
     /**
         This function creates a post object from the input string captured in the searchfield.

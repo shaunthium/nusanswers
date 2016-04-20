@@ -26,6 +26,21 @@ angular.module('quoraApp')
           $scope.apiMe = res;
           qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
             $rootScope.currentUser = data.data;
+
+            var base_url = '';
+            // var base_url = "http://139.59.247.83/";
+            $http({
+              url: base_url + 'server/notifications.php',
+              method: 'POST',
+              data: {
+                cmd: 'get_votes_notifications',
+                user_id: $rootScope.currentUser.id,
+              }
+            }).then(function(data) {
+              console.log('data', data);
+              $scope.notifications = data.data;
+            });
+
             $http({
               url: 'http://graph.facebook.com/v2.5/' + $rootScope.currentUser.id + '/picture?redirect=false&width=9999',
               method: 'GET',
@@ -77,6 +92,19 @@ angular.module('quoraApp')
               $scope.apiMe = res;
               qs.getCurrentUser($scope.apiMe.id, $scope.loginStatus.authResponse.accessToken).then(function(data) {
                 $rootScope.currentUser = data.data;
+                var base_url = '';
+                // var base_url = "http://139.59.247.83/";
+                $http({
+                  url: base_url + 'server/notifications.php',
+                  method: 'POST',
+                  data: {
+                    cmd: 'get_votes_notifications',
+                    user_id: $rootScope.currentUser.id,
+                  }
+                }).then(function(data) {
+                  console.log('data', data);
+                  $scope.notifications = data.data;
+                });
                 $('#login-modal').closeModal();
                 Materialize.toast('Welcome back, ' + $rootScope.currentUser.first_name, 2000, 'custom-toast')
                 $http({
@@ -164,7 +192,7 @@ angular.module('quoraApp')
         });
     }
 
-    $scope.notifications = qs.getNotifications();
+    // $scope.notifications = qs.getNotifications();
     qs.submitGetTrendingTags().then(function(data) {
       $scope.trendingTags = data.data;
     });
