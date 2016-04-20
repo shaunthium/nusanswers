@@ -511,11 +511,19 @@
 
 			else
 			{
+				$query = "delete from  Votes_Notifications where qns_ans_id = $answer_id and type_qns_ans = 1";
+				$res = $db->query($query);
+				
 				$query = "delete from Answers_Comments where answer_id = $answer_id";
 				$res = $db->query($query);
 
 				$query = "delete from Answers where id = $answer_id";
 				$res = $db->query($query);
+				
+				$query = "delete from Answers where id = $answer_id";
+				$res = $db->query($query);
+				
+				
 				echo true;
 			}
 
