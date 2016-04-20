@@ -8,24 +8,24 @@
 	/*
 		Get vote notifications of a user
 		@param: $user_id
-		@param: $index (OPTIONAL)//start index of notification
-		@paramL $limit (OPTIONAL)//Number of notifications
-		@return: list of unread notification
+		
+		@return: list of unread notification + read notifications
 	*/
 	if($cmd == "get_votes_notifications"){
 		
 		global $db;
 		$user_id = $db->escape_string($data->user_id);
-		
+		/*
 		if(isset($data->index) && isset($data->limit)){
 			$limit = $db->escape_string($data->limit);
 			$index = $db->escape_string($data->index);
 			
 			$query = "SELECT * FROM Votes_Notifications  WHERE author_id=".$user_id. " ORDER BY checked, id DESC LIMIT " . $index . ", " . $limit;
 		}else{
-			$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC";
+			$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC LIMIT 0, 20";
 		}
-		
+		*/
+		$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC LIMIT 0, 20";
 		$result = $db->query($query);
 		
 		$notifications_array = array();
@@ -40,12 +40,25 @@
 					$query_qns_title = "SELECT * FROM Questions WHERE id=" . $notification['qns_ans_id'];
 					$result_qns_title =  $db->query($query_qns_title);
 					$qns_title = mysqli_fetch_assoc($result_qns_title);
+
+					if($notification['type_qns_ans'] == 0){
+						$type_qns_ans = "qns";
+					}else{
+						$type_qns_ans = "ans";
+					}
+
+					if($notification['type_vote'] == 1){
+						$type_vote = "upVote";
+					}else{
+						$type_vote = "downVote";
+					}
+
 					$notifications_array[] = array(
 						'id' => $notification['id'],
 						'voter' => $qns_voter_name['first_name']. " " . $qns_voter_name['last_name'],
 						'title_content' => $qns_title['title'],
-						'type_qns_ans' => $notification['type_qns_ans'],
-						'type_vote' => $$notification['type_vote'],
+						'type_qns_ans' => $type_qns_ans,//$notification['type_qns_ans'],
+						'type_vote' => $type_vote,//$notification['type_vote'],
 						'checked' => $notification['checked']
 					);
 				}
@@ -57,12 +70,26 @@
 					$query_ans_content = "SELECT * FROM Answers WHERE id=" . $notification['qns_ans_id'];
 					$result_ans_content =  $db->query($query_ans_content);
 					$ans_content = mysqli_fetch_assoc($result_ans_content);
+
+
+					if($notification['type_qns_ans'] == 0){
+						$type_qns_ans = "qns";
+					}else{
+						$type_qns_ans = "ans";
+					}
+
+					if($notification['type_vote'] == 1){
+						$type_vote = "upVote";
+					}else{
+						$type_vote = "downVote";
+					}
+
 					$notifications_array[] = array(
 						'id' => $notification['id'],
 						'voter' => $ans_voter_name['first_name']. " " . $ans_voter_name['last_name'],
 						'title_content' => $ans_content['content'],
-						'type_qns_ans' => $notification['type_qns_ans'],
-						'type_vote' => $$notification['type_vote'],
+						'type_qns_ans' => $type_qns_ans,//$notification['type_qns_ans'],
+						'type_vote' => $type_vote,//$notification['type_vote'],
 						'checked' => $notification['checked']
 					);
 				}
@@ -162,15 +189,15 @@
 		$id_array = json_decode($raw_id_array);
 		foreach($id_array as $id){
 			//$sanitised_tag =  $db->escape_string($tag);
-			$query = "UPDATE Votes_Notifications SET checked=true WHERE user_id=". $user_id . " AND id=". $id;
+			$query = "UPDATE Votes_Notifications SET checked=true WHERE author_id=". $user_id . " AND id=". $id;
 			$db->query($query);
 		}
 		$affected = $db->affected_rows;
 			
 		if( $affected > 0 ){
-			echo true;
+			echo intval(true);
 		}else{
-			echo false;
+			echo intval(false);
 		}
 	}
 	
@@ -189,9 +216,9 @@
 		$affected = $db->affected_rows;
 			
 		if( $affected > 0 ){
-			echo true;
+			echo intval(true);
 		}else{
-			echo false;
+			echo intval(true);
 		}
 	}
 ?>
