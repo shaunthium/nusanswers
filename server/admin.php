@@ -16,9 +16,9 @@
   		  $username = $db->escape_string($data->username);
   		  $password = $db->escape_string($data->password);
 
-        //$cost = 10;
+        $cost = 10;
         $salt = "dsgdskjgbkg34weir894r83&0r3t-234-02";
-        //$salt = sprintf("$2a$%02d$", $cost) . $salt;
+        $salt = sprintf("$2a$%02d$", $cost) . $salt;
         $hash = crypt($password, $salt);
 
   		  $query = "SELECT * FROM Admin WHERE username='".$username."'";
@@ -42,9 +42,9 @@
         $username = $db->escape_string($data->username);
   		  $password = $db->escape_string($data->password);
 
-        //$cost = 10;
+        $cost = 10;
         $salt = "dsgdskjgbkg34weir894r83&0r3t-234-02";
-        //$salt = sprintf("$2a$%02d$", $cost) . $salt;
+        $salt = sprintf("$2a$%02d$", $cost) . $salt;
         $hash = crypt($password, $salt);
 
     		$query = "INSERT INTO Admin(username, password) VALUES('".$username."', '".$hash."')";
