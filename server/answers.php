@@ -514,6 +514,9 @@
 				$query = "delete from  Votes_Notifications where qns_ans_id = $answer_id and type_qns_ans = 1";
 				$res = $db->query($query);
 				
+				$query = "delete from   Answers_Notifications where answer_id = $answer_id";
+				$res = $db->query($query);
+				
 				$query = "delete from Answers_Comments where answer_id = $answer_id";
 				$res = $db->query($query);
 
@@ -946,6 +949,14 @@
 						'chosen' => $r['chosen'],
 						'comments' => array()
 					);
+					
+					$query = "Select user_id from Questions where id = $question_id";
+					$result = $db->query($query);
+					$quid = mysqli_fetch_assoc($result);
+					$quid = $quid['user_id'];
+					
+					$query = "Insert into Answers_Notifications (answer_id, author_id, answerer_id) values ($r['id'],$quid, $r['user_id'])";
+					$db->query($query);
 				}
 			}
 			//error_log(json_encode($answersResult));
