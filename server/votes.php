@@ -120,7 +120,7 @@
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
 		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);
-		deleteNotify($qns_id, $voter_id);
+		deleteNotify($qns_id, $user_id);
 		
 	}
 
@@ -138,7 +138,7 @@
 		//set_qns_vote($table_name, $qns_id, $user_id, $up_vote, $down_vote);
 		deleteEntry($qns_id, $user_id);
 		updateAuthorScore($qns_id, $operator);	
-		deleteNotify($qns_id, $voter_id);
+		deleteNotify($qns_id, $user_id);
 		
 		
 	}
