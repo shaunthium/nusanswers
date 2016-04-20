@@ -1,9 +1,12 @@
-<?php session_start();
-	require_once('admin.php');
+<?php
+  if (!(isset($_SESSION))) {
+    session_start();
+  }
+  require_once('admin.php');
 	require_once('connect.php');
 	require_once('tags.php');
 	require_once('votes.php');
-	
+
 	//echo "aqns session: " . session_id();
 
 	$request_data = file_get_contents("php://input");
@@ -21,9 +24,9 @@
   	if($cmd == "get_all_qns"){
   		global $db;
 
-		
+
 		$query = "SELECT * FROM Questions ORDER BY id DESC";
-		
+
 
 		//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
 		$result = $db->query($query);
@@ -191,11 +194,26 @@
 		@return: all data of new question and author name, score
 	*/
 	if($cmd == "new_qns"){
-
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		if (!(isset($_SESSION['id']))) {
+ 			//http_response_code(401);
+      http_response_code(401);
+      echo "Unauthorized";
+ 			return;
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 
 		$user_id= $db->escape_string($data->user_id);
@@ -347,7 +365,28 @@
 				echo json_encode(false);
 			}
 		}
-		else{	
+		else{
+
+      		if (!(isset($_SESSION['id']))) {
+            http_response_code(401);
+            echo "Unauthorized";
+            return;
+      		} else {
+            if (isset($data->user_id)) {
+              $temp = $data->user_id;
+              $session_id = $_SESSION['id'];
+              if ($temp != $session_id) {
+                // print_r(error_log('hi'), true);
+                http_response_code(401);
+                echo "Unauthorized";
+           			return;
+              }
+            } else {
+              http_response_code(401);
+              echo "Unauthorized";
+         			return;
+            }
+          }
 			$qns_id= $db->escape_string($data->qns_id);
 			$title = $db->escape_string($data->title);
 			$content= $db->escape_string($data->content);
@@ -406,6 +445,9 @@
 
 				$query_delete_ans_voted = "DELETE FROM Answers_Voted_By_Users WHERE answer_id=" . $ans_id;
 				$db->query($query_delete_ans_voted);
+
+				$query_delete_notify_votes = "DELETE FROM Votes_Notifications WHERE qns_ans_id=" . $ans_id;
+				$db->query($query_delete_notify_votes);
 			}
 			$query_delete_ans_id = "DELETE FROM Answers WHERE question_id=" . $qns_id;
 			$db->query($query_delete_ans_id);
@@ -436,6 +478,9 @@
 			$query_qns = "DELETE FROM Questions WHERE id=" . $qns_id; //." AND user_id=". $user_id;
 			$db->query($query_qns);
 
+			$query_delete_notify_votes = "DELETE FROM Votes_Notifications WHERE qns_ans_id=" . $qns_id;
+			$db->query($query_delete_notify_votes);
+
 
 			$affected = $db->affected_rows;
 			if( $affected > 0 ){
@@ -445,6 +490,26 @@
 			}
 
 		}else{
+
+  		if (!(isset($_SESSION['id']))) {
+        http_response_code(401);
+        echo "Unauthorized";
+        return;
+  		} else {
+        if (isset($data->user_id)) {
+          $temp = $data->user_id;
+          $session_id = $_SESSION['id'];
+          if ($temp != $session_id) {
+            http_response_code(401);
+            echo "Unauthorized";
+       			return;
+          }
+        } else {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      }
 			$user_id = $db->escape_string($data->user_id);
 			$qns_id= $db->escape_string($data->qns_id);
 
@@ -537,9 +602,17 @@
 		if($admin == "admin"){
 			global $db;
 
-		
-			$query = "SELECT * FROM Questions ORDER BY id DESC";
-			
+
+			// $query = "SELECT * FROM Questions ORDER BY id DESC";
+      if(isset($data->index) && isset($data->limit) ){
+        //$limit_qns = 10;
+        $index = $db->escape_string($data->index);
+        $limit = $db->escape_string($data->limit);
+        $query = "SELECT * FROM Questions ORDER BY id DESC LIMIT " . $index . ", " . $limit;
+      }else{
+        $query = "SELECT * FROM Questions ORDER BY id DESC";
+      }
+
 
 			//$query = "SELECT * FROM Questions ORDER BY updated_at DESC";
 			$result = $db->query($query);
@@ -1048,10 +1121,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_up_vote_qns"){
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		if (!(isset($_SESSION['id']))) {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -1066,10 +1154,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "set_down_vote_qns"){
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		if (!(isset($_SESSION['id']))) {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -1084,10 +1187,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_up_vote_qns"){
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		if (!(isset($_SESSION['id']))) {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -1102,10 +1220,25 @@
 		@param:	qns_id, user_id
 	*/
 	if($cmd == "reset_down_vote_qns"){
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		if (!(isset($_SESSION['id']))) {
+      http_response_code(401);
+      echo "Unauthorized";
+      return;
+		} else {
+      if (isset($data->user_id)) {
+        $temp = $data->user_id;
+        $session_id = $_SESSION['id'];
+        if ($temp != $session_id) {
+          http_response_code(401);
+          echo "Unauthorized";
+     			return;
+        }
+      } else {
+        http_response_code(401);
+        echo "Unauthorized";
+   			return;
+      }
+    }
 
 		$qns_id= $db->escape_string($data->qns_id);
 		$user_id= $db->escape_string($data->user_id);
@@ -1130,10 +1263,25 @@
 		@return: list of questions posted by user
 	*/
 	if($cmd == "get_all_qns_of_user"){
-		// if (!(isset($_SESSION['cs3226']))) {
- 	// 		//http_response_code(401);
- 	// 		echo false;
-		// }
+		// if (!(isset($_SESSION['id']))) {
+    //   http_response_code(401);
+    //   echo "Unauthorized";
+    //   return;
+		// } else {
+    //   if (isset($data->user_id)) {
+    //     $temp = $data->user_id;
+    //     $session_id = $_SESSION['id'];
+    //     if ($temp != $session_id) {
+    //       http_response_code(401);
+    //       echo "Unauthorized";
+    //  			return;
+    //     }
+    //   } else {
+    //     http_response_code(401);
+    //     echo "Unauthorized";
+   // 			return;
+    //   }
+    // }
 		$user_id = $db->escape_string($data->user_id);
 		$query = "SELECT * FROM Questions WHERE user_id=" . $user_id . " ORDER BY updated_at DESC";
 		$result = $db->query($query);
