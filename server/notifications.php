@@ -1,25 +1,25 @@
-<?php 
+<?php
 	require_once ('connect.php');
-	
+
 	$request_data = file_get_contents("php://input");
   	$data = json_decode($request_data);
   	$cmd = $db->escape_string($data->cmd);
-  	
+
 	/*
 		Get vote notifications of a user
 		@param: $user_id
-		
+
 		@return: list of unread notification + read notifications
 	*/
 	if($cmd == "get_votes_notifications"){
-		
+
 		global $db;
 		$user_id = $db->escape_string($data->user_id);
 		/*
 		if(isset($data->index) && isset($data->limit)){
 			$limit = $db->escape_string($data->limit);
 			$index = $db->escape_string($data->index);
-			
+
 			$query = "SELECT * FROM Votes_Notifications  WHERE author_id=".$user_id. " ORDER BY checked, id DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC LIMIT 0, 20";
@@ -27,9 +27,9 @@
 		*/
 		$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " ORDER BY checked, id DESC LIMIT 0, 20";
 		$result = $db->query($query);
-		
+
 		$notifications_array = array();
-		
+
 		while($notification = mysqli_fetch_assoc($result)){
 			if($notification['voter_id'] != $user_id){
 				//If type is a question
@@ -42,15 +42,15 @@
 					$qns_title = mysqli_fetch_assoc($result_qns_title);
 
 					if($notification['type_qns_ans'] == 0){
-						$type_qns_ans = "qns";
+						$type_qns_ans = "question";
 					}else{
-						$type_qns_ans = "ans";
+						$type_qns_ans = "answer";
 					}
 
 					if($notification['type_vote'] == 1){
-						$type_vote = "upVote";
+						$type_vote = "upvoted";
 					}else{
-						$type_vote = "downVote";
+						$type_vote = "downvoted";
 					}
 
 					$notifications_array[] = array(
@@ -59,7 +59,8 @@
 						'title_content' => $qns_title['title'],
 						'type_qns_ans' => $type_qns_ans,//$notification['type_qns_ans'],
 						'type_vote' => $type_vote,//$notification['type_vote'],
-						'checked' => $notification['checked']
+						'checked' => $notification['checked'],
+            'post_id' => $notification['qns_ans_id']
 					);
 				}
 				//If type is an answer
@@ -72,17 +73,17 @@
 					$ans_content = mysqli_fetch_assoc($result_ans_content);
 
 
-					if($notification['type_qns_ans'] == 0){
-						$type_qns_ans = "qns";
-					}else{
-						$type_qns_ans = "ans";
-					}
+          if($notification['type_qns_ans'] == 0){
+            $type_qns_ans = "question";
+          }else{
+            $type_qns_ans = "answer";
+          }
 
-					if($notification['type_vote'] == 1){
-						$type_vote = "upVote";
-					}else{
-						$type_vote = "downVote";
-					}
+          if($notification['type_vote'] == 1){
+            $type_vote = "upvoted";
+          }else{
+            $type_vote = "downvoted";
+          }
 
 					$notifications_array[] = array(
 						'id' => $notification['id'],
@@ -90,13 +91,15 @@
 						'title_content' => $ans_content['content'],
 						'type_qns_ans' => $type_qns_ans,//$notification['type_qns_ans'],
 						'type_vote' => $type_vote,//$notification['type_vote'],
-						'checked' => $notification['checked']
+						'checked' => $notification['checked'],
+              'post_id' => $notification['qns_ans_id']
+
 					);
 				}
 			}
 		}
-		
-		
+
+
 		echo json_encode($notifications_array);
 	}
 	/*
@@ -106,26 +109,26 @@
 		@paramL $limit (OPTIONAL)//Number of notifications
 		@return: list of unread notification
 	*/
-	
+
 	if($cmd == "get_unchecked_votes_notifications"){
-		
+
 		global $db;
 
 		$user_id = $db->escape_string($data->user_id);
-		
+
 		if(isset($data->index) && isset($data->limit)){
 			$limit = $db->escape_string($data->limit);
 			$index = $db->escape_string($data->index);
-			
+
 			$query = "SELECT * FROM Votes_Notifications  WHERE author_id=".$user_id. " and checked = 0 ORDER BY id DESC LIMIT " . $index . ", " . $limit;
 		}else{
 			$query = "SELECT * FROM Votes_Notifications  where author_id=".$user_id. " and checked = 0 ORDER BY id DESC";
 		}
-		
+
 		$result = $db->query($query);
-		
+
 		$notifications_array = array();
-		
+
 		while($notification = mysqli_fetch_assoc($result)){
 
 			if($notification['voter_id'] != $user_id){
@@ -170,18 +173,18 @@
 				}
 			}
 		}
-		
-		
+
+
 		echo json_encode($notifications_array);
 	}
-	
+
 	/*
 		Checked notifications viewed by user, set the checked value in 'Notifications' table to true
 		@param: $user_id  => CURRENT USER ID
 		@param: $notification_id_string => CAN BE MULTIPLE IDs Seperated by COMMA ","
 	*/
 	if($cmd == "check_notifications"){
-		
+
 		$user_id = $db->escape_string($data->user_id);
 		//$notification_id_string = $db->escape_string($data->notification_id_string);
 		$raw_id_array = $db->escape_string($data->id);
@@ -193,28 +196,50 @@
 			$db->query($query);
 		}
 		$affected = $db->affected_rows;
-			
+
 		if( $affected > 0 ){
 			echo intval(true);
 		}else{
 			echo intval(false);
 		}
 	}
-	
+
+  if($cmd == "check_single_notification"){
+
+    $user_id = $db->escape_string($data->user_id);
+    //$notification_id_string = $db->escape_string($data->notification_id_string);
+    // $raw_id_array = $db->escape_string($data->id);
+    $raw_id = $db->escape_string($data->id);
+    //$notification_id_array = explode(",", $notification_id_string);
+    // $id_array = json_decode($raw_id_array);
+    // foreach($id_array as $id){
+    //   //$sanitised_tag =  $db->escape_string($tag);
+    $query = "UPDATE Votes_Notifications SET checked=true WHERE author_id=". $user_id . " AND id=". $id;
+    $db->query($query);
+    // }
+    $affected = $db->affected_rows;
+
+    if( $affected > 0 ){
+      echo intval(true);
+    }else{
+      echo intval(false);
+    }
+  }
+
 	/*
 		Check notifications viewed by user, set the checked value in 'Notifications' table to true
 		@param: $user_id  => CURRENT USER ID
 	*/
 	if($cmd == "check_all_notifications"){
-		
+
 		$user_id = $db->escape_string($data->user_id);
 
-		
-		$query = "UPDATE Votes_Notifications SET checked=true WHERE user_id= ". $user_id;
+
+		$query = "UPDATE Votes_Notifications SET checked=true WHERE author_id= ". $user_id;
 		$db->query($query);
-		
+
 		$affected = $db->affected_rows;
-			
+
 		if( $affected > 0 ){
 			echo intval(true);
 		}else{

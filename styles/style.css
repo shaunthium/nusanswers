@@ -35,6 +35,13 @@ input:focus {
   color:#d32f2f !important;
 }
 
+.notification-black {
+  color: black !important;
+}
+
+.notification-red {
+  color: red !important;
+}
 
 
 [ui-view].ng-enter, [ui-view].ng-leave {
