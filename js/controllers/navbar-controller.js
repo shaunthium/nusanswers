@@ -20,6 +20,7 @@ angular.module('quoraApp')
         }
       }).then(function() {
         // console.log('checked all');
+        Materialize.toast('All notifications successfully marked!', 2000, 'custom-toast')
       });
     }
 
@@ -33,6 +34,7 @@ angular.module('quoraApp')
           id: id
         }
       }).then(function() {
+        Materialize.toast('Notification successfully marked!', 2000, 'custom-toast')
       });
     }
 

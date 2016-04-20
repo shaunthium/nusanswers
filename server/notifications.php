@@ -209,7 +209,7 @@
     $user_id = $db->escape_string($data->user_id);
     //$notification_id_string = $db->escape_string($data->notification_id_string);
     // $raw_id_array = $db->escape_string($data->id);
-    $raw_id = $db->escape_string($data->id);
+    $id = $db->escape_string($data->id);
     //$notification_id_array = explode(",", $notification_id_string);
     // $id_array = json_decode($raw_id_array);
     // foreach($id_array as $id){

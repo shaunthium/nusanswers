@@ -1,8 +1,17 @@
 <!-- Dropdown Structure for notifications-->
 <ul id="dropdown" class="dropdown-content collection">
-    <a ng-click="markNotifications()"><span style="color: blue;">Mark all notifications!</span></a>
+    <li ng-show="notifications.length > 0" ng-click="markNotifications()" class="collection-item waves-effect waves-light btn right no-animate">
+      <span style="color: #2196f3;" class="title">
+        Mark all notifications as read
+      </span>
+    </li>
+    <li ng-show="notifications.length == 0">
+      <span style="color: #2196f3;" class="title">
+        No notifications to display!
+      </span>
+    </li>
     <li class="divider"></li>
-    <li ng-repeat = "notification in notifications" class="collection-item">
+    <li ng-repeat = "notification in notifications | limitTo:5" class="collection-item">
         <a ng-href="/#/qa/{{notification.post_id}}" ng-click="markSingleNotification(notification.id)"><span class="title text-darken-1" ng-class="{'notification-black' : notification.checked == '1', 'notification-red' : notification.checked == '0'}">{{notification.voter}} {{notification.type_vote}} your {{notification.type_qns_ans}}!</span></a>
     </li>
 </ul>
