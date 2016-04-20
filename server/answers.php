@@ -751,7 +751,7 @@
 					else
 					{
 						/* Here we delete upvote notification*/
-						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voter_id = $user_id and type_qns_ans = 1";
 						$db->query($query);
 					}
 
@@ -869,8 +869,9 @@
 					else
 					{
 						/* Here we delete downvote notification*/
-						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voted_id = $user_id and type_qns_ans = 1";
+						$query = "Delete from Votes_Notifications where qns_ans_id = $answer_id and author_id = $answer_user_id and voter_id = $user_id and type_qns_ans = 1";
 						$db->query($query);
+            error_log("ansid = $answer_id , author_id = $answer_user_id  voter_id = $user_id type of qns = 1");
 					}
 					echo true;
 			}
